@@ -15,7 +15,7 @@
    <input placeholder="Phone number" class="inputKredencijali" type="text" v-model="phoneNumber"/>
    <br>
    <br>
-   <input placeholder="Email" class="inputKredencijali" type="text" v-model="password"/>
+   <input placeholder="Email" class="inputKredencijali" type="text" v-model="email"/>
    <br>
    <input placeholder="Password" class="inputKredencijali" type="password" v-model="password"/>
    <br>

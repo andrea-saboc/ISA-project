@@ -1,0 +1,64 @@
+<template>
+<div class="registrationForm">
+   <h1>Login</h1>
+   <br>
+   <br>
+   <input placeholder="Email" class="inputKredencijali" type="text" v-model="email"/>
+   <br>
+   <input placeholder="Password" class="inputKredencijali" type="password" v-model="password"/>
+   <br>
+   <br>
+   <br>
+   <button class="buttonLogin" v-on:click="Login">Login</button>
+   <br>
+   <br>
+</div>
+</template>
+<script>
+export default{
+    data(){
+        return{
+            email: '',
+            password: ''
+        }
+    },
+    Login(){},
+    CheckIfEmpty(){}
+}
+</script>
+<style>
+  h1{
+    text-align: center;
+  }
+
+  .registrationForm{
+      text-align:center;
+  }
+
+  input{
+    width: 300px;
+	margin:5px 0;
+	padding:10px;
+	border-radius:20px;
+	border: 2px solid #eee;
+	box-shadow:0 0 15px 4px rgba(0,0,0,0.06);
+  }
+  input:focus{
+	background: #FCFCFC;
+	outline: none;
+	
+  }
+  
+ .buttonLogin {
+	padding:10px;
+	border:none;
+	background-color:#2ECC71;
+	color:#fff;
+	font-weight:600;
+	border-radius:20px;
+	width:300px;
+  }
+    .buttonLogin:hover{
+	background: #333;
+  }
+</style>
