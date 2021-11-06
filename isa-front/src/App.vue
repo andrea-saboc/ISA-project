@@ -1,8 +1,10 @@
 <template>
   <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-    <router-link to="/clientRegistration">Register</router-link>
+    <ul>
+      <li><dl><router-link to="/">Home</router-link> </dl></li>
+      <li><dl><router-link to="/about">About</router-link></dl></li>
+      <li style="float:right"><dl><router-link to="/clientRegistration">Register</router-link></dl></li>
+    </ul>
   </div>
   <router-view/>
 </template>
@@ -12,7 +14,6 @@
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
 }
 
@@ -23,9 +24,22 @@
 #nav a {
   font-weight: bold;
   color: #2c3e50;
+  background-color: #dddddd;
 }
 
 #nav a.router-link-exact-active {
   color: #42b983;
+
 }
+li {
+  display: inline;
+  float: left;
+  border: 1px solid #bbb;
+  background-color: #dddddd;
+}
+ul {
+  border: 1px solid #bbb;
+  background-color: #dddddd;
+}
+
 </style>
