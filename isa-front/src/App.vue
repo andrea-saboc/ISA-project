@@ -3,12 +3,25 @@
     <ul>
       <li><dl><router-link to="/">Home</router-link> </dl></li>
       <li><dl><router-link to="/about">About</router-link></dl></li>
-      <li style="float:right"><dl><router-link to="/clientRegistration">Register</router-link></dl></li>
-      <li style="float:right"><dl><router-link to="/login">Login</router-link></dl></li>
+      <li v-if="!LoggedIn" style="float:right"><dl><router-link to="/clientRegistration">Register</router-link></dl></li>
+      <li v-if="!LoggedIn" style="float:right"><dl><router-link to="/login">Login</router-link></dl></li>
+
+      <li v-if="!LoggedIn" style="float:right"><dl><router-link to="/profile">Profile</router-link></dl></li>
+      <li v-if="LoggedIn" style="float:right"><dl><router-link to="/login">Logout</router-link></dl></li>
     </ul>
   </div>
   <router-view/>
 </template>
+
+<script>
+export default{
+  data(){
+    LoggedIn: false
+  }
+
+
+}
+</script>
 
 <style>
 #app {
