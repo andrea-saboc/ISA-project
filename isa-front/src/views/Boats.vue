@@ -17,9 +17,10 @@
             <br>
 </div>
 
+<div class="right-fixed"><label style="color:black;font-size:20px;">Pretraga po razlicitim krit:</label></div>
+<div class="left-fixed"> <label style="color:black;font-size:20px;">Odabrani entitet pa combobox:</label></div>
 
 </div>
-
 </template>
 
 <script>
@@ -41,6 +42,12 @@ boats : [
            },
            {
                'name': 'Ime trece, ime broda zamisli',
+               'address': 'Adresa od vise dijelova',
+               'promoDescription' : 'promo opis',
+               'avgGrade' : 'ocjena'
+           },
+           {
+               'name': 'Cetvrto',
                'address': 'Adresa od vise dijelova',
                'promoDescription' : 'promo opis',
                'avgGrade' : 'ocjena'
@@ -68,6 +75,29 @@ boats : [
 .row:hover{
     background-color:#FCFCFC;
 	box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0);
+}
+
+.right-fixed {
+  background-color: #dddddd;
+  opacity: 0.3;
+  width: 250px;
+  height: 350px;
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+	border-radius: 20px;
+    padding: 60px;
+}
+.left-fixed {
+  background-color: #dddddd;
+  opacity: 0.3;
+  width: 185px;
+  height: 100px;
+  position: fixed;
+  bottom: 30px;
+  left: 30px;
+	border-radius: 10px;
+    padding: 60px;
 }
 
 </style>
