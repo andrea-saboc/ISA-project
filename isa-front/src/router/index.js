@@ -5,6 +5,8 @@ import ClientRegistration from '../views/ClientRegistration.vue'
 import Login from '../views/Login.vue'
 import Profile from '../views/Profile.vue'
 
+import Boats from '../views/Boats.vue'
+
 
 const routes = [
   {
@@ -31,7 +33,13 @@ const routes = [
     path: '/profile',
     name: 'profile',
     component: Profile
+   },
+   {
+    path: '/boats',
+    name: 'boats',
+    component: Boats
    }
+
 ]
 
 const router = createRouter({
