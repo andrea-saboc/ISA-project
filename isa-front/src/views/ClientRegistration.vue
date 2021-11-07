@@ -1,5 +1,5 @@
 <template>
-<div class="registrationForm">
+<div id="registrationForm">
    <h1>Registracija</h1>
    <br>
    <input placeholder="Name" class="inputKredencijali" type="text" v-model="name"/>            
@@ -24,7 +24,7 @@
    <br>
    <br>
    <br>
-   <button class="buttonLogin" v-on:click="Register">Register</button>
+   <button class="buttonRegister" v-on:click="Register">Register</button>
    <br>
    <br>
    <br>
@@ -64,29 +64,27 @@ export default{
 }
 </script>
 <style>
-  h1{
-    text-align: center;
-  }
 
-  .registrationForm{
+  #registrationForm{
       text-align:center;
   }
 
-  input{
-    width: 300px;
-	margin:5px 0;
+  #registrationForm input{
+  width: 300px;
+  margin:5px 0;
 	padding:10px;
 	border-radius:20px;
 	border: 2px solid #eee;
 	box-shadow:0 0 15px 4px rgba(0,0,0,0.06);
   }
-  input:focus{
+
+  #registrationForm input:focus{
 	background: #FCFCFC;
 	outline: none;
 	
   }
   
- .buttonLogin {
+ .buttonRegister {
 	padding:10px;
 	border:none;
 	background-color:#2ECC71;
@@ -95,7 +93,8 @@ export default{
 	border-radius:20px;
 	width:300px;
   }
-    .buttonLogin:hover{
+
+  .buttonLogin:hover{
 	background: #333;
   }
 

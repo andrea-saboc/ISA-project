@@ -1,13 +1,13 @@
 <template>
   <div id="nav">
     <ul>
-      <li><dl><router-link to="/">Home</router-link> </dl></li>
-      <li><dl><router-link to="/about">About</router-link></dl></li>
-      <li v-if="!LoggedIn" style="float:right"><dl><router-link to="/clientRegistration">Register</router-link></dl></li>
-      <li v-if="!LoggedIn" style="float:right"><dl><router-link to="/login">Login</router-link></dl></li>
+      <li><dl><router-link to="/">Home </router-link> </dl></li>
+      <li><dl><router-link to="/about">  About  </router-link></dl></li>
+      <li v-if="!LoggedIn" style="float:right"><dl><router-link to="/clientRegistration">  Register  </router-link></dl></li>
+      <li v-if="!LoggedIn" style="float:right"><dl><router-link to="/login">  Login  </router-link></dl></li>
 
-      <li v-if="!LoggedIn" style="float:right"><dl><router-link to="/profile">Profile</router-link></dl></li>
-      <li v-if="LoggedIn" style="float:right"><dl><router-link to="/login">Logout</router-link></dl></li>
+      <li v-if="!LoggedIn" style="float:right"><dl><router-link to="/profile">  Profile  </router-link></dl></li>
+      <li v-if="LoggedIn" style="float:right"><dl><router-link to="/login">  Logout  </router-link></dl></li>
     </ul>
   </div>
   <router-view/>
@@ -33,6 +33,7 @@ export default{
 
 #nav {
   padding: 30px;
+
 }
 
 #nav a {
@@ -43,12 +44,11 @@ export default{
 
 #nav a.router-link-exact-active {
   color: #42b983;
-
 }
+
 li {
   display: inline;
   float: left;
-  border: 1px solid #bbb;
   background-color: #dddddd;
 }
 ul {

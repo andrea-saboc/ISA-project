@@ -1,5 +1,5 @@
 <template>
-<div class="registrationForm">
+<div id="loginForm">
    <h1>Login</h1>
    <br>
    <br>
@@ -27,22 +27,25 @@ export default{
 }
 </script>
 <style>
+
   h1{
     text-align: center;
   }
 
-  .registrationForm{
+  #loginForm{
       text-align:center;
   }
 
-  input{
-    width: 300px;
+  #loginForm input{
+    
+  width: 300px;
 	margin:5px 0;
 	padding:10px;
 	border-radius:20px;
 	border: 2px solid #eee;
 	box-shadow:0 0 15px 4px rgba(0,0,0,0.06);
   }
+
   input:focus{
 	background: #FCFCFC;
 	outline: none;
@@ -58,7 +61,7 @@ export default{
 	border-radius:20px;
 	width:300px;
   }
-    .buttonLogin:hover{
+  .buttonLogin:hover{
 	background: #333;
   }
 </style>

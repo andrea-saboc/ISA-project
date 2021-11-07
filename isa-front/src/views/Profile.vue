@@ -1,7 +1,7 @@
 <template>
 
 <div id="profileInfo">
-<h4>Change your info :</h4>
+<h3>Change your info :</h3>
 <table>
    <tr>
       <td> <label>Name:</label></td>
@@ -34,7 +34,10 @@
       <td><button>Change</button></td>
    </tr>
 </table>
-<h4>Change your password :</h4>
+<br>
+<br>
+<br>
+<h3>Change your password :</h3>
 <table>
    <tr>
       <td> <label>Enter your old password:</label></td>
@@ -72,7 +75,7 @@ export default{
   }
 
   #profileInfo input{
-    width: 300px;
+  width: 300px;
 	padding:10px 10px 10px 5px;
   display:block;
   width:300px;
@@ -84,5 +87,20 @@ export default{
     margin-left: auto;
     margin-right: auto;
   }
+
+  #profileInfo button{
+   padding:10px;
+	border:none;
+	background-color:#2ECC71;
+	color:#fff;
+	font-weight:600;
+	border-radius:20px;
+	width:100px;
+  }
+
+  #profileInfo button:hover{
+	background: #333;
+  }
+
 
 </style>
