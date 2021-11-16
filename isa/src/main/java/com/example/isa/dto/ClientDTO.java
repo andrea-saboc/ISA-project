@@ -18,6 +18,22 @@ public class ClientDTO {
 				+ ", country=" + country + ", phoneNumber=" + phoneNumber + ", email=" + email + ", password="
 				+ password + "]";
 	}
+
+
+	public ClientDTO(String name, String surname, String address, String city, String country, String phoneNumber,
+			String email, String password) {
+		super();
+		this.name = name;
+		this.surname = surname;
+		this.address = address;
+		this.city = city;
+		this.country = country;
+		this.phoneNumber = phoneNumber;
+		this.email = email;
+		this.password = password;
+	}
+	
+	
     
     
 

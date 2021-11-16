@@ -34,6 +34,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default{
     data(){
         return{
@@ -49,17 +50,39 @@ export default{
             fieldsFillled : true
         }
     },
-    Register(){},
-    CheckFields(){
-        if(this.name === '') this.fieldsFillled = false;
-        if(this.surname === '') this.fieldsFillled = false;
-        if(this.address === '') this.fieldsFillled = false;
-        if(this.city === '') this.fieldsFillled = false
-        if(this.country === '') this.fieldsFillled = false
-        if(this.phoneNumber === '') this.fieldsFillled = false
-        if(this.email === '') this.fieldsFillled = false
-    }
+    methods:{
 
+      Register(){
+      alert(this.name);
+      axios
+          .post('http://localhost:8080/clientRegistration',
+          {
+            "name": this.name,
+            "surname": this.surname,
+            "address": this.address,
+            "city": this.city,
+            "country": this.country,
+            "phoneNumber": this.phoneNumber,
+            "email": this.emaill,
+            "password": this.password,
+          })
+          .then(response => {
+            alert(response.data)
+            this.messege = response.data
+          });
+
+
+      },
+      CheckFields(){
+          if(this.name === '') this.fieldsFillled = false;
+          if(this.surname === '') this.fieldsFillled = false;
+          if(this.address === '') this.fieldsFillled = false;
+          if(this.city === '') this.fieldsFillled = false
+          if(this.country === '') this.fieldsFillled = false
+          if(this.phoneNumber === '') this.fieldsFillled = false
+          if(this.email === '') this.fieldsFillled = false
+      }
+    }
 
 }
 </script>

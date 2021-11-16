@@ -13,12 +13,13 @@ import com.example.isa.dto.ClientDTO;
 @RestController
 public class ClientController {
 	
-    @RequestMapping("/")
-    public String index() {
-        return "Spring Boot POC Welcomes You!";
-    }
+
 	
-	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+	//@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE,value = "/clientRegistration")
+	//@CrossOrigin(origins = "*")
+    
+	@RequestMapping(method = RequestMethod.POST, value = "/clientRegistration",consumes = MediaType.APPLICATION_JSON_VALUE)
+	@CrossOrigin(origins = "*")
 	public ResponseEntity<String> registerClient(ClientDTO clientData){
 		
 		System.out.println("Client added :)");
