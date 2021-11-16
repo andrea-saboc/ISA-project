@@ -4,5 +4,6 @@ public enum UserType {
 	  CLIENT,
 	  MANSION_OWNER,
 	  BOAT_OWNER,
-	  INSTRUCTOR
+	  INSTRUCTOR,
+	  ADMIN
 }

@@ -25,15 +25,20 @@ public class LoginController {
 	@CrossOrigin(origins = "*")
 	public ResponseEntity<String> login(@RequestBody LoginDTO loginData,HttpServletRequest request) throws JsonProcessingException{
 		
+		HttpSession session = request.getSession(true);	
 		
-		if(!userExists(loginData.getEmail()))
-			return new ResponseEntity<>("User does not exist", HttpStatus.OK);	
-		else if (!passwordInvalid(loginData))
-			return new ResponseEntity<>("Invalid password", HttpStatus.OK);			
+		if(!userExists(loginData.getEmail())) {
+			session.setAttribute("User","No user");
+			return new ResponseEntity<>("User does not exist", HttpStatus.OK);
+		}
+	
+		else if (!passwordInvalid(loginData)) {
+			session.setAttribute("User","No user");
+			return new ResponseEntity<>("Invalid password", HttpStatus.OK);	
+		}
 		else {
 			
 			User user = loginUser(loginData);
-			HttpSession session = request.getSession();
 			session.setAttribute("User", user);
 
 			return new ResponseEntity<>(user.getUserType().name(), HttpStatus.OK);
@@ -55,14 +60,14 @@ public class LoginController {
 		return client;
 	}
 	
-	@RequestMapping(method = RequestMethod.POST, value = "/loginTest",produces = MediaType.APPLICATION_JSON_VALUE )
+	@RequestMapping(method = RequestMethod.GET, value = "/loginTest",produces = MediaType.APPLICATION_JSON_VALUE )
 	@CrossOrigin(origins = "*")
 	public ResponseEntity<String> loginTest(HttpServletRequest request) throws JsonProcessingException{
 
 		
-		HttpSession session = request.getSession();
-		
-		if(session.getAttribute("User") == null)
+		HttpSession session = request.getSession(true);
+		System.out.println(session.getAttribute("User"));
+		if(session.getAttribute("User") == "No user")
 			return new ResponseEntity<>("Client is not logged in", HttpStatus.OK);
 		else {
 			

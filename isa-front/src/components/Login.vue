@@ -37,16 +37,32 @@ export default{
               })
               .then(response => {
                 if (response.data != 'Err:KorisnikNijeUlogovan') {
+
                   this.userType = response.data;
+                  this.RedirectToUserHomePage()
+
                 }
               });
         }else alert('error in filling form');
 
       },
+
       CheckIfEmpty(){
         if(this.email === '' || this.password === '') this.fieldEmpty = true;
-      }
+      },
 
+      RedirectToUserHomePage(){
+        if(this.userType === 'CLIENT')
+          this.$router.push({name: 'About'});
+        else if(this.userType === 'ADMIN')
+          this.$router.push({name: 'About'});
+        else if(this.userType === 'BOAT_OWNER')
+          this.$router.push({name: 'About'});
+        else if(this.userType === 'MANSION_OWNER')
+          this.$router.push({name: 'About'});
+        else
+          this.$router.push({name: 'About'});
+      }
     }
 }
 </script>
