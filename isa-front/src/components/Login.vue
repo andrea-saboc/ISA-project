@@ -19,6 +19,7 @@ import axios from 'axios'
 export default{
     data(){
         return{
+            userType: '',
             email: '',
             password: '',
             fieldEmpty: false
@@ -35,8 +36,9 @@ export default{
                 "password": this.password
               })
               .then(response => {
-                alert(response.data)
-                this.messege = response.data
+                if (response.data != 'Err:KorisnikNijeUlogovan') {
+                  this.userType = response.data;
+                }
               });
         }else alert('error in filling form');
 

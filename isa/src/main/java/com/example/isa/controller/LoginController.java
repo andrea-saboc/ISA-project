@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import com.example.isa.dto.LoginDTO;
 import com.example.isa.enums.UserType;
-import com.example.isa.model.Client;
+import com.example.isa.model.User;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -25,7 +25,6 @@ public class LoginController {
 	@CrossOrigin(origins = "*")
 	public ResponseEntity<String> login(@RequestBody LoginDTO loginData,HttpServletRequest request) throws JsonProcessingException{
 		
-		System.out.println(loginData.getEmail());
 		
 		if(!userExists(loginData.getEmail()))
 			return new ResponseEntity<>("User does not exist", HttpStatus.OK);	
@@ -33,43 +32,25 @@ public class LoginController {
 			return new ResponseEntity<>("Invalid password", HttpStatus.OK);			
 		else {
 			
-			System.out.println("DOODODOODODOo");
-			Object User = loginUser(loginData);
+			User user = loginUser(loginData);
 			HttpSession session = request.getSession();
-			session.setAttribute("User", User);
-			
-			System.out.println(User.toString());
-			ObjectMapper mapper = new ObjectMapper();
-			String jsonString = mapper.writeValueAsString(session.getAttribute("User"));
-			
-			return new ResponseEntity<>(jsonString, HttpStatus.OK);
+			session.setAttribute("User", user);
+
+			return new ResponseEntity<>(user.getUserType().name(), HttpStatus.OK);
 		}
 	}
 	
-	private boolean userExists(String email) { //treba pozvati sve servise i proveriti
-		
-		//check clients
-		//check managers
-		//check instructors
-		
+	private boolean userExists(String email) {
 		return true;
 	}
 	
-	private boolean passwordInvalid(LoginDTO loginData) { //treba pozvati sve servise i proveriti
-		
-		//check clients
-		//check managers
-		//check instructors
-		
+	private boolean passwordInvalid(LoginDTO loginData) {	
 		return true;
 	}
 	
-	private Object loginUser(LoginDTO loginData) {
-		
-		//
-		//		
-		//
-		Client client = new Client("id", "nameee", "surname", "address", "city", "bsckj",
+	private User loginUser(LoginDTO loginData) {
+
+		User client = new User(1, "nameee", "surname", "address", "city", "bsckj",
 				"hcbjv", "jfjh", "ytyt",UserType.CLIENT);
 		return client;
 	}

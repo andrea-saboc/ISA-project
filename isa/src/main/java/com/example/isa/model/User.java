@@ -2,9 +2,9 @@ package com.example.isa.model;
 
 import com.example.isa.enums.UserType;
 
-public class Client {
+public class User {
 	
-	private String id;
+	private int id;
     private String name;
     private String surname;
     private String address;
@@ -16,7 +16,7 @@ public class Client {
     private UserType userType;
     
     
-	public Client(String id, String name, String surname, String address, String city, String country,
+	public User(int id, String name, String surname, String address, String city, String country,
 			String phoneNumber, String email, String password,UserType userType) {
 		super();
 		this.id = id;
@@ -32,12 +32,12 @@ public class Client {
 	}
 
 
-	public String getId() {
+	public int getId() {
 		return id;
 	}
 
 
-	public void setId(String id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 
