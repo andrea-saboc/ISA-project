@@ -4,6 +4,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,10 +21,11 @@ public class ClientController {
     
 	@RequestMapping(method = RequestMethod.POST, value = "/clientRegistration",consumes = MediaType.APPLICATION_JSON_VALUE)
 	@CrossOrigin(origins = "*")
-	public ResponseEntity<String> registerClient(ClientDTO clientData){
+	public ResponseEntity<String> registerClient(@RequestBody ClientDTO clientData){
 		
 		System.out.println("Client added :)");
 		System.out.println(clientData.toString());
+
 		return new ResponseEntity<>("Client is registered", HttpStatus.OK);
 	}	
 	
