@@ -25,15 +25,20 @@ public class LoginController {
 	@CrossOrigin(origins = "*")
 	public ResponseEntity<String> login(@RequestBody LoginDTO loginData,HttpServletRequest request) throws JsonProcessingException{
 		
+		System.out.println(loginData.getEmail());
+		
 		if(!userExists(loginData.getEmail()))
 			return new ResponseEntity<>("User does not exist", HttpStatus.OK);	
 		else if (!passwordInvalid(loginData))
 			return new ResponseEntity<>("Invalid password", HttpStatus.OK);			
 		else {
 			
+			System.out.println("DOODODOODODOo");
 			Object User = loginUser(loginData);
 			HttpSession session = request.getSession();
 			session.setAttribute("User", User);
+			
+			System.out.println(User.toString());
 			ObjectMapper mapper = new ObjectMapper();
 			String jsonString = mapper.writeValueAsString(session.getAttribute("User"));
 			

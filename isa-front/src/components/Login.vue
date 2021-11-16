@@ -15,6 +15,7 @@
 </div>
 </template>
 <script>
+import axios from 'axios'
 export default{
     data(){
         return{
@@ -23,27 +24,27 @@ export default{
             fieldEmpty: false
         }
     },
-    Login(){
+    methods:{
+      Login(){
 
-      alert(this.email);
-      this.CheckIfEmpty();
+        if(!this.fieldEmpty){
+          axios
+              .post('http://localhost:8080/login',
+              {
+                "email": this.email,
+                "password": this.password
+              })
+              .then(response => {
+                alert(response.data)
+                this.messege = response.data
+              });
+        }else alert('error in filling form');
 
-      if(!this.fieldEmpty){
-        axios
-            .post('http://localhost:8080/login',
-            {
-              "email": this.email,
-              "password": this.password
-            })
-            .then(response => {
-              alert(response.data)
-              this.messege = response.data
-            });
-      }else alert('error in filling form');
+      },
+      CheckIfEmpty(){
+        if(this.email === '' || this.password === '') this.fieldEmpty = true;
+      }
 
-    },
-    CheckIfEmpty(){
-      if(this.email === '' || this.password === '') this.fieldEmpty = true;
     }
 }
 </script>
