@@ -47,40 +47,47 @@ export default{
             email: '',
             password: '',
             passwordRepeated: '',
-            fieldsFillled : true
+            fieldsFilled : true,
+            passwordValid : true
         }
     },
     methods:{
 
       Register(){
-      alert(this.name);
-      axios
-          .post('http://localhost:8080/clientRegistration',
-          {
-            "name": this.name,
-            "surname": this.surname,
-            "address": this.address,
-            "city": this.city,
-            "country": this.country,
-            "phoneNumber": this.phoneNumber,
-            "email": this.emaill,
-            "password": this.password,
-          })
-          .then(response => {
-            alert(response.data)
-            this.messege = response.data
-          });
+      this.CheckIfPassworIsValid();
+      this.CheckIfFieldsAreFilled();
 
+      if(this.fieldsFilled && this.passwordValid){
+        axios
+            .post('http://localhost:8080/clientRegistration',
+            {
+              "name": this.name,
+              "surname": this.surname,
+              "address": this.address,
+              "city": this.city,
+              "country": this.country,
+              "phoneNumber": this.phoneNumber,
+              "email": this.emaill,
+              "password": this.password,
+            })
+            .then(response => {
+              alert(response.data)
+              this.messege = response.data
+            });
+      }else alert('error in filling registration');
 
       },
-      CheckFields(){
-          if(this.name === '') this.fieldsFillled = false;
-          if(this.surname === '') this.fieldsFillled = false;
-          if(this.address === '') this.fieldsFillled = false;
-          if(this.city === '') this.fieldsFillled = false
-          if(this.country === '') this.fieldsFillled = false
-          if(this.phoneNumber === '') this.fieldsFillled = false
-          if(this.email === '') this.fieldsFillled = false
+      CheckIfFieldsAreFilled(){
+          if(this.name === '') this.fieldsFilled = false;
+          if(this.surname === '') this.fieldsFilled = false;
+          if(this.address === '') this.fieldsFilled = false;
+          if(this.city === '') this.fieldsFilled = false
+          if(this.country === '') this.fieldsFilled = false
+          if(this.phoneNumber === '') this.fieldsFilled = false
+          if(this.email === '') this.fieldsFilled = false
+      },
+      CheckIfPassworIsValid(){
+          if(!this.password === this.passwordRepeated) this.passwordValid = false;
       }
     }
 
