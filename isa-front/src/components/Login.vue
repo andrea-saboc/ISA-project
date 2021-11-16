@@ -19,11 +19,32 @@ export default{
     data(){
         return{
             email: '',
-            password: ''
+            password: '',
+            fieldEmpty: false
         }
     },
-    Login(){},
-    CheckIfEmpty(){}
+    Login(){
+
+      alert(this.email);
+      this.CheckIfEmpty();
+
+      if(!this.fieldEmpty){
+        axios
+            .post('http://localhost:8080/login',
+            {
+              "email": this.email,
+              "password": this.password
+            })
+            .then(response => {
+              alert(response.data)
+              this.messege = response.data
+            });
+      }else alert('error in filling form');
+
+    },
+    CheckIfEmpty(){
+      if(this.email === '' || this.password === '') this.fieldEmpty = true;
+    }
 }
 </script>
 <style>

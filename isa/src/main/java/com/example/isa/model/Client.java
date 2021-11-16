@@ -1,5 +1,6 @@
 package com.example.isa.model;
 
+import com.example.isa.enums.UserType;
 
 public class Client {
 	
@@ -12,10 +13,11 @@ public class Client {
     private String phoneNumber;
     private String email;
     private String password;
+    private UserType userType;
     
     
 	public Client(String id, String name, String surname, String address, String city, String country,
-			String phoneNumber, String email, String password) {
+			String phoneNumber, String email, String password,UserType userType) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -26,6 +28,7 @@ public class Client {
 		this.phoneNumber = phoneNumber;
 		this.email = email;
 		this.password = password;
+		this.userType = userType;
 	}
 
 
@@ -116,6 +119,16 @@ public class Client {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+
+	public UserType getUserType() {
+		return userType;
+	}
+
+
+	public void setUserType(UserType userType) {
+		this.userType = userType;
 	}
 	
 	
