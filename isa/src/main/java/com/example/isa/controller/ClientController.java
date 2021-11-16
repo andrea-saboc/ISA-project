@@ -1,0 +1,30 @@
+package com.example.isa.controller;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.example.isa.dto.ClientDTO;
+
+@RestController
+public class ClientController {
+	
+    @RequestMapping("/")
+    public String index() {
+        return "Spring Boot POC Welcomes You!";
+    }
+	
+	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> registerClient(ClientDTO clientData){
+		
+		System.out.println("Client added :)");
+		System.out.println(clientData.toString());
+		return new ResponseEntity<>("Client is registered", HttpStatus.OK);
+	}	
+	
+
+}
