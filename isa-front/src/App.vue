@@ -7,7 +7,7 @@
       <li v-if="!LoggedIn" style="float:right"><dl><router-link to="/login">  Login  </router-link></dl></li>
       <li v-if="LoggedIn" style="float:right"><dl><router-link to="/boats">  Boats  </router-link></dl></li>
 
-      <li v-if="LoggedIn" style="float:right"><dl><router-link to="/profile">  Profile  </router-link></dl></li>
+      <li v-if="!LoggedIn" style="float:right"><dl><router-link to="/profile">  Profile  </router-link></dl></li>
       <li v-if="LoggedIn" style="float:right"><dl><router-link to="/login">  Logout  </router-link></dl></li>
     </ul>
   </div>
@@ -26,6 +26,8 @@ export default{
   
   mounted(){
 
+    alert('entered')
+
     axios
       .get('http://localhost:8080/loginTest')
       .then(response => {
@@ -34,10 +36,6 @@ export default{
           this.LoggedIn = true;
         }
       });
-
-
-
-
   }
 
 

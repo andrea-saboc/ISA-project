@@ -65,7 +65,10 @@ public class LoginController {
 		
 		if(null == user) {
 			session.setAttribute("User", new User());
-			return new ResponseEntity<>("User is not logged in", HttpStatus.OK);
+			ObjectMapper mapper = new ObjectMapper();
+			String jsonString = mapper.writeValueAsString(clientService.loginUser(new LoginDTO("","")));
+			
+			return new ResponseEntity<>(jsonString, HttpStatus.OK);
 		}
 		else {
 			
