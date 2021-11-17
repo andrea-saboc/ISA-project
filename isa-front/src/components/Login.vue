@@ -53,15 +53,15 @@ export default{
 
       RedirectToUserHomePage(){
         if(this.userType === 'CLIENT')
-          this.$router.push({name: 'About'});
+          this.$router.push({name: 'Home'});
         else if(this.userType === 'ADMIN')
-          this.$router.push({name: 'About'});
+          this.$router.push({name: 'Home'});
         else if(this.userType === 'BOAT_OWNER')
-          this.$router.push({name: 'About'});
+          this.$router.push({name: 'Home'});
         else if(this.userType === 'MANSION_OWNER')
-          this.$router.push({name: 'About'});
+          this.$router.push({name: 'Home'});
         else
-          this.$router.push({name: 'About'});
+          this.$router.push({name: 'Home'});
       }
     }
 }

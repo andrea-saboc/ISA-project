@@ -23,16 +23,17 @@ export default{
     LoggedIn: false
     }
   },
+  
   mounted(){
 
- axios
-  .get('http://localhost:8080/loginTest')
-  .then(response => {
-    if (!response.data === 'Client is not logged in') {
-      this.user = response.data;
-      this.LoggedIn = true;
-    }
-  });
+    axios
+      .get('http://localhost:8080/loginTest')
+      .then(response => {
+        if (!response.data === 'User is not logged in') {
+          this.user = response.data;
+          this.LoggedIn = true;
+        }
+      });
 
 
 
