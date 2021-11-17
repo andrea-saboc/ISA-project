@@ -41,19 +41,19 @@
 <table>
    <tr>
       <td> <label>Enter your old password:</label></td>
-      <td><input type="password" v-model="password"></td>
+      <td><input type="password" v-model="oldPassword"></td>
    </tr>
    <tr>
       <td> <label>Enter your new password:</label></td>
-      <td><input type="password" v-model="newPasswordRepeated"></td>
-   </tr>
-   <tr>
-      <td> <label>Reenter your new password:</label></td>
       <td><input type="password" v-model="newPassword"></td>
    </tr>
    <tr>
+      <td> <label>Reenter your new password:</label></td>
+      <td><input type="password" v-model="newPasswordRepeated"></td>
+   </tr>
+   <tr>
       <td></td>
-      <td><button>Change</button></td>
+      <td><button v-on:click="ChangePassword">Change</button></td>
    </tr>
 </table>
 </div>
@@ -70,7 +70,10 @@ export default{
          address: '',
          city: '',
          country: '',
-         phoneNumber: ''
+         phoneNumber: '',
+         oldPassword: '',
+         newPssword: '',
+         newPasswordRepeated: ''
         }
     },         
    mounted(){
@@ -118,10 +121,15 @@ export default{
          axios
          .post('http://localhost:8080/updateUser',this.user)
          .then(response => {
-            alert('client is updated')
+            alert('user is updated')
          });
-
-
+      },
+      ChangePassword(){
+         
+         if(this.oldPassword === user.password && this.newPassword === this.newPasswordRepeated){
+            this.user.password = this.newPassword;
+            this.UpdateUser();
+         }
       }
 
     
