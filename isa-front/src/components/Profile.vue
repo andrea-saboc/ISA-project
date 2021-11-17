@@ -5,33 +5,33 @@
 <table>
    <tr>
       <td> <label>Name:</label></td>
-      <td><input class="infoInput" type="text" v-model="name"></td>
-      <td><button>Change</button></td>
+      <td><input type="text" v-model="name"></td>
+      <td><button v-on:click="ChangeName">Change</button></td>
    </tr>
    <tr>
       <td> <label>Surname:</label></td>
       <td><input type="text" v-model="surname"></td>
-      <td><button>Change</button></td>
+      <td><button v-on:click="ChangeSurname">Change</button></td>
    </tr>
    <tr>
       <td> <label>Address:</label></td>
       <td><input type="text" v-model="address"></td>
-      <td><button>Change</button></td>
+      <td><button v-on:click="ChangeAddress">Change</button></td>
    </tr>
    <tr>
       <td> <label>City:</label></td>
       <td><input type="text" v-model="city"></td>
-      <td><button>Change</button></td>
+      <td><button v-on:click="ChangeCity">Change</button></td>
    </tr>
    <tr>
       <td> <label>Country:</label></td>
       <td><input type="text" v-model="country"></td>
-      <td><button>Change</button></td>
+      <td><button v-on:click="ChangeCountry">Change</button></td>
    </tr>
    <tr>
       <td> <label>Phone number:</label></td>
       <td><input type="text" v-model="phoneNumber"></td>
-      <td><button>Change</button></td>
+      <td><button v-on:click="ChangePhoneNumber">Change</button></td>
    </tr>
 </table>
 <br>
@@ -41,32 +41,103 @@
 <table>
    <tr>
       <td> <label>Enter your old password:</label></td>
-      <td><input type="password" v-model="password"></td>
+      <td><input type="password" v-model="oldPassword"></td>
    </tr>
    <tr>
       <td> <label>Enter your new password:</label></td>
-      <td><input type="password" v-model="newPasswordRepeated"></td>
-   </tr>
-   <tr>
-      <td> <label>Reenter your new password:</label></td>
       <td><input type="password" v-model="newPassword"></td>
    </tr>
    <tr>
+      <td> <label>Reenter your new password:</label></td>
+      <td><input type="password" v-model="newPasswordRepeated"></td>
+   </tr>
+   <tr>
       <td></td>
-      <td><button>Change</button></td>
+      <td><button v-on:click="ChangePassword">Change</button></td>
    </tr>
 </table>
 </div>
 </template>
 
 <script>
+import axios from 'axios'
 export default{
+    data(){
+        return{
+         user : {},
+         name : '',
+         surname: '',
+         address: '',
+         city: '',
+         country: '',
+         phoneNumber: '',
+         oldPassword: '',
+         newPssword: '',
+         newPasswordRepeated: ''
+        }
+    },         
+   mounted(){
+      axios
+         .get('http://localhost:8080/loginTest')
+         .then(response => {
+            this.user = response.data;
 
+            this.name = response.data.name;
+            this.surname = response.data.surname;
+            this.address = response.data.address;
+            this.city = response.data.city;
+            this.country = response.data.country;
+            this.phoneNumber = response.data.phoneNumber;        
+      });
+   },
+    methods:{
 
+      ChangeName(){
+         this.user.name = this.name;
+         this.UpdateUser();
+      },
+      ChangeSurname(){
+         this.user.surname = this.surname;
+         this.UpdateUser();
+      },
+      ChangeAddress(){
+         this.user.address = this.address;
+         this.UpdateUser();
+      },
+      ChangeCity(){
+         this.user.city = this.city;
+         this.UpdateUser();
+      },
+      ChangeCountry(){
+         this.user.country = this.country;
+         this.UpdateUser();
+      },
+      ChangePhoneNumber(){
+         this.user.country = this.country;
+         this.UpdateUser();
+      },
+      UpdateUser(){
 
+         axios
+         .post('http://localhost:8080/updateUser',this.user)
+         .then(response => {
+            alert('user is updated')
+         });
+      },
+      ChangePassword(){
+         
+         if(this.oldPassword === user.password && this.newPassword === this.newPasswordRepeated){
+            this.user.password = this.newPassword;
+            this.UpdateUser();
+         }
+      }
+
+    
+    }
 }
 
 </script>
+
 
 <style>
 
