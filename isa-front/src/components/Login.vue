@@ -15,15 +15,55 @@
 </div>
 </template>
 <script>
+import axios from 'axios'
 export default{
     data(){
         return{
+            userType: '',
             email: '',
-            password: ''
+            password: '',
+            fieldEmpty: false
         }
     },
-    Login(){},
-    CheckIfEmpty(){}
+    methods:{
+      Login(){
+
+        if(!this.fieldEmpty){
+          axios
+              .post('http://localhost:8080/login',
+              {
+                "email": this.email,
+                "password": this.password
+              })
+              .then(response => {
+                if (response.data != 'Err:KorisnikNijeUlogovan') {
+
+                  this.userType = response.data;
+                  this.RedirectToUserHomePage()
+
+                }
+              });
+        }else alert('error in filling form');
+
+      },
+
+      CheckIfEmpty(){
+        if(this.email === '' || this.password === '') this.fieldEmpty = true;
+      },
+
+      RedirectToUserHomePage(){
+        if(this.userType === 'CLIENT')
+          this.$router.push({name: 'Home'});
+        else if(this.userType === 'ADMIN')
+          this.$router.push({name: 'Home'});
+        else if(this.userType === 'BOAT_OWNER')
+          this.$router.push({name: 'Home'});
+        else if(this.userType === 'MANSION_OWNER')
+          this.$router.push({name: 'Home'});
+        else
+          this.$router.push({name: 'Home'});
+      }
+    }
 }
 </script>
 <style>

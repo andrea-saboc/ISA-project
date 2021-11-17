@@ -5,9 +5,9 @@
       <li><dl><router-link to="/about">  About  </router-link></dl></li>
       <li v-if="!LoggedIn" style="float:right"><dl><router-link to="/clientRegistration">  Register  </router-link></dl></li>
       <li v-if="!LoggedIn" style="float:right"><dl><router-link to="/login">  Login  </router-link></dl></li>
-      <li v-if="!LoggedIn" style="float:right"><dl><router-link to="/boats">  Boats  </router-link></dl></li>
+      <li v-if="LoggedIn" style="float:right"><dl><router-link to="/boats">  Boats  </router-link></dl></li>
 
-      <li v-if="!LoggedIn" style="float:right"><dl><router-link to="/profile">  Profile  </router-link></dl></li>
+      <li v-if="LoggedIn" style="float:right"><dl><router-link to="/profile">  Profile  </router-link></dl></li>
       <li v-if="LoggedIn" style="float:right"><dl><router-link to="/login">  Logout  </router-link></dl></li>
     </ul>
   </div>
@@ -15,9 +15,29 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default{
   data(){
+    return{
+    user: {},
     LoggedIn: false
+    }
+  },
+  
+  mounted(){
+
+    axios
+      .get('http://localhost:8080/loginTest')
+      .then(response => {
+        if (!response.data === 'User is not logged in') {
+          this.user = response.data;
+          this.LoggedIn = true;
+        }
+      });
+
+
+
+
   }
 
 
