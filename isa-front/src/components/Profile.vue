@@ -74,22 +74,58 @@ export default{
         }
     },         
    mounted(){
-      alert('entered');
       axios
          .get('http://localhost:8080/loginTest')
          .then(response => {
             this.user = response.data;
-            alert(this.user);
+
             this.name = response.data.name;
             this.surname = response.data.surname;
             this.address = response.data.address;
             this.city = response.data.city;
             this.country = response.data.country;
-            this.phoneNumber = response.data.phoneNumber;
-            
-         
+            this.phoneNumber = response.data.phoneNumber;        
+      });
+   },
+    methods:{
+
+      ChangeName(){
+         this.user.name = this.name;
+         this.UpdateUser();
+      },
+      ChangeSurname(){
+         this.user.surname = this.surname;
+         this.UpdateUser();
+      },
+      ChangeAddress(){
+         this.user.address = this.address;
+         this.UpdateUser();
+      },
+      ChangeCity(){
+         this.user.city = this.city;
+         this.UpdateUser();
+      },
+      ChangeCountry(){
+         this.user.country = this.country;
+         this.UpdateUser();
+      },
+      ChangePhoneNumber(){
+         this.user.country = this.country;
+         this.UpdateUser();
+      },
+      UpdateUser(){
+
+         axios
+         .post('http://localhost:8080/updateUser',this.user)
+         .then(response => {
+            alert('client is updated')
          });
+
+
       }
+
+    
+    }
 }
 
 </script>

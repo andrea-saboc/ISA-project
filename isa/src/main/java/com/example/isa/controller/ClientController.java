@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.isa.dto.ClientDTO;
+import com.example.isa.model.User;
 
 @RestController
 public class ClientController {
@@ -27,7 +28,17 @@ public class ClientController {
 		System.out.println(clientData.toString());
 
 		return new ResponseEntity<>("Client is registered", HttpStatus.OK);
-	}	
+	}
+	
+	@RequestMapping(method = RequestMethod.POST, value = "/updateUser",consumes = MediaType.APPLICATION_JSON_VALUE)
+	@CrossOrigin(origins = "*")
+	public ResponseEntity<String> updateUser(@RequestBody User user){
+		
+		System.out.println("Client to update :)");
+		System.out.println(user.getName());
+
+		return new ResponseEntity<>("Client is updated", HttpStatus.OK);
+	}
 	
 
 }
