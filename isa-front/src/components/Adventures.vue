@@ -1,14 +1,14 @@
 <template>
-<div id="mansions">
+<div id="adventures">
 
-<div v-for="mansion in mansions">
+<div v-for="adventure in adventures">
   
 			<div class="row" style="position:relative;">
 
-		  			<label style="color:#2ECC71;font-size:26px;">{{mansion.name}}</label><br><br>
-                    <label style="color:#2ECC71;font-size:20px;">{{mansion.promoDescription}}</label>
+		  			<label style="color:#2ECC71;font-size:26px;">{{adventure.name}}</label><br><br>
+                    <label style="color:#2ECC71;font-size:20px;">{{adventure.promoDescription}}</label>
                         <div style="position:absolute;bottom:30px;left:30px;">
-                            <label>{{mansion.address}}</label>
+                            <label>{{adventure.address}}</label>
                         </div>
 				
 			</div>
@@ -29,7 +29,7 @@ import axios from 'axios'
 export default{
     data(){
         return{
-        mansions : [
+        adventures : [
            {
                'name': 'Ime prvo',
                'address': 'Adresa od vise dijelova',

@@ -3,7 +3,7 @@
     <h1>Chose your interests</h1>
     <button v-on:click="RedirectBoats">BOATS</button><br><br>
     <button v-on:click="RedirectMansions">MANSIONS</button><br><br>
-    <button v-on:click="RedirectInstructors">INSTRUCTORS</button><br><br>
+    <button v-on:click="RedirectAdventures">INSTRUCTORS</button><br><br>
   </div>
 </template>
 
@@ -18,10 +18,10 @@ export default {
       this.$router.push({name: 'boats'});
     },
     RedirectMansions(){
-
+      this.$router.push({name: 'mansions'});
     },
-    RedirectInstructors(){
-
+    RedirectAdventures(){
+      this.$router.push({name: 'adventures'});
     }
 
   }
