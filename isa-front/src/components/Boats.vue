@@ -24,37 +24,27 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default{
 data: function(){
-return{
-boats : [
-           {
-               'name': 'Ime prvo',
-               'address': 'Adresa od vise dijelova',
-               'promoDescription' : 'promo opis',
-               'avgGrade' : 'ocjena'
-           },
-           {
-               'name': 'Ime drugo',
-               'address': 'Adresa od vise dijelova',
-               'promoDescription' : 'promo opis',
-               'avgGrade' : 'ocjena'
-           },
-           {
-               'name': 'Ime trece, ime broda zamisli',
-               'address': 'Adresa od vise dijelova',
-               'promoDescription' : 'promo opis',
-               'avgGrade' : 'ocjena'
-           },
-           {
-               'name': 'Cetvrto',
-               'address': 'Adresa od vise dijelova',
-               'promoDescription' : 'promo opis',
-               'avgGrade' : 'ocjena'
-           }
-        ]
-       }
+    return{
+        boats : []
+        }
+    },
+mounted(){
+      axios
+         .get('http://localhost:8080/boats')
+         .then(response => {
+            this.boats = response.data;
+            alert(response.data);        
+      });   
+
+},
+methods:{
+
+
 }
+
 }
 
 </script>

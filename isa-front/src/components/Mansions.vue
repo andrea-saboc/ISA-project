@@ -29,37 +29,23 @@ import axios from 'axios'
 export default{
     data(){
         return{
-        mansions : [
-           {
-               'name': 'Ime prvo',
-               'address': 'Adresa od vise dijelova',
-               'promoDescription' : 'promo opis',
-               'avgGrade' : 'ocjena'
-           },
-           {
-               'name': 'Ime drugo',
-               'address': 'Adresa od vise dijelova',
-               'promoDescription' : 'promo opis',
-               'avgGrade' : 'ocjena'
-           },
-           {
-               'name': 'Ime trece, ime broda zamisli',
-               'address': 'Adresa od vise dijelova',
-               'promoDescription' : 'promo opis',
-               'avgGrade' : 'ocjena'
-           },
-           {
-               'name': 'Cetvrto',
-               'address': 'Adresa od vise dijelova',
-               'promoDescription' : 'promo opis',
-               'avgGrade' : 'ocjena'
-           }
-        ]
+        mansions : []
         }
+    },
+    mounted(){
+      axios
+         .get('http://localhost:8080/mansions')
+         .then(response => {
+            this.mansions = response.data;
+            alert(response.data);        
+      });   
+
     },
     methods:{
 
+
     }
+
 }
 </script>
 
