@@ -6,7 +6,8 @@ import Login from '../components/Login.vue'
 import Profile from '../components/Profile.vue'
 
 import Boats from '../components/Boats.vue'
-
+import Mansions from '../components/Mansions.vue'
+import Adventures from '../components/Adventures.vue'
 
 const routes = [
   {
@@ -38,6 +39,16 @@ const routes = [
     path: '/boats',
     name: 'boats',
     component: Boats
+   },
+   {
+    path: '/mansions',
+    name: 'mansions',
+    component: Mansions
+   },
+   {
+    path: '/adventures',
+    name: 'adventures',
+    component: Adventures
    }
 
 ]
