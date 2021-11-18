@@ -36,8 +36,7 @@ export default{
       axios
          .get('http://localhost:8080/mansions')
          .then(response => {
-            this.mansions = response.data;
-            alert(response.data);        
+            this.mansions = response.data;       
       });   
 
     },

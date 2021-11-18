@@ -35,8 +35,7 @@ mounted(){
       axios
          .get('http://localhost:8080/boats')
          .then(response => {
-            this.boats = response.data;
-            alert(response.data);        
+            this.boats = response.data;       
       });   
 
 },
