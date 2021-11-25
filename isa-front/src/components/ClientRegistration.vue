@@ -37,7 +37,11 @@
    <input placeholder="Password" class="inputKredencijali" type="password" v-model="password"/>
    <input placeholder="Repeat your password" class="inputKredencijali" type="password" v-model="passwordRepeated"/>
    <br>
-  <textarea  name="textar" v-if="picked=='Owner'" placeholder="Give a short description about what you do and why you want to advertise yourself here..."></textarea>
+  <textarea  name="textar" v-if="picked=='Owner'"
+             placeholder="Give a short description about what you do and why you want to advertise yourself here..."
+              v-model="reasonadv">
+
+  </textarea>
    <br>
    <br>
    <br>
@@ -67,7 +71,8 @@ export default{
             fieldsFilled : true,
             passwordValid : true,
           picked: 'Client',
-          otype: 'none'
+          otype: 'none',
+          reasonadv: ''
         }
     },
     methods:{
@@ -75,8 +80,10 @@ export default{
       Register(){
       this.CheckIfPassworIsValid();
       this.CheckIfFieldsAreFilled();
-
-      if(this.fieldsFilled && this.passwordValid){
+      alert(this.fieldsFilled)
+        alert(this.passwordValid)
+        alert(this.picked)
+      if(this.fieldsFilled && this.passwordValid && this.picked=='Client'){
         axios
             .post('http://localhost:8080/clientRegistration',
             {
@@ -86,27 +93,72 @@ export default{
               "city": this.city,
               "country": this.country,
               "phoneNumber": this.phoneNumber,
-              "email": this.emaill,
+              "email": this.email,
               "password": this.password,
             })
             .then(response => {
               alert(response.data)
               this.messege = response.data
             });
-      }else alert('error in filling registration');
+      } else if (this.fieldsFilled && this.passwordValid && this.picked=='Owner'){
+        axios
+      .post('http://localhost:8080/register/advertiser',
+            {
+              "name": this.name,
+              "surname": this.surname,
+              "address": this.address,
+              "city": this.city,
+              "country": this.country,
+              "phoneNumber": this.phoneNumber,
+              "email": this.email,
+              "password": this.password,
+              "type": this.otype,
+              "reason": this.reasonadv
+            })
+            .then(response => {
+              alert(response.data)
+              this.messege = response.data
+            });
+      } else alert('Error in filling registration');
 
       },
       CheckIfFieldsAreFilled(){
-          if(this.name === '') this.fieldsFilled = false;
-          if(this.surname === '') this.fieldsFilled = false;
-          if(this.address === '') this.fieldsFilled = false;
-          if(this.city === '') this.fieldsFilled = false
-          if(this.country === '') this.fieldsFilled = false
-          if(this.phoneNumber === '') this.fieldsFilled = false
-          if(this.email === '') this.fieldsFilled = false
+          if(this.name === ''){
+            this.fieldsFilled = false;
+            alert("Enter your name")
+            return;
+          }
+          if(this.surname === '') {
+            alert("Enter your surname")
+            this.fieldsFilled = false;
+            return;
+          }
+          if(this.address === '' || this.city === '' || this.country === '') {
+            alert("Enter your address")
+            this.fieldsFilled = false;
+            return;
+          }
+          if(this.phoneNumber === '') {
+            alert("Enter your phoneNumber")
+            this.fieldsFilled = false
+            return;
+          }
+          if(this.email === '') {
+            alert("Enter your email")
+            this.fieldsFilled = false
+            return;
+          }
+          if(this.picked == 'Owner' && (this.otype=='none' || this.reasonadv =='')){
+            alert("Select all the fields!")
+            this.fieldsFilled = false
+            return;
+          }
       },
       CheckIfPassworIsValid(){
-          if(!this.password === this.passwordRepeated) this.passwordValid = false;
+          if(!this.password === this.passwordRepeated) {
+            this.passwordValid = false;
+            alert("Repeat your password correctly")
+          }
       }
     }
 

@@ -38,7 +38,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.session:spring-session-core'
 	implementation 'junit:junit:4.12'
-	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+    implementation 'org.jetbrains:annotations:20.1.0'
+    providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
 
 	// security
 	//implementation 'org.springframework.boot:spring-boot-starter-security'
