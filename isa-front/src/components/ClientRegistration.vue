@@ -1,6 +1,24 @@
 <template>
 <div id="registrationForm">
-   <h1>Registracija</h1>
+   <h1>{{picked}} registration</h1>
+  <br>
+  <div class="radio">
+  <input type="radio" id="clientreg" value="Client" name="selecttype" v-model="picked">
+  <label for="clientreg">Client</label>
+  <input type="radio" id="ownerreg" value="Owner" name="selecttype" v-model="picked">
+  <label for="ownerreg">Advertiser</label>
+  </div>
+  <br>
+  <br>
+    <div class="selection" v-if="picked=='Owner'">
+      <select v-model="otype">
+        <option value="none" disabled selected hidden>Select what you want to advertise</option>
+        <option value="boat" >Boats</option>
+        <option value="mansion">Mansions</option>
+        <option value="fishing">Fishing classes</option>
+      </select>
+
+    </div>
    <br>
    <input placeholder="Name" class="inputKredencijali" type="text" v-model="name"/>            
    <br>
@@ -14,13 +32,12 @@
    <br>
    <input placeholder="Phone number" class="inputKredencijali" type="text" v-model="phoneNumber"/>
    <br>
-   <br>
    <input placeholder="Email" class="inputKredencijali" type="text" v-model="email"/>
    <br>
    <input placeholder="Password" class="inputKredencijali" type="password" v-model="password"/>
-   <br>
    <input placeholder="Repeat your password" class="inputKredencijali" type="password" v-model="passwordRepeated"/>
    <br>
+  <textarea  name="textar" v-if="picked=='Owner'" placeholder="Give a short description about what you do and why you want to advertise yourself here..."></textarea>
    <br>
    <br>
    <br>
@@ -48,7 +65,9 @@ export default{
             password: '',
             passwordRepeated: '',
             fieldsFilled : true,
-            passwordValid : true
+            passwordValid : true,
+          picked: 'Client',
+          otype: 'none'
         }
     },
     methods:{
@@ -96,17 +115,35 @@ export default{
 <style>
 
   #registrationForm{
+      width: 30%;
+      margin-left: 30% ;
       text-align:center;
   }
 
   #registrationForm input{
-  width: 300px;
+  width: 60%;
   margin:5px 0;
 	padding:10px;
 	border-radius:20px;
 	border: 2px solid #eee;
 	box-shadow:0 0 15px 4px rgba(0,0,0,0.06);
   }
+
+  #registrationForm .radio{
+    display: flex;
+    flex-direction: row;
+    padding: 10px;
+    border-radius:20px;
+    background: #2ECC71;
+  }
+
+  #registrationForm input[type='radio']{
+    width: 30%;
+    margin: 0;
+    border-color: purple;
+  }
+
+
 
   #registrationForm input:focus{
 	background: #FCFCFC;
@@ -126,6 +163,15 @@ export default{
 
   .buttonLogin:hover{
 	background: #333;
+  }
+
+  #registrationForm textarea{
+    font-family: inherit;
+    color: #bbbbbb;
+    width: 70%;
+    height: 200px;
+    padding: 10px;
+    border-radius: 20px;
   }
 
 </style>
