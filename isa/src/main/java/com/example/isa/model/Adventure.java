@@ -1,10 +1,22 @@
 package com.example.isa.model;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name="Adventure")
 public class Adventure {
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
+
+	@Column(name = "advanture_name", nullable = false)
 	private String name;
+	@Column(name = "advanture_adress", nullable = false)
 	private String address;
+	@Column(name = "promo_description", nullable = false)
 	private String promoDescriptions;
+	@Column(name = "advanture_grade", nullable = false)
 	private float avgGrade;
 		
 
@@ -40,5 +52,8 @@ public class Adventure {
 		this.promoDescriptions = promoDescriptions;
 		this.avgGrade = avgGrade;
 	}
-		
+
+	public Adventure() {
+		super();
+	}
 }
