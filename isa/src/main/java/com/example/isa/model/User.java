@@ -1,35 +1,57 @@
 package com.example.isa.model;
 
 import com.example.isa.enums.UserType;
+import java.util.List;
+import java.util.Collection;
 
-public class User {
+import javax.persistence.*;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+@Entity
+@Table(name = "system_user")
+
+public class User implements UserDetails{
 	
-	private int id;
+
+	@Column(name = "id", unique = true)
+    @SequenceGenerator(name = "user_sequence_generator", sequenceName = "user_sequence", initialValue = 100)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_sequence_generator")
+	private Long id;
+    
+    @Column(name = "name")
     private String name;
+    
+    @Column(name = "surname")
     private String surname;
+    
+    @Column(name = "address")
     private String address;
+    
+    @Column(name = "city")
     private String city;
+    
+    @Column(name = "country")
     private String country;
+    
+    @Column(name = "phoneNumber")
     private String phoneNumber;
+    
+    @Column(name = "email")
     private String email;
+    
+    @Column(name = "password")
     private String password;
-    private UserType userType;
     
-    
-	public User(int id, String name, String surname, String address, String city, String country,
-			String phoneNumber, String email, String password,UserType userType) {
-		super();
-		this.id = id;
-		this.name = name;
-		this.surname = surname;
-		this.address = address;
-		this.city = city;
-		this.country = country;
-		this.phoneNumber = phoneNumber;
-		this.email = email;
-		this.password = password;
-		this.userType = userType;
-	}
+    @Column(name = "blocked")
+    private boolean blocked;
+ 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "user_authority",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
+    private List<Role> authorities;
 
 
 	public User() {
@@ -37,12 +59,12 @@ public class User {
 	}
 
 
-	public int getId() {
+	public Long getId() {
 		return id;
 	}
 
 
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -127,13 +149,45 @@ public class User {
 	}
 
 
-	public UserType getUserType() {
-		return userType;
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 
-	public void setUserType(UserType userType) {
-		this.userType = userType;
+	@Override
+	public String getUsername() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public boolean isAccountNonExpired() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+	@Override
+	public boolean isAccountNonLocked() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+	@Override
+	public boolean isEnabled() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 	
 	
