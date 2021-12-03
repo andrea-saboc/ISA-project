@@ -51,7 +51,7 @@ public class LoginController {
 			session.setAttribute("User", user);
 			System.out.println("postavljen je user atr ali kako cita kad ga uzme od sesije");
 
-			return new ResponseEntity<>(user.getUserType().name(), HttpStatus.OK);
+			return new ResponseEntity<>("CLIENT", HttpStatus.OK);
 		}
 	}
 
