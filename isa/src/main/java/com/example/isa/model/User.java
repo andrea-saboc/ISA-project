@@ -1,7 +1,7 @@
 package com.example.isa.model;
 
-import java.security.Timestamp;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -23,7 +24,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 public class User implements UserDetails{
 	
-
+	@Id
 	@Column(name = "id", unique = true)
     @SequenceGenerator(name = "user_sequence_generator", sequenceName = "user_sequence", initialValue = 100)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_sequence_generator")
@@ -61,6 +62,9 @@ public class User implements UserDetails{
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private List<Role> authorities;
+    
+    @Column(name = "last_password_reset_date")
+    protected Date lastPasswordResetDate;
 
 
 	public User() {
@@ -199,6 +203,13 @@ public class User implements UserDetails{
 		return false;
 	}
 	
+    public void setLastPasswordResetDate(Date lastPasswordResetDate) {
+        this.lastPasswordResetDate = lastPasswordResetDate;
+    }
+    
+    public Date getLastPasswordResetDate() {
+        return this.lastPasswordResetDate;
+    }
 
     
     

@@ -15,6 +15,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
+import com.example.isa.security.RestAuthenticationEntryPoint;
+import com.example.isa.security.TokenAuthenticationFilter;
 import com.example.isa.security.TokenUtils;
 import com.example.isa.service.implemented.UserCredentialsService;
 
@@ -26,6 +28,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+    @Autowired
+    private RestAuthenticationEntryPoint restAuthenticationEntryPoint;
     
     @Autowired
     private UserCredentialsService userCredentialsService;
@@ -49,11 +53,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     
     @Autowired
     private TokenUtils tokenUtils;
-    
-    /*
-    @Autowired
-    private RestAuthenticationEntryPoint restAuthenticationEntryPoint;
-    
+     
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -62,24 +62,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/register/**").permitAll()
                 .antMatchers("/login/**").permitAll()
-                .antMatchers("/medicine-reservation/**").permitAll()
-                .antMatchers("/user/refresh").permitAll()
-                .antMatchers("/api/foo").permitAll()
-                .antMatchers("/order/**").permitAll()
-                .antMatchers("/dermatologist/getAllDermatologists").permitAll()
-                .antMatchers("/pharmacist/getAllPharmacists").permitAll()
-                .antMatchers("/pharmacy/**").permitAll()
-                .antMatchers("/vacation/**").permitAll()
-                .antMatchers("/dermatologist/**").permitAll()
-                .antMatchers("/pharmacist/**").permitAll()
-                .antMatchers("/medicine/**").permitAll()
-                .antMatchers("/statistic/**").permitAll()
+                .antMatchers("/home/**").permitAll()
                 .anyRequest().authenticated().and()
                 .cors().and()
-                .addFilterBefore(new TokenAuthenticationFilter(tokenUtils, jwtUserDetailsService),
+                .addFilterBefore(new TokenAuthenticationFilter(tokenUtils, userCredentialsService),
                         BasicAuthenticationFilter.class);
         http.csrf().disable();
     }
-*/
    
 }

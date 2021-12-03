@@ -18,7 +18,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 @Component
 public class TokenUtils {
 
-    @Value("pharmacy")
+    @Value("isa")
     private String APP_NAME;
 
     @Value("somesecret")
@@ -76,7 +76,7 @@ public class TokenUtils {
                 && (!(this.isTokenExpired(token)) || this.ignoreTokenExpiration(token)));
     }
     
-    /*
+    
     public Boolean validateToken(String token, UserDetails userDetails) {
         User user = (User) userDetails;
         final String username = getUsernameFromToken(token);
@@ -85,7 +85,7 @@ public class TokenUtils {
         return (username != null && username.equals(userDetails.getUsername())
                 && !isCreatedBeforeLastPasswordReset(created, user.getLastPasswordResetDate()));
     }
-     */
+     
     public String getUsernameFromToken(String token) {
         String username;
         try {
