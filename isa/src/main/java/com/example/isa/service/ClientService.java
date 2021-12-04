@@ -20,9 +20,7 @@ public class ClientService {
 	
 	public User loginUser(LoginDTO loginData) {
 
-		User client = new User(1, "nameee", "surname", "address", "city", "bsckj",
-				"hcbjv", "jfjh", "ytyt",UserType.CLIENT);
-		return client;
+		return null;
 	}
 	
 

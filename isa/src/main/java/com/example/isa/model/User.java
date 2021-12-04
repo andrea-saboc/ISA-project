@@ -1,48 +1,98 @@
 package com.example.isa.model;
 
-import com.example.isa.enums.UserType;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
 
-public class User {
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+
+import org.checkerframework.common.aliasing.qual.Unique;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+@Entity
+@Table(name = "system_user")
+
+public class User implements UserDetails{
 	
-	private int id;
+	@Id
+	@Column(name = "id", unique = true)
+    @SequenceGenerator(name = "user_sequence_generator", sequenceName = "user_sequence", initialValue = 100)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_sequence_generator")
+	private Long id;
+    
+    @Column(name = "name")
     private String name;
+    
+    @Column(name = "surname")
     private String surname;
+    
+    @Column(name = "address")
     private String address;
+    
+    @Column(name = "city")
     private String city;
+    
+    @Column(name = "country")
     private String country;
+    
+    @Column(name = "phoneNumber")
     private String phoneNumber;
+    
+    @Unique
+    @Column(name = "email")
     private String email;
+    
+    @Column(name = "password")
     private String password;
-    private UserType userType;
     
+    @Column(name = "blocked")
+    private boolean blocked;
+ 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "user_authority",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     
-	public User(int id, String name, String surname, String address, String city, String country,
-			String phoneNumber, String email, String password,UserType userType) {
-		super();
-		this.id = id;
-		this.name = name;
-		this.surname = surname;
-		this.address = address;
-		this.city = city;
-		this.country = country;
-		this.phoneNumber = phoneNumber;
-		this.email = email;
-		this.password = password;
-		this.userType = userType;
-	}
+    private List<Role> authorities;
+    
+    @Column(name = "last_password_reset_date")
+    protected Date lastPasswordResetDate;
 
 
 	public User() {
 		// TODO Auto-generated constructor stub
 	}
+	
+	
 
 
-	public int getId() {
+	public User(@Unique String email, String password) {
+		super();
+		this.email = email;
+		this.password = password;
+		this.blocked = true;
+	}
+
+
+
+
+	public Long getId() {
 		return id;
 	}
 
 
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -125,18 +175,74 @@ public class User {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+	
+	
 
+	public boolean isBlocked() {
+		return blocked;
+	}
 
-	public UserType getUserType() {
-		return userType;
+	public void setBlocked(boolean blocked) {
+		this.blocked = blocked;
 	}
 
 
-	public void setUserType(UserType userType) {
-		this.userType = userType;
+
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		// TODO Auto-generated method stub
+		return this.authorities;
+	}
+
+
+	@Override
+	public String getUsername() {
+		// TODO Auto-generated method stub
+		return this.email;
+	}
+
+
+	@Override
+	public boolean isAccountNonExpired() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+	@Override
+	public boolean isAccountNonLocked() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+	@Override
+	public boolean isEnabled() {
+		// TODO Auto-generated method stub
+		return !this.blocked;
 	}
 	
-	
+    public void setLastPasswordResetDate(Date lastPasswordResetDate) {
+        this.lastPasswordResetDate = lastPasswordResetDate;
+    }
+    
+    public Date getLastPasswordResetDate() {
+        return this.lastPasswordResetDate;
+    }
+
+
+	public void setAuthorities(List<Role> authorities) {
+		this.authorities = authorities;
+	}
+
     
     
 	

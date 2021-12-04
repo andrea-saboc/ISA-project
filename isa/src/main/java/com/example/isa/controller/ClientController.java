@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.isa.dto.ClientDTO;
+import com.example.isa.dto.ClientRegistrationDTO;
 import com.example.isa.model.User;
 
 @RestController
@@ -22,7 +22,7 @@ public class ClientController {
     
 	@RequestMapping(method = RequestMethod.POST, value = "/clientRegistration",consumes = MediaType.APPLICATION_JSON_VALUE)
 	@CrossOrigin(origins = "*")
-	public ResponseEntity<String> registerClient(@RequestBody ClientDTO clientData){
+	public ResponseEntity<String> registerClient(@RequestBody ClientRegistrationDTO clientData){
 		
 		System.out.println("Client added :)");
 		System.out.println(clientData.toString());
