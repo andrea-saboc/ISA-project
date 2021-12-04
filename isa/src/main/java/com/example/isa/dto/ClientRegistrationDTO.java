@@ -1,6 +1,6 @@
 package com.example.isa.dto;
 
-public class ClientDTO {
+public class ClientRegistrationDTO {
 	
     private String name;
     private String surname;
@@ -20,7 +20,7 @@ public class ClientDTO {
 	}
 
 
-	public ClientDTO(String name, String surname, String address, String city, String country, String phoneNumber,
+	public ClientRegistrationDTO(String name, String surname, String address, String city, String country, String phoneNumber,
 			String email, String password) {
 		super();
 		this.name = name;
@@ -34,7 +34,7 @@ public class ClientDTO {
 	}
 
 
-	public ClientDTO() {
+	public ClientRegistrationDTO() {
 		super();
 	}
 

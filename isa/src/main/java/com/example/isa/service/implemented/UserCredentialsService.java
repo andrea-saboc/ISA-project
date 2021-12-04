@@ -16,9 +16,9 @@ public class UserCredentialsService implements UserDetailsService{
 	private UserRepository repo;	
 
 	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 		// TODO Auto-generated method stub
-		return null;
+		return repo.findByEmail(email);
 	}
 
 }

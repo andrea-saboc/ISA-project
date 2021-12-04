@@ -16,6 +16,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import org.checkerframework.common.aliasing.qual.Unique;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -48,6 +49,7 @@ public class User implements UserDetails{
     @Column(name = "phoneNumber")
     private String phoneNumber;
     
+    @Unique
     @Column(name = "email")
     private String email;
     
@@ -61,6 +63,7 @@ public class User implements UserDetails{
     @JoinTable(name = "user_authority",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
+    
     private List<Role> authorities;
     
     @Column(name = "last_password_reset_date")
@@ -70,6 +73,18 @@ public class User implements UserDetails{
 	public User() {
 		// TODO Auto-generated constructor stub
 	}
+	
+	
+
+
+	public User(@Unique String email, String password) {
+		super();
+		this.email = email;
+		this.password = password;
+		this.blocked = true;
+	}
+
+
 
 
 	public Long getId() {
@@ -160,19 +175,31 @@ public class User implements UserDetails{
 	public void setPassword(String password) {
 		this.password = password;
 	}
+	
+	
+
+	public boolean isBlocked() {
+		return blocked;
+	}
+
+	public void setBlocked(boolean blocked) {
+		this.blocked = blocked;
+	}
+
+
 
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		// TODO Auto-generated method stub
-		return null;
+		return this.authorities;
 	}
 
 
 	@Override
 	public String getUsername() {
 		// TODO Auto-generated method stub
-		return null;
+		return this.email;
 	}
 
 
@@ -200,7 +227,7 @@ public class User implements UserDetails{
 	@Override
 	public boolean isEnabled() {
 		// TODO Auto-generated method stub
-		return false;
+		return !this.blocked;
 	}
 	
     public void setLastPasswordResetDate(Date lastPasswordResetDate) {
@@ -210,6 +237,11 @@ public class User implements UserDetails{
     public Date getLastPasswordResetDate() {
         return this.lastPasswordResetDate;
     }
+
+
+	public void setAuthorities(List<Role> authorities) {
+		this.authorities = authorities;
+	}
 
     
     

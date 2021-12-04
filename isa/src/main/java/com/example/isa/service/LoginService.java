@@ -17,9 +17,13 @@ import com.example.isa.security.TokenUtils;
 @Service
 public class LoginService {
 
+	@Autowired
     private TokenUtils tokenUtils;
+    @Autowired
     private AuthenticationManager authenticationManager;
+    @Autowired
     private UserRepository userRepository;
+    @Autowired
     private PasswordEncoder passwordEncoder;
     
     public UserTokenState logIn(LoginDTO authenticationRequest) {
