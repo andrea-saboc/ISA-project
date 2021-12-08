@@ -27,7 +27,7 @@ public class ClientController {
 	@CrossOrigin(origins = "*")
 	public ResponseEntity<String> registerClient(@RequestBody ClientRegistrationDTO clientDto){
 		
-		this.clientRegistrationService.registerClient(clientDto);
+		//this.clientRegistrationService.registerClient(clientDto);
 
 		return new ResponseEntity<>("Client is registered", HttpStatus.OK);
 	}

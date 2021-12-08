@@ -54,11 +54,12 @@ public class RegisterController {
     
 	@RequestMapping(method = RequestMethod.POST, value = "/client",consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE )
 	@CrossOrigin(origins = "*")
-    public ResponseEntity<String> registerPatient(@RequestBody ClientRegistrationDTO clientDto) {
+    public ResponseEntity<String> registerPatient(HttpServletRequest request,@RequestBody ClientRegistrationDTO clientDto) {
     	
     	System.out.println("pogodjen kontroler za reg");
+    
     	/*
-        if (!validUserInfo(patientDTO.getName(), patientDTO.getEmail(), patientDTO.getPassword())) {
+        if (!validUserInfo(clientDto.getName(), clientDto.getEmail(), clientDto.getPassword())) {
             return new ResponseEntity<>(missingBasicUserInfoAlert, HttpStatus.BAD_REQUEST);
         }
         
@@ -67,7 +68,7 @@ public class RegisterController {
         }
         */
         try {
-            this.clientRegistrationService.registerClient(clientDto);
+            this.clientRegistrationService.registerClient(clientDto,getSiteURL(request));
             return new ResponseEntity<>("/emailSent", HttpStatus.OK);
             
             /*
@@ -79,7 +80,12 @@ public class RegisterController {
         */
         	} catch(Exception e) {
         		System.out.println("gresca u registraciji");
+        		System.out.println(e);
         	}
         return new ResponseEntity<>("okei",HttpStatus.OK);
         }
+	
+    private String getSiteURL(HttpServletRequest request) {
+        return request.getHeader("origin");
+    }
 }
