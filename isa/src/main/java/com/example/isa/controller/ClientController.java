@@ -23,7 +23,7 @@ public class ClientController {
 	//@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE,value = "/clientRegistration")
 	//@CrossOrigin(origins = "*")
     
-	@RequestMapping(method = RequestMethod.POST, value = "/clientRegistration",consumes = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(method = RequestMethod.POST, value = "/clientRegistrationNNN",consumes = MediaType.APPLICATION_JSON_VALUE)
 	@CrossOrigin(origins = "*")
 	public ResponseEntity<String> registerClient(@RequestBody ClientRegistrationDTO clientDto){
 		

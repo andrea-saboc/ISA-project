@@ -52,9 +52,9 @@ public class RegisterController {
 
     }
     
-	@RequestMapping(method = RequestMethod.POST, value = "/clientRegistration",consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE )
-	//@CrossOrigin(origins = "*")
-    public ResponseEntity<String> registerPatient(HttpServletRequest request, @RequestBody ClientRegistrationDTO clientDto) {
+	@RequestMapping(method = RequestMethod.POST, value = "/client",consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE )
+	@CrossOrigin(origins = "*")
+    public ResponseEntity<String> registerPatient(@RequestBody ClientRegistrationDTO clientDto) {
     	
     	System.out.println("pogodjen kontroler za reg");
     	/*

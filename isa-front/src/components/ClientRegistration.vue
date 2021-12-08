@@ -85,7 +85,7 @@ export default{
         alert(this.picked)
       if(this.fieldsFilled && this.passwordValid && this.picked=='Client'){
         axios
-            .post('http://localhost:8080/clientRegistration',
+            .post('http://localhost:8080/register/client',
             {
               "name": this.name,
               "surname": this.surname,
