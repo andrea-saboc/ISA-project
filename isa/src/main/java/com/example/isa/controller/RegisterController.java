@@ -56,34 +56,21 @@ public class RegisterController {
 	@CrossOrigin(origins = "*")
     public ResponseEntity<String> registerPatient(HttpServletRequest request,@RequestBody ClientRegistrationDTO clientDto) {
     	
-    	System.out.println("pogodjen kontroler za reg");
-    
-    	/*
-        if (!validUserInfo(clientDto.getName(), clientDto.getEmail(), clientDto.getPassword())) {
-            return new ResponseEntity<>(missingBasicUserInfoAlert, HttpStatus.BAD_REQUEST);
-        }
         
-        if (this.registerPatientService.userExists(patientDTO.getEmail())) {
-            return new ResponseEntity<>(userExistsAlert, HttpStatus.BAD_REQUEST);
-        }
-        */
+        if (this.clientRegistrationService.clientExists(clientDto.getEmail()))
+            return new ResponseEntity<>("userExists", HttpStatus.BAD_REQUEST);
+        
         try {
             this.clientRegistrationService.registerClient(clientDto,getSiteURL(request));
-            return new ResponseEntity<>("/emailSent", HttpStatus.OK);
-            
-            /*
-        } catch (BadUserInformationException e) {
-            return new ResponseEntity<>(userExistsAlert, HttpStatus.BAD_REQUEST);
-        } catch (Exception e) {
-            return new ResponseEntity<>(registrationFailedAlert, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-        */
-        	} catch(Exception e) {
-        		System.out.println("gresca u registraciji");
+            return new ResponseEntity<>("emailSent", HttpStatus.OK);
+        	}
+        catch(Exception e) {        	
         		System.out.println(e);
         	}
-        return new ResponseEntity<>("okei",HttpStatus.OK);
-        }
+        
+    return new ResponseEntity<>("okei",HttpStatus.OK);
+    }
+	
 	
     private String getSiteURL(HttpServletRequest request) {
         return request.getHeader("origin");

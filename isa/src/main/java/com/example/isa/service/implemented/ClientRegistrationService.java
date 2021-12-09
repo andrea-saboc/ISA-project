@@ -45,4 +45,11 @@ public class ClientRegistrationService {
         System.out.println(verifyURL);
         mailService.sendMail(client.getEmail(), verifyURL, new AccountActivationFormatter());
     }
+
+	public boolean clientExists(String email) {
+		
+		if (userRepository.findByEmail(email) != null)
+			return true;
+		return false;
+	}
 }

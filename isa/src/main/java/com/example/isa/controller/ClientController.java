@@ -17,21 +17,6 @@ import com.example.isa.service.implemented.ClientRegistrationService;
 public class ClientController {
 	
 	
-	@Autowired
-	private ClientRegistrationService clientRegistrationService;
-	
-	//@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE,value = "/clientRegistration")
-	//@CrossOrigin(origins = "*")
-    
-	@RequestMapping(method = RequestMethod.POST, value = "/clientRegistrationNNN",consumes = MediaType.APPLICATION_JSON_VALUE)
-	@CrossOrigin(origins = "*")
-	public ResponseEntity<String> registerClient(@RequestBody ClientRegistrationDTO clientDto){
-		
-		//this.clientRegistrationService.registerClient(clientDto);
-
-		return new ResponseEntity<>("Client is registered", HttpStatus.OK);
-	}
-	
 	@RequestMapping(method = RequestMethod.POST, value = "/updateUser",consumes = MediaType.APPLICATION_JSON_VALUE)
 	@CrossOrigin(origins = "*")
 	public ResponseEntity<String> updateUser(@RequestBody User user){
