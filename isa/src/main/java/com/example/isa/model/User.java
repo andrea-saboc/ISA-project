@@ -25,6 +25,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 public class User implements UserDetails{
 	
+
+	private static final long serialVersionUID = 1L;
+
+	private transient String role = "";
+	
 	@Id
 	@Column(name = "id", unique = true)
     @SequenceGenerator(name = "user_sequence_generator", sequenceName = "user_sequence", initialValue = 100)
@@ -32,13 +37,13 @@ public class User implements UserDetails{
 	private Long id;
     
     @Column(name = "name")
-    private String name;
+	protected String name;
     
     @Column(name = "surname")
-    private String surname;
+	protected String surname;
     
     @Column(name = "address")
-    private String address;
+	protected String address;
     
     @Column(name = "city")
     private String city;
@@ -47,7 +52,7 @@ public class User implements UserDetails{
     private String country;
     
     @Column(name = "phoneNumber")
-    private String phoneNumber;
+	protected String phoneNumber;
     
     @Unique
     @Column(name = "email")
@@ -82,6 +87,24 @@ public class User implements UserDetails{
 		this.email = email;
 		this.password = password;
 		this.blocked = true;
+	}
+	
+	
+
+
+
+
+	public User(String name, String surname, String address, String city, String country, String phoneNumber,
+			String email, String password) {
+		super();
+		this.name = name;
+		this.surname = surname;
+		this.address = address;
+		this.city = city;
+		this.country = country;
+		this.phoneNumber = phoneNumber;
+		this.email = email;
+		this.password = password;
 	}
 
 
@@ -243,7 +266,9 @@ public class User implements UserDetails{
 		this.authorities = authorities;
 	}
 
-    
+    public String getRole() {
+        return this.role;
+    }
     
 	
 

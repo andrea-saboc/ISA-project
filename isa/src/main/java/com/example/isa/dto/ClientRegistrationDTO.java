@@ -1,5 +1,7 @@
 package com.example.isa.dto;
 
+import com.example.isa.model.Client;
+
 public class ClientRegistrationDTO {
 	
     private String name;
@@ -116,6 +118,11 @@ public class ClientRegistrationDTO {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+
+	public Client createClient(ClientRegistrationDTO clientDto) {
+		return new Client(clientDto.name,clientDto.surname,clientDto.address,clientDto.city,clientDto.country,clientDto.phoneNumber,clientDto.email,clientDto.password);
 	}
 	
 }
