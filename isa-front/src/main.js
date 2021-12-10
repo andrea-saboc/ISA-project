@@ -4,6 +4,7 @@ import { createApp } from 'vue'
 import router from './router'
 import { createWebHistory, createRouter } from 'vue-router';
 import Axios from "axios";
+import "bootstrap/dist/css/bootstrap.min.css"
 
 import About from './components/About'
 import App from './App.vue'

@@ -1,16 +1,35 @@
 <template>
-  <div id="nav">
-    <ul>
-      <li><dl><router-link to="/">Home </router-link> </dl></li>
-      <li><dl><router-link to="/about">  About  </router-link></dl></li>
-      <li v-if="!LoggedIn" style="float:right"><dl><router-link to="/clientRegistration">  Register  </router-link></dl></li>
-      <li v-if="!LoggedIn" style="float:right"><dl><router-link to="/login">  Login  </router-link></dl></li>
-      <li v-if="LoggedIn" style="float:right"><dl><router-link to="/boats">  Boats  </router-link></dl></li>
-
-      <li v-if="LoggedIn" style="float:right"><dl><router-link to="/profile">  Profile  </router-link></dl></li>
-      <li v-if="LoggedIn" style="float:right"><dl><router-link to="/login">  Logout  </router-link></dl></li>
+<navbar>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="#">Fishing Fish</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav">
+      <li class="nav-item active">
+        <a class="nav-link" href="#">Home</a>
+      </li>
     </ul>
   </div>
+  <form class="form-inline my-2 my-lg-0">
+    <ul class="navbar-nav">
+      <li class="nav-item active">
+        <a class="nav-link" href="/clientRegistration">Register</a>
+      </li>
+    </ul>
+  </form>
+  <form class="form-inline my-2 my-lg-0">
+    <ul class="navbar-nav">
+      <li class="nav-item active">
+        <a class="nav-link" href="/login">Login</a>
+      </li>
+    </ul>
+  </form>
+
+</nav>
+
+</navbar>
   <router-view/>
 </template>
 
@@ -50,29 +69,5 @@ export default{
   color: #2c3e50;
 }
 
-#nav {
-  padding: 30px;
-
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-  background-color: #dddddd;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
-
-li {
-  display: inline;
-  float: left;
-  background-color: #dddddd;
-}
-ul {
-  border: 1px solid #bbb;
-  background-color: #dddddd;
-}
 
 </style>
