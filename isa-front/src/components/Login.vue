@@ -43,8 +43,8 @@ export default{
               .then(response => {
                 console.log(response)
                 store.dispatch('startSession', response.data);
+                this.$forceUpdate();
                 this.dispatch(response.data.userType);
-                console.log('valjda smo postavili token u memoriju vue, i hope so')
               });
         }else alert('error in filling form');
 
@@ -54,17 +54,13 @@ export default{
         if(this.email === '' || this.password === '') this.fieldEmpty = true;
       },
 
-      RedirectToUserHomePage(){
-        if(this.userType === 'CLIENT')
-          this.$router.push({name: 'Home'});
-        else if(this.userType === 'ADMIN')
-          this.$router.push({name: 'Home'});
-        else if(this.userType === 'BOAT_OWNER')
-          this.$router.push({name: 'Home'});
-        else if(this.userType === 'MANSION_OWNER')
-          this.$router.push({name: 'Home'});
-        else
-          this.$router.push({name: 'Home'});
+      dispatch(type) {
+      console.log(type)
+      let router = this.$router;
+      if (type === 'Client') {
+        router.push("/boats");
+        return
+        }
       }
     }
 }

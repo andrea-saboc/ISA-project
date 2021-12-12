@@ -1,12 +1,10 @@
-import Vue from 'vue';
 import {createStore} from 'vuex';
 import axios from "axios";
 
-//Vue.use(Vuex);
+
 
 const store = createStore({
     state: {
-        title: 'vuex store',
         accessToken: null,
         expiresIn: null,
         userType: null,
@@ -50,6 +48,7 @@ const store = createStore({
             assignData(context.state, tokenData);
         },
         startSession: (context, tokenData) => {
+            console.log('loging in')
             if (tokenData == null) {
                 tokenData = loadFromSessionStorage();
             } else {
@@ -94,7 +93,6 @@ const store = createStore({
         }
     }
 });
-
 export default store;
 
 function assignData(state, tokenData) {
