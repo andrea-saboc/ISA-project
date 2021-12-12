@@ -30,10 +30,12 @@
 </nav>
 
 </navbar>
+  {{$store.state.title}}
   <router-view/>
 </template>
 
 <script>
+import {useStore} from "vuex"
 import axios from 'axios'
 export default{
   data(){

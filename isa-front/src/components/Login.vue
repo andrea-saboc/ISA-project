@@ -25,9 +25,14 @@ export default{
             fieldEmpty: false
         }
     },
+    mounted(){
+    if (this.$store.state.userType !== null) {
+      this.$router.push("/")
+      }       
+    },
     methods:{
       Login(){
-
+        let store = this.$store;
         if(!this.fieldEmpty){
           axios
               .post('http://localhost:8080/login',
@@ -37,6 +42,9 @@ export default{
               })
               .then(response => {
                 console.log(response)
+                store.dispatch('startSession', response.data);
+                this.dispatch(response.data.userType);
+                console.log('valjda smo postavili token u memoriju vue, i hope so')
               });
         }else alert('error in filling form');
 
