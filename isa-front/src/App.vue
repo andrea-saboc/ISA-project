@@ -44,17 +44,6 @@ export default{
   },
   
   mounted(){
-
-    alert('entered')
-
-    axios
-      .get('http://localhost:8080/loginTest')
-      .then(response => {
-        if (!response.data === 'User is not logged in') {
-          this.user = response.data;
-          this.LoggedIn = true;
-        }
-      });
   }
 
 

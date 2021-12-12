@@ -36,12 +36,7 @@ export default{
                 "password": this.password
               })
               .then(response => {
-                if (response.data != 'Err:KorisnikNijeUlogovan') {
-
-                  this.userType = response.data;
-                  this.RedirectToUserHomePage()
-
-                }
+                console.log(response)
               });
         }else alert('error in filling form');
 

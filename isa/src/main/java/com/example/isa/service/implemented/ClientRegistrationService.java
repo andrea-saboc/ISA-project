@@ -34,6 +34,7 @@ public class ClientRegistrationService {
 		client.setPassword(passwordEncoder.encode(clientDto.getPassword()));
 		String activationCode = RandomString.make(10);
 	    client.setActivationCode(activationCode);
+	    client.setBlocked(false);
 	    sendActivationLink(client,siteUrl);
 		return userRepository.save(client);
 	}
