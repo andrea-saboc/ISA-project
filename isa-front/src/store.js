@@ -48,7 +48,7 @@ const store = createStore({
             assignData(context.state, tokenData);
         },
         startSession: (context, tokenData) => {
-            console.log('loging in')
+            
             if (tokenData == null) {
                 tokenData = loadFromSessionStorage();
             } else {

@@ -43,7 +43,7 @@ export default{
               .then(response => {
                 console.log(response)
                 store.dispatch('startSession', response.data);
-                this.$forceUpdate();
+                console.log('User got the token:',this.$store.getters.tokenString)
                 this.dispatch(response.data.userType);
               });
         }else alert('error in filling form');

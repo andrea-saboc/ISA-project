@@ -23,7 +23,7 @@ public class UserService {
 	public Iterable<User> findAll()  throws AccessDeniedException{
 		return userRepository.findAll();
 	}
-	
+	/*
 	public User save(ClientRegistrationDTO userRequest) {
 		User u = new User();
 		u.setEmail(userRequest.getEmail());
@@ -42,5 +42,12 @@ public class UserService {
 		//u.setRoles(roles);
 		
 		return this.userRepository.save(u);
+	}
+	*/
+	public User getByEmail(String email) {
+		
+		System.out.println("Pronadjeni user:");
+		System.out.println(userRepository.findByEmail(email).getName());
+		return userRepository.findByEmail(email);
 	}
 }

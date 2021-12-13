@@ -32,7 +32,7 @@ public class ClientRegistrationService {
 		client.setLoyaltyPoints(0);
 		client.setPenaltyPoints(0);
 		client.setPassword(passwordEncoder.encode(clientDto.getPassword()));
-		String activationCode = RandomString.make(10);
+		String activationCode = RandomString.make(64);
 	    client.setActivationCode(activationCode);
 	    client.setBlocked(false);
 	    sendActivationLink(client,siteUrl);

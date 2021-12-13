@@ -72,13 +72,18 @@ export default{
          country: '',
          phoneNumber: '',
          oldPassword: '',
-         newPssword: '',
+         newPassword: '',
          newPasswordRepeated: ''
         }
-    },         
+   },
    mounted(){
-      axios
-         .get('http://localhost:8080/loginTest')
+      console.log('hello from profile',this.$store.getters.tokenString)
+         axios
+         .post('http://localhost:8080/userData', this.user.email,{
+            headers: {
+               'Authorization' : this.$store.getters.tokenString
+            }
+         })
          .then(response => {
             this.user = response.data;
 
@@ -93,6 +98,7 @@ export default{
     methods:{
 
       ChangeName(){
+         alert('name changed')
          this.user.name = this.name;
          this.UpdateUser();
       },

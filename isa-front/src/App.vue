@@ -60,13 +60,11 @@ export default{
   mounted(){
     this.$store.dispatch('startSession', null);   
     this.user = this.$store.state.userType;
-    this.$http.defaults.headers.common['Authorization'] = this.$store.getters.tokenString;
-  },
+},
   methods:{
     Logout(){
       this.$store.commit('logOut');
-      
-      this.$forceUpdate();
+      this.$router.push("/home");    
     }
   }
 
