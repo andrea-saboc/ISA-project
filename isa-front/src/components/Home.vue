@@ -1,10 +1,30 @@
 <template>
-  <div id="home">
-    <h1>Chose your interests</h1>
-    <button v-on:click="RedirectBoats">BOATS</button><br><br>
-    <button v-on:click="RedirectMansions">MANSIONS</button><br><br>
-    <button v-on:click="RedirectAdventures">INSTRUCTORS</button><br><br>
+<section class="bg-dark text-light p-5 text-center text-sm-start">
+  <div class = "container pt-100">
+    <div class = "d-sm-flex align-items-center justify-content-between">
+      <div>
+      <h1>Log in to your account</h1>
+      <p class="lead my-4">
+        This is the place where you car run away from your miserable lifes once in a while..
+      </p>
+      <button class = "btn btn-primary btn-lg">Login ili Register
+      </button>
+      </div>
+      <div>
+        <img class="img-fluid w-30 s-sm-block" src = "../assets/logo.png">
+      </div>
+    </div>
   </div>
+</section>
+<section>
+  <div class ="container">
+    <nav class="nav nav-tabs">
+      <a class="nav-link active" aria-current="page" href="#">Active</a>
+      <a class="nav-link" href="#">Link</a>
+      <a class="nav-link" href="#">Link</a>
+    </nav>
+  </div>
+</section>
 </template>
 
 <script>

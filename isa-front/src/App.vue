@@ -1,50 +1,24 @@
 <template>
-<navbar>
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="#">Adventureland</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="navbarNav">
-    <ul class="navbar-nav">
-      <li class="nav-item active">
-        <a class="nav-link" href="#">Home</a>
-      </li>
-    </ul>
-  </div>
-  <form v-if="user === null" class="form-inline my-2 my-lg-0">
-    <ul class="navbar-nav">
-      <li class="nav-item active">
-        <a class="nav-link" href="/clientRegistration">Register</a>
-      </li>
-    </ul>
-  </form>
-  <form v-if="user !== null" class="form-inline my-2 my-lg-0">
-    <ul class="navbar-nav">
-      <li class="nav-item active">
-        <a class="nav-link" href="/profile">Profile</a>
-      </li>
-    </ul>
-  </form>
-  <form v-if="user === null" class="form-inline my-2 my-lg-0">
-    <ul class="navbar-nav">
-      <li class="nav-item active">
-        <a class="nav-link" href="/login">Login</a>
-      </li>
-    </ul>
-  </form>
-  <form v-if="user !== null" class="form-inline my-2 my-lg-0">
-    <ul class="navbar-nav">
-      <li class="nav-item active">
-        <button class="nav-link" v-on:click="Logout" >Logout</button>
-      </li>
-    </ul>
-  </form>
+  <nav class = "navbar navbar-expand-lg bg-dark navbar-dark">
+    <div class="container">
+      <a href="/home" class="navbar-brand">Adventureland</a>
+      <div class="collapse navbar-collapse">
+        <ul class ="navbar-nav ms-auto">
 
-</nav>
-
-</navbar>
-<router-view/>
+        <li class="nav-item">
+          <a href="/clientRegistration" class="nav-link">Register</a>
+        </li>
+        <li class="nav-item">
+          <a href="/login" class="nav-link">Login</a>
+        </li>
+        <li class="nav-item">
+          <a href="" class="nav-link">Logout</a>
+        </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+    <router-view/>
 </template>
 
 <script>
