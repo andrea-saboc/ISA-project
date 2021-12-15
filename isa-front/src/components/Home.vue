@@ -5,33 +5,31 @@
       <div>
       <h1>Log in to your account</h1>
       <p class="lead my-4">
-        This is the place where you car run away from your miserable lifes once in a while..
+        This is some kind of description or whatever.. Ovdje bi mozda mogla i slika?
       </p>
       <button class = "btn btn-primary btn-lg">Login ili Register
       </button>
       </div>
       <div>
-        <img class="img-fluid w-30 s-sm-block" src = "../assets/logo.png">
+        <img class="img-fluid w-30 s-sm-block" src = "">
       </div>
     </div>
   </div>
 </section>
-<section>
-  <div class ="container">
-    <nav class="nav nav-tabs">
-      <a class="nav-link active" aria-current="page" href="#">Active</a>
-      <a class="nav-link" href="#">Link</a>
-      <a class="nav-link" href="#">Link</a>
-    </nav>
+<section class="p-10">
+  <div class ="container" py-30>
+   <listing></listing>
   </div>
 </section>
 </template>
 
 <script>
 import axios from 'axios'
+import Listing from './Listing.vue'
+
 export default {
   name: 'Home',
-  components: {
+  components: { Listing
   },
   methods:{
     RedirectBoats(){

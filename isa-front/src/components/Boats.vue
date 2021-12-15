@@ -26,67 +26,28 @@
 <script>
 import axios from 'axios'
 export default{
-data: function(){
-    return{
-        boats : []
-        }
+    name: 'boats',
+    data: function(){
+        return{
+            boats : []
+            }
+        },
+    mounted(){
+        axios
+            .get('http://localhost:8080/boats')
+            .then(response => {
+                this.boats = response.data;       
+        });   
+
     },
-mounted(){
-      axios
-         .get('http://localhost:8080/boats')
-         .then(response => {
-            this.boats = response.data;       
-      });   
-
-},
-methods:{
+    methods:{
 
 
-}
-
+    }
 }
 
 </script>
 
 <style>
-
-.row{   
-
-    width: 1000px;
-    height: 200px;
-    background-color: white;
-	padding: 30px;
-	margin-top: 900px;
-	border-radius: 10px;
-	box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.2);
-    margin: 0 auto;
-}
-.row:hover{
-    background-color:#FCFCFC;
-	box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0);
-}
-
-.right-fixed {
-  background-color: #dddddd;
-  opacity: 0.3;
-  width: 250px;
-  height: 350px;
-  position: fixed;
-  bottom: 10px;
-  right: 10px;
-	border-radius: 20px;
-    padding: 60px;
-}
-.left-fixed {
-  background-color: #dddddd;
-  opacity: 0.3;
-  width: 185px;
-  height: 100px;
-  position: fixed;
-  bottom: 30px;
-  left: 30px;
-	border-radius: 10px;
-    padding: 60px;
-}
 
 </style>

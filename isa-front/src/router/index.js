@@ -8,6 +8,7 @@ import Profile from '../components/Profile.vue'
 import Boats from '../components/Boats.vue'
 import Mansions from '../components/Mansions.vue'
 import Adventures from '../components/Adventures.vue'
+import Listing from '../components/Listing.vue'
 
 const routes = [
   {
@@ -49,6 +50,11 @@ const routes = [
     path: '/adventures',
     name: 'adventures',
     component: Adventures
+   },
+   {
+    path: '/listing',
+    name: 'listing',
+    component: Listing
    }
 
 ]

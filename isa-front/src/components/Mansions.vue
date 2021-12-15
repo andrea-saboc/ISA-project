@@ -27,6 +27,7 @@
 <script>
 import axios from 'axios'
 export default{
+    name: 'mansions',
     data(){
         return{
         mansions : []
