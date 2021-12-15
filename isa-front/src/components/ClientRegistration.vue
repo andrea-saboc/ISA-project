@@ -1,4 +1,5 @@
 <template>
+<section class="bg-dark text-light p-5 text-center text-sm-start">
 <div id="registrationForm">
    <h1>{{picked}} registration</h1>
   <br>
@@ -52,6 +53,7 @@
    <br>
    <br>
 </div>
+</section>
 </template>
 
 <script>

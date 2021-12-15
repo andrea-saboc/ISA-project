@@ -5,13 +5,13 @@
       <div class="collapse navbar-collapse">
         <ul class ="navbar-nav ms-auto">
 
-        <li class="nav-item">
+        <li v-if="user === null" class="nav-item">
           <a href="/clientRegistration" class="nav-link">Register</a>
         </li>
-        <li class="nav-item">
+        <li v-if="user === null" class="nav-item">
           <a href="/login" class="nav-link">Login</a>
         </li>
-        <li class="nav-item">
+        <li v-if="user !== null" class="nav-item">
           <a href="" class="nav-link">Logout</a>
         </li>
         </ul>

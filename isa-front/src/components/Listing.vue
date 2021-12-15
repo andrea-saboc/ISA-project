@@ -37,17 +37,18 @@ export default {
       }
   },
   methods:{
-    DisplayMansions(){
-    
-    if(this.display == 'mansions')
-        this.display = 'None'
-    else
-        this.display = 'mansions'
+    DisplayMansions(){   
+        if(this.display == 'mansions')
+            this.display = 'None'
+        else
+            this.display = 'mansions'
     },
 
     DisplayBoats(){
-      this.display = 'boats'
-      console.log(this.display)
+        if(this.display == 'boats')
+            this.display = 'None'
+        else
+            this.display = 'boats'
     },
     DisplayAdventures(){
       this.display = 'adventures'

@@ -1,4 +1,5 @@
 <template>
+<section class="bg-dark text-light p-5 text-center text-sm-start">
 <div id="loginForm">
    <h1>Login</h1>
    <br>
@@ -13,6 +14,7 @@
    <br>
    <br>
 </div>
+</section>
 </template>
 <script>
 import axios from 'axios'
