@@ -1,32 +1,54 @@
 <template>
-<div id="adventures">
+<section class="p-5">
+    <div class = "container">
+    <div class="row text-center">
 
-<div v-for="adventure in adventures">
-  
-			<div class="row" style="position:relative;">
+ <div class="col-md">    
+    <div v-for="(value, index) in adventures">
+      <div v-if="index % 2 != 0">
 
-		  			<label style="color:#2ECC71;font-size:26px;">{{adventure.name}}</label><br><br>
-                    <label style="color:#2ECC71;font-size:20px;">{{adventure.promoDescription}}</label>
-                        <div style="position:absolute;bottom:30px;left:30px;">
-                            <label>{{adventure.address}}</label>
-                        </div>
-				
-			</div>
-            <br>
-            <br>
-</div>
 
-<div class="right-fixed"><label style="color:black;font-size:20px;">Pretraga po razlicitim krit:</label></div>
-<div class="left-fixed"> <label style="color:black;font-size:20px;">Odabrani entitet pa combobox:</label></div>
+            <div class="card mb-3">
+                <img src="../assets/yacht.jpg" class="card-img-top img-fluid w-30">
+                <div class="card-body">
+                    <h5 class="card-title">{{value.name}}</h5>
+                    <p class="card-text">{{value.promoDescription}}</p>
+                    <p class="card-text"><small class="text-muted">{{value.address}}</small></p>
+                </div>
+            </div>
+        </div>
 
-</div>
+      </div>
+    </div>
 
+<div class="col-md">
+    <div v-for="(value, index) in adventures">
+      <div v-if="index % 2 == 0">
+
+        
+            <div class="card mb-3">
+                <img src="../assets/yacht.jpg" class="card-img-top img-fluid w-30">
+                <div class="card-body">
+                    <h5 class="card-title">{{value.name}}</h5>
+                    <p class="card-text">{{value.promoDescription}}</p>
+                    <p class="card-text"><small class="text-muted">{{value.address}}</small></p>
+                </div>
+            </div>        
+        </div>
+
+       </div>
+    </div>
+
+    </div>
+    </div>
+</section>
 
 </template>
 
 <script>
 import axios from 'axios'
 export default{
+    name: 'adventures',
     data(){
         return{
         adventures : [

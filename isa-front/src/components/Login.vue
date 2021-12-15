@@ -1,4 +1,5 @@
 <template>
+<section class="bg-dark text-light p-5 text-center text-sm-start">
 <div id="loginForm">
    <h1>Login</h1>
    <br>
@@ -13,6 +14,7 @@
    <br>
    <br>
 </div>
+</section>
 </template>
 <script>
 import axios from 'axios'
@@ -25,9 +27,14 @@ export default{
             fieldEmpty: false
         }
     },
+    mounted(){
+    if (this.$store.state.userType !== null) {
+      this.$router.push("/")
+      }       
+    },
     methods:{
       Login(){
-
+        let store = this.$store;
         if(!this.fieldEmpty){
           axios
               .post('http://localhost:8080/login',
@@ -36,12 +43,10 @@ export default{
                 "password": this.password
               })
               .then(response => {
-                if (response.data != 'Err:KorisnikNijeUlogovan') {
-
-                  this.userType = response.data;
-                  this.RedirectToUserHomePage()
-
-                }
+                console.log(response)
+                store.dispatch('startSession', response.data);
+                console.log('User got the token:',this.$store.getters.tokenString)
+                this.dispatch(response.data.userType);
               });
         }else alert('error in filling form');
 
@@ -51,17 +56,13 @@ export default{
         if(this.email === '' || this.password === '') this.fieldEmpty = true;
       },
 
-      RedirectToUserHomePage(){
-        if(this.userType === 'CLIENT')
-          this.$router.push({name: 'Home'});
-        else if(this.userType === 'ADMIN')
-          this.$router.push({name: 'Home'});
-        else if(this.userType === 'BOAT_OWNER')
-          this.$router.push({name: 'Home'});
-        else if(this.userType === 'MANSION_OWNER')
-          this.$router.push({name: 'Home'});
-        else
-          this.$router.push({name: 'Home'});
+      dispatch(type) {
+      console.log(type)
+      let router = this.$router;
+      if (type === 'Client') {
+        router.push("/boats");
+        return
+        }
       }
     }
 }

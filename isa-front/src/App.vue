@@ -1,41 +1,45 @@
 <template>
-  <div id="nav">
-    <ul>
-      <li><dl><router-link to="/">Home </router-link> </dl></li>
-      <li><dl><router-link to="/about">  About  </router-link></dl></li>
-      <li v-if="!LoggedIn" style="float:right"><dl><router-link to="/clientRegistration">  Register  </router-link></dl></li>
-      <li v-if="!LoggedIn" style="float:right"><dl><router-link to="/login">  Login  </router-link></dl></li>
-      <li v-if="LoggedIn" style="float:right"><dl><router-link to="/boats">  Boats  </router-link></dl></li>
+  <nav class = "navbar navbar-expand-lg bg-dark navbar-dark">
+    <div class="container">
+      <a href="/home" class="navbar-brand">Adventureland</a>
+      <div class="collapse navbar-collapse">
+        <ul class ="navbar-nav ms-auto">
 
-      <li v-if="LoggedIn" style="float:right"><dl><router-link to="/profile">  Profile  </router-link></dl></li>
-      <li v-if="LoggedIn" style="float:right"><dl><router-link to="/login">  Logout  </router-link></dl></li>
-    </ul>
-  </div>
-  <router-view/>
+        <li v-if="user === null" class="nav-item">
+          <a href="/clientRegistration" class="nav-link">Register</a>
+        </li>
+        <li v-if="user === null" class="nav-item">
+          <a href="/login" class="nav-link">Login</a>
+        </li>
+        <li v-if="user !== null" class="nav-item">
+          <a href="" class="nav-link">Logout</a>
+        </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+    <router-view/>
 </template>
 
 <script>
+import {useStore} from "vuex"
 import axios from 'axios'
 export default{
   data(){
     return{
-    user: {},
-    LoggedIn: false
+    user: null,
     }
   },
   
   mounted(){
-
-    alert('entered')
-
-    axios
-      .get('http://localhost:8080/loginTest')
-      .then(response => {
-        if (!response.data === 'User is not logged in') {
-          this.user = response.data;
-          this.LoggedIn = true;
-        }
-      });
+    this.$store.dispatch('startSession', null);   
+    this.user = this.$store.state.userType;
+},
+  methods:{
+    Logout(){
+      this.$store.commit('logOut');
+      this.$router.push("/home");    
+    }
   }
 
 
@@ -50,29 +54,5 @@ export default{
   color: #2c3e50;
 }
 
-#nav {
-  padding: 30px;
-
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-  background-color: #dddddd;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
-
-li {
-  display: inline;
-  float: left;
-  background-color: #dddddd;
-}
-ul {
-  border: 1px solid #bbb;
-  background-color: #dddddd;
-}
 
 </style>

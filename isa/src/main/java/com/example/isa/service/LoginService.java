@@ -1,5 +1,6 @@
 package com.example.isa.service;
 
+import org.h2.engine.SysProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -27,6 +28,7 @@ public class LoginService {
     private PasswordEncoder passwordEncoder;
     
     public UserTokenState logIn(LoginDTO authenticationRequest) {
+
         return getUserTokenState(authenticationRequest);
     }
 
@@ -56,11 +58,11 @@ public class LoginService {
     }
 */
     private UserTokenState getUserTokenState(LoginDTO authenticationRequest) {
+
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getEmail(),
                         authenticationRequest.getPassword()));
-
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+        System.out.println("izasli iz auth");        SecurityContextHolder.getContext().setAuthentication(authentication);
         User user = (User) authentication.getPrincipal();
         String username = user.getUsername();
         String userType = user.getClass().getSimpleName();
