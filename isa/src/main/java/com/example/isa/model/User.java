@@ -16,7 +16,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-import org.checkerframework.common.aliasing.qual.Unique;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -54,7 +53,7 @@ public class User implements UserDetails{
     @Column(name = "phoneNumber")
 	protected String phoneNumber;
     
-    @Unique
+
     @Column(name = "email")
     private String email;
     
@@ -82,7 +81,7 @@ public class User implements UserDetails{
 	
 
 
-	public User(@Unique String email, String password) {
+	public User(String email, String password) {
 		super();
 		this.email = email;
 		this.password = password;

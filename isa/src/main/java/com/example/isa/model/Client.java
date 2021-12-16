@@ -4,7 +4,6 @@ import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
-import org.checkerframework.common.aliasing.qual.Unique;
 
 @Entity
 @DiscriminatorValue("CLIENT")

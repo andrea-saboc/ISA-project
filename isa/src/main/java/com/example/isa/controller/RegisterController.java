@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -15,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.isa.dto.AdvertiserRegistrationDTO;
 import com.example.isa.dto.ClientRegistrationDTO;
-import com.example.isa.service.implemented.AdvertiserRegisterService;
+import com.example.isa.service.AdvertiserRegisterService;
 import com.example.isa.service.implemented.ClientRegistrationService;
 
 @RestController
@@ -45,9 +44,9 @@ public class RegisterController {
         try {
             this.advertiserRegisterService.saveAdvertiserRegistrationRequest(advertiserData);
             System.out.println(advertiserData.toString());
-            return new ResponseEntity<>("Successfull registratio", HttpStatus.OK);
+            return new ResponseEntity<>("Successfull registration", HttpStatus.OK);
         } catch (Exception e){
-            return  new ResponseEntity<>("Failed", HttpStatus.INTERNAL_SERVER_ERROR);
+            return  new ResponseEntity<>("Failed to register", HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
     }
