@@ -9,6 +9,7 @@ import Boats from '../components/Boats.vue'
 import Mansions from '../components/Mansions.vue'
 import Adventures from '../components/Adventures.vue'
 import Listing from '../components/Listing.vue'
+import ClientReservations from '../components/ClientReservations.vue'
 
 const routes = [
   {
@@ -55,6 +56,11 @@ const routes = [
     path: '/listing',
     name: 'listing',
     component: Listing
+   },
+   {
+    path: '/clientReservations',
+    name: 'clientReservations',
+    component: ClientReservations
    }
 
 ]
