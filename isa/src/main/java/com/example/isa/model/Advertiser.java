@@ -2,8 +2,7 @@ package com.example.isa.model;
 
 import javax.persistence.*;
 
-@Entity
-@DiscriminatorValue("ADVERTISER")
+
 public class Advertiser extends User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
