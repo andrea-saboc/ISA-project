@@ -8,6 +8,9 @@
         <li v-if="user === null" class="nav-item">
           <a href="/clientRegistration" class="nav-link">Register</a>
         </li>
+        <li v-if="user === Client" class="nav-item">
+          <a href="/clientReservations" class="nav-link">Reservations</a>
+        </li>
         <li v-if="user === null" class="nav-item">
           <a href="/login" class="nav-link">Login</a>
         </li>
