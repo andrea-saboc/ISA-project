@@ -1,5 +1,7 @@
 package com.example.isa.model;
 
+import org.springframework.security.core.GrantedAuthority;
+
 import javax.persistence.*;
 
 @Entity

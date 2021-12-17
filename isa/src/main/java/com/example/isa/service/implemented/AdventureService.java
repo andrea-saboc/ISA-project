@@ -7,8 +7,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class AdventureService {
-
-    private final AdventureRepository adventureRepository;
+    @Autowired
+    private AdventureRepository adventureRepository;
     @Autowired
     public AdventureService(AdventureRepository ar) {
         this.adventureRepository = ar;

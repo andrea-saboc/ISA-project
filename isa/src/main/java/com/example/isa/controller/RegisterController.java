@@ -42,7 +42,7 @@ public class RegisterController {
     public ResponseEntity<String> register(@RequestBody AdvertiserRegistrationDTO advertiserData){
         System.out.println("Advertiser adding :"+advertiserData.toString());
         try {
-            this.advertiserRegisterService.saveAdvertiserRegistrationRequest(advertiserData);
+            this.advertiserRegisterService.saveAdvertiserRegistration(advertiserData);
             System.out.println(advertiserData.toString());
             return new ResponseEntity<>("Successfull registration", HttpStatus.OK);
         } catch (Exception e){

@@ -11,8 +11,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class AdvertiserRegisterService {
 
-    private final BoatOwnerRepository boatOwnerRepository;
-    private final MansionOwnerRepository mansionOwnerRepository;
+    private BoatOwnerRepository boatOwnerRepository;
+    private MansionOwnerRepository mansionOwnerRepository;
 
     public AdvertiserRegisterService(BoatOwnerRepository boatOwnerRepository, MansionOwnerRepository mansionOwnerRepository) {
         this.boatOwnerRepository = boatOwnerRepository;
@@ -33,5 +33,7 @@ public class AdvertiserRegisterService {
         return  mansionOwner;
     }
 
-
+    public void saveAdvertiserRegistration(AdvertiserRegistrationDTO advertiserData) {
+        return;
+    }
 }
