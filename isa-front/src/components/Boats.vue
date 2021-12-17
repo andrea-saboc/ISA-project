@@ -42,10 +42,13 @@
     </div>
     </div>
 </section>
+
+
 </template>
 
 <script>
 import axios from 'axios'
+import Popper from 'popper.js'
 export default{
     name: 'boats',
     data: function(){
