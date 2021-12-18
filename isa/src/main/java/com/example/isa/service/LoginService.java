@@ -27,7 +27,7 @@ public class LoginService {
     private PasswordEncoder passwordEncoder;
     
     public UserTokenState logIn(LoginDTO authenticationRequest) {
-
+        System.out.println("U LogIn metodi servisa");
         return getUserTokenState(authenticationRequest);
     }
 
@@ -57,11 +57,12 @@ public class LoginService {
     }
 */
     private UserTokenState getUserTokenState(LoginDTO authenticationRequest) {
-
+        System.out.println("U get user token state");
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getEmail(),
                         authenticationRequest.getPassword()));
-        System.out.println("izasli iz auth");        SecurityContextHolder.getContext().setAuthentication(authentication);
+        System.out.println("izasli iz auth");
+        SecurityContextHolder.getContext().setAuthentication(authentication);
         User user = (User) authentication.getPrincipal();
         String username = user.getUsername();
         String userType = user.getClass().getSimpleName();

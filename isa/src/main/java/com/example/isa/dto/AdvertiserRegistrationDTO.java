@@ -1,7 +1,6 @@
 package com.example.isa.dto;
 
-import com.example.isa.model.BoatOwner;
-import com.example.isa.model.MansionOwner;
+import com.example.isa.model.Advertiser;
 
 public class AdvertiserRegistrationDTO {
     private String name;
@@ -129,8 +128,8 @@ public class AdvertiserRegistrationDTO {
         this.type = type;
     }
 
-    public BoatOwner createBoatOwner(AdvertiserRegistrationDTO dat) {
-        BoatOwner boatOwner = new BoatOwner(
+    public Advertiser createAdvertiser(AdvertiserRegistrationDTO dat) {
+        Advertiser boatOwner = new Advertiser(
                 dat.getName(),
                 dat.getSurname(),
                 dat.getAddress(),
@@ -140,24 +139,12 @@ public class AdvertiserRegistrationDTO {
                 dat.getEmail(),
                 dat.getPassword(),
                 dat.getReason(),
+                dat.getType(),
                 false
                 );
         return boatOwner;
     }
 
-    public MansionOwner createMansionOwner(AdvertiserRegistrationDTO dat){
-        MansionOwner mansionOwner = new MansionOwner(
-                dat.getName(),
-                dat.getSurname(),
-                dat.getAddress(),
-                dat.getCity(),
-                dat.getCountry(),
-                dat.getPhoneNumber(),
-                dat.getEmail(),
-                dat.getPassword(),
-                dat.getReason(),
-                false
-        );
-        return mansionOwner;
-    }
+
+
 }

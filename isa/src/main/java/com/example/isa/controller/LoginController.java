@@ -30,7 +30,7 @@ public class LoginController {
 	@RequestMapping(method = RequestMethod.POST, value = "/login",consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE )
 	@CrossOrigin(origins = "*")
 	public ResponseEntity<UserTokenState> login(@RequestBody LoginDTO loginData,HttpServletRequest req) throws JsonProcessingException{
-		
+		System.out.println("U kontroleru");
 
         UserTokenState state = loginService.logIn(loginData);
         return ResponseEntity.ok(state);		

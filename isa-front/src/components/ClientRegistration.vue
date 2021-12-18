@@ -102,6 +102,7 @@ export default{
               alert(response.data)
               this.messege = response.data
             });
+        this.ClearAllFields();
       } else if (this.fieldsFilled && this.passwordValid && this.picked=='Owner'){
         axios
       .post('http://localhost:8080/register/advertiser',
@@ -121,6 +122,7 @@ export default{
               alert(response.data)
               this.messege = response.data
             });
+        this.ClearAllFields();
       } else alert('Error in filling registration');
 
       },
@@ -155,12 +157,28 @@ export default{
             this.fieldsFilled = false
             return;
           }
+          this.fieldsFilled = true
       },
       CheckIfPassworIsValid(){
           if(!this.password === this.passwordRepeated) {
             this.passwordValid = false;
             alert("Repeat your password correctly")
           }
+      },
+      ClearAllFields(){
+        this.name = "";
+        this.surname = "";
+        this.email = "";
+        this.address = "";
+        this.city = "";
+        this.country = "";
+        this.password= "";
+        this.passwordRepeated= "";
+        this.phoneNumber = "";
+        this.reasonadv ="";
+        this.passwordValid = false;
+        this.fieldsFilled = false;
+
       }
     }
 
