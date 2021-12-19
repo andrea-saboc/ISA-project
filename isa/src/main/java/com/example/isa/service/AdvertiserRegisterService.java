@@ -3,10 +3,12 @@ package com.example.isa.service;
 import com.example.isa.dto.AdvertiserRegistrationDTO;
 import com.example.isa.exception.BadUserTypeException;
 import com.example.isa.model.BoatOwner;
+import com.example.isa.model.FishingInstructor;
 import com.example.isa.model.MansionOwner;
 import com.example.isa.model.User;
 import com.example.isa.repository.AdvertiserRepository;
 import com.example.isa.repository.BoatOwnerRepository;
+import com.example.isa.repository.FishingInstructorRepository;
 import com.example.isa.repository.MansionOwnerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,10 +24,13 @@ public class AdvertiserRegisterService {
     private MansionOwnerRepository mansionOwnerRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private FishingInstructorRepository fishnigInstructorRepository;
 
-    public AdvertiserRegisterService(MansionOwnerRepository mansionOwnerRepository, BoatOwnerRepository boatOwnerRepository) {
+    public AdvertiserRegisterService(MansionOwnerRepository mansionOwnerRepository, BoatOwnerRepository boatOwnerRepository,FishingInstructorRepository fishnigInstructorRepository) {
         this.mansionOwnerRepository = mansionOwnerRepository;
         this.boatOwnerRepository = boatOwnerRepository;
+        this.fishnigInstructorRepository=fishnigInstructorRepository;
     }
 
     public User saveNewAdvertiser(AdvertiserRegistrationDTO dat) throws BadUserTypeException {
@@ -42,8 +47,9 @@ public class AdvertiserRegisterService {
                 boatOwnerRepository.save((BoatOwner) user);
                 break;
             case "fishing":
-                /**/
-                break;
+            	 user = dat.createFishingInstructor();
+            	 fishnigInstructorRepository.save((FishingInstructor) user);
+                 break;
             default:
                 throw new BadUserTypeException();
 

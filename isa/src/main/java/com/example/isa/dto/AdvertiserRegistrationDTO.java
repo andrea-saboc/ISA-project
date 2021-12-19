@@ -1,6 +1,7 @@
 package com.example.isa.dto;
 
 import com.example.isa.model.BoatOwner;
+import com.example.isa.model.FishingInstructor;
 import com.example.isa.model.MansionOwner;
 
 public class AdvertiserRegistrationDTO {
@@ -161,5 +162,21 @@ public class AdvertiserRegistrationDTO {
                 false
         );
         return mansionOwner;
+    }
+    public FishingInstructor createFishingInstructor() {
+    	FishingInstructor fishingInstructor = new FishingInstructor(
+                name,
+                surname,
+                address,
+                city,
+                country,
+                phoneNumber,
+                email,
+                password,
+                reason,
+                "mansion",
+                false
+        );
+        return fishingInstructor;
     }
 }
