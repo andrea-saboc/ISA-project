@@ -47,6 +47,8 @@ export default{
                 store.dispatch('startSession', response.data);
                 console.log('User got the token:',this.$store.getters.tokenString)
                 this.dispatch(response.data.userType);
+                console.log('user type isss')
+                console.log(this.$store.state.userType)
               });
         }else alert('error in filling form');
 
