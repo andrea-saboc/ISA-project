@@ -1,2 +1,38 @@
-package com.example.isa.model;public class MansionOwner {
+package com.example.isa.model;
+
+import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+
+@Entity
+@DiscriminatorValue("MansionOwner")
+public class MansionOwner extends User{
+    @Column(name = "advertiser_reason")
+    private String reason;
+    @Column(name = "type")
+    private String advertiserType;
+    @Column(name = "advertiser_registration_approved")
+    private boolean approved;
+
+    public  MansionOwner() {}
+
+    public MansionOwner(String reason, String advertiserType, boolean approved) {
+        this.reason = reason;
+        this.advertiserType = advertiserType;
+        this.approved = approved;
+    }
+
+    public MansionOwner(String email, String password, String reason, String advertiserType, boolean approved) {
+        super(email, password);
+        this.reason = reason;
+        this.advertiserType = advertiserType;
+        this.approved = approved;
+    }
+
+    public MansionOwner(String name, String surname, String address, String city, String country, String phoneNumber, String email, String password, String reason, String advertiserType, boolean approved) {
+        super(name, surname, address, city, country, phoneNumber, email, password);
+        this.reason = reason;
+        this.advertiserType = advertiserType;
+        this.approved = approved;
+    }
 }

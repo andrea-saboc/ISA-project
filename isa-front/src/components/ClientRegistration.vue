@@ -164,6 +164,9 @@ export default{
             this.passwordValid = false;
             alert("Repeat your password correctly")
           }
+          else{
+            this.passwordValid = true;
+          }
       },
       ClearAllFields(){
         this.name = "";

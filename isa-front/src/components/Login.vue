@@ -65,6 +65,11 @@ export default{
         router.push("/boats");
         return
         }
+      else if(type === 'MansionOwner'){
+        router.push("/home")
+        return;
+      }
+
       }
     }
 }

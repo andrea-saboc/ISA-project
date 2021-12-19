@@ -1,2 +1,5 @@
-package com.example.isa.exception;public class BadUserTypeException {
+package com.example.isa.exception;
+
+public class BadUserTypeException extends RuntimeException{
+    public  BadUserTypeException(){}
 }
