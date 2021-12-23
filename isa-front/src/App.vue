@@ -15,6 +15,9 @@
         <li v-if="user === 'Client'" class="nav-item">
           <a href="/profile" class="nav-link">Profile</a>
         </li>
+        <li v-if="user === 'Administrator'" class="nav-item">
+          <a href="/profile" class="nav-link">Profile Admina</a>
+        </li>
         <li v-if="user === null" class="nav-item">
           <a href="/login" class="nav-link">Login</a>
         </li>

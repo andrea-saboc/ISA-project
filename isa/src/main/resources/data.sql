@@ -1,0 +1,3 @@
+INSERT INTO public.system_user(
+	user_type, id, address, blocked, city, country, email, last_password_reset_date, name, password, phone_number, surname, type, advertiser_registration_approved, advertiser_reason, client_activation_code, client_loyalty_points, client_penalty_points)
+	VALUES ('Administrator', '100', 'Tolstojeva 10', false, 'Novi Sad', 'Srbija', 'alex@gmail.com', null, 'Adminka', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '069652256', null, null, null, null, null, null, null);

@@ -69,6 +69,11 @@ export default{
         router.push("/home")
         return;
       }
+      else if(type === 'Administrator'){
+        router.push("/")
+        window.location.reload()
+        return;
+      }
 
       }
     }
