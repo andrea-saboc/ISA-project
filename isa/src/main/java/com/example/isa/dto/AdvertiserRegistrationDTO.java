@@ -174,7 +174,7 @@ public class AdvertiserRegistrationDTO {
                 email,
                 password,
                 reason,
-                "mansion",
+                "fishing",
                 false
         );
         return fishingInstructor;

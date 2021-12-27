@@ -12,6 +12,12 @@
         <li v-if="user === 'Client'" class="nav-item">
           <a href="/clientReservations" class="nav-link">Reservations</a>
         </li>
+         <li v-if="user === 'Administrator'" class="nav-item">
+          <a href="/profile" class="nav-link">Profile Admina</a>
+        </li>
+        <li v-if="user === 'Administrator'" class="nav-item">
+          <a href="/viewRegistration" class="nav-link">View registrations users</a>
+        </li>
         <li v-if="user === 'Client'" class="nav-item">
           <a href="/profile" class="nav-link">Profile</a>
         </li>

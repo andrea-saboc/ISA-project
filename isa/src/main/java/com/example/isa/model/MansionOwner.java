@@ -35,4 +35,29 @@ public class MansionOwner extends User{
         this.advertiserType = advertiserType;
         this.approved = approved;
     }
+
+	public String getReason() {
+		return reason;
+	}
+
+	public void setReason(String reason) {
+		this.reason = reason;
+	}
+
+	public String getAdvertiserType() {
+		return advertiserType;
+	}
+
+	public void setAdvertiserType(String advertiserType) {
+		this.advertiserType = advertiserType;
+	}
+
+	public boolean isApproved() {
+		return approved;
+	}
+
+	public void setApproved(boolean approved) {
+		this.approved = approved;
+	}
+    
 }

@@ -10,6 +10,8 @@ import Mansions from '../components/Mansions.vue'
 import Adventures from '../components/Adventures.vue'
 import Listing from '../components/Listing.vue'
 import ClientReservations from '../components/ClientReservations.vue'
+import ViewRegistration from '../components/ViewRegistration.vue'
+
 
 const routes = [
   {
@@ -61,7 +63,13 @@ const routes = [
     path: '/clientReservations',
     name: 'clientReservations',
     component: ClientReservations
+   }, {
+    path: '/viewRegistration',
+    name: 'viewRegistration',
+    component: ViewRegistration
    }
+
+
 
 ]
 
