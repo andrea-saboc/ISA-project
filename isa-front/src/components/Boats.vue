@@ -1,4 +1,65 @@
 <template>
+
+<button class = "btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#res">Make a reservation
+</button>
+
+    <div class="modal fade" id="res" tabindex="-1" role="dialog" aria-labelledby="res" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="res">Moking reservation</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+
+
+            <div class="input-group input-group-lg">
+            <label class="form-control">Select start date:</label><input class="form-control" placeholder="Select date" type="date" id="example"><br>
+            </div>
+            <div class="input-group input-group-lg">
+            <label class="form-control">Number of days:</label><input class="form-control" type="number"><br>
+            </div>
+            <div class="input-group input-group-lg">
+            <label class="form-control">Number of guests:</label><input class="form-control" type="number"><br>
+            </div>          
+            <br>
+            <label>Optional:</label><br>
+            <div class="input-group input-group">
+            
+            <label class="form-control">Location:</label><input class="form-control" type="text"><br>
+            </div>
+            <div class="input-group input-group">
+            <label class="form-control">Grade:</label><input class="form-control" type="number"><br>
+            </div>
+
+
+
+
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Done</button>
+        </div>
+        </div>
+    </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <section class="p-5">
     <div class = "container">
     <div class="row text-center">
