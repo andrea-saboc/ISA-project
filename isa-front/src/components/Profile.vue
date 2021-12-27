@@ -104,11 +104,15 @@ export default{
         }
    },
    mounted(){
+      alert(this.user.email)
       console.log('hello from profile',this.$store.getters.tokenString)
          axios
-         .post('http://localhost:8080/userData', this.user.email,{
+         .post('http://localhost:8080/userData', 'igi@gmail.com',{
             headers: {
                'Authorization' : this.$store.getters.tokenString
+            },
+            data:{
+               email: 'igi@gmail.com'
             }
          })
          .then(response => {
@@ -150,7 +154,7 @@ export default{
          this.UpdateUser();
       },
       UpdateUser(){
-
+         console.log(this.user)
          axios
          .post('http://localhost:8080/updateUser',this.user)
          .then(response => {

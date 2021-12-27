@@ -5,7 +5,7 @@
 
  <div class="col-md">    
     <div v-for="(value, index) in adventures">
-      <div v-if="index % 2 != 0">
+      <div v-if="index % 2 == 0">
 
 
             <div class="card mb-3">
@@ -23,7 +23,7 @@
 
 <div class="col-md">
     <div v-for="(value, index) in adventures">
-      <div v-if="index % 2 == 0">
+      <div v-if="index % 2 != 0">
 
         
             <div class="card mb-3">
@@ -75,16 +75,15 @@
 <div class="input-group">
     <div class="dropdown">
         <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdown2" data-bs-toggle="dropdown" aria-expanded="true">
-            Name
+            {{sort}}
         </button>
         <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdown2">
-            <li><a class="dropdown-item active" href="#">Action</a></li>
-            <li><a class="dropdown-item" href="#">Name</a></li>
-            <li><a class="dropdown-item" href="#">Location</a></li>
-            <li><a class="dropdown-item" href="#">Grade</a></li>
+            <li><button class="dropdown-item" v-on:click=SortByName>Name</button></li>
+            <li><button class="dropdown-item" v-on:click=SortByLocation>Location</button></li>
+            <li><button class="dropdown-item" v-on:click=SortByGrade>Grade</button></li>
         </ul>
     </div>
-    <button class = "btn btn-primary">Sort</button>
+    <button class = "btn btn-primary" v-on:click=Sort>Sort</button>
  </div>
  </div>
 </div>
@@ -98,36 +97,58 @@ export default{
     name: 'adventures',
     data(){
         return{
+            sort: 'Name',
         adventures : [
            {
                'name': 'Ime prvo',
                'address': 'Adresa od vise dijelova',
                'promoDescription' : 'promo opis',
-               'avgGrade' : 'ocjena'
+               'avgGrade' : 'ocjenay'
            },
            {
                'name': 'Ime drugo',
                'address': 'Adresa od vise dijelova',
                'promoDescription' : 'promo opis',
-               'avgGrade' : 'ocjena'
+               'avgGrade' : 'ocjenaaa'
            },
            {
                'name': 'Ime trece, ime broda zamisli',
                'address': 'Adresa od vise dijelova',
                'promoDescription' : 'promo opis',
-               'avgGrade' : 'ocjena'
+               'avgGrade' : 'ocjenab'
            },
            {
                'name': 'Cetvrto',
                'address': 'Adresa od vise dijelova',
                'promoDescription' : 'promo opis',
-               'avgGrade' : 'ocjena'
+               'avgGrade' : 'ocjenaa'
            }
         ],
         searchCategoryClicked: true
         }
     },
     methods:{
+
+        SortByName(){
+            this.sort = 'Name';
+        },
+        SortByGrade(){
+            this.sort = 'Grade';
+        },
+        SortByLocation(){
+            this.sort = 'Location';
+        },
+        Sort(){
+
+            if (this.sort == 'Name') {
+				this.adventures.sort((b, a) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0));
+			} else if (this.sort == 'Grade') {
+				this.adventures.sort((a, b) => (a.avgGrade > b.avgGrade) ? 1 : ((b.avgGrade > a.avgGrade) ? -1 : 0));
+			} else if (this.sort == 'Location') {
+				this.adventures.sort((b, a) => (a.address > b.address) ? 1 : ((b.address > a.address) ? -1 : 0));
+			}
+            
+        }
 
     }
 }

@@ -13,7 +13,12 @@ import com.example.isa.repository.UserRepository;
 public class UserCredentialsService implements UserDetailsService{
 	
 	@Autowired
-	private UserRepository repo;	
+	private UserRepository repo;
+	
+	public UserCredentialsService(UserRepository userRepository){
+		this.repo = userRepository;
+	}
+
 
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {

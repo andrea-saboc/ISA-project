@@ -5,6 +5,8 @@ import java.nio.file.AccessDeniedException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,8 @@ public class UserService {
     private UserRepository userRepository;
 	@Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private AuthenticationManager authentication;
 	
 	public Iterable<User> findAll()  throws AccessDeniedException{
 		return userRepository.findAll();
@@ -44,10 +48,14 @@ public class UserService {
 		return this.userRepository.save(u);
 	}
 	*/
-	public User getByEmail(String email) {
+	public User getLoggedUser() {
 		
-		System.out.println("Pronadjeni user:");
-		System.out.println(userRepository.findByEmail(email).getName());
-		return userRepository.findByEmail(email);
+		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		return user;
 	}
+	
+    public User updateUserInfo(User u) {
+        //User user = getLoggedUser();
+        return userRepository.save(u);
+    }
 }
