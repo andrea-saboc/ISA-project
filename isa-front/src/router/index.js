@@ -12,7 +12,7 @@ import Listing from '../components/Listing.vue'
 import ClientReservations from '../components/ClientReservations.vue'
 import ClientSubscriptions from '../components/ClientSubscriptions.vue'
 import ViewRegistration from '../components/ViewRegistration.vue'
-
+import MansionOwnerHomePage from "../components/MansionOwnerHomePage";
 
 const routes = [
   {
@@ -74,7 +74,12 @@ const routes = [
     path: '/clientSubscriptions',
     name: 'clientSubscriptions',
     component: ClientSubscriptions
-   }
+   },
+    {
+        path: '/mansionOwnerHomePage',
+        name: 'mansionOwnerHomePage',
+        component: MansionOwnerHomePage
+    }
 
 
 

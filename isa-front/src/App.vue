@@ -2,10 +2,17 @@
   <nav class = "navbar navbar-expand-lg bg-dark navbar-dark">
     <div class="container">
       <a v-if="user === null" href="/home" class="navbar-brand">Adventureland</a>
+<<<<<<< HEAD
       <a v-if="user === 'Client'" href="/listing" class="navbar-brand">Adventureland</a>
+=======
+      <a v-if="user === 'Client' || user == 'MansionOwner' || user === 'BoatOwner'" href="/boats" class="navbar-brand">Adventureland</a>
+>>>>>>> 28d04e7 (feat: mansion owner home page)
       <div class="collapse navbar-collapse">
         <ul class ="navbar-nav ms-auto">
+        <li v-if="user === 'MansionOwner'" class ="nav-item" >
+          <a href="/mansionOwnerHomePage" class="nav-link">Home</a>
 
+        </li>
         <li v-if="user === null" class="nav-item">
           <a href="/clientRegistration" class="nav-link">Register</a>
         </li>
@@ -21,7 +28,7 @@
         <li v-if="user === 'Administrator'" class="nav-item">
           <a href="/viewRegistration" class="nav-link">View registrations users</a>
         </li>
-        <li v-if="user === 'Client'" class="nav-item">
+        <li v-if="user === 'Client' || user == 'MansionOwner' || user === 'BoatOwner'" class="nav-item">
           <a href="/profile" class="nav-link">Profile</a>
         </li>
         <li v-if="user === null" class="nav-item">

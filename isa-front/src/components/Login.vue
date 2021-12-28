@@ -18,6 +18,7 @@
 </template>
 <script>
 import axios from 'axios'
+import {onBeforeMount} from "vue";
 export default{
     data(){
         return{
@@ -70,9 +71,13 @@ export default{
         router.push("/home")
         return;
       }
-       else if(type === 'Administrator'){
+
+       else if(type === 'Administrator') {
         router.push("/")
         window.location.reload()
+      }
+      else if(type === "BoatOwner"){
+        router.push("/about")
         return;
       }
 
