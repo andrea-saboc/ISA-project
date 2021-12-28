@@ -1,10 +1,14 @@
 <template>
+<section >
+<br>
+  <hr>
+<div class="input-group mb-3">
+  <button class="btn btn-outline-secondary" v-on:click=DisplayMansions>Mansions</button>
+  <button class="btn btn-outline-secondary" v-on:click=DisplayBoats>Boats</button>
+  <button class="btn btn-outline-secondary" v-on:click=DisplayAdventures>Adventures</button>
 
-<div class="btn-group">
-  <button href="#" class="btn btn-primary" v-on:click=DisplayMansions>Mansions</button>
-  <button href="#" class="btn btn-primary" v-on:click=DisplayBoats>Boats</button>
-  <button href="#" class="btn btn-primary" v-on:click=DisplayAdventures>Adventures</button>
 </div>
+  <hr>
 <br>
 <br>
 <div py-50>
@@ -18,7 +22,7 @@
         <adventures></adventures>
     </div>
 </div>
-
+</section>
 </template>
 
 <script>

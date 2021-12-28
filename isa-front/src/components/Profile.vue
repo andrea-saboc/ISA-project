@@ -4,6 +4,10 @@
 
 
 <div class="w-50">
+
+   <h1 >Number of penalties: {{penalties}}</h1>
+   <br>
+   <br>
    <h3>Change your info :</h3>
 
    <div class="input-group">
@@ -84,6 +88,32 @@
 
 </div>
 </section>
+<section>
+
+<button class = "btn btn-danger btn-lg" data-bs-toggle="modal" data-bs-target="#del">Request deleting account
+      </button>
+      <div class="modal fade" id="del" tabindex="-1" role="dialog" aria-labelledby="del" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="del">What is the reason for deleting your account?</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+            <textarea class="form-control"></textarea>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Submit</button>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+</section>
 </template>
 
 <script>
@@ -100,7 +130,8 @@ export default{
          phoneNumber: '',
          oldPassword: '',
          newPassword: '',
-         newPasswordRepeated: ''
+         newPasswordRepeated: '',
+         penalties: '0'
         }
    },
    mounted(){
