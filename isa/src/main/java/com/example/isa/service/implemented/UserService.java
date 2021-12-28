@@ -2,7 +2,6 @@ package com.example.isa.service.implemented;
 
 
 import java.nio.file.AccessDeniedException;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -10,7 +9,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.example.isa.dto.ClientRegistrationDTO;
 import com.example.isa.model.User;
 import com.example.isa.repository.UserRepository;
 

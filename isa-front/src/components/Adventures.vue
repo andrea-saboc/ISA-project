@@ -13,26 +13,26 @@
             </div>
             <div class="modal-body">
                <div class="input-group input-group-lg">
-                  <label class="form-control">Select start date:</label><input class="form-control" placeholder="Select date" type="date" id="example"><br>
+                  <label class="form-control">Select start date:</label><input v-model="reservationForm.startDate" class="form-control" placeholder="Select date" type="date" id="example"><br>
                </div>
                <div class="input-group input-group-lg">
-                  <label class="form-control">Number of days:</label><input class="form-control" type="number"><br>
+                  <label class="form-control">Number of days:</label><input v-model="reservationForm.numberOfDays" class="form-control" type="number"><br>
                </div>
                <div class="input-group input-group-lg">
-                  <label class="form-control">Number of guests:</label><input class="form-control" type="number"><br>
+                  <label class="form-control">Number of guests:</label><input v-model="reservationForm.numberOfGuests" class="form-control" type="number"><br>
                </div>
                <br>
                <label>Optional:</label><br>
                <div class="input-group input-group">
-                  <label class="form-control">Location:</label><input class="form-control" type="text"><br>
+                  <label class="form-control">Location:</label><input v-model="reservationForm.location" class="form-control" type="text"><br>
                </div>
                <div class="input-group input-group">
-                  <label class="form-control">Grade:</label><input class="form-control" type="number"><br>
+                  <label class="form-control">Grade:</label><input v-model="reservationForm.grade" class="form-control" type="number"><br>
                </div>
             </div>
             <div class="modal-footer">
                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-               <button type="button" class="btn btn-primary">Done</button>
+               <button type="button" class="btn btn-primary" v-on:click=SearchForReservations>Search</button>
             </div>
          </div>
       </div>
@@ -119,6 +119,14 @@ export default{
     data(){
         return{
             sort: 'Name',
+            reservationForm:{
+               'startDate': '',
+               'numberOfClients': '',
+               'numberOfDays': '',
+               'location': '',
+               'grade': '',
+
+            },
         adventures : [
            {
                'name': 'Ime prvo',
@@ -169,6 +177,9 @@ export default{
 				this.adventures.sort((b, a) => (a.address > b.address) ? 1 : ((b.address > a.address) ? -1 : 0));
 			}
             
+        },
+        SearchForReservations(){
+           console.log(this.reservationForm)
         }
 
     }

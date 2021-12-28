@@ -9,12 +9,12 @@
             <div  v-for="res in currentReservations">
                <div class="card text-dark bg-light mt-3">
                   <div class="card-header h4">
-                     {{res.mansionName}}
+                     {{}}
                   </div>
                   <div class="card-body">
                      <label>Start date: {{res.startDate}}.</label>
-                     <label>Number of days: {{res.numberOfDays}}.</label>
-                     <label>Number of guests: {{res.numberOfGuests}}.</label>
+                     <label>Number of days: {{res.durationInDays}}.</label>
+                     <label>Number of guests: {{res.numberOfClients}}.</label>
                      <div><button class="btn btn-danger" v-on:click="CancelReservation()">Cancel reservation</button></div>
                   </div>
                </div>
@@ -142,22 +142,7 @@ export default {
           givingFeedback: 'None',
           feedbackContent: '',
           sortReservations: 'Date',
-          currentReservations:[
-           {
-               'startDate': '1.1.2021.',
-               'numberOfDays': '10',
-               'numberOfGuests' : '4',
-               'mansionName' : 'Vila Golia', 
-               'mansionAddress' : 'Herceg Novi'
-           },
-                      {
-               'startDate': '1.1.2021.',
-               'numberOfDays': '5',
-               'numberOfGuests' : '4',
-               'mansionName' : 'Vila Sofia', 
-               'mansionAddress' : 'Herceg Novi'
-           }
-        ],
+          currentReservations: [],
         pastMansionReservations:[
            {
                'name': 'Ime prvo',
@@ -187,6 +172,15 @@ export default {
         pastBoatReservations:[],
         pastAdventureReservations:[]
       }
+  },
+  mounted(){
+      axios
+         .get('http://localhost:8080/reservations')
+         .then(response => {
+            this.currentReservations = response.data
+            console.log(response.data)
+          });
+
   },
   methods:{
     DisplayMansions(){       

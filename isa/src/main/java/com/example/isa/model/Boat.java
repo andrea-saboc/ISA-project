@@ -1,6 +1,20 @@
 package com.example.isa.model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+
+@Entity
 public class Boat {
+	
+	@Id
+	@Column(name = "id", unique = true)
+    @SequenceGenerator(name = "user_sequence_generator", sequenceName = "user_sequence", initialValue = 100)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_sequence_generator")
+	private Long id;
 	
 	private String name;
 	private String address;
@@ -40,6 +54,8 @@ public class Boat {
 		this.promoDescription = promoDescription;
 		this.avgGrade = avgGrade;
 	}
+	
+	public Boat() {}
 	
 	
 
