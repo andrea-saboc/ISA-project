@@ -1,6 +1,7 @@
 <template>
 <section >
 <br>
+  <hr>
 <div class="input-group mb-3">
   <button class="btn btn-outline-secondary" v-on:click=DisplayMansions>Mansions</button>
   <button class="btn btn-outline-secondary" v-on:click=DisplayBoats>Boats</button>
