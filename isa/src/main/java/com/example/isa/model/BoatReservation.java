@@ -15,8 +15,8 @@ public class BoatReservation extends Reservation{
 	@JoinColumn(name = "boat_id")
 	private Boat boat;
 
-	public BoatReservation(String type, User user, Date startDate, int durationInDays, int numberOfClients, Boat boat) {
-		super(type, user, startDate, durationInDays, numberOfClients);
+	public BoatReservation(User user, Date startDate, int durationInDays, int numberOfClients, Boat boat) {
+		super("BOAT", user, startDate, durationInDays, numberOfClients);
 		this.boat = boat;
 	}
 

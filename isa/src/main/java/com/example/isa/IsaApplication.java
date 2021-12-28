@@ -14,6 +14,7 @@ import com.example.isa.service.implemented.AdventureService;
 import java.awt.Component;
 import java.awt.List;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Optional;
 
 import org.hibernate.internal.build.AllowSysOut;
@@ -23,6 +24,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 
@@ -40,6 +42,8 @@ public class IsaApplication extends SpringBootServletInitializer implements Comm
 	BoatRepository boatRepo;
 	@Autowired
 	UserRepository userRepo;
+	@Autowired
+	private PasswordEncoder passwordEncoder;
     
 	public static void main(String[] args) {
 		SpringApplication.run(IsaApplication.class, args);
@@ -55,10 +59,11 @@ public class IsaApplication extends SpringBootServletInitializer implements Comm
 		
 		Client c = new Client("Igor","Stojanovic", "Address", "City", "Serbiania", "468438",
 				"igi@gmail.com", "igi", 0,0);
+		c.setPassword(passwordEncoder.encode("igi"));
 		userRepo.save(c);
 		
-		repo.save(new BoatReservation(null, c, null, 66, 77, b1));
-		repo.save(new BoatReservation(null, c, null, 4444, 77, b2));
+		repo.save(new BoatReservation(c, new Date(), 66, 77, b1));
+		repo.save(new BoatReservation(c, new Date(), 4444, 77, b2));
 
 		
     	Iterable<BoatReservation> res = repo.findAllByUser(c);
