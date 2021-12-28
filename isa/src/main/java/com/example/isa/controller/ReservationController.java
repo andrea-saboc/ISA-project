@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,14 +16,20 @@ import com.example.isa.dto.ReservationSearchDTO;
 import com.example.isa.model.Boat;
 import com.example.isa.model.BoatReservation;
 import com.example.isa.model.Reservation;
+import com.example.isa.model.User;
 import com.example.isa.repository.BoatRepository;
 import com.example.isa.service.ReservationService;
+import com.example.isa.service.implemented.UserService;
+
+
 
 @RestController
 public class ReservationController {
 	
 	@Autowired 
 	ReservationService service;
+	@Autowired
+	UserService userService;
 	
 	@Autowired
 	BoatRepository repo;
@@ -58,9 +65,10 @@ public class ReservationController {
     @CrossOrigin(origins = "*")
     public ResponseEntity<Iterable<Reservation>> getUserReservations(){
     	
-    	System.out.println("USli u kontroler");
+    	User user = userService.getLoggedUser();
+    	System.out.println("Uspio user");
         try {
-            return new ResponseEntity<>(service.GetUserReservations(null), HttpStatus.OK);
+            return new ResponseEntity<>(service.GetUserReservations(user), HttpStatus.OK);
         } catch (Exception e){
         	System.out.println(e);
             return  new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);

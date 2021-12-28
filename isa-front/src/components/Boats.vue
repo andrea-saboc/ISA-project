@@ -34,11 +34,6 @@
                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                <button type="button" class="btn btn-primary" v-on:click=SearchForReservations>Search</button>
             </div>
-         
-         <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button-lg" class="btn btn-primary">Search</button>
-         </div>
       </div>
    </div>
 </div>
