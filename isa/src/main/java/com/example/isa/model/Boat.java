@@ -55,6 +55,8 @@ public class Boat {
 		this.avgGrade = avgGrade;
 	}
 	
+	public Boat() {}
+	
 	
 
 }

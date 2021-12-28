@@ -19,6 +19,20 @@ public class BoatReservation extends Reservation{
 		super(type, user, startDate, durationInDays, numberOfClients);
 		this.boat = boat;
 	}
+
+	public BoatReservation() {
+		super();
+	}
+
+	public Boat getBoat() {
+		return boat;
+	}
+
+	public void setBoat(Boat boat) {
+		this.boat = boat;
+	}
+	
+	
 	
 	
 

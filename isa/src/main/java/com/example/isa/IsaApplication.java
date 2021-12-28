@@ -1,13 +1,22 @@
 package com.example.isa;
 
+import com.example.isa.dto.AdvertisersDTO;
 import com.example.isa.model.Boat;
 import com.example.isa.model.BoatReservation;
+import com.example.isa.model.Reservation;
 import com.example.isa.model.Client;
 import com.example.isa.model.Reservation;
 import com.example.isa.repository.BoatRepository;
-import com.example.isa.repository.ReservationRepository;
+import com.example.isa.repository.BoatReservationRepository;
 import com.example.isa.repository.UserRepository;
 import com.example.isa.service.implemented.AdventureService;
+
+import java.awt.Component;
+import java.awt.List;
+import java.util.ArrayList;
+import java.util.Optional;
+
+import org.hibernate.internal.build.AllowSysOut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -16,6 +25,9 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
+
+
+
 @SpringBootApplication
 @EnableWebMvc
 public class IsaApplication extends SpringBootServletInitializer implements CommandLineRunner {
@@ -23,7 +35,7 @@ public class IsaApplication extends SpringBootServletInitializer implements Comm
 	AdventureService as;
 	
 	@Autowired
-	ReservationRepository repo;
+	BoatReservationRepository repo;
 	@Autowired
 	BoatRepository boatRepo;
 	@Autowired
@@ -46,7 +58,18 @@ public class IsaApplication extends SpringBootServletInitializer implements Comm
 		userRepo.save(c);
 		
 		repo.save(new BoatReservation(null, c, null, 66, 77, b1));
-		as.creatAdventure();
+		repo.save(new BoatReservation(null, c, null, 4444, 77, b2));
+
+		
+    	Iterable<BoatReservation> res = repo.findAllByUser(c);
+    	
+    	for(BoatReservation r: res){
+    		System.out.println(r.getBoat().getName());
+    	}
+		
+
 	}
+	
+
 
 }

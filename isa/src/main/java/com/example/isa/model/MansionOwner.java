@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 @Entity
 @DiscriminatorValue("MansionOwner")
 public class MansionOwner extends User{
+	
     @Column(name = "advertiser_reason")
     private String reason;
     @Column(name = "type")
