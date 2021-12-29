@@ -2,6 +2,8 @@ package com.example.isa.service.implemented;
 
 
 import java.nio.file.AccessDeniedException;
+import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -9,7 +11,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.example.isa.dto.ClientRegistrationDTO;
+import com.example.isa.model.Client;
 import com.example.isa.model.User;
+import com.example.isa.repository.ClientRepository;
 import com.example.isa.repository.UserRepository;
 
 @Service
@@ -17,6 +22,8 @@ public class UserService {
 
 	@Autowired
     private UserRepository userRepository;
+	@Autowired
+	private ClientRepository clientRepository;
 	@Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
@@ -49,11 +56,21 @@ public class UserService {
 	public User getLoggedUser() {
 		
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		
+		System.out.println(user.getSurname());
 		return user;
 	}
 	
-    public User updateUserInfo(User u) {
-        //User user = getLoggedUser();
-        return userRepository.save(u);
+    public User updateUserInfo(User user) {
+    	
+    	//moze samo swith za user type i svi koriste funkciju 
+    	//moze da se ovo setovanje stavi u odvojenu funkciju
+        Client c = clientRepository.findByEmail(user.getEmail());
+        c.setName(user.getName());
+        c.setSurname(user.getSurname());
+
+        clientRepository.save(c);
+        return user;
+   
     }
-}
+    }

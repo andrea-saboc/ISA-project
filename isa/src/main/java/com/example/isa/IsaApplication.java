@@ -51,7 +51,6 @@ public class IsaApplication extends SpringBootServletInitializer implements Comm
 	@Override
 	public void run(String... args) throws Exception {
 		
-		
 		Boat b1 = new Boat("Milicija", "promo pretp", "smth", 0);
 		Boat b2 = new Boat("Malicija", "promo pretp", "smth", 0);		
 		boatRepo.save(b1);
@@ -70,8 +69,8 @@ public class IsaApplication extends SpringBootServletInitializer implements Comm
     	
     	for(BoatReservation r: res){
     		System.out.println(r.getBoat().getName());
-    	}
-		
+    	}	
+
 
 	}
 	

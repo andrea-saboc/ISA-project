@@ -135,20 +135,17 @@ export default{
         }
    },
    mounted(){
-      alert(this.user.email)
+
       console.log('hello from profile',this.$store.getters.tokenString)
          axios
-         .post('http://localhost:8080/userData', 'igi@gmail.com',{
+         .get('http://localhost:8080/userData',{
             headers: {
                'Authorization' : this.$store.getters.tokenString
-            },
-            data:{
-               email: 'igi@gmail.com'
             }
          })
          .then(response => {
             this.user = response.data;
-
+            alert(this.user.email)
             this.name = response.data.name;
             this.surname = response.data.surname;
             this.address = response.data.address;
