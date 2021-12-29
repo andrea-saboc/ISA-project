@@ -4,6 +4,7 @@ import com.example.isa.model.Address;
 import com.example.isa.model.Boat;
 
 import java.util.List;
+import java.util.Set;
 
 public class BoatRegistrationDTO {
     public String name;
@@ -22,14 +23,14 @@ public class BoatRegistrationDTO {
     public String longitude;
     public String latitude;
     public String promoDescription;
-    public List<String> InteriorImages;
-    public List<String> ExteriorImages;
+    public Set<String> InteriorImages;
+    public Set<String> ExteriorImages;
     public int capacity;
-    public List<String> rules;
+    public Set<String> rules;
 
     public BoatRegistrationDTO(){}
 
-    public BoatRegistrationDTO(String name, String type, double length, int numberOfEngines, double enginePower, double maxSpeed, boolean GPS, boolean radar, boolean VHFradio, boolean fishfinder, String address, String city, String country, String longitude, String latitude, String promoDescription, List<String> interiorImages, List<String> exteriorImages, int capacity, List<String> rules) {
+    public BoatRegistrationDTO(String name, String type, double length, int numberOfEngines, double enginePower, double maxSpeed, boolean GPS, boolean radar, boolean VHFradio, boolean fishfinder, String address, String city, String country, String longitude, String latitude, String promoDescription, Set<String> interiorImages, Set<String> exteriorImages, int capacity, Set<String> rules) {
         this.name = name;
         this.type = type;
         this.length = length;
@@ -52,18 +53,29 @@ public class BoatRegistrationDTO {
         this.rules = rules;
     }
 
-    public Boat createBoat() {
-        Address boatAddress = new Address();
-        boatAddress.setAddress(address);
-        boatAddress.setCity(city);
-        boatAddress.setCity(country);
-        boatAddress.setLatitude(latitude);
-        boatAddress.setLongitude(longitude);
-        Boat newBoat = new Boat();
-        newBoat.setName(name);
-        newBoat.setAddress(boatAddress);
-        newBoat.setCapacity(capacity);
-        //new.set
-        return newBoat;
+    @Override
+    public String toString() {
+        return "BoatRegistrationDTO{" +
+                "name='" + name + '\'' +
+                ", type='" + type + '\'' +
+                ", length=" + length +
+                ", numberOfEngines=" + numberOfEngines +
+                ", enginePower=" + enginePower +
+                ", maxSpeed=" + maxSpeed +
+                ", GPS=" + GPS +
+                ", radar=" + radar +
+                ", VHFradio=" + VHFradio +
+                ", fishfinder=" + fishfinder +
+                ", address='" + address + '\'' +
+                ", city='" + city + '\'' +
+                ", country='" + country + '\'' +
+                ", longitude='" + longitude + '\'' +
+                ", latitude='" + latitude + '\'' +
+                ", promoDescription='" + promoDescription + '\'' +
+                ", InteriorImages=" + InteriorImages +
+                ", ExteriorImages=" + ExteriorImages +
+                ", capacity=" + capacity +
+                ", rules=" + rules +
+                '}';
     }
 }

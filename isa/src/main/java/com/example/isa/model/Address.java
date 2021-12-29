@@ -2,17 +2,17 @@ package com.example.isa.model;
 
 import jdk.jfr.Name;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "Address")
 public class Address {
     @Id
-    @Column(name="id")
-    Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "address_id")
+    private Integer id;
+
+
 
     public String address;
     public String city;

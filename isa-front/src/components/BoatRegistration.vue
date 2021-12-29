@@ -99,7 +99,7 @@
       <div class="double-field">
         <div class="mb-3 col-md-5">
           <label for="interiorImages" class="form-label">Interior images</label>
-          <input class="form-control" type="file" id="interiorImages" multiple>
+          <input class="form-control" type="file" id="interiorImages" multiple @change="onInteriorImagesSelected">
         </div>
         <div class="mb-3 col-md-5">
           <label for="exteriorImages" class="form-label">Exterior images</label>
@@ -146,8 +146,8 @@ export default {
   name: "BoatRegistration",
   data(){
     return {
-      name : "",
-      type : "",
+      name : '',
+      type : '',
       length : '',
       engineNum : '',
       enginePower : '',
@@ -163,11 +163,11 @@ export default {
       latitude : '',
       capacity : '',
       promoDescription : '',
-      imgInter : [],
-      imgExter : [],
-      rules : [],
-      selectedExteriorImages : [],
-      selectedInteriorImages : []
+      imgInter : new Array(),
+      imgExter : new Array(),
+      rules : new Array(),
+      selectedExteriorImages : new Array(),
+      selectedInteriorImages : new Array()
 
     }
     },
@@ -182,7 +182,6 @@ export default {
       console.log(typeof(this.imgExter))
       console.log(event)
       this.selectedExteriorImages = event.target.files
-      alert(this.selectedExteriorImages[0].type)
       console.log(this.selectedExteriorImages)
       const reader = new FileReader()
       console.log("selected exterior image length is", this.selectedExteriorImages)
@@ -208,7 +207,40 @@ export default {
       }
       reader.readAsDataURL(file);
     },
+    onInteriorImagesSelected(event){
+      this.imgExter = new Array()
+      console.log(typeof(this.imgInter))
+      console.log(event)
+      this.selectedInteriorImages = event.target.files
+      console.log(this.selectedInteriorImages)
+      const reader = new FileReader()
+      console.log("selected exterior image length is", this.selectedInteriorImages)
+      for (var img in this.selectedInteriorImages){
+        console.log(isNaN(img))
+        if (isNaN(img)) {
+          return;
+        }
+
+        console.log("before pushig file index:", img)
+        this.onUploadI(this.selectedInteriorImages[img])
+      }
+
+    },
+    onUploadI: function(file){
+      console.log(this.imgInter)
+      console.log("In onUpload, file:", file)
+      console.log("Type of the file is", file.type)
+      const reader= new FileReader();
+      reader.onload = (e) =>{
+        console.log("e:",e.target.result)
+        this.imgInter.push(e.target.result)
+      }
+      reader.readAsDataURL(file);
+    },
     registerBoat(){
+      alert("Registering a boat")
+      alert(this.name)
+      alert(this.type)
       axios
       .post('http://localhost:8080/registerBoat',
           {

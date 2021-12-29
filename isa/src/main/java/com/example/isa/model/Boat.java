@@ -1,14 +1,17 @@
 package com.example.isa.model;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "Boats")
 public class Boat {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer boatId;
+	@Column(name = "id")
+	private Integer id;
 
 	private String name;
 	private String promoDescription;
@@ -24,29 +27,34 @@ public class Boat {
 	public boolean VHFradio;
 	public boolean fishfinder;
 
-	@OneToOne(fetch = FetchType.EAGER)
-	@JoinTable(name = "user_authority",
-			joinColumns = @JoinColumn(name = "boatId", referencedColumnName = "id"),
+	@OneToOne(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
+	@JoinTable(name = "Addreess",
+			joinColumns = @JoinColumn(name = "id", referencedColumnName = "id"),
 			inverseJoinColumns = @JoinColumn(name = "id", referencedColumnName = "address"))
 	private Address address;
-	@OneToMany
-	public List<String> InteriorImages;
-	@OneToMany
-	public List<String> ExteriorImages;
-	@OneToMany
-	public List<String> rules;
+	@OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER, mappedBy = "boat")
+	public Set<Image> InteriorImages = new HashSet<Image>();
+	@OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER, mappedBy = "boat")
+	public Set<Image> ExteriorImages = new HashSet<Image>();
+	@ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER, mappedBy = "boat")
+	public Set<Rule> rules = new HashSet<Rule>();
 
 	public Boat(){}
 
 	public Boat(String ime_mi_je_brod, String neka_adresa, String promo_opis_moj, float v) {
 	}
 
+	public void addRule(Rule newRule){
+		newRule.addBoat(this);
+		rules.add(newRule);
+	}
+
 	public Integer getId() {
-		return boatId;
+		return id;
 	}
 
 	public void setId(Integer id) {
-		this.boatId = id;
+		this.id = id;
 	}
 
 	public String getName() {
@@ -161,27 +169,27 @@ public class Boat {
 		this.address = address;
 	}
 
-	public List<String> getInteriorImages() {
+	public Set<Image> getInteriorImages() {
 		return InteriorImages;
 	}
 
-	public void setInteriorImages(List<String> interiorImages) {
+	public void setInteriorImages(Set<Image> interiorImages) {
 		InteriorImages = interiorImages;
 	}
 
-	public List<String> getExteriorImages() {
+	public Set<Image> getExteriorImages() {
 		return ExteriorImages;
 	}
 
-	public void setExteriorImages(List<String> exteriorImages) {
+	public void setExteriorImages(Set<Image> exteriorImages) {
 		ExteriorImages = exteriorImages;
 	}
 
-	public List<String> getRules() {
+	public Set<Rule> getRules() {
 		return rules;
 	}
 
-	public void setRules(List<String> rules) {
+	public void setRules(Set<Rule> rules) {
 		this.rules = rules;
 	}
 }
