@@ -2,6 +2,7 @@ package com.example.isa.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import com.example.isa.dto.BDTO;
 import com.example.isa.dto.BoatRegistrationDTO;
@@ -20,7 +21,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class BoatController {
 	
 	@Autowired
-	BoatService service;
+	private BoatService service;
+
+	public BoatController(BoatService bs){
+		this.service = bs;
+	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/boats",produces = MediaType.APPLICATION_JSON_VALUE)
 	@CrossOrigin(origins = "*")
@@ -29,6 +34,8 @@ public class BoatController {
 		List <Boat> boats = service.getAll();
 		ObjectMapper mapper = new ObjectMapper();
 		String jsonString = mapper.writeValueAsString(boats);
+		System.out.println(jsonString);
+		System.out.println("In contoler");
 				
 		return new ResponseEntity<>(jsonString, HttpStatus.OK);
 	}

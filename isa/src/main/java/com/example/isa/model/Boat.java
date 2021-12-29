@@ -1,18 +1,18 @@
 package com.example.isa.model;
-
 import javax.persistence.*;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
-@Table(name = "Boats")
+@Table(name = "Boat")
 public class Boat {
+	
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
+	@Column(name = "id", unique = true)
+    @SequenceGenerator(name = "user_sequence_generator", sequenceName = "user_sequence", initialValue = 100)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_sequence_generator")
 	private Integer id;
-
+	
 	private String name;
 	private String promoDescription;
 	private float avgGrade;
@@ -39,7 +39,6 @@ public class Boat {
 	@ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER, mappedBy = "boat")
 	public Set<Rule> rules = new HashSet<Rule>();
 
-	public Boat(){}
 
 	public Boat(String ime_mi_je_brod, String neka_adresa, String promo_opis_moj, float v) {
 	}
@@ -168,6 +167,9 @@ public class Boat {
 	public void setAddress(Address address) {
 		this.address = address;
 	}
+	public Boat() {}
+	
+	
 
 	public Set<Image> getInteriorImages() {
 		return InteriorImages;

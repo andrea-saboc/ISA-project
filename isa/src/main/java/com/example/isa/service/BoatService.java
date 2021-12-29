@@ -29,6 +29,7 @@ public class BoatService {
 
 	public List<Boat> getAll() {
 		List<Boat> boats = boatsRepository.findAll();
+		System.out.println("Service boat getting all");
 		System.out.println(boats);
 		return boats;
 	}

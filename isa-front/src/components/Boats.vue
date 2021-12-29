@@ -11,29 +11,29 @@
             <span aria-hidden="true">&times;</span>
             </button>
          </div>
-         <div class="modal-body">
-            <div class="input-group input-group-lg">
-               <label class="form-control">Select start date:</label><input class="form-control" placeholder="Select date" type="date" id="example"><br>
+            <div class="modal-body">
+               <div class="input-group input-group-lg">
+                  <label class="form-control">Select start date:</label><input v-model="reservationForm.startDate" class="form-control" placeholder="Select date" type="date" id="example"><br>
+               </div>
+               <div class="input-group input-group-lg">
+                  <label class="form-control">Number of days:</label><input v-model="reservationForm.numberOfDays" class="form-control" type="number"><br>
+               </div>
+               <div class="input-group input-group-lg">
+                  <label class="form-control">Number of guests:</label><input v-model="reservationForm.numberOfGuests" class="form-control" type="number"><br>
+               </div>
+               <br>
+               <label>Optional:</label><br>
+               <div class="input-group input-group">
+                  <label class="form-control">Location:</label><input v-model="reservationForm.location" class="form-control" type="text"><br>
+               </div>
+               <div class="input-group input-group">
+                  <label class="form-control">Grade:</label><input v-model="reservationForm.grade" class="form-control" type="number"><br>
+               </div>
             </div>
-            <div class="input-group input-group-lg">
-               <label class="form-control">Number of days:</label><input class="form-control" type="number"><br>
+            <div class="modal-footer">
+               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+               <button type="button" class="btn btn-primary" v-on:click=SearchForReservations>Search</button>
             </div>
-            <div class="input-group input-group-lg">
-               <label class="form-control">Number of guests:</label><input class="form-control" type="number"><br>
-            </div>
-            <br>
-            <label>Optional:</label><br>
-            <div class="input-group input-group">
-               <label class="form-control">Location:</label><input class="form-control" type="text"><br>
-            </div>
-            <div class="input-group input-group">
-               <label class="form-control">Grade:</label><input class="form-control" type="number"><br>
-            </div>
-         </div>
-         <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button-lg" class="btn btn-primary">Search</button>
-         </div>
       </div>
    </div>
 </div>
@@ -65,7 +65,7 @@
                      <div class="card-body">
                         <h5 class="card-title">{{value.name}}</h5>
                         <p class="card-text">{{value.promoDescription}}</p>
-                        <p class="card-text"><small class="text-muted">{{value.address}}</small></p>
+                        <p class="card-text"><small class="text-muted">{{value.address.address}}</small></p>
                      </div>
                   </div>
                </div>
@@ -121,6 +121,14 @@ export default{
     data: function(){
         return{
             sort: 'Name',
+            reservationForm:{
+               'startDate': '',
+               'numberOfClients': '',
+               'numberOfDays': '',
+               'location': '',
+               'grade': '',
+
+            },
             boats : [
             {
                'name': 'Ime prvo',
@@ -164,6 +172,15 @@ export default{
 			} else if (this.sort == 'Location') {
 				this.boats.sort((b, a) => (a.address > b.address) ? 1 : ((b.address > a.address) ? -1 : 0));
 			}
+        },
+        SearchForReservations(){
+           console.log(this.reservationForm)
+            axios
+            .post('http://localhost:8080/reservations/availableBoats',this.reservationForm)
+            .then(response => {
+               this.boats = response.data
+               console.log(response.data)
+            });
         }
 
     }

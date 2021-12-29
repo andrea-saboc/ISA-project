@@ -61,9 +61,15 @@ public class LoginService {
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getEmail(),
                         authenticationRequest.getPassword()));
+        
         System.out.println("izasli iz auth");
         SecurityContextHolder.getContext().setAuthentication(authentication);
         User user = (User) authentication.getPrincipal();
+        
+        System.out.println("Ulogovani user");
+        System.out.println(user.getEmail());
+        
+        
         String username = user.getUsername();
         String userType = user.getClass().getSimpleName();
         String accessToken = tokenUtils.generateToken(username);

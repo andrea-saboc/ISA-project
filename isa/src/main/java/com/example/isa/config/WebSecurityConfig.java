@@ -67,6 +67,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/home/**").permitAll()
                 .antMatchers("/userData/**").permitAll()
                 .antMatchers("/updateUser/**").permitAll()
+                .antMatchers("/reservations/**").permitAll()
                 .antMatchers("/getAllAdvertisers/**").permitAll()
                 .anyRequest().authenticated().and()
                 .cors().and()

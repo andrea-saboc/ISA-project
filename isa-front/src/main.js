@@ -15,10 +15,10 @@ import 'bootstrap';
 
 createApp(App).use(router).use(store).mount('#app')
 
-Axios.defaults.headers.common['Authorization'] = this.$store.getters.tokenString
+//Axios.defaults.headers.common['Authorization'] = this.$store.getters.tokenString
 
 const app = Vue.createApp({
     components: {
-        Index
+        //Index
     },
 });
