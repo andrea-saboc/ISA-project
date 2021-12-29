@@ -2,6 +2,7 @@ package com.example.isa.controller;
 
 import java.util.ArrayList;
 
+import com.example.isa.dto.BoatRegistrationDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -31,5 +32,12 @@ public class BoatController {
 		String jsonString = mapper.writeValueAsString(boats);
 				
 		return new ResponseEntity<>(jsonString, HttpStatus.OK);
+	}
+
+	@RequestMapping(method = RequestMethod.GET, value = "/registerBoat",produces = MediaType.APPLICATION_JSON_VALUE)
+	@CrossOrigin(origins = "*")
+	public ResponseEntity<Boat> registerBoat(BoatRegistrationDTO dto){
+		Boat savedBoat = service.registerBoat(dto);
+		return new ResponseEntity<>(savedBoat, HttpStatus.OK);
 	}
 }

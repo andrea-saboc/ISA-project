@@ -1,12 +1,21 @@
 package com.example.isa.service;
 import java.util.ArrayList;
 
+import com.example.isa.dto.BoatRegistrationDTO;
+import com.example.isa.repository.BoatsRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.isa.model.Boat;
 
 @Service
 public class BoatService {
+	@Autowired
+	private BoatsRepository boatsRepository;
+
+	public BoatService(BoatsRepository br){
+		this.boatsRepository = br;
+	}
 
 	public ArrayList<Boat> getAll() {
 		
@@ -15,4 +24,9 @@ public class BoatService {
 		return boats;
 	}
 
+    public Boat registerBoat(BoatRegistrationDTO dto) {
+		Boat newBoat = dto.createBoat();
+		boatsRepository.save(newBoat);
+		return newBoat;
+    }
 }

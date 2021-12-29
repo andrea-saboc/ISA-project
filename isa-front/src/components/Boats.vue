@@ -43,6 +43,7 @@
       <div class="row text-center">
          <div class="col-md">
             <div v-for="(value, index) in boats">
+              <a href="/boat">
                <div v-if="index % 2 != 0">
                   <div class="card mb-3">
                      <img src="../assets/yacht.jpg" class="card-img-top img-fluid w-30">
@@ -53,6 +54,7 @@
                      </div>
                   </div>
                </div>
+              </a>
             </div>
          </div>
          <div class="col-md">

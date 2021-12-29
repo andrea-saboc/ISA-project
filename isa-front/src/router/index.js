@@ -13,6 +13,11 @@ import ClientReservations from '../components/ClientReservations.vue'
 import ClientSubscriptions from '../components/ClientSubscriptions.vue'
 import ViewRegistration from '../components/ViewRegistration.vue'
 import MansionOwnerHomePage from "../components/MansionOwnerHomePage";
+import BoatOwnerHomePage from "../components/BoatOwnerHomePage";
+import BoatView from "../components/BoatView";
+import BoatRegistration from "../components/BoatRegistration";
+import MansionRegistration from "../components/MansionRegistration";
+import MansionView from "../components/MansionView";
 
 const routes = [
   {
@@ -79,7 +84,33 @@ const routes = [
         path: '/mansionOwnerHomePage',
         name: 'mansionOwnerHomePage',
         component: MansionOwnerHomePage
+    },
+    {
+        path: '/boatOwnerHomePage',
+        name: 'BoatOwnerHomePage',
+        component: BoatOwnerHomePage
+    },
+    {
+        path: '/boat',
+        name: 'BoatView',
+        component: BoatView
+    },
+    {
+        path: '/mansion',
+        name: 'MansionView',
+        component: MansionView
+    },
+    {
+        path: '/boatRegistration',
+        name: 'BoatRegistration',
+        component: BoatRegistration
+    },
+    {
+        path: '/mansionRegistration',
+        name: 'MansionRegistration',
+        component: MansionRegistration
     }
+
 
 
 
