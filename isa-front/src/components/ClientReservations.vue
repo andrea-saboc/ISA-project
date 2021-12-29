@@ -24,13 +24,13 @@
             <div class="input-group justify-content-end mr-30">
                <ul class="nav">
                   <li class="nav-item">
-                     <button class="btn btn-link" v-on:click="DisplayMansions">Mansions</button>
+                     <button class="btn btn-link" v-on:click=DisplayMansions>Mansions</button>
                   </li>
                   <li class="nav-item">
-                     <button class="btn btn-link" v-on:clik="DisplayBoats">Boats</button>
+                     <button class="btn btn-link" v-on:clik=DisplayBoats>Boats</button>
                   </li>
                   <li class="nav-item">
-                     <button class="btn btn-link" v-on:click="DisplayAdventures">Adventures</button>
+                     <button class="btn btn-link" v-on:click=DisplayAdventures>Adventures</button>
                   </li>
                </ul>
                <div class="dropdown ">
@@ -78,11 +78,11 @@
                <div v-for="res in pastBoatReservations">
                   <div class="text-dark bg-light mt-3">
                      <div class="card-header h4">
-                        Naziv vikendice
+                        {{res.boat.name}}
                      </div>
                      <div class="card-body">
                         <blockquote class="blockquote mb-0">
-                           <p>A well-known quote, contained in a blockquote element.</p>
+                           <p>{{res.startDate}}</p>
                            <button v-if="givingFeedback == 'None'" class = "btn btn-secondary" v-on:click = "ShowFeedbackBox(res)">Give feedback</button> 
                            <button v-if="givingFeedback == res" class = "btn btn-secondary" v-on:click="SubmitFeedback()">Submit</button>             
                            <button v-if="givingFeedback == res" class = "btn btn-secondary" v-on:click="CancelGivingFeedback()">Cancel</button> 
@@ -137,56 +137,47 @@ export default {
   },
   data: function(){
       return{
+
           display: 'current',
           displayPastReservations: 'mansions',
           givingFeedback: 'None',
           feedbackContent: '',
           sortReservations: 'Date',
-          currentReservations: [],
-        pastMansionReservations:[
-           {
-               'name': 'Ime prvo',
-               'address': 'Adresa od vise dijelova',
-               'promoDescription' : 'promo opis',
-               'avgGrade' : 'ocjena'
-           },
-           {
-               'name': 'Ime drugo',
-               'address': 'Adresa od vise dijelova',
-               'promoDescription' : 'promo opis',
-               'avgGrade' : 'ocjena'
-           },
-           {
-               'name': 'Ime trece, ime broda zamisli',
-               'address': 'Adresa od vise dijelova',
-               'promoDescription' : 'promo opis',
-               'avgGrade' : 'ocjena'
-           },
-           {
-               'name': 'Cetvrto',
-               'address': 'Adresa od vise dijelova',
-               'promoDescription' : 'promo opis',
-               'avgGrade' : 'ocjena'
-           }
-        ],
-        pastBoatReservations:[],
-        pastAdventureReservations:[]
+
+         currentReservations: [],
+         pastMansionReservations:[],
+         pastBoatReservations:[],
+         pastAdventureReservations:[]
       }
   },
   mounted(){
+       axios
+         .get('http://localhost:8080/reservations')
+         .then(response => {
+            this.currentReservations = response.data
+            console.log(response.data)
+          });
       axios
          .get('http://localhost:8080/reservations/boats')
          .then(response => {
-            this.currentReservations = response.data
+            this.pastBoatReservations = response.data
+            console.log(response.data)
+          });
+      axios
+         .get('http://localhost:8080/reservations/mansions')
+         .then(response => {
+            this.pastMansionReservations = response.data
             console.log(response.data)
           });
 
   },
   methods:{
-    DisplayMansions(){       
+    DisplayMansions(){  
+      console.log('showing mansions')     
       this.displayPastReservations = 'mansions'
     },
-    DisplayBoats(){  
+    DisplayBoats(){ 
+      console.log('showing boats')  
       this.displayPastReservations = 'boats'
     },
     DisplayAdventures(){
