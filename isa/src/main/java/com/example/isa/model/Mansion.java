@@ -1,6 +1,23 @@
 package com.example.isa.model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+
+
+//ovo je samo jer mi treba u bazi
+
+@Entity
 public class Mansion {
+	
+	@Id
+	@Column(name = "id", unique = true)
+    @SequenceGenerator(name = "user_sequence_generator", sequenceName = "user_sequence", initialValue = 100)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_sequence_generator")
+	private Long id;
 
 	private String name;
 	private String address;
