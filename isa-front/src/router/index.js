@@ -12,7 +12,7 @@ import Listing from '../components/Listing.vue'
 import ClientReservations from '../components/ClientReservations.vue'
 import ClientSubscriptions from '../components/ClientSubscriptions.vue'
 import ViewRegistration from '../components/ViewRegistration.vue'
-
+import ClientComplains from '../components/ClientComplains.vue'
 
 const routes = [
   {
@@ -74,6 +74,11 @@ const routes = [
     path: '/clientSubscriptions',
     name: 'clientSubscriptions',
     component: ClientSubscriptions
+   },
+   {
+    path: '/clientComplains',
+    name: 'clientComplains',
+    component: ClientComplains
    }
 
 
