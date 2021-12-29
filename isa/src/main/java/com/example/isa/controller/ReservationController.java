@@ -1,5 +1,7 @@
 package com.example.isa.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -20,6 +22,7 @@ import com.example.isa.model.User;
 import com.example.isa.repository.BoatRepository;
 import com.example.isa.service.ReservationService;
 import com.example.isa.service.implemented.UserService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 
 
@@ -34,11 +37,13 @@ public class ReservationController {
 	@Autowired
 	BoatRepository repo;
 	
-    @RequestMapping(value = "/reservations/boats", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Iterable<BoatReservation>> getBoatReservations(@RequestBody AdvertiserRegistrationDTO advertiserData){
-
+    @RequestMapping(method = RequestMethod.GET,value = "/reservations/boats", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Iterable<BoatReservation>> getBoatReservations(){
+		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		System.out.println("user koji hoce rez");
+		System.out.println(user.getEmail());
         try {
-            return new ResponseEntity<>(service.GetAllByUser(null), HttpStatus.OK);
+            return new ResponseEntity<>(service.GetAllByUser(user), HttpStatus.OK);
         } catch (Exception e){
             return  new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -61,12 +66,12 @@ public class ReservationController {
             return  new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    @RequestMapping(value = "/reservations", produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(method = RequestMethod.GET,value = "/reservations", produces = MediaType.APPLICATION_JSON_VALUE)
     @CrossOrigin(origins = "*")
-    public ResponseEntity<Iterable<Reservation>> getUserReservations(){
+    public ResponseEntity<List<Reservation>> getUserReservations(){
     	
-    	User user = userService.getLoggedUser();
-    	System.out.println("Uspio user");
+		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		System.out.println(user.getEmail());
         try {
             return new ResponseEntity<>(service.GetUserReservations(user), HttpStatus.OK);
         } catch (Exception e){
@@ -74,7 +79,7 @@ public class ReservationController {
             return  new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-      
+        
     @RequestMapping(method = RequestMethod.POST,value = "/reservations/availableBoats", produces = MediaType.APPLICATION_JSON_VALUE)
     @CrossOrigin(origins = "*")
     public ResponseEntity<Iterable<Boat>> getAvailableBoats(@RequestBody ReservationSearchDTO search){

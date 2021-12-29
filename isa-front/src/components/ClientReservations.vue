@@ -175,7 +175,7 @@ export default {
   },
   mounted(){
       axios
-         .get('http://localhost:8080/reservations')
+         .get('http://localhost:8080/reservations/boats')
          .then(response => {
             this.currentReservations = response.data
             console.log(response.data)

@@ -26,12 +26,11 @@ public class ReservationService {
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		return boatReservationRepo.findAllByUser(user);
 	}
-	public Iterable<Reservation> GetUserReservations(User u){
+	public List<Reservation> GetUserReservations(User u){
 		
-		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
 		List<Reservation> ret = new ArrayList<Reservation>();
-		ret.addAll(boatReservationRepo.findAllByUser(user));
+		ret.addAll(boatReservationRepo.findAllByUser(u));
 		
 		return ret;
 	}
