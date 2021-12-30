@@ -159,7 +159,7 @@ data(){
 
 },
 mounted(){
-alert(this.display)
+
 },
 methods:{
     DisplayMansions(){  
