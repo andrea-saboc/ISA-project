@@ -49,7 +49,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) throws Exception {
     	
         web.ignoring().antMatchers(HttpMethod.GET, "/", "/webjars/**", "/*.html", "/favicon.ico", "/**/*.html",
-                "/**/*.css", "/**/*.js");
+                "/**/*.css", "/**/*.js", "/mansions");
         web.ignoring().antMatchers(HttpMethod.POST,"/login/**");
     }
     
@@ -62,7 +62,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .exceptionHandling().authenticationEntryPoint(restAuthenticationEntryPoint).and()
                 .authorizeRequests()
-                .antMatchers("/register/**").permitAll()
+                .antMatchers("/register**").permitAll()
                 .antMatchers("/login/**").permitAll()
                 .antMatchers("/home/**").permitAll()
                 .antMatchers("/userData/**").permitAll()

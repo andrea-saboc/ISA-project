@@ -79,11 +79,6 @@ public class User implements UserDetails{
 		this.password = password;
 		this.blocked = true;
 	}
-	
-	
-
-
-
 
 	public User(String name, String surname, String address, String city, String country, String phoneNumber,
 			String email, String password) {
