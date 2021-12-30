@@ -18,6 +18,9 @@
         <li v-if="user === 'Client'" class="nav-item">
           <a href="/clientSubscriptions" class="nav-link">Subscriptions</a>
         </li>
+        <li v-if="user === 'Client'" class="nav-item">
+          <a href="/clientComplains" class="nav-link">Complains</a>
+        </li>
          <li v-if="user === 'Administrator'" class="nav-item">
           <a href="/profile" class="nav-link">Profile Admina</a>
         </li>
