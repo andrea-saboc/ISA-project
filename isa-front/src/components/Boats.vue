@@ -43,6 +43,7 @@
       <div class="row text-center">
          <div class="col-md">
             <div v-for="(value, index) in boats">
+              <p>{{index}}</p>
               <a href="/boat">
                <div v-if="index % 2 != 0">
                   <div class="card mb-3">
@@ -50,25 +51,22 @@
                      <div class="card-body">
                         <h5 class="card-title">{{value.name}}</h5>
                         <p class="card-text">{{value.promoDescription}}</p>
-                        <p class="card-text"><small class="text-muted">{{value.address}}</small></p>
+                        <p class="card-text"><small class="text-muted">bilo sta1</small></p>
                      </div>
                   </div>
                </div>
-              </a>
-            </div>
-         </div>
-         <div class="col-md">
-            <div v-for="(value, index) in boats">
-               <div v-if="index % 2 == 0">
-                  <div class="card mb-3">
+                 <div v-if="index % 2 == 0">
+                   <div class="card mb-3">
                      <img src="../assets/yacht.jpg" class="card-img-top img-fluid w-30">
                      <div class="card-body">
-                        <h5 class="card-title">{{value.name}}</h5>
-                        <p class="card-text">{{value.promoDescription}}</p>
-                        <p class="card-text"><small class="text-muted">{{value.address.address}}</small></p>
+                       <h5 class="card-title">{{value.name}}</h5>
+                       <p class="card-text">{{value.promoDescription}}</p>
+                       <p class="card-text"><small class="text-muted">bilo sta</small></p>
                      </div>
-                  </div>
-               </div>
+                   </div>
+                 </div>
+               
+              </a>
             </div>
          </div>
       </div>
@@ -129,27 +127,16 @@ export default{
                'grade': '',
 
             },
-            boats : [
-            {
-               'name': 'Ime prvo',
-               'address': 'Adresa od vise dijelova',
-               'promoDescription' : 'promo opis',
-               'avgGrade' : 'ocjena'
-           },
-           {
-               'name': 'Ime drugo',
-               'address': 'Adresa od vise dijelova',
-               'promoDescription' : 'promo opis',
-               'avgGrade' : 'ocjena'
-           }
-            ]
+            boats : []
             }
         },
     mounted(){
+      alert("In mounted")
         axios
             .get('http://localhost:8080/boats')
             .then(response => {
-                this.boats = response.data;       
+                this.boats = response.data;
+                alert(this.boats);
         });   
 
     },

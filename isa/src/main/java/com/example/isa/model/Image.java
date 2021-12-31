@@ -19,6 +19,10 @@ public class Image {
     private String imgPath;
     private byte[] imageByte;
 
+    @ManyToOne(cascade = {CascadeType.ALL, CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE, CascadeType.REFRESH, CascadeType.DETACH})
+    @JoinColumn(name = "boat_id")
+    private Boat boat;
+
     public void saveImage() {
         String imageString = img.split(",")[1];
         BufferedImage imageDone = null;
@@ -50,8 +54,20 @@ public class Image {
         }
 
     @ManyToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
-    @JoinColumn(name = "boat_id", referencedColumnName = "id", nullable = true)
-    private Boat boat;
+    @JoinColumn(name = "boat_exter_id", referencedColumnName = "id", nullable = true)
+    private Boat boatExter;
+
+    @ManyToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+    @JoinColumn(name = "boat_inter_id", referencedColumnName = "id", nullable = true)
+    private Boat boatInter;
+
+    public Boat getBoat() {
+        return boat;
+    }
+
+    public void setBoat(Boat boat) {
+        this.boat = boat;
+    }
 
     public Image(){}
 
@@ -60,12 +76,28 @@ public class Image {
         this.img = img;
     }
 
-    public Boat getBoat() {
-        return boat;
+    public String getImgPath() {
+        return imgPath;
     }
 
-    public void setBoat(Boat boat) {
-        this.boat = boat;
+    public void setImgPath(String imgPath) {
+        this.imgPath = imgPath;
+    }
+
+    public Boat getBoatExter() {
+        return boatExter;
+    }
+
+    public void setBoatExter(Boat boatExter) {
+        this.boatExter = boatExter;
+    }
+
+    public Boat getBoatInter() {
+        return boatInter;
+    }
+
+    public void setBoatInter(Boat boatInter) {
+        this.boatInter = boatInter;
     }
 
     public Integer getImgId() {

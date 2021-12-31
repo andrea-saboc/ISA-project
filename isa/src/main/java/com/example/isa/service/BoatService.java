@@ -60,23 +60,29 @@ public class BoatService {
 		newBoat.setMaxSpeed(dto.maxSpeed);
 		newBoat.setGPS(dto.GPS);
 		newBoat.setVHFradio(dto.VHFradio);
-		newBoat.setExteriorImages(convertString2Image(dto.ExteriorImages, newBoat));
-		newBoat.setInteriorImages(convertString2Image(dto.InteriorImages, newBoat));
+		newBoat.setExteriorImages(convertString2Image(dto.ExteriorImages, newBoat, false));
+		newBoat.setInteriorImages(convertString2Image(dto.InteriorImages, newBoat, true));
 		newBoat.setRules(convertString2Rule(dto.rules, newBoat));
 		return newBoat;
 	}
 
-	private Set<Image> convertString2Image(Set<String> Images, Boat boat){
+	private Set<Image> convertString2Image(Set<String> Images, Boat boat, boolean inter){
 		Set<Image> convertedImages = new HashSet<>();
 		for (String s: Images) {
 			Image newImage = new Image();
-			newImage.setBoat(boat);
+			newImage = setBoat(newImage, boat, inter);
 			newImage = imageRepository.save(newImage);
 			newImage.setImg(s);
 			newImage.saveImage();
 			convertedImages.add(newImage);
 		}
 		return convertedImages;
+	}
+
+	private Image setBoat(Image newImage, Boat boat, boolean inter) {
+		if (inter) newImage.setBoatInter(boat);
+		else newImage.setBoatExter(boat);
+		return newImage;
 	}
 
 	private Set<Rule> convertString2Rule(Set<String> Rules, Boat boat){
