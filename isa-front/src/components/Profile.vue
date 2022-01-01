@@ -102,11 +102,11 @@
               </button>
             </div>
             <div class="modal-body">
-            <textarea class="form-control"></textarea>
+            <textarea class="form-control"  v-model="deletionReason"></textarea>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Submit</button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal" v-on:click="SubmitDeletionRequest()">Submit</button>
 
             </div>
           </div>
@@ -131,7 +131,8 @@ export default{
          oldPassword: '',
          newPassword: '',
          newPasswordRepeated: '',
-         penalties: '0'
+         penalties: '0',
+         deletionReason: ''
         }
    },
    mounted(){
@@ -195,6 +196,19 @@ export default{
             this.user.password = this.newPassword;
             this.UpdateUser();
          }
+      },
+      SubmitDeletionRequest(){
+         axios
+         .post('http://localhost:8080/createDeletionRequest',this.deletionReason,{
+         headers: {
+         'Authorization' : this.$store.getters.tokenString,
+         'Content-Type': 'application/json'
+         }
+      })
+         .then(response => {
+            alert('submited')
+      });
+
       }
 
     

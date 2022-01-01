@@ -33,7 +33,7 @@
 export default {
   name: "BoatView",
   data: function (){
-    boatToShow: 
+    boatToShow: null
   }
 }
 

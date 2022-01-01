@@ -2,19 +2,17 @@ package com.example.isa.service.implemented;
 
 
 import java.nio.file.AccessDeniedException;
-import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.example.isa.dto.ClientRegistrationDTO;
+import com.example.isa.model.AccountDeletionRequest;
 import com.example.isa.model.Client;
 import com.example.isa.model.User;
 import com.example.isa.repository.ClientRepository;
+import com.example.isa.repository.DeletionRequestRepository;
 import com.example.isa.repository.UserRepository;
 
 @Service
@@ -25,7 +23,7 @@ public class UserService {
 	@Autowired
 	private ClientRepository clientRepository;
 	@Autowired
-    private PasswordEncoder passwordEncoder;
+    private DeletionRequestRepository deletionRequestRepository;
     @Autowired
     private AuthenticationManager authentication;
 	
@@ -73,4 +71,11 @@ public class UserService {
         return user;
    
     }
+	public User createDeletionRequest(String reason) {
+		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		System.out.println(user.getName());
+		deletionRequestRepository.save(new AccountDeletionRequest(user.getId(),reason));
+		
+		return user;
+	}
     }

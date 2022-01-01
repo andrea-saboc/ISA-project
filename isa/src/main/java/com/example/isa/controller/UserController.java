@@ -39,7 +39,15 @@ public class UserController {
 	@CrossOrigin(origins = "*")	
 	public ResponseEntity<User> updateUser(@RequestBody User user) throws JsonProcessingException{	
 		return ResponseEntity.ok(userService.updateUserInfo(user));
+	}
+	
+	@RequestMapping(method = RequestMethod.POST, value = "/createDeletionRequest",produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
+	//@PreAuthorize("hasRole('ROLE_CLIENT')")
+	@CrossOrigin(origins = "*")	
+	public ResponseEntity<User> createDeletionRequest(@RequestBody String reason) throws JsonProcessingException{	
+		return ResponseEntity.ok(userService.createDeletionRequest(reason));
 	}	
+
 
 
 }
