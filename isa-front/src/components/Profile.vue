@@ -146,7 +146,6 @@ export default{
          })
          .then(response => {
             this.user = response.data;
-            alert(this.user.email)
             this.name = response.data.name;
             this.surname = response.data.surname;
             this.address = response.data.address;
@@ -158,7 +157,6 @@ export default{
     methods:{
 
       ChangeName(){
-         alert('name changed')
          this.user.name = this.name;
          this.UpdateUser();
       },

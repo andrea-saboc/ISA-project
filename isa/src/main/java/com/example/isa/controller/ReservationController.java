@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,10 +17,10 @@ import com.example.isa.model.Boat;
 import com.example.isa.model.BoatReservation;
 import com.example.isa.model.MansionReservation;
 import com.example.isa.model.Reservation;
-import com.example.isa.model.User;
 import com.example.isa.repository.BoatRepository;
 import com.example.isa.repository.ClientRepository;
 import com.example.isa.service.ReservationService;
+import com.example.isa.service.ReservationSuggestionService;
 import com.example.isa.service.implemented.UserService;
 
 
@@ -37,6 +36,9 @@ public class ReservationController {
 	BoatRepository repo;
 	@Autowired
 	ClientRepository clients;
+	@Autowired
+	ReservationSuggestionService suggestionService;
+	
 	
     @RequestMapping(method = RequestMethod.GET,value = "/reservations/boats", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Iterable<BoatReservation>> getBoatReservations(){
@@ -78,7 +80,7 @@ public class ReservationController {
     	
     	System.out.println("USli u kontroler");
         try {
-            return new ResponseEntity<>(repo.findAll(), HttpStatus.OK);
+            return new ResponseEntity<>(suggestionService.getAvailableBoats(search), HttpStatus.OK);
         } catch (Exception e){
         	System.out.println(e);
             return  new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);

@@ -40,8 +40,19 @@ public class Boat {
 	public Set<Rule> rules = new HashSet<Rule>();
 
 
+
+
 	public Boat(String ime_mi_je_brod, String neka_adresa, String promo_opis_moj, float v) {
 	}
+	
+	
+	
+	public Boat(String name, String promoDescription) {
+		super();
+		this.name = name;
+		this.promoDescription = promoDescription;
+	}
+
 
 	public void addRule(Rule newRule){
 		newRule.addBoat(this);

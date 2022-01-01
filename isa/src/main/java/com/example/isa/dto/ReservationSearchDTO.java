@@ -4,16 +4,23 @@ import java.util.Date;
 
 public class ReservationSearchDTO {
 	
-	private Date startDate;
+	private String startDate;
+	private String startTime;
 	private int numberOfClients;
 	private int numberOfDays;
 	private String location;
 	private float grade;
-	public Date getStartDate() {
+	public String getStartDate() {
 		return startDate;
 	}
-	public void setStartDate(Date startDate) {
+	public void setStartDate(String startDate) {
 		this.startDate = startDate;
+	}
+	public String getStartTime() {
+		return startTime;
+	}
+	public void setStartTime(String startTime) {
+		this.startTime = startTime;
 	}
 	public int getNumberOfClients() {
 		return numberOfClients;
@@ -41,18 +48,20 @@ public class ReservationSearchDTO {
 	}
 	
 	
-	public ReservationSearchDTO(Date startDate, int numberOfClients, int numberOfDays, String location, float grade) {
+	public ReservationSearchDTO(String startDate, String startTime, int numberOfClients, int numberOfDays,
+			String location, float grade) {
 		super();
 		this.startDate = startDate;
+		this.startTime = startTime;
 		this.numberOfClients = numberOfClients;
 		this.numberOfDays = numberOfDays;
 		this.location = location;
 		this.grade = grade;
 	}
-	public ReservationSearchDTO() {
-		super();
-	}
 	
+	public ReservationSearchDTO() {}
+
+
 	
 	
 	

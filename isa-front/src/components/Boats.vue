@@ -16,6 +16,9 @@
                   <label class="form-control">Select start date:</label><input v-model="reservationForm.startDate" class="form-control" placeholder="Select date" type="date" id="example"><br>
                </div>
                <div class="input-group input-group-lg">
+                  <label class="form-control">Select start time:</label><input v-model="reservationForm.startTime" class="form-control" placeholder="Select time" type="time" id="example"><br>
+               </div>
+               <div class="input-group input-group-lg">
                   <label class="form-control">Number of days:</label><input v-model="reservationForm.numberOfDays" class="form-control" type="number"><br>
                </div>
                <div class="input-group input-group-lg">
@@ -121,6 +124,7 @@ export default{
             sort: 'Name',
             reservationForm:{
                'startDate': '',
+               'startTime': '',
                'numberOfClients': '',
                'numberOfDays': '',
                'location': '',
@@ -161,7 +165,10 @@ export default{
 			}
         },
         SearchForReservations(){
-           console.log(this.reservationForm)
+
+           
+           console.log(this.reservationForm.startDate)
+           console.log(this.reservationForm.startTime)
             axios
             .post('http://localhost:8080/reservations/availableBoats',this.reservationForm)
             .then(response => {
