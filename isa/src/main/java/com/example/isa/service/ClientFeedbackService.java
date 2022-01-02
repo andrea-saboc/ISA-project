@@ -27,8 +27,18 @@ public class ClientFeedbackService {
 		BoatReservation boatReservation = boatReservationRepo.findById(dto.getReservation());
 		boatReservation.setBoatOwnerFeedback(feedback);
 		boatReservationRepo.save(boatReservation);
-		return feedback;
+		return feedback;		
+	}
+	
+	public ClientFeedback addBoatFeedback(ClientFeedbackDTO dto) {
 		
+		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		ClientFeedback feedback = new ClientFeedback(dto.getContent(), dto.getGrade(),user.getEmail());
+		feedbackRepo.save(feedback);
+		BoatReservation boatReservation = boatReservationRepo.findById(dto.getReservation());
+		boatReservation.setBoatFeedback(feedback);
+		boatReservationRepo.save(boatReservation);
+		return feedback;		
 	}
 	
 	

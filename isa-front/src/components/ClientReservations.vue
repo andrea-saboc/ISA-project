@@ -94,6 +94,9 @@
                         {{res.boat.name}}
                      </div>
                      <div class="card-body">
+                        <label>Start date: {{res.startDate}}</label><br>
+                        <label>Duration in days: {{res.durationInDays}}</label><br>
+                        <label>Number of guests : {{res.numberOfClients}}</label><br>
                         <blockquote class="blockquote mb-0">
                         <button v-if="res.boatOwnerFeedback==null" class = "btn btn-light" v-on:click = "ShowBOwnerFeedbackBox(res)">Give feedback about the owner</button> 
                         <button v-if="res.boatFeedback==null" class = "btn btn-light" v-on:click = "ShowBoatFeedbackBox(res)">Give boat feedback</button>            
@@ -212,7 +215,6 @@ export default {
             }
          })
          .then(response => {
-            alert(response.data)
             this.pastBoatReservations = response.data       
       });
 
@@ -286,10 +288,34 @@ export default {
       })
          .then(response => {
             alert('submited')
+            this.ownerFeedbackGrade='';
+            this.ownerFeedbackContent='';
+            this.$router.go(0);
       });
     },
     SubmitBoatFeedback(m){
+       var feedback ={
+          content:this.feedbackContent,
+          grade: this.feedbackGrade,
+          reservation: m.id
 
+       }
+
+       
+         console.log(feedback)
+          axios
+         .post('http://localhost:8080/feedbacks/addBoatFeedback',feedback,{
+         headers: {
+         'Authorization' : this.$store.getters.tokenString,
+         'Content-Type': 'application/json'
+         }
+      })
+         .then(response => {
+            alert('submited')
+            this.feedbackContent='';
+            this.feedbackGrade='';
+            this.$router.go(0);
+      });
 
 
     }

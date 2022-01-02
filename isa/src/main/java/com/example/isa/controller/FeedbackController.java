@@ -28,5 +28,13 @@ public class FeedbackController {
 		
 		return ResponseEntity.ok(feedbackService.addBoatOwnerFeedback(dto));
 	}
+	
+	@RequestMapping(method = RequestMethod.POST, value = "/feedbacks/addBoatFeedback",produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
+	//@PreAuthorize("hasRole('ROLE_CLIENT')")
+	@CrossOrigin(origins = "*")	
+	public ResponseEntity<ClientFeedback> addBoatFeedback(@RequestBody ClientFeedbackDTO dto) throws JsonProcessingException{	
+		
+		return ResponseEntity.ok(feedbackService.addBoatFeedback(dto));
+	}
 
 }
