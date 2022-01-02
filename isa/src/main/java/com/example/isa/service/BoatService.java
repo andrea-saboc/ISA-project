@@ -94,4 +94,8 @@ public class BoatService {
 		}
 		return convertedRules;
 	}
+
+	public Boat getById(String id) {
+		return boatsRepository.getOne(Integer.parseInt(id));
+	}
 }

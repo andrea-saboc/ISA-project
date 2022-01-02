@@ -100,7 +100,7 @@ const routes = [
         component: BoatOwnerHomePage
     },
     {
-        path: '/boat',
+        path: '/boat/100',
         name: 'BoatView',
         component: BoatView
     },

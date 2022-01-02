@@ -22,7 +22,7 @@
     </button>
   </div>
   <p class="fs-5">
-    {{}}
+    {{boatToShow.name}}
   </p>
 
 </div>
@@ -30,10 +30,29 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
   name: "BoatView",
   data: function (){
-    boatToShow: null
+    return{
+      boatToShow: null
+    }
+
+  },
+  mounted() {
+    var path = window.location.href;
+    var boatId = path.split('/boats/')[1].replaceAll('%20', ' ');
+    axios
+    .get('http://localhost:8080/boat', {
+      params:
+          {
+            boatId : boatId
+          }
+    })
+    .then(response =>{
+      this.boatToShow = response.data
+    })
+
   }
 }
 
@@ -50,7 +69,7 @@ export default {
 }
 
 .boat-view .top-slider{
-  height: 250px;
+  height: 350px;
 
 }
 </style>

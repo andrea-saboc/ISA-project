@@ -27,6 +27,16 @@ public class BoatController {
 		this.service = bs;
 	}
 
+	@RequestMapping(method = RequestMethod.GET, value = "/boat",produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> getBoatById(@RequestParam String id) throws JsonProcessingException{
+		System.out.println("We are searchinng for "+id);
+		Boat boat = service.getById(id);
+		ObjectMapper mapper = new ObjectMapper();
+		String jsonString = mapper.writeValueAsString(boat);
+		return new ResponseEntity<>(jsonString, HttpStatus.OK);
+
+	}
+
 	@RequestMapping(method = RequestMethod.GET, value = "/boats",produces = MediaType.APPLICATION_JSON_VALUE)
 	@CrossOrigin(origins = "*")
 	public ResponseEntity<String> registerClient() throws JsonProcessingException{

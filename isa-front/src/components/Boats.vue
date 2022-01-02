@@ -47,9 +47,8 @@
          <div class="col-md">
             <div v-for="(value, index) in boats">
               <p>{{index}}</p>
-              <a href="/boat">
                <div v-if="index % 2 != 0">
-                  <div class="card mb-3">
+                  <div class="card mb-3" v-on:click="showboat(value)">
                      <img src="../assets/yacht.jpg" class="card-img-top img-fluid w-30">
                      <div class="card-body">
                         <h5 class="card-title">{{value.name}}</h5>
@@ -59,7 +58,7 @@
                   </div>
                </div>
                  <div v-if="index % 2 == 0">
-                   <div class="card mb-3">
+                   <div class="card mb-3" v-on:click="showboat(value)">
                      <img src="../assets/yacht.jpg" class="card-img-top img-fluid w-30">
                      <div class="card-body">
                        <h5 class="card-title">{{value.name}}</h5>
@@ -68,8 +67,6 @@
                      </div>
                    </div>
                  </div>
-
-              </a>
             </div>
          </div>
       </div>
@@ -176,7 +173,10 @@ export default{
                this.boats = response.data
                console.log(response.data)
             });
-        }
+        },
+     showboat(value){
+       window.location.href = "/boat/"+value.id.toString();
+     }
 
     }
 }
