@@ -14,6 +14,14 @@ public class BoatReservation extends Reservation{
 	@OneToOne
 	@JoinColumn(name = "boat_id")
 	private Boat boat;
+	
+	@OneToOne
+	@JoinColumn(name = "feedback_id")
+	private ClientFeedback boatFeedback;
+
+	@OneToOne
+	@JoinColumn(name = "owner_feedback_id")
+	private ClientFeedback boatOwnerFeedback;
 
 	public BoatReservation(User user, Date startDate, int durationInDays, int numberOfClients, Boat boat) {
 		super("BOAT", user, startDate, durationInDays, numberOfClients);

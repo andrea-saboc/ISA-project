@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +18,7 @@ import com.example.isa.model.Boat;
 import com.example.isa.model.BoatReservation;
 import com.example.isa.model.MansionReservation;
 import com.example.isa.model.Reservation;
+import com.example.isa.model.User;
 import com.example.isa.repository.BoatRepository;
 import com.example.isa.repository.ClientRepository;
 import com.example.isa.service.ReservationService;
@@ -42,9 +44,9 @@ public class ReservationController {
 	
     @RequestMapping(method = RequestMethod.GET,value = "/reservations/boats", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Iterable<BoatReservation>> getBoatReservations(){
-		//User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         try {
-            return new ResponseEntity<>(service.GetBoatReservationHistory(clients.findByEmail("igi@gmail.com")), HttpStatus.OK);
+            return new ResponseEntity<>(service.GetBoatReservationHistory(clients.findByEmail(user.getEmail())), HttpStatus.OK);
         } catch (Exception e){
             return  new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
