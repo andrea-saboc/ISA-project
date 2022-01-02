@@ -20,6 +20,9 @@
                </div>
             </div>
          </div>
+
+
+
          <div v-if="display == 'past'">
             <div class="input-group justify-content-end mr-30">
                <ul class="nav">
@@ -45,35 +48,55 @@
                </div>
                <button class = "btn btn-primary" v-on:click=sortReservations>Sort</button>
             </div>
+
+
+
+
+
+
             <div v-if="displayPastReservations == 'mansions'">
-               <div v-for="res in pastMansionReservations">
+               <div v-for="res in pastBoatReservations">
                   <div class="text-dark bg-light mt-3">
                      <div class="card-header h4">
-                        Naziv vikendice
+                        {{res.mansion.name}}
                      </div>
                      <div class="card-body">
+                        <label>Start date: {{res.startDate}}</label><br>
+                        <label>Duration in days: {{res.durationInDays}}</label><br>
+                        <label>Number of guests : {{res.numberOfClients}}</label><br>
                         <blockquote class="blockquote mb-0">
-                           <p>A well-known quote, contained in a blockquote element.</p>
-                           <button v-if="givingFeedback == 'None'" class = "btn btn-secondary" v-on:click = "ShowFeedbackBox(res)">Give feedback</button> 
-                           <button v-if="givingFeedback == res" class = "btn btn-secondary" v-on:click="SubmitFeedback()">Submit</button>             
-                           <button v-if="givingFeedback == res" class = "btn btn-secondary" v-on:click="CancelGivingFeedback()">Cancel</button> 
-                        </blockquote>
+                        <button v-if="res.mansionOwnerFeedback==null" class = "btn btn-light" v-on:click = "ShowOwnerFeedbackBox(res)">Give feedback about the owner</button> 
+                        <button v-if="res.mansionFeedback==null" class = "btn btn-light" v-on:click = "ShowFeedbackBox(res)">Give mansion feedback</button>            
+                  
+                      </blockquote>
                      </div>
-                  </div>
-                  <div v-if="givingFeedback == res" class="input-group">
-                     <div class="input-group-prepend">
-                        <span class="input-group-text">Feedback content:</span>
+               <div v-if="givingOwnerFeedback == res" class="input-group">
+                                 <div class="input-group-prepend">
+                                 <span class="input-group-text">Complain content:</span>
+                                 </div>
+                                 <textarea class="form-control" aria-label="With textarea" v-model="ownerFeedbackContent"></textarea>
+                                 <span class="input-group-text">Grade:</span>
+                                 <input type="number" class="form-control" v-model="ownerFeedbackGrade"/>
+                                 <button class="btn btn-secondary" v-on:click = "SubmitBOwnerFeedback(res)">Sumbit</button>
                      </div>
-                     <textarea class="form-control" aria-label="With textarea" v-model="feedbackContent"></textarea>
-                     <div class="input-group">
-                      <div class="input-group-prepend">
-                        <span class="input-group-text" id="" >Grade:</span>
-                      </div>
-                      <input type="number" class="form-control" v-model="feedbackGrade">
-                    </div>
+                              <div v-if="givingFeedback == res" class="input-group">
+                                 <div class="input-group-prepend">
+                                 <span class="input-group-text">Boat complain content:</span>
+                                 </div>
+                                 <textarea class="form-control" aria-label="With textarea" v-model="feedbackContent"></textarea>
+                                 <span class="input-group-text">Grade:</span>
+                                 <input type="number" class="form-control" v-model="feedbackGrade"/>
+                                 <button class="btn btn-secondary" v-on:click = "SubmitBoatFeedback(res)">Sumbit</button>
+                     </div>
+
                   </div>
+
                </div>
             </div>
+
+
+
+
             <div v-if="displayPastReservations == 'boats'">
                <div v-for="res in pastBoatReservations">
                   <div class="text-dark bg-light mt-3">
@@ -81,22 +104,43 @@
                         {{res.boat.name}}
                      </div>
                      <div class="card-body">
+                        <label>Start date: {{res.startDate}}</label><br>
+                        <label>Duration in days: {{res.durationInDays}}</label><br>
+                        <label>Number of guests : {{res.numberOfClients}}</label><br>
                         <blockquote class="blockquote mb-0">
-                           <p>{{res.startDate}}</p>
-                           <button v-if="givingFeedback == 'None'" class = "btn btn-secondary" v-on:click = "ShowFeedbackBox(res)">Give feedback</button> 
-                           <button v-if="givingFeedback == res" class = "btn btn-secondary" v-on:click="SubmitFeedback()">Submit</button>             
-                           <button v-if="givingFeedback == res" class = "btn btn-secondary" v-on:click="CancelGivingFeedback()">Cancel</button> 
-                        </blockquote>
+                        <button v-if="res.boatOwnerFeedback==null" class = "btn btn-light" v-on:click = "ShowOwnerFeedbackBox(res)">Give feedback about the owner</button> 
+                        <button v-if="res.boatFeedback==null" class = "btn btn-light" v-on:click = "ShowFeedbackBox(res)">Give boat feedback</button>            
+                  
+                      </blockquote>
                      </div>
-                  </div>
-                  <div v-if="givingFeedback == res" class="input-group">
-                     <div class="input-group-prepend">
-                        <span class="input-group-text">Feedback content:</span>
+               <div v-if="givingOwnerFeedback == res" class="input-group">
+                                 <div class="input-group-prepend">
+                                 <span class="input-group-text">Complain content:</span>
+                                 </div>
+                                 <textarea class="form-control" aria-label="With textarea" v-model="ownerFeedbackContent"></textarea>
+                                 <span class="input-group-text">Grade:</span>
+                                 <input type="number" class="form-control" v-model="ownerFeedbackGrade"/>
+                                 <button class="btn btn-secondary" v-on:click = "SubmitBOwnerFeedback(res)">Sumbit</button>
                      </div>
-                     <textarea class="form-control" aria-label="With textarea"></textarea>
+                              <div v-if="givingFeedback == res" class="input-group">
+                                 <div class="input-group-prepend">
+                                 <span class="input-group-text">Boat complain content:</span>
+                                 </div>
+                                 <textarea class="form-control" aria-label="With textarea" v-model="feedbackContent"></textarea>
+                                 <span class="input-group-text">Grade:</span>
+                                 <input type="number" class="form-control" v-model="feedbackGrade"/>
+                                 <button class="btn btn-secondary" v-on:click = "SubmitBoatFeedback(res)">Sumbit</button>
+                     </div>
+
                   </div>
+
                </div>
             </div>
+
+
+
+
+
             <div v-if="displayPastReservations == 'adventures'">
                <div v-for="res in pastAdventureReservations">
                   <div class="text-dark bg-light mt-3">
@@ -138,10 +182,19 @@ export default {
   data: function(){
       return{
 
+        givingOwnerFeedback: 'None',
+        givingFeedback: 'None',
+         
+
           display: 'current',
           displayPastReservations: 'mansions',
-          givingFeedback: 'None',
+
           feedbackContent: '',
+          feedbackGrade: '',
+
+          ownerFeedbackContent: '',
+          ownerFeedbackGrade: '',
+
           sortReservations: 'Date',
 
          currentReservations: [],
@@ -172,7 +225,6 @@ export default {
             }
          })
          .then(response => {
-            alert(response.data)
             this.pastBoatReservations = response.data       
       });
 
@@ -214,6 +266,78 @@ export default {
       this.sortReservations = 'Duration'
     },
     sortReservations(){
+
+    },    
+
+
+    ShowOwnerFeedbackBox(m){
+      if (this.givingOwnerFeedback == m){ this.givingOwnerFeedback = 'None'; return}
+      this.givingOwnerFeedback=m
+    },
+    ShowFeedbackBox(m){
+      if (this.givingFeedback == m){ this.givingFeedback = 'None'; return}
+      this.givingFeedback=m
+    },
+    SubmitBOwnerFeedback(m){
+
+       var feedback ={
+          content:this.ownerFeedbackContent,
+          grade: this.ownerFeedbackGrade,
+          reservation: m.id
+
+       }
+      
+      var url=''
+      if(this.displayPastReservations == 'mansions')
+      { url ='http://localhost:8080/feedbacks/addMansionOwnerFeedback'}
+      else if (this.displayPastReservations == 'boats')
+      { url ='http://localhost:8080/feedbacks/addBoatOwnerFeedback'}
+      else{}
+       
+         console.log(feedback)
+          axios
+         .post(url,feedback,{
+         headers: {
+         'Authorization' : this.$store.getters.tokenString,
+         'Content-Type': 'application/json'
+         }
+      })
+         .then(response => {
+            alert('submited')
+            this.ownerFeedbackGrade='';
+            this.ownerFeedbackContent='';
+            this.$router.go(0);
+      });
+    },
+    SubmitBoatFeedback(m){
+       var feedback ={
+          content:this.feedbackContent,
+          grade: this.feedbackGrade,
+          reservation: m.id
+
+       }
+      var url=''
+      if(this.displayPastReservations == 'mansions')
+      { url ='http://localhost:8080/feedbacks/addMansionFeedback'}
+      else if (this.displayPastReservations == 'boats')
+      { url ='http://localhost:8080/feedbacks/addBoatFeedback'}
+      else{}
+       
+         console.log(feedback)
+          axios
+         .post(url,feedback,{
+         headers: {
+         'Authorization' : this.$store.getters.tokenString,
+         'Content-Type': 'application/json'
+         }
+      })
+         .then(response => {
+            alert('submited')
+            this.feedbackContent='';
+            this.feedbackGrade='';
+            this.$router.go(0);
+      });
+
 
     }
 

@@ -75,7 +75,7 @@
       </div>
    </div>
 </section>
-<div class="card text-white bg-dark ml-100 mb-100" style="max-width: 20rem; position: fixed;bottom: 10px; right: 10px">
+<div v-if="!makingReservation" class="card text-white bg-dark ml-100 mb-100" style="max-width: 20rem; position: fixed;bottom: 10px; right: 10px">
    <div class="card-header">Search or sort boats</div>
    <div class="card-body">
       <label>Chose search category:</label>
@@ -121,6 +121,8 @@ export default{
     name: 'boats',
     data: function(){
         return{
+
+            makingReservation: false,
             sort: 'Name',
             reservationForm:{
                'startDate': '',
@@ -135,7 +137,6 @@ export default{
             }
         },
     mounted(){
-      alert("In mounted")
         axios
             .get('http://localhost:8080/boats')
             .then(response => {
@@ -166,7 +167,7 @@ export default{
         },
         SearchForReservations(){
 
-           
+           this.makingReservation = true;
            console.log(this.reservationForm.startDate)
            console.log(this.reservationForm.startTime)
             axios

@@ -1,8 +1,9 @@
 package com.example.isa;
 
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,10 +56,10 @@ public class IsaApplication extends SpringBootServletInitializer implements Comm
 		boatRepo.save(b1);
 		boatRepo.save(b2);		
 		
-		AvailablePeriod a1 = new AvailablePeriod(new Date(),new Date(),b1);
-		AvailablePeriod a2 = new AvailablePeriod(new Date(),new Date(),b1);
-		AvailablePeriod a3 = new AvailablePeriod(new Date(),new Date(),b2);
-		AvailablePeriod a4 = new AvailablePeriod(new Date(),new Date(),b2);
+		AvailablePeriod a1 = new AvailablePeriod(new GregorianCalendar(2022, Calendar.JANUARY, 1).getTime(),new GregorianCalendar(2022, Calendar.JANUARY, 10).getTime(),b1);
+		AvailablePeriod a2 = new AvailablePeriod(new GregorianCalendar(2022, Calendar.JANUARY, 20).getTime(),new GregorianCalendar(2022, Calendar.JANUARY, 28).getTime(),b1);
+		AvailablePeriod a3 = new AvailablePeriod(new GregorianCalendar(2022, Calendar.MARCH, 1).getTime(),new GregorianCalendar(2022, Calendar.MARCH, 16).getTime(),b2);
+		AvailablePeriod a4 = new AvailablePeriod(new GregorianCalendar(2022, Calendar.JUNE, 1).getTime(),new GregorianCalendar(2022, Calendar.JUNE, 21).getTime(),b2);
 		
 		
 		periodRepo.save(a1);

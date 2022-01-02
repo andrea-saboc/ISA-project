@@ -44,14 +44,26 @@ public class ReservationSuggestionService {
         System.out.println("Adding days to start date: "+endDate);
 	    return getAvailableBoatsBetweenDates(startDate,endDate);
 	    
-	} catch (ParseException e) {
+		} catch (ParseException e) {
 		System.out.println("PUČE!");
 		e.printStackTrace();
-	}
+		}
 			
 	return null;
 	}
 	
+	public List<Boat> FilterByLocationAndAvgGrade(String location, float avgGrade,List<Boat> boats){
+		
+		List<Boat> ret = new ArrayList<Boat>();
+		for(Boat b : boats) {
+			if((b.getAddress().getAddress().contains(location) || b.getAddress().getCity().contains(location)) && b.getAvgGrade()>= avgGrade)
+				ret.add(b);
+			
+		}
+		
+		return ret;
+		
+	}
 	public List<Boat> getAvailableBoatsBetweenDates(Date startDate, Date endDate){
 		
 		List<Boat> ret = new ArrayList<Boat>();

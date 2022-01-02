@@ -16,11 +16,13 @@ public class ClientFeedback {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "feedback_id")
     private Long id;
-    
+    private String authorEmail;
     private Date date;
     private String content;
     private int grade;
     private boolean approved;
+    
+    
 	public Long getId() {
 		return id;
 	}
@@ -52,15 +54,24 @@ public class ClientFeedback {
 		this.approved = approved;
 	}
 	
-	public ClientFeedback(String content, int grade) {
+	public ClientFeedback(String content, int grade, String authorEmail) {
 		super();
 		this.content = content;
 		this.grade = grade;
+		this.authorEmail = authorEmail;
 		this.approved = false;
 		this.date = new Date();
 	}
+	
+	
 	public ClientFeedback() {
 		super();
+	}
+	public String getAuthorEmail() {
+		return authorEmail;
+	}
+	public void setAuthorEmail(String authorEmail) {
+		this.authorEmail = authorEmail;
 	}
     
     
