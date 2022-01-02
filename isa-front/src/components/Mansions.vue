@@ -16,6 +16,9 @@
                <label class="form-control">Select start date:</label><input class="form-control" placeholder="Select date" type="date" id="example"><br>
             </div>
             <div class="input-group input-group-lg">
+                  <label class="form-control">Select start time:</label><input v-model="reservationForm.startTime" class="form-control" placeholder="Select time" type="time" id="example"><br>
+             </div>
+            <div class="input-group input-group-lg">
                <label class="form-control">Number of days:</label><input class="form-control" type="number"><br>
             </div>
             <div class="input-group input-group-lg">
@@ -43,7 +46,7 @@
       <div class="row text-center">
          <div class="col-md">
             <div v-for="(value, index) in mansions">
-               <div v-if="index % 2 != 0">
+               <div v-if="index % 2 == 0">
                   <div class="card mb-3">
                      <img src="../assets/yacht.jpg" class="card-img-top img-fluid w-30">
                      <div class="card-body">
@@ -57,7 +60,7 @@
          </div>
          <div class="col-md">
             <div v-for="(value, index) in mansions">
-               <div v-if="index % 2 == 0">
+               <div v-if="index % 2 != 0">
                   <div class="card mb-3">
                      <img src="../assets/yacht.jpg" class="card-img-top img-fluid w-30">
                      <div class="card-body">

@@ -27,7 +27,7 @@
                      <button class="btn btn-link" v-on:click=DisplayMansions>Mansions</button>
                   </li>
                   <li class="nav-item">
-                     <button class="btn btn-link" v-on:clik=DisplayBoats>Boats</button>
+                     <button class="btn btn-link" v-on:click=DisplayBoats>Boats</button>
                   </li>
                   <li class="nav-item">
                      <button class="btn btn-link" v-on:click=DisplayAdventures>Adventures</button>
@@ -157,18 +157,24 @@ export default {
             this.currentReservations = response.data
             console.log(response.data)
           });
-      axios
-         .get('http://localhost:8080/reservations/boats')
-         .then(response => {
-            this.pastBoatReservations = response.data
-            console.log(response.data)
-          });
+
       axios
          .get('http://localhost:8080/reservations/mansions')
          .then(response => {
             this.pastMansionReservations = response.data
             console.log(response.data)
           });
+      
+      axios
+         .get('http://localhost:8080/reservations/boats',{
+            headers: {
+               'Authorization' : this.$store.getters.tokenString
+            }
+         })
+         .then(response => {
+            alert(response.data)
+            this.pastBoatReservations = response.data       
+      });
 
   },
   methods:{

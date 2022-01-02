@@ -1,31 +1,27 @@
 package com.example.isa;
 
-import com.example.isa.dto.AdvertisersDTO;
-import com.example.isa.model.Boat;
-import com.example.isa.model.BoatReservation;
-import com.example.isa.model.Reservation;
-import com.example.isa.model.Client;
-import com.example.isa.model.Reservation;
-import com.example.isa.repository.BoatRepository;
-import com.example.isa.repository.BoatReservationRepository;
-import com.example.isa.repository.UserRepository;
-import com.example.isa.service.implemented.AdventureService;
-
-import java.awt.Component;
-import java.awt.List;
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
-import org.hibernate.internal.build.AllowSysOut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+
+import com.example.isa.model.AvailablePeriod;
+import com.example.isa.model.Boat;
+import com.example.isa.model.BoatReservation;
+import com.example.isa.model.Client;
+import com.example.isa.repository.AvailablePeriodRepository;
+import com.example.isa.repository.BoatRepository;
+import com.example.isa.repository.BoatReservationRepository;
+import com.example.isa.repository.UserRepository;
+import com.example.isa.service.implemented.AdventureService;
 
 
 
@@ -43,6 +39,8 @@ public class IsaApplication extends SpringBootServletInitializer implements Comm
 	@Autowired
 	UserRepository userRepo;
 	@Autowired
+	AvailablePeriodRepository periodRepo;
+	@Autowired
 	private PasswordEncoder passwordEncoder;
     
 	public static void main(String[] args) {
@@ -50,12 +48,35 @@ public class IsaApplication extends SpringBootServletInitializer implements Comm
 	}
 	@Override
 	public void run(String... args) throws Exception {
+
 		
-		Boat b1 = new Boat("Milicija", "promo pretp", "smth", 0);
-		Boat b2 = new Boat("Malicija", "promo pretp", "smth", 0);		
+		Boat b1 = new Boat("Milicija", "promo milicije");
+		Boat b2 = new Boat("Malicija", "promo malicije");		
 		boatRepo.save(b1);
-		boatRepo.save(b2);
+		boatRepo.save(b2);		
 		
+		AvailablePeriod a1 = new AvailablePeriod(new Date(),new Date(),b1);
+		AvailablePeriod a2 = new AvailablePeriod(new Date(),new Date(),b1);
+		AvailablePeriod a3 = new AvailablePeriod(new Date(),new Date(),b2);
+		AvailablePeriod a4 = new AvailablePeriod(new Date(),new Date(),b2);
+		
+		
+		periodRepo.save(a1);
+		periodRepo.save(a2);		
+		periodRepo.save(a3);		
+		periodRepo.save(a4);
+		
+		Set<AvailablePeriod> availablePeriods = new HashSet<AvailablePeriod>();
+		availablePeriods.add(new AvailablePeriod(new Date(),new Date()));
+		availablePeriods.add(new AvailablePeriod(new Date(),new Date()));
+		availablePeriods.add(new AvailablePeriod(new Date(),new Date()));
+		
+		
+
+		
+		Boat b = boatRepo.findByName("Milicija");
+		
+
 		Client c = new Client("Igor","Stojanovic", "Address", "City", "Serbiania", "468438",
 				"igi@gmail.com", "igi", 0,0);
 		c.setPassword(passwordEncoder.encode("igi"));

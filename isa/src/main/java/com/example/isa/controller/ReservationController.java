@@ -22,6 +22,7 @@ import com.example.isa.model.User;
 import com.example.isa.repository.BoatRepository;
 import com.example.isa.repository.ClientRepository;
 import com.example.isa.service.ReservationService;
+import com.example.isa.service.ReservationSuggestionService;
 import com.example.isa.service.implemented.UserService;
 
 
@@ -37,12 +38,15 @@ public class ReservationController {
 	BoatRepository repo;
 	@Autowired
 	ClientRepository clients;
+	@Autowired
+	ReservationSuggestionService suggestionService;
+	
 	
     @RequestMapping(method = RequestMethod.GET,value = "/reservations/boats", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Iterable<BoatReservation>> getBoatReservations(){
-		//User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         try {
-            return new ResponseEntity<>(service.GetBoatReservationHistory(clients.findByEmail("igi@gmail.com")), HttpStatus.OK);
+            return new ResponseEntity<>(service.GetBoatReservationHistory(clients.findByEmail(user.getEmail())), HttpStatus.OK);
         } catch (Exception e){
             return  new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -78,7 +82,7 @@ public class ReservationController {
     	
     	System.out.println("USli u kontroler");
         try {
-            return new ResponseEntity<>(repo.findAll(), HttpStatus.OK);
+            return new ResponseEntity<>(suggestionService.getAvailableBoats(search), HttpStatus.OK);
         } catch (Exception e){
         	System.out.println(e);
             return  new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
