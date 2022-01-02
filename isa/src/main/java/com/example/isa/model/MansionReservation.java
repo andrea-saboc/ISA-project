@@ -19,6 +19,14 @@ public class MansionReservation extends Reservation{
 	@OneToOne
 	@JoinColumn(name = "mansion_id")
 	private Mansion mansion;
+	
+	@OneToOne
+	@JoinColumn(name = "feedback_id")
+	private ClientFeedback mansionFeedback;
+
+	@OneToOne
+	@JoinColumn(name = "owner_feedback_id")
+	private ClientFeedback mansionOwnerFeedback;
 
 	public MansionReservation(User user, Date startDate, int durationInDays, int numberOfClients, Mansion mansion) {
 		super("MANSION", user, startDate, durationInDays, numberOfClients);
@@ -36,7 +44,28 @@ public class MansionReservation extends Reservation{
 	public void setBoat(Mansion mansion) {
 		this.mansion = mansion;
 	}
-		
+
+	public ClientFeedback getMansionFeedback() {
+		return mansionFeedback;
+	}
+
+	public void setMansionFeedback(ClientFeedback mansionFeedback) {
+		this.mansionFeedback = mansionFeedback;
+	}
+
+	public ClientFeedback getMansionOwnerFeedback() {
+		return mansionOwnerFeedback;
+	}
+
+	public void setMansionOwnerFeedback(ClientFeedback mansionOwnerFeedback) {
+		this.mansionOwnerFeedback = mansionOwnerFeedback;
+	}
+
+	public void setMansion(Mansion mansion) {
+		this.mansion = mansion;
+	}
+	
+	
 
 
 }

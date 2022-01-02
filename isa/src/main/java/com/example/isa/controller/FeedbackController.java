@@ -36,5 +36,21 @@ public class FeedbackController {
 		
 		return ResponseEntity.ok(feedbackService.addBoatFeedback(dto));
 	}
+	
+	@RequestMapping(method = RequestMethod.POST, value = "/feedbacks/addMansionOwnerFeedback",produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
+	//@PreAuthorize("hasRole('ROLE_CLIENT')")
+	@CrossOrigin(origins = "*")	
+	public ResponseEntity<ClientFeedback> addMansionOwnerFeedback(@RequestBody ClientFeedbackDTO dto) throws JsonProcessingException{	
+		
+		return ResponseEntity.ok(feedbackService.addMansionOwnerFeedback(dto));
+	}
+	
+	@RequestMapping(method = RequestMethod.POST, value = "/feedbacks/addMansionFeedback",produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
+	//@PreAuthorize("hasRole('ROLE_CLIENT')")
+	@CrossOrigin(origins = "*")	
+	public ResponseEntity<ClientFeedback> addMansionFeedback(@RequestBody ClientFeedbackDTO dto) throws JsonProcessingException{	
+		
+		return ResponseEntity.ok(feedbackService.addMansionFeedback(dto));
+	}
 
 }

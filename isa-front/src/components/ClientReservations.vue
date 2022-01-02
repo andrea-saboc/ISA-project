@@ -55,32 +55,42 @@
 
 
             <div v-if="displayPastReservations == 'mansions'">
-               <div v-for="res in pastMansionReservations">
+               <div v-for="res in pastBoatReservations">
                   <div class="text-dark bg-light mt-3">
                      <div class="card-header h4">
-                        Naziv vikendice
+                        {{res.mansion.name}}
                      </div>
                      <div class="card-body">
+                        <label>Start date: {{res.startDate}}</label><br>
+                        <label>Duration in days: {{res.durationInDays}}</label><br>
+                        <label>Number of guests : {{res.numberOfClients}}</label><br>
                         <blockquote class="blockquote mb-0">
-                           <p>A well-known quote, contained in a blockquote element.</p>
-                           <button v-if="givingFeedback == 'None'" class = "btn btn-secondary" v-on:click = "ShowFeedbackBox(res)">Give feedback</button> 
-                           <button v-if="givingFeedback == res" class = "btn btn-secondary" v-on:click="SubmitFeedback()">Submit</button>             
-                           <button v-if="givingFeedback == res" class = "btn btn-secondary" v-on:click="CancelGivingFeedback()">Cancel</button> 
-                        </blockquote>
+                        <button v-if="res.mansionOwnerFeedback==null" class = "btn btn-light" v-on:click = "ShowOwnerFeedbackBox(res)">Give feedback about the owner</button> 
+                        <button v-if="res.mansionFeedback==null" class = "btn btn-light" v-on:click = "ShowFeedbackBox(res)">Give mansion feedback</button>            
+                  
+                      </blockquote>
                      </div>
-                  </div>
-                  <div v-if="givingFeedback == res" class="input-group">
-                     <div class="input-group-prepend">
-                        <span class="input-group-text">Feedback content:</span>
+               <div v-if="givingOwnerFeedback == res" class="input-group">
+                                 <div class="input-group-prepend">
+                                 <span class="input-group-text">Complain content:</span>
+                                 </div>
+                                 <textarea class="form-control" aria-label="With textarea" v-model="ownerFeedbackContent"></textarea>
+                                 <span class="input-group-text">Grade:</span>
+                                 <input type="number" class="form-control" v-model="ownerFeedbackGrade"/>
+                                 <button class="btn btn-secondary" v-on:click = "SubmitBOwnerFeedback(res)">Sumbit</button>
                      </div>
-                     <textarea class="form-control" aria-label="With textarea" v-model="feedbackContent"></textarea>
-                     <div class="input-group">
-                      <div class="input-group-prepend">
-                        <span class="input-group-text" id="" >Grade:</span>
-                      </div>
-                      <input type="number" class="form-control" v-model="feedbackGrade">
-                    </div>
+                              <div v-if="givingFeedback == res" class="input-group">
+                                 <div class="input-group-prepend">
+                                 <span class="input-group-text">Boat complain content:</span>
+                                 </div>
+                                 <textarea class="form-control" aria-label="With textarea" v-model="feedbackContent"></textarea>
+                                 <span class="input-group-text">Grade:</span>
+                                 <input type="number" class="form-control" v-model="feedbackGrade"/>
+                                 <button class="btn btn-secondary" v-on:click = "SubmitBoatFeedback(res)">Sumbit</button>
+                     </div>
+
                   </div>
+
                </div>
             </div>
 
@@ -98,8 +108,8 @@
                         <label>Duration in days: {{res.durationInDays}}</label><br>
                         <label>Number of guests : {{res.numberOfClients}}</label><br>
                         <blockquote class="blockquote mb-0">
-                        <button v-if="res.boatOwnerFeedback==null" class = "btn btn-light" v-on:click = "ShowBOwnerFeedbackBox(res)">Give feedback about the owner</button> 
-                        <button v-if="res.boatFeedback==null" class = "btn btn-light" v-on:click = "ShowBoatFeedbackBox(res)">Give boat feedback</button>            
+                        <button v-if="res.boatOwnerFeedback==null" class = "btn btn-light" v-on:click = "ShowOwnerFeedbackBox(res)">Give feedback about the owner</button> 
+                        <button v-if="res.boatFeedback==null" class = "btn btn-light" v-on:click = "ShowFeedbackBox(res)">Give boat feedback</button>            
                   
                       </blockquote>
                      </div>
@@ -260,11 +270,11 @@ export default {
     },    
 
 
-    ShowBOwnerFeedbackBox(m){
+    ShowOwnerFeedbackBox(m){
       if (this.givingOwnerFeedback == m){ this.givingOwnerFeedback = 'None'; return}
       this.givingOwnerFeedback=m
     },
-    ShowBoatFeedbackBox(m){
+    ShowFeedbackBox(m){
       if (this.givingFeedback == m){ this.givingFeedback = 'None'; return}
       this.givingFeedback=m
     },
@@ -276,11 +286,17 @@ export default {
           reservation: m.id
 
        }
-
+      
+      var url=''
+      if(this.displayPastReservations == 'mansions')
+      { url ='http://localhost:8080/feedbacks/addMansionOwnerFeedback'}
+      else if (this.displayPastReservations == 'boats')
+      { url ='http://localhost:8080/feedbacks/addBoatOwnerFeedback'}
+      else{}
        
          console.log(feedback)
           axios
-         .post('http://localhost:8080/feedbacks/addBoatOwnerFeedback',feedback,{
+         .post(url,feedback,{
          headers: {
          'Authorization' : this.$store.getters.tokenString,
          'Content-Type': 'application/json'
@@ -300,11 +316,16 @@ export default {
           reservation: m.id
 
        }
-
+      var url=''
+      if(this.displayPastReservations == 'mansions')
+      { url ='http://localhost:8080/feedbacks/addMansionFeedback'}
+      else if (this.displayPastReservations == 'boats')
+      { url ='http://localhost:8080/feedbacks/addBoatFeedback'}
+      else{}
        
          console.log(feedback)
           axios
-         .post('http://localhost:8080/feedbacks/addBoatFeedback',feedback,{
+         .post(url,feedback,{
          headers: {
          'Authorization' : this.$store.getters.tokenString,
          'Content-Type': 'application/json'

@@ -38,6 +38,7 @@ public class Reservation {
 	private Date startDate;
 	private int durationInDays;
 	private int numberOfClients;
+	private float price;
 		
 	public Reservation(String type, User user, Date startDate, int durationInDays, int numberOfClients) {
 		super();
@@ -96,6 +97,20 @@ public class Reservation {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+
+
+
+	public float getPrice() {
+		return price;
+	}
+
+
+
+
+	public void setPrice(float price) {
+		this.price = price;
 	}
 	
 	

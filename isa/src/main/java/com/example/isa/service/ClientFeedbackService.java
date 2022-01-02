@@ -7,9 +7,11 @@ import org.springframework.stereotype.Service;
 import com.example.isa.dto.ClientFeedbackDTO;
 import com.example.isa.model.BoatReservation;
 import com.example.isa.model.ClientFeedback;
+import com.example.isa.model.MansionReservation;
 import com.example.isa.model.User;
 import com.example.isa.repository.BoatReservationRepository;
 import com.example.isa.repository.ClientFeedbackRepository;
+import com.example.isa.repository.MansionReservationRepository;
 
 @Service
 public class ClientFeedbackService {
@@ -18,6 +20,8 @@ public class ClientFeedbackService {
 	ClientFeedbackRepository feedbackRepo;
 	@Autowired
 	BoatReservationRepository boatReservationRepo;
+	@Autowired
+	MansionReservationRepository mansionReservationRepo;
 
 	public ClientFeedback addBoatOwnerFeedback(ClientFeedbackDTO dto) {
 		
@@ -40,6 +44,29 @@ public class ClientFeedbackService {
 		boatReservationRepo.save(boatReservation);
 		return feedback;		
 	}
+	
+	public ClientFeedback addMansionOwnerFeedback(ClientFeedbackDTO dto) {
+		
+		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		ClientFeedback feedback = new ClientFeedback(dto.getContent(), dto.getGrade(),user.getEmail());
+		feedbackRepo.save(feedback);
+		MansionReservation mansionReservation = mansionReservationRepo.findById(dto.getReservation());
+		mansionReservation.setMansionOwnerFeedback(feedback);
+		mansionReservationRepo.save(mansionReservation);
+		return feedback;		
+	}
+	
+	public ClientFeedback addMansionFeedback(ClientFeedbackDTO dto) {
+		
+		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		ClientFeedback feedback = new ClientFeedback(dto.getContent(), dto.getGrade(),user.getEmail());
+		feedbackRepo.save(feedback);
+		MansionReservation mansionReservation = mansionReservationRepo.findById(dto.getReservation());
+		mansionReservation.setMansionFeedback(feedback);
+		mansionReservationRepo.save(mansionReservation);
+		return feedback;		
+	}
+	
 	
 	
 

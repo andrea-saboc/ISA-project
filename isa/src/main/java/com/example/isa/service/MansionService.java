@@ -1,16 +1,22 @@
 package com.example.isa.service;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import com.example.isa.model.Mansion;
+import com.example.isa.repository.MansionRepository;
 
 @Service
 public class MansionService {
-	public ArrayList<Mansion> getAll() {
+	
+	@Autowired
+	MansionRepository mansionRepo;
+	
+	public List<Mansion> getAll() {
 		
-		ArrayList<Mansion> boats = new ArrayList<>();
-		boats.add(new Mansion("ime mi je vikendica","neka adresa","promo opis moj",(float) 2.00));
-		return boats;
+		return mansionRepo.findAll();
 	}
 }
