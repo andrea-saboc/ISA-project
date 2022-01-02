@@ -86,6 +86,19 @@ public class Reservation {
 	public void setNumberOfClients(int numberOfClients) {
 		this.numberOfClients = numberOfClients;
 	}
+
+
+
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+	
+	
 	
 	
 	

@@ -13,5 +13,6 @@ import com.example.isa.model.User;
 public interface BoatReservationRepository extends JpaRepository<BoatReservation, Long>{
 
 	List<BoatReservation> findAllByUser(User user);
+	BoatReservation findById(long id);
 	
 }

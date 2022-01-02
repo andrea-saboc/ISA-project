@@ -39,6 +39,22 @@ public class BoatReservation extends Reservation{
 	public void setBoat(Boat boat) {
 		this.boat = boat;
 	}
+
+	public ClientFeedback getBoatFeedback() {
+		return boatFeedback;
+	}
+
+	public void setBoatFeedback(ClientFeedback boatFeedback) {
+		this.boatFeedback = boatFeedback;
+	}
+
+	public ClientFeedback getBoatOwnerFeedback() {
+		return boatOwnerFeedback;
+	}
+
+	public void setBoatOwnerFeedback(ClientFeedback boatOwnerFeedback) {
+		this.boatOwnerFeedback = boatOwnerFeedback;
+	}
 	
 	
 	
