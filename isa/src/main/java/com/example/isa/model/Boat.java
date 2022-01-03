@@ -11,7 +11,7 @@ public class Boat {
 	@Column(name = "id", unique = true)
     @SequenceGenerator(name = "user_sequence_generator", sequenceName = "user_sequence", initialValue = 100)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_sequence_generator")
-	private Integer id;
+	private Long id;
 	
 	private String name;
 	private String promoDescription;
@@ -59,11 +59,11 @@ public class Boat {
 		rules.add(newRule);
 	}
 
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
