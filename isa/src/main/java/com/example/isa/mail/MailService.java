@@ -28,7 +28,7 @@ public class MailService<T> {
 	    public void sendMail(String recipient, String activationCode, AccountActivationFormatter mailFormatter) throws MessagingException {
 
 	    	SimpleMailMessage message = new SimpleMailMessage();
-	    	message.setFrom("littlevamp999@gmail.com");
+	    	message.setFrom("adventurelandisa@gmail.com");
 	    	message.setTo(recipient);
 	    	message.setText(mailFormatter.getText(activationCode));
 	    	message.setSubject(mailFormatter.getSubject());
