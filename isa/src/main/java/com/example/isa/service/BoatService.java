@@ -96,7 +96,7 @@ public class BoatService {
 		return convertedRules;
 	}
 
-	public Boat getById(int id) {
+	public Boat getById(Long id) {
 		return boatsRepository.findById(id).get();
 	}
 }

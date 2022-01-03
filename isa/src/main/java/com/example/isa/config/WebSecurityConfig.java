@@ -62,7 +62,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .exceptionHandling().authenticationEntryPoint(restAuthenticationEntryPoint).and()
                 .authorizeRequests()
-                .antMatchers("/register**").permitAll()
+                .antMatchers("/register/**").permitAll()
                 .antMatchers("/login/**").permitAll()
                 .antMatchers("/home/**").permitAll()
                 .antMatchers("/userData/**").permitAll()
@@ -70,13 +70,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/createDeletionRequest/**").permitAll()
                 .antMatchers("/reservations/**").permitAll()
                 .antMatchers("/getAllAdvertisers/**").permitAll()
-<<<<<<< HEAD
                 .antMatchers("/boats/**").permitAll()
                 .antMatchers("/feedbacks/**").permitAll()
                 .antMatchers("/complaints/**").permitAll()
-=======
-                .antMatchers("/boats**").permitAll()
->>>>>>> fbe2575 (feat: boat view and owner added)
                 .antMatchers("/boat**").permitAll()
                 .anyRequest().authenticated().and()
                 .cors().and()

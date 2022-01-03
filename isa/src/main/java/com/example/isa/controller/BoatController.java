@@ -6,6 +6,7 @@ import java.util.Set;
 
 import com.example.isa.dto.BDTO;
 import com.example.isa.dto.BoatRegistrationDTO;
+import org.postgresql.largeobject.LargeObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -28,7 +29,7 @@ public class BoatController {
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/boat",produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> getBoatById(@RequestParam Integer id) throws JsonProcessingException{
+	public ResponseEntity<String> getBoatById(@RequestParam Long id) throws JsonProcessingException{
 		System.out.println("We are searchinng for" +id);
 		Boat boat = service.getById(id);
 		ObjectMapper mapper = new ObjectMapper();

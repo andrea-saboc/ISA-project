@@ -62,9 +62,11 @@ public class Boat {
 		rules.add(newRule);
 	}
 
-<<<<<<< HEAD
+
 	public Long getId() {
-=======
+		return id;
+	}
+
 
 	public String getCancellationPolicy() {
 		return cancellationPolicy;
@@ -76,10 +78,7 @@ public class Boat {
 
 
 
-	public Integer getId() {
->>>>>>> fbe2575 (feat: boat view and owner added)
-		return id;
-	}
+
 
 	public void setId(Long id) {
 		this.id = id;
