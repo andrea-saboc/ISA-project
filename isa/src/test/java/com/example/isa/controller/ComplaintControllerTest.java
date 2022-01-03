@@ -37,6 +37,8 @@ public class ComplaintControllerTest {
 
     @Test
     public void getBoatComplainCandidates() throws Exception {
-        //mockMvc.perform(get(URL_PREFIX + ""));
+       mockMvc.perform(get(URL_PREFIX + ""));
+       //.andExpect(status().isCreated());
+       //.andExpect(jsonPath("$", hasSize(2)));
     }
 }

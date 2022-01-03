@@ -36,7 +36,7 @@ public class ComplaintController {
 	@CrossOrigin(origins = "*")	
 	public ResponseEntity<Complaint> addBoatOwnerComplaint(@RequestBody ClientComplaintDTO dto) throws JsonProcessingException{	
 		
-		return ResponseEntity.ok(complaintService.addBoatOwnerComplaint(dto));
+		return ResponseEntity.ok(complaintService.addAdvertiserComplaint(dto));
 	}
 	@RequestMapping(method = RequestMethod.POST, value = "/complaints/addMansionComplain",produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
 	//@PreAuthorize("hasRole('ROLE_CLIENT')")
@@ -50,7 +50,7 @@ public class ComplaintController {
 	@CrossOrigin(origins = "*")	
 	public ResponseEntity<Complaint> addMansionOwnerComplaint(@RequestBody ClientComplaintDTO dto) throws JsonProcessingException{	
 		
-		return ResponseEntity.ok(complaintService.addMansionOwnerComplaint(dto));
+		return ResponseEntity.ok(complaintService.addAdvertiserComplaint(dto));
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/complaints/boats",produces = MediaType.APPLICATION_JSON_VALUE)
