@@ -8,7 +8,7 @@
             <button class="btn btn-link" v-on:click=DisplayMansions>Mansions</button>
         </li>
         <li class="nav-item">
-            <button class="btn btn-link" v-on:clik=DisplayBoats>Boats</button>
+            <button class="btn btn-link" v-on:click=DisplayBoats>Boats</button>
         </li>
         <li class="nav-item">
             <button class="btn btn-link" v-on:click=DisplayAdventures>Adventures</button>
@@ -24,22 +24,22 @@
             <h5 class="card-title">{{m.name}}</h5>
             <p class="card-text">{{m.promoDescription}}</p>
             <p class="card-text"><small class="text-muted">{{m.address}}</small></p>
-            <button class = "btn btn-danger" v-on:click = "ShowMOwnerComplainBox(m)">Complain about the owner</button> 
-            <button class = "btn btn-danger" v-on:click = "ShowMansionComplainBox(m)">Complain about the mansion</button>            
+            <button class = "btn btn-danger" v-on:click = "ShowOwnerComplaintBox(m)">Complain about the owner</button> 
+            <button class = "btn btn-danger" v-on:click = "ShowComplaintBox(m)">Complain about the mansion</button>            
         </div>
         <div v-if="givingMOwnerComplain == m" class="input-group">
                     <div class="input-group-prepend">
                     <span class="input-group-text">Complain content:</span>
                     </div>
-                    <textarea class="form-control" aria-label="With textarea" v-model="feedbackContent"></textarea>
-                    <button class="btn btn-secondary" v-on:click = "SubmitMOwnerComplain(m)">Sumbit</button>
+                    <textarea class="form-control" aria-label="With textarea" v-model="ownerComplainContent"></textarea>
+                    <button class="btn btn-secondary" v-on:click = SubmitMOwnerComplain(m)>Sumbit</button>
         </div>
                 <div v-if="givingMansionComplain == m" class="input-group">
                     <div class="input-group-prepend">
                     <span class="input-group-text">Mansion complain content:</span>
                     </div>
-                    <textarea class="form-control" aria-label="With textarea" v-model="feedbackContent"></textarea>
-                    <button class="btn btn-secondary" v-on:click = "SubmitMansionComplain(m)">Sumbit</button>
+                    <textarea class="form-control" aria-label="With textarea" v-model="complainContent"></textarea>
+                    <button class="btn btn-secondary" v-on:click = SubmitMansionComplain(m)>Sumbit</button>
         </div>
     </div>
     </div>
@@ -61,14 +61,14 @@
                     <div class="input-group-prepend">
                     <span class="input-group-text">Complain content:</span>
                     </div>
-                    <textarea class="form-control" aria-label="With textarea" v-model="feedbackContent"></textarea>
+                    <textarea class="form-control" aria-label="With textarea" v-model="ownerComplaintContent"></textarea>
                     <button class="btn btn-secondary" v-on:click = "SubmitBOwnerComplain(m)">Sumbit</button>
         </div>
                 <div v-if="givingBoatComplain == m" class="input-group">
                     <div class="input-group-prepend">
                     <span class="input-group-text">Boat complain content:</span>
                     </div>
-                    <textarea class="form-control" aria-label="With textarea" v-model="feedbackContent"></textarea>
+                    <textarea class="form-control" aria-label="With textarea" v-model="complainContent"></textarea>
                     <button class="btn btn-secondary" v-on:click = "SubmitBoatComplain(m)">Sumbit</button>
         </div>
         
@@ -118,47 +118,35 @@ import Adventures from './Adventures.vue'
 export default {
 data(){
     return{
+
+        complainContent: '',
+        ownerComplaintContent: '',
+
         display: 'mansions',
         givingMOwnerComplain: 'None',
         givingMansionComplain: 'None',
         givingBOwnerComplain: 'None',
         givingBoatComplain: 'None',
         givingInstructorComplain: 'None',
-        mansions: [
-                       {
-               'name': 'Ime trece, ime broda zamisli',
-               'address': 'Adresa od vise dijelova',
-               'promoDescription' : 'promo opis',
-               'avgGrade' : 'ocjenab'
-           },
-           {
-               'name': 'Cetvrto',
-               'address': 'Adresa od vise dijelova',
-               'promoDescription' : 'promo opis',
-               'avgGrade' : 'ocjenaa'
-           }
-        ],
+
+        mansions: [],
         boats: [],
-        adventures:[
-           {
-               'name': 'Ime trece, ime broda zamisli',
-               'address': 'Adresa od vise dijelova',
-               'promoDescription' : 'promo opis',
-               'avgGrade' : 'ocjenab'
-           },
-           {
-               'name': 'Cetvrto',
-               'address': 'Adresa od vise dijelova',
-               'promoDescription' : 'promo opis',
-               'avgGrade' : 'ocjenaa'
-           }
-
-
-        ]
+        adventures:[]
     }
 
 },
 mounted(){
+         axios
+         .get('http://localhost:8080/complaints/boats',{
+            headers: {
+               'Authorization' : this.$store.getters.tokenString
+            }
+         })
+         .then(response => {
+            this.boats = response.data;
+            console.log(this.boats)      
+      });
+
 
 },
 methods:{
@@ -174,11 +162,11 @@ methods:{
     console.log('showing adventures')
       this.display = 'adventures'
     },
-    ShowMOwnerComplainBox(m){
+    ShowOwnerComplaintBox(m){
       if (this.givingMOwnerComplain == m){ this.givingMOwnerComplain = 'None'; return}
       this.givingMOwnerComplain=m
     },
-    ShowMansionComplainBox(m){
+    ShowComplaintBox(m){
       if (this.givingMansionComplain == m){ this.givingMansionComplain = 'None'; return}
       this.givingMansionComplain=m
     },
@@ -186,7 +174,8 @@ methods:{
 
     },
     SubmitMansionComplain(m){
-
+        alert('do it')
+        this.SubmitBoatComplain(m)
     },
     ShowBOwnerComplainBox(m){
       if (this.givingBOwnerComplain == m){ this.givingBOwnerComplain = 'None'; return}
@@ -198,8 +187,30 @@ methods:{
     },
     SubmitBOwnerComplain(m){
 
+
     },
     SubmitBoatComplain(m){
+        alert('doing it')
+         var complaint ={
+          content:this.complainContent,
+          entityId: m.id
+       }
+
+        axios
+         .post('http://localhost:8080/complaints/addBoatComplain',complaint,{
+         headers: {
+         'Authorization' : this.$store.getters.tokenString,
+         'Content-Type': 'application/json'
+         }
+      })
+         .then(response => {
+            alert('submited')
+      });
+
+
+
+
+
 
     },
     SubmitInstructorComplain(m){

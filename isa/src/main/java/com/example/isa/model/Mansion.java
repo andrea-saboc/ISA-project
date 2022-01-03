@@ -58,6 +58,9 @@ public class Mansion {
 		this.promoDescription = promoDescription;
 		this.avgGrade = avgGrade;
 	}
+	public Mansion() {
+		super();
+	}
 	
 	
 }
