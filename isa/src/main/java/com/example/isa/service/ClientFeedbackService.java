@@ -23,10 +23,10 @@ public class ClientFeedbackService {
 	@Autowired
 	MansionReservationRepository mansionReservationRepo;
 
+
 	public ClientFeedback addBoatOwnerFeedback(ClientFeedbackDTO dto) {
 		
-		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		ClientFeedback feedback = new ClientFeedback(dto.getContent(), dto.getGrade(),user.getEmail());
+		ClientFeedback feedback = new ClientFeedback(dto.getContent(), dto.getGrade(),getLoggedUser().getEmail());
 		feedbackRepo.save(feedback);
 		BoatReservation boatReservation = boatReservationRepo.findById(dto.getReservation());
 		boatReservation.setBoatOwnerFeedback(feedback);
@@ -36,8 +36,7 @@ public class ClientFeedbackService {
 	
 	public ClientFeedback addBoatFeedback(ClientFeedbackDTO dto) {
 		
-		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		ClientFeedback feedback = new ClientFeedback(dto.getContent(), dto.getGrade(),user.getEmail());
+		ClientFeedback feedback = new ClientFeedback(dto.getContent(), dto.getGrade(),getLoggedUser().getEmail());
 		feedbackRepo.save(feedback);
 		BoatReservation boatReservation = boatReservationRepo.findById(dto.getReservation());
 		boatReservation.setBoatFeedback(feedback);
@@ -67,7 +66,10 @@ public class ClientFeedbackService {
 		return feedback;		
 	}
 	
-	
+	public User getLoggedUser() {		
+		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		return user;
+	}	
 	
 
 }
