@@ -175,6 +175,7 @@ export default{
             });
         },
      showboat(value){
+          alert(value.id)
        window.location.href = "/boat/"+value.id.toString();
      }
 

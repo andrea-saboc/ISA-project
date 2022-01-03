@@ -163,6 +163,7 @@ export default {
       latitude : '',
       capacity : '',
       promoDescription : '',
+      cancellationPolicy : '',
       imgInter : new Array(),
       imgExter : new Array(),
       rules : new Array(),
@@ -247,6 +248,7 @@ export default {
             "name": this.name,
             "type": this.type,
             "length": this.length,
+            "cancellationPolicy" : this.cancellationPolicy,
             "numberOfEngines": this.engineNum,
             "enginePower": this.enginePower,
             "maxSpeed": this.maxSpeed,
@@ -281,7 +283,7 @@ export default {
 
   width: 60%;
   horiz-align: center;
-  margin-left: 25%;
+  margin-left: 20%;
   margin-top: 2%;
   border-radius: 3%;
   padding: 3%;

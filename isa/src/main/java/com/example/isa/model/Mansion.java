@@ -49,6 +49,8 @@ public class Mansion {
 	public void setAvgGrade(float avgGrade) {
 		this.avgGrade = avgGrade;
 	}
+
+	public Mansion(){}
 	
 	
 	public Mansion(String name, String address, String promoDescription, float avgGrade) {

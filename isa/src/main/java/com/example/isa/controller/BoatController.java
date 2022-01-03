@@ -28,11 +28,12 @@ public class BoatController {
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/boat",produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> getBoatById(@RequestParam String id) throws JsonProcessingException{
-		System.out.println("We are searchinng for "+id);
+	public ResponseEntity<String> getBoatById(@RequestParam Integer id) throws JsonProcessingException{
+		System.out.println("We are searchinng for" +id);
 		Boat boat = service.getById(id);
 		ObjectMapper mapper = new ObjectMapper();
 		String jsonString = mapper.writeValueAsString(boat);
+		System.out.println(jsonString);
 		return new ResponseEntity<>(jsonString, HttpStatus.OK);
 
 	}

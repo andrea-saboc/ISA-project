@@ -6,6 +6,8 @@ import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.example.isa.model.*;
+import com.example.isa.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -14,14 +16,6 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import com.example.isa.model.AvailablePeriod;
-import com.example.isa.model.Boat;
-import com.example.isa.model.BoatReservation;
-import com.example.isa.model.Client;
-import com.example.isa.repository.AvailablePeriodRepository;
-import com.example.isa.repository.BoatRepository;
-import com.example.isa.repository.BoatReservationRepository;
-import com.example.isa.repository.UserRepository;
 import com.example.isa.service.implemented.AdventureService;
 
 
@@ -42,6 +36,8 @@ public class IsaApplication extends SpringBootServletInitializer implements Comm
 	@Autowired
 	AvailablePeriodRepository periodRepo;
 	@Autowired
+	AddressRepository addressRepository;
+	@Autowired
 	private PasswordEncoder passwordEncoder;
     
 	public static void main(String[] args) {
@@ -52,7 +48,13 @@ public class IsaApplication extends SpringBootServletInitializer implements Comm
 
 		
 		Boat b1 = new Boat("Milicija", "promo milicije");
-		Boat b2 = new Boat("Malicija", "promo malicije");		
+		Boat b2 = new Boat("Malicija", "promo malicije");
+		Address adr1 = new Address("Marka Mljanova 30", "Novi Sad", "Srbija");
+		b1.setAddress(adr1);
+		Address adr2 = new Address("St Marcus Aurelius 23/788", "Honolulu", "Hawaii" );
+		b2.setAddress(adr2);
+		//addressRepository.save(adr1);
+		//addressRepository.save(adr2);
 		boatRepo.save(b1);
 		boatRepo.save(b2);		
 		

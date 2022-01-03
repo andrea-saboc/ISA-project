@@ -17,7 +17,6 @@ public class Image {
     private Integer imgId;
     private String img;
     private String imgPath;
-    private byte[] imageByte;
 
     @ManyToOne(cascade = {CascadeType.ALL, CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "boat_id")

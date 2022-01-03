@@ -1,6 +1,8 @@
 package com.example.isa.model;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @DiscriminatorValue("BoatOwner")
@@ -14,6 +16,9 @@ public class BoatOwner extends User{
     private String advertiserType;
     @Column(name = "advertiser_registration_approved")
     private boolean approved;
+
+    @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+    private Set<Boat> boats = new HashSet<Boat>();
 
     public BoatOwner(){}
 
@@ -58,5 +63,12 @@ public class BoatOwner extends User{
 	public void setApproved(boolean approved) {
 		this.approved = approved;
 	}
-    
+
+    public Set<Boat> getBoats() {
+        return boats;
+    }
+
+    public void setBoats(Set<Boat> boats) {
+        this.boats = boats;
+    }
 }

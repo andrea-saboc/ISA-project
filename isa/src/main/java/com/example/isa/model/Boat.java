@@ -15,6 +15,7 @@ public class Boat {
 	
 	private String name;
 	private String promoDescription;
+	private String cancellationPolicy;
 	private float avgGrade;
 	private int capacity;
 	public String type;
@@ -27,10 +28,12 @@ public class Boat {
 	public boolean VHFradio;
 	public boolean fishfinder;
 
-	@OneToOne(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
-	@JoinTable(name = "Addreess",
-			joinColumns = @JoinColumn(name = "id", referencedColumnName = "id"),
-			inverseJoinColumns = @JoinColumn(name = "id", referencedColumnName = "address"))
+	@ManyToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+	@JoinColumn(name = "owner_id", referencedColumnName = "id", nullable = true)
+	public BoatOwner boatOwner;
+
+	@OneToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+	@JoinColumn(name = "address_id", referencedColumnName = "id", nullable = true)
 	private Address address;
 	@OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER, mappedBy = "boat")
 	public Set<Image> InteriorImages = new HashSet<Image>();
@@ -59,7 +62,22 @@ public class Boat {
 		rules.add(newRule);
 	}
 
+<<<<<<< HEAD
 	public Long getId() {
+=======
+
+	public String getCancellationPolicy() {
+		return cancellationPolicy;
+	}
+
+	public void setCancellationPolicy(String cancellationPolicy) {
+		this.cancellationPolicy = cancellationPolicy;
+	}
+
+
+
+	public Integer getId() {
+>>>>>>> fbe2575 (feat: boat view and owner added)
 		return id;
 	}
 
@@ -177,6 +195,7 @@ public class Boat {
 
 	public void setAddress(Address address) {
 		this.address = address;
+		//address.setBoat(this);
 	}
 	public Boat() {}
 	
@@ -204,5 +223,13 @@ public class Boat {
 
 	public void setRules(Set<Rule> rules) {
 		this.rules = rules;
+	}
+
+	public BoatOwner getBoatOwner() {
+		return boatOwner;
+	}
+
+	public void setBoatOwner(BoatOwner boatOwner) {
+		this.boatOwner = boatOwner;
 	}
 }

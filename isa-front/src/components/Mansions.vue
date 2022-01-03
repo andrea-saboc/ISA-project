@@ -16,7 +16,7 @@
                <label class="form-control">Select start date:</label><input class="form-control" placeholder="Select date" type="date" id="example"><br>
             </div>
             <div class="input-group input-group-lg">
-                  <label class="form-control">Select start time:</label><input v-model="reservationForm.startTime" class="form-control" placeholder="Select time" type="time" id="example"><br>
+                  <label class="form-control">Select start time:</label><input class="form-control" placeholder="Select time" type="time" id="example"><br>
              </div>
             <div class="input-group input-group-lg">
                <label class="form-control">Number of days:</label><input class="form-control" type="number"><br>

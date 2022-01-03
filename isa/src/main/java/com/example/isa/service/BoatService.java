@@ -59,6 +59,7 @@ public class BoatService {
 		newBoat.setNumberOfEngines(dto.numberOfEngines);
 		newBoat.setMaxSpeed(dto.maxSpeed);
 		newBoat.setGPS(dto.GPS);
+		newBoat.setCancellationPolicy(dto.cancellationPolicy);
 		newBoat.setVHFradio(dto.VHFradio);
 		newBoat.setExteriorImages(convertString2Image(dto.ExteriorImages, newBoat, false));
 		newBoat.setInteriorImages(convertString2Image(dto.InteriorImages, newBoat, true));
@@ -95,7 +96,7 @@ public class BoatService {
 		return convertedRules;
 	}
 
-	public Boat getById(String id) {
-		return boatsRepository.getOne(Integer.parseInt(id));
+	public Boat getById(int id) {
+		return boatsRepository.findById(id).get();
 	}
 }
