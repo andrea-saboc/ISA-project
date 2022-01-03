@@ -14,12 +14,14 @@ import com.example.isa.model.BoatReservation;
 import com.example.isa.model.Complaint;
 import com.example.isa.model.Mansion;
 import com.example.isa.model.MansionComplaint;
+import com.example.isa.model.MansionReservation;
 import com.example.isa.model.User;
 import com.example.isa.repository.BoatRepository;
 import com.example.isa.repository.BoatReservationRepository;
 import com.example.isa.repository.ClientRepository;
 import com.example.isa.repository.ComplaintRepository;
 import com.example.isa.repository.MansionRepository;
+import com.example.isa.repository.MansionReservationRepository;
 
 @Service
 public class ClientComplaintService {
@@ -34,6 +36,8 @@ public class ClientComplaintService {
 	ClientRepository clientRepo;
 	@Autowired
 	BoatReservationRepository boatReservationRepo;
+	@Autowired
+	MansionReservationRepository mansionReservationRepo;
 
 	public Complaint addBoatComplaint(ClientComplaintDTO dto) {
 		
@@ -63,7 +67,13 @@ public class ClientComplaintService {
 		return ret;
 	}
 	public List<Mansion> getMansions() {
-		return null;
+		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		List<Mansion> ret = new ArrayList<Mansion>();
+		for(MansionReservation b : mansionReservationRepo.findAllByUser(user)) {
+			if(!ret.contains(b.getMansion()))
+				ret.add(b.getMansion());			
+		}		
+		return ret;
 	}
 
 }
