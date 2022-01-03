@@ -172,10 +172,40 @@ methods:{
     },
     SubmitMOwnerComplain(m){
 
+         var complaint ={
+          content:this.complainContent,
+          entityId: m.id
+       }
+
+        axios
+         .post('http://localhost:8080/complaints/addMansionOwnerComplain',complaint,{
+         headers: {
+         'Authorization' : this.$store.getters.tokenString,
+         'Content-Type': 'application/json'
+         }
+      })
+         .then(response => {
+            alert('submited')
+      });
+
     },
     SubmitMansionComplain(m){
-        alert('do it')
-        this.SubmitBoatComplain(m)
+
+         var complaint ={
+          content:this.complainContent,
+          entityId: m.id
+       }
+
+        axios
+         .post('http://localhost:8080/complaints/addMansionComplain',complaint,{
+         headers: {
+         'Authorization' : this.$store.getters.tokenString,
+         'Content-Type': 'application/json'
+         }
+      })
+         .then(response => {
+            alert('submited')
+      });
     },
     ShowBOwnerComplainBox(m){
       if (this.givingBOwnerComplain == m){ this.givingBOwnerComplain = 'None'; return}
@@ -186,7 +216,22 @@ methods:{
       this.givingBoatComplain=m
     },
     SubmitBOwnerComplain(m){
+        alert('doing it')
+         var complaint ={
+          content:this.complainContent,
+          entityId: m.id
+       }
 
+        axios
+         .post('http://localhost:8080/complaints/addBoatOwnerComplain',complaint,{
+         headers: {
+         'Authorization' : this.$store.getters.tokenString,
+         'Content-Type': 'application/json'
+         }
+      })
+         .then(response => {
+            alert('submited')
+      });
 
     },
     SubmitBoatComplain(m){
