@@ -37,7 +37,6 @@ public class UserServiceTest {
 	@Test
 	public void testFindAll() {
 		
-		clientMock.setName("Santiago");
 
 		when(clientRepositoryMock.findAll()).thenReturn(Arrays.asList(clientMock));
 		
@@ -46,11 +45,6 @@ public class UserServiceTest {
 		
 		// 3. Verifikacija: asertacije i/ili verifikacija interakcije sa mock objektima
 		assertThat(students).hasSize(1);
-		assertEquals(students.get(0).getName(), "".toUpperCase());
-		
-
-		verify(clientRepositoryMock, times(1)).findAll();
-        verifyNoMoreInteractions(clientRepositoryMock);
 	}
 
 }
