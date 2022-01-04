@@ -1,7 +1,34 @@
 <template>
-<section>
-<button class = "btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#res">Make a reservation
+<section v-if="user === 'Client' && !makingReservation" class="bg-light text-sm-start">
+<div class=" text-center">
+<button class = "btn btn-primary btn-lg " data-bs-toggle="modal" data-bs-target="#res">Make a reservation
 </button>
+</div>
+
+<div  v-if="!makingReservation">
+
+         <div>
+            <div class="input-group justify-content-end mr-30">
+
+               <div class="dropdown ">
+                  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdown2" data-bs-toggle="dropdown" aria-expanded="true">
+                  {{sortSearchResult}}
+                  </button>
+                  <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdown2">
+                    <li><button class="dropdown-item" v-on:click=SortResultByPrice()>Prize</button></li>
+                    <li><button class="dropdown-item" v-on:click=SortResultByAvgGrade()>Average grade</button></li>
+                  </ul>
+               </div>
+               <button class = "btn btn-primary">Sort</button>
+               <button class = "btn btn-secondary">Go back </button>
+            </div>
+            </div>
+
+
+</div>
+
+
+
 <div class="modal fade" id="res" tabindex="-1" role="dialog" aria-labelledby="res" aria-hidden="true">
    <div class="modal-dialog" role="document">
       <div class="modal-content">
@@ -40,38 +67,49 @@
       </div>
    </div>
 </div>
+
 </section>
 <section class="p-5">
    <div class = "container">
       <div class="row text-center">
          <div class="col-md">
             <div v-for="(value, index) in boats">
-              <p>{{index}}</p>
+               <div v-if="index % 2 == 0">
+                  <div class="card mb-3" v-on:click="showboat(value)">
+                     <img src="../assets/yacht.jpg" class="card-img-top img-fluid w-30">
+                     <div class="card-body">
+                        <h5 class="card-title">{{value.name}}</h5>
+                        <p class="card-text">{{value.promoDescription}}</p>
+                        <p class="card-text"><small class="text-muted">{{value.address}}</small></p>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="col-md">
+            <div v-for="(value, index) in boats">
                <div v-if="index % 2 != 0">
                   <div class="card mb-3" v-on:click="showboat(value)">
                      <img src="../assets/yacht.jpg" class="card-img-top img-fluid w-30">
                      <div class="card-body">
                         <h5 class="card-title">{{value.name}}</h5>
                         <p class="card-text">{{value.promoDescription}}</p>
-                        <p class="card-text"><small class="text-muted">bilo sta1</small></p>
+                        <p class="card-text"><small class="text-muted">{{value.address}}</small></p>
                      </div>
                   </div>
                </div>
-                 <div v-if="index % 2 == 0">
-                   <div class="card mb-3" v-on:click="showboat(value)">
-                     <img src="../assets/yacht.jpg" class="card-img-top img-fluid w-30">
-                     <div class="card-body">
-                       <h5 class="card-title">{{value.name}}</h5>
-                       <p class="card-text">{{value.promoDescription}}</p>
-                       <p class="card-text"><small class="text-muted">bilo sta</small></p>
-                     </div>
-                   </div>
-                 </div>
             </div>
          </div>
       </div>
    </div>
 </section>
+
+
+
+
+
+
+
 <div v-if="!makingReservation" class="card text-white bg-dark ml-100 mb-100" style="max-width: 20rem; position: fixed;bottom: 10px; right: 10px">
    <div class="card-header">Search or sort boats</div>
    <div class="card-body">
@@ -118,8 +156,9 @@ export default{
     name: 'boats',
     data: function(){
         return{
-
+            user: null,
             makingReservation: false,
+            sortSearchResult: 'Prize',
             sort: 'Name',
             reservationForm:{
                'startDate': '',
@@ -134,11 +173,11 @@ export default{
             }
         },
     mounted(){
+        this.user = this.$store.state.userType;
         axios
             .get('http://localhost:8080/boats')
             .then(response => {
                 this.boats = response.data;
-                alert(this.boats);
         });   
 
     },
@@ -168,7 +207,12 @@ export default{
            console.log(this.reservationForm.startDate)
            console.log(this.reservationForm.startTime)
             axios
-            .post('http://localhost:8080/reservations/availableBoats',this.reservationForm)
+            .post('http://localhost:8080/reservations/availableBoats',this.reservationForm,{
+         headers: {
+         'Authorization' : this.$store.getters.tokenString,
+         'Content-Type': 'application/json'
+         }
+      })
             .then(response => {
                this.boats = response.data
                console.log(response.data)
@@ -179,6 +223,12 @@ export default{
        window.location.href = "/boat/"+value.id.toString();
      }
 
+    },
+    SortResultByAvgGrade(){
+      this.sortSearchResult='AvgGrade'
+    },
+    SortResultByPrice(){
+       this.sortSearchResult='Price'
     }
 }
 
