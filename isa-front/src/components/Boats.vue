@@ -1,39 +1,15 @@
 <template>
 <section v-if="user === 'Client' && !makingReservation" class="bg-light text-sm-start">
 <div class=" text-center">
-<button class = "btn btn-primary btn-lg " data-bs-toggle="modal" data-bs-target="#res">Make a reservation
+<button type="button" class = "btn btn-primary btn-lg " data-toggle="modal" data-target="#res">Make a reservation
 </button>
 </div>
 
-<div  v-if="!makingReservation">
-
-         <div>
-            <div class="input-group justify-content-end mr-30">
-
-               <div class="dropdown ">
-                  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdown2" data-bs-toggle="dropdown" aria-expanded="true">
-                  {{sortSearchResult}}
-                  </button>
-                  <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdown2">
-                    <li><button class="dropdown-item" v-on:click=SortResultByPrice()>Prize</button></li>
-                    <li><button class="dropdown-item" v-on:click=SortResultByAvgGrade()>Average grade</button></li>
-                  </ul>
-               </div>
-               <button class = "btn btn-primary">Sort</button>
-               <button class = "btn btn-secondary">Go back </button>
-            </div>
-            </div>
-
-
-</div>
-
-
-
-<div class="modal fade" id="res" tabindex="-1" role="dialog" aria-labelledby="res" aria-hidden="true">
-   <div class="modal-dialog" role="document">
+<div class="modal fade" id="res" tabindex="-1" role="dialog" aria-labelledby="ress" aria-hidden="true">
+   <div class="modal-dialog" role="dialog">
       <div class="modal-content">
          <div class="modal-header">
-            <h5 class="modal-title" id="res">Making reservation</h5>
+            <h5 class="modal-title" id="ress">Making reservation</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
             </button>
@@ -62,11 +38,37 @@
             </div>
             <div class="modal-footer">
                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-               <button type="button" class="btn btn-primary" v-on:click=SearchForReservations>Search</button>
+               <button type="button" class="btn btn-primary" v-on:click=SearchForReservations() data-dismiss="modal">Search</button>
             </div>
       </div>
    </div>
 </div>
+
+<div  v-if="!makingReservation">
+
+         <div>
+            <div class="input-group justify-content-end mr-30">
+
+               <div class="dropdown ">
+                  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdown2" data-bs-toggle="dropdown" aria-expanded="true">
+                  {{sortSearchResult}}
+                  </button>
+                  <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdown2">
+                    <li><button class="dropdown-item" v-on:click=SortResultByPrice>Prize</button></li>
+                    <li><button class="dropdown-item" v-on:click=SortResultByAvgGrade>Average grade</button></li>
+                  </ul>
+               </div>
+               <button class = "btn btn-primary">Sort</button>
+               <button class = "btn btn-secondary">Go back </button>
+            </div>
+            </div>
+
+
+</div>
+
+
+
+
 
 </section>
 <section class="p-5">
@@ -116,12 +118,12 @@
       <label>Chose search category:</label>
       <div class="dropdown mt-3">
          <button class="btn btn-secondary dropdown-toggle" type="button"  id="dropdown1" data-bs-toggle="dropdown">
-         Name
+         {{search}}
          </button>
          <ul class="dropdown-menu" aria-labelledby="dropdown1">
-            <li><button class="dropdown-item">Name</button></li>
-            <li><button class="dropdown-item">Location</button></li>
-            <li><button class="dropdown-item">Grade</button></li>
+            <li><button class="dropdown-item" >Name</button></li>
+            <li><button class="dropdown-item" >Location</button></li>
+            <li><button class="dropdown-item" >Grade</button></li>
          </ul>
       </div>
       <div class="input-group mt-2">
@@ -160,6 +162,7 @@ export default{
             makingReservation: false,
             sortSearchResult: 'Prize',
             sort: 'Name',
+            search: 'Name',
             reservationForm:{
                'startDate': '',
                'startTime': '',
@@ -219,16 +222,15 @@ export default{
             });
         },
      showboat(value){
-          alert(value.id)
        window.location.href = "/boat/"+value.id.toString();
-     }
-
-    },
+     },
     SortResultByAvgGrade(){
-      this.sortSearchResult='AvgGrade'
+      this.sortSearchResult='Average grade'
     },
     SortResultByPrice(){
        this.sortSearchResult='Price'
+    }
+
     }
 }
 
