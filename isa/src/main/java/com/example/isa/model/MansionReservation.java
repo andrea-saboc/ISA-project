@@ -28,9 +28,14 @@ public class MansionReservation extends Reservation{
 	@JoinColumn(name = "owner_feedback_id")
 	private ClientFeedback mansionOwnerFeedback;
 
-	public MansionReservation(User user, Date startDate, int durationInDays, int numberOfClients, Mansion mansion) {
-		super("MANSION", user, startDate, durationInDays, numberOfClients);
+
+
+	public MansionReservation(User user, Date startDate, Date endDate, int numberOfGuests,
+			double totalPrice, Mansion mansion, ClientFeedback mansionFeedback, ClientFeedback mansionOwnerFeedback) {
+		super("MANSION", user, startDate, endDate, numberOfGuests, totalPrice);
 		this.mansion = mansion;
+		this.mansionFeedback = mansionFeedback;
+		this.mansionOwnerFeedback = mansionOwnerFeedback;
 	}
 
 	public MansionReservation() {

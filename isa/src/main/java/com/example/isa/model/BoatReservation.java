@@ -1,10 +1,15 @@
 package com.example.isa.model;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 @Entity
@@ -22,9 +27,13 @@ public class BoatReservation extends Reservation{
 	@OneToOne
 	@JoinColumn(name = "owner_feedback_id")
 	private ClientFeedback boatOwnerFeedback;
+	
 
-	public BoatReservation(User user, Date startDate, int durationInDays, int numberOfClients, Boat boat) {
-		super("BOAT", user, startDate, durationInDays, numberOfClients);
+	
+
+	public BoatReservation(User user, Date startDate, Date endDate, int numberOfGuests, double totalPrice,
+			Boat boat) {
+		super("BOAT", user, startDate, endDate, numberOfGuests, totalPrice);
 		this.boat = boat;
 	}
 
@@ -55,9 +64,8 @@ public class BoatReservation extends Reservation{
 	public void setBoatOwnerFeedback(ClientFeedback boatOwnerFeedback) {
 		this.boatOwnerFeedback = boatOwnerFeedback;
 	}
-	
-	
-	
-	
+
+
+
 
 }

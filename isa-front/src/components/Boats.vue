@@ -1,12 +1,15 @@
 <template>
-<section>
-<button class = "btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#res">Make a reservation
+<section v-if="user === 'Client' && !makingReservation" class="bg-light text-sm-start">
+<div class=" text-center">
+<button type="button" class = "btn btn-primary btn-lg " data-toggle="modal" data-target="#res">Make a reservation
 </button>
-<div class="modal fade" id="res" tabindex="-1" role="dialog" aria-labelledby="res" aria-hidden="true">
-   <div class="modal-dialog" role="document">
+</div>
+
+<div class="modal fade" id="res" tabindex="-1" role="dialog" aria-labelledby="ress" aria-hidden="true">
+   <div class="modal-dialog" role="dialog">
       <div class="modal-content">
          <div class="modal-header">
-            <h5 class="modal-title" id="res">Making reservation</h5>
+            <h5 class="modal-title" id="ress">Making reservation</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
             </button>
@@ -35,55 +38,123 @@
             </div>
             <div class="modal-footer">
                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-               <button type="button" class="btn btn-primary" v-on:click=SearchForReservations>Search</button>
+               <button type="button" class="btn btn-primary" v-on:click=SearchForReservations() data-dismiss="modal">Search</button>
             </div>
       </div>
    </div>
 </div>
 </section>
+
+
+<div v-if="makingReservation" class="card text-white bg-dark ml-100 mb-100" style="max-width: 20rem; position: fixed;bottom: 10px; right: 10px">
+            <div class="card-header">Sort search results</div>
+            <div class="card-body">
+            <div class="input-group justify-content-end mr-30">
+               <h5>Chose sort category:</h5><br><br>
+
+                  <div class="dropdown">
+                     <button class="btn-lg btn-secondary dropdown-toggle" type="button" id="dropdown2" data-bs-toggle="dropdown" aria-expanded="true">
+                     {{sortSearchResult}}
+                     </button>
+                     <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdown2">
+                     <li><button class="dropdown-item" v-on:click=SortResultByPrice>Prize</button></li>
+                     <li><button class="dropdown-item" v-on:click=SortResultByAvgGrade>Average grade</button></li>
+                     </ul>
+                  </div>
+               <button class = "btn-lg btn-primary">Sort</button><br><br>
+                </div>
+                <br>
+                <br>
+               <button class = "btn-lg btn-outline-secondary" v-on:click=CancelMakingReservation>Go back </button>
+              
+            </div>
+
+
+  
+</div>
+
+
+
+
 <section class="p-5">
    <div class = "container">
       <div class="row text-center">
          <div class="col-md">
             <div v-for="(value, index) in boats">
-              <p>{{index}}</p>
+               <div v-if="index % 2 == 0">
+                  <div class="card mb-3">
+                     <img src="../assets/yacht.jpg" class="card-img-top img-fluid w-30" v-on:click="showboat(value)">
+                     <div class="card-body">
+                     <div v-on:click="showboat(value)">
+                        <h5 class="card-title">{{value.name}}</h5>
+                        <p class="card-text">{{value.promoDescription}}</p>
+                        <p class="card-text"><small class="text-muted">{{value.address}}</small></p>
+                     </div>
+                        <div class="bg-light p-3 text-left" v-if="makingReservation">
+                           <p class="card-text">Price: 150</p>
+                           <p class="card-text">Average grade: {{value.avgGrade}}</p>
+                           <p>Add additional services to your reservation: </p>
+
+                              <div v-for="(s,index) in additionalServices">
+                                 <div class="custom-control custom-checkbox mb-3">
+                                    <input type="checkbox" class="custom-control-input" :id="value.name+index" required>
+                                    <label class="custom-control-label" :for="value.name+index">{{s.name}}</label>
+                                 </div>
+                              </div>
+
+
+                           <button class="btn btn-primary" v-on:click=MakeBoatReservation(value)>Make a reservation</button>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="col-md">
+            <div v-for="(value, index) in boats">
                <div v-if="index % 2 != 0">
                   <div class="card mb-3" v-on:click="showboat(value)">
                      <img src="../assets/yacht.jpg" class="card-img-top img-fluid w-30">
                      <div class="card-body">
                         <h5 class="card-title">{{value.name}}</h5>
                         <p class="card-text">{{value.promoDescription}}</p>
-                        <p class="card-text"><small class="text-muted">bilo sta1</small></p>
+                        <p class="card-text"><small class="text-muted">{{value.address}}</small></p>
+                        <div class="bg-light mb-3" v-if="makingReservation">
+                           
+                           <p class="card-text">Average grade: 4.5</p>
+                           <p>Additional services: </p>
+
+
+
+                           <button class="btn btn-primary">Make a reservation</button>
+                        </div>
                      </div>
                   </div>
                </div>
-                 <div v-if="index % 2 == 0">
-                   <div class="card mb-3" v-on:click="showboat(value)">
-                     <img src="../assets/yacht.jpg" class="card-img-top img-fluid w-30">
-                     <div class="card-body">
-                       <h5 class="card-title">{{value.name}}</h5>
-                       <p class="card-text">{{value.promoDescription}}</p>
-                       <p class="card-text"><small class="text-muted">bilo sta</small></p>
-                     </div>
-                   </div>
-                 </div>
             </div>
          </div>
       </div>
    </div>
 </section>
+
+
+
+
+
+
+
 <div v-if="!makingReservation" class="card text-white bg-dark ml-100 mb-100" style="max-width: 20rem; position: fixed;bottom: 10px; right: 10px">
    <div class="card-header">Search or sort boats</div>
    <div class="card-body">
       <label>Chose search category:</label>
       <div class="dropdown mt-3">
          <button class="btn btn-secondary dropdown-toggle" type="button"  id="dropdown1" data-bs-toggle="dropdown">
-         Name
+         {{search}}
          </button>
          <ul class="dropdown-menu" aria-labelledby="dropdown1">
-            <li><button class="dropdown-item">Name</button></li>
-            <li><button class="dropdown-item">Location</button></li>
-            <li><button class="dropdown-item">Grade</button></li>
+            <li><button class="dropdown-item" >Name</button></li>
+            <li><button class="dropdown-item" >Location</button></li>
+            <li><button class="dropdown-item" >Grade</button></li>
          </ul>
       </div>
       <div class="input-group mt-2">
@@ -118,27 +189,42 @@ export default{
     name: 'boats',
     data: function(){
         return{
-
+            user: null,
             makingReservation: false,
+            sortSearchResult: 'Prize',
             sort: 'Name',
+            search: 'Name',
             reservationForm:{
                'startDate': '',
                'startTime': '',
-               'numberOfClients': '',
+               'numberOfGuests': '',
                'numberOfDays': '',
                'location': '',
                'grade': '',
 
             },
-            boats : []
+            boats : [],
+            additionalServices:[
+           {
+               'name': 'Wifi',
+               'price': 20
+           },           {
+               'name': 'Champagne',
+               'price': 30
+           },
+           {
+               'name': 'Music',
+               'price': 30
+           }
+            ]
             }
         },
     mounted(){
+        this.user = this.$store.state.userType;
         axios
             .get('http://localhost:8080/boats')
             .then(response => {
                 this.boats = response.data;
-                alert(this.boats);
         });   
 
     },
@@ -165,19 +251,76 @@ export default{
         SearchForReservations(){
 
            this.makingReservation = true;
+
            console.log(this.reservationForm.startDate)
            console.log(this.reservationForm.startTime)
             axios
-            .post('http://localhost:8080/reservations/availableBoats',this.reservationForm)
+            .post('http://localhost:8080/reservations/availableBoats',this.reservationForm,{
+         headers: {
+         'Authorization' : this.$store.getters.tokenString,
+         'Content-Type': 'application/json'
+         }
+      })
             .then(response => {
                this.boats = response.data
-               console.log(response.data)
             });
         },
      showboat(value){
-          alert(value.id)
        window.location.href = "/boat/"+value.id.toString();
-     }
+     },
+    SortResultByAvgGrade(){
+      this.sortSearchResult='Average grade'
+    },
+    SortResultByPrice(){
+       this.sortSearchResult='Price'
+    },
+    CancelMakingReservation(){
+       this.makingReservation = false
+               axios
+            .get('http://localhost:8080/boats')
+            .then(response => {
+                this.boats = response.data;
+        }); 
+    },
+    MakeBoatReservation(b){
+
+       var boatReservation ={
+          boatId : b.id,
+          additionalServices :[],
+          numberOfGuests: this.reservationForm.numberOfGuests,
+          price: 500,
+          startDate: this.reservationForm.startDate,
+          startTime: this.reservationForm.startTime,
+          numberOfDays: this.reservationForm.numberOfDays
+       }
+
+      console.log(boatReservation)
+
+
+      var id = '#'+b.name+'2'
+      alert(id)
+
+       if ($(id).is(":checked"))
+         {
+         alert('checkovan')
+         }
+         boatReservation.additionalServices.push(1);
+
+         console.log(boatReservation)
+
+         axios
+         .post('http://localhost:8080/reservations/createBoatReservation',boatReservation,{
+         headers: {
+         'Authorization' : this.$store.getters.tokenString,
+         'Content-Type': 'application/json'
+         }
+      })
+         .then(response => {
+            alert('submited')
+      });
+
+
+    }
 
     }
 }
