@@ -43,46 +43,68 @@
       </div>
    </div>
 </div>
+</section>
 
-<div  v-if="!makingReservation">
 
-         <div>
+<div v-if="makingReservation" class="card text-white bg-dark ml-100 mb-100" style="max-width: 20rem; position: fixed;bottom: 10px; right: 10px">
+            <div class="card-header">Sort search results</div>
+            <div class="card-body">
             <div class="input-group justify-content-end mr-30">
+               <h5>Chose sort category:</h5><br><br>
 
-               <div class="dropdown ">
-                  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdown2" data-bs-toggle="dropdown" aria-expanded="true">
-                  {{sortSearchResult}}
-                  </button>
-                  <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdown2">
-                    <li><button class="dropdown-item" v-on:click=SortResultByPrice>Prize</button></li>
-                    <li><button class="dropdown-item" v-on:click=SortResultByAvgGrade>Average grade</button></li>
-                  </ul>
-               </div>
-               <button class = "btn btn-primary">Sort</button>
-               <button class = "btn btn-secondary">Go back </button>
+                  <div class="dropdown">
+                     <button class="btn-lg btn-secondary dropdown-toggle" type="button" id="dropdown2" data-bs-toggle="dropdown" aria-expanded="true">
+                     {{sortSearchResult}}
+                     </button>
+                     <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdown2">
+                     <li><button class="dropdown-item" v-on:click=SortResultByPrice>Prize</button></li>
+                     <li><button class="dropdown-item" v-on:click=SortResultByAvgGrade>Average grade</button></li>
+                     </ul>
+                  </div>
+               <button class = "btn-lg btn-primary">Sort</button><br><br>
+                </div>
+                <br>
+                <br>
+               <button class = "btn-lg btn-outline-secondary" v-on:click=CancelMakingReservation>Go back </button>
+              
             </div>
-            </div>
 
 
+  
 </div>
 
 
 
 
-
-</section>
 <section class="p-5">
    <div class = "container">
       <div class="row text-center">
          <div class="col-md">
             <div v-for="(value, index) in boats">
                <div v-if="index % 2 == 0">
-                  <div class="card mb-3" v-on:click="showboat(value)">
-                     <img src="../assets/yacht.jpg" class="card-img-top img-fluid w-30">
+                  <div class="card mb-3">
+                     <img src="../assets/yacht.jpg" class="card-img-top img-fluid w-30" v-on:click="showboat(value)">
                      <div class="card-body">
+                     <div v-on:click="showboat(value)">
                         <h5 class="card-title">{{value.name}}</h5>
                         <p class="card-text">{{value.promoDescription}}</p>
                         <p class="card-text"><small class="text-muted">{{value.address}}</small></p>
+                     </div>
+                        <div class="bg-light p-3 text-left" v-if="makingReservation">
+                           <p class="card-text">Price: 150</p>
+                           <p class="card-text">Average grade: {{value.avgGrade}}</p>
+                           <p>Add additional services to your reservation: </p>
+
+                              <div v-for="(s,index) in additionalServices">
+                                 <div class="custom-control custom-checkbox mb-3">
+                                    <input type="checkbox" class="custom-control-input" :id="value.name+index" required>
+                                    <label class="custom-control-label" :for="value.name+index">{{s.name}}</label>
+                                 </div>
+                              </div>
+
+
+                           <button class="btn btn-primary" v-on:click=MakeBoatReservation(value)>Make a reservation</button>
+                        </div>
                      </div>
                   </div>
                </div>
@@ -97,6 +119,15 @@
                         <h5 class="card-title">{{value.name}}</h5>
                         <p class="card-text">{{value.promoDescription}}</p>
                         <p class="card-text"><small class="text-muted">{{value.address}}</small></p>
+                        <div class="bg-light mb-3" v-if="makingReservation">
+                           
+                           <p class="card-text">Average grade: 4.5</p>
+                           <p>Additional services: </p>
+
+
+
+                           <button class="btn btn-primary">Make a reservation</button>
+                        </div>
                      </div>
                   </div>
                </div>
@@ -166,13 +197,26 @@ export default{
             reservationForm:{
                'startDate': '',
                'startTime': '',
-               'numberOfClients': '',
+               'numberOfGuests': '',
                'numberOfDays': '',
                'location': '',
                'grade': '',
 
             },
-            boats : []
+            boats : [],
+            additionalServices:[
+           {
+               'name': 'Wifi',
+               'price': 20
+           },           {
+               'name': 'Champagne',
+               'price': 30
+           },
+           {
+               'name': 'Music',
+               'price': 30
+           }
+            ]
             }
         },
     mounted(){
@@ -207,6 +251,7 @@ export default{
         SearchForReservations(){
 
            this.makingReservation = true;
+
            console.log(this.reservationForm.startDate)
            console.log(this.reservationForm.startTime)
             axios
@@ -218,7 +263,6 @@ export default{
       })
             .then(response => {
                this.boats = response.data
-               console.log(response.data)
             });
         },
      showboat(value){
@@ -229,6 +273,53 @@ export default{
     },
     SortResultByPrice(){
        this.sortSearchResult='Price'
+    },
+    CancelMakingReservation(){
+       this.makingReservation = false
+               axios
+            .get('http://localhost:8080/boats')
+            .then(response => {
+                this.boats = response.data;
+        }); 
+    },
+    MakeBoatReservation(b){
+
+       var boatReservation ={
+          boatId : b.id,
+          additionalServices :[],
+          numberOfGuests: this.reservationForm.numberOfGuests,
+          price: 500,
+          startDate: this.reservationForm.startDate,
+          startTime: this.reservationForm.startTime,
+          numberOfDays: this.reservationForm.numberOfDays
+       }
+
+      console.log(boatReservation)
+
+
+      var id = '#'+b.name+'2'
+      alert(id)
+
+       if ($(id).is(":checked"))
+         {
+         alert('checkovan')
+         }
+         boatReservation.additionalServices.push(1);
+
+         console.log(boatReservation)
+
+         axios
+         .post('http://localhost:8080/reservations/createBoatReservation',boatReservation,{
+         headers: {
+         'Authorization' : this.$store.getters.tokenString,
+         'Content-Type': 'application/json'
+         }
+      })
+         .then(response => {
+            alert('submited')
+      });
+
+
     }
 
     }

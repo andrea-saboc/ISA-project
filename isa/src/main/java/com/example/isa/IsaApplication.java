@@ -85,8 +85,8 @@ public class IsaApplication extends SpringBootServletInitializer implements Comm
 		c.setPassword(passwordEncoder.encode("igi"));
 		userRepo.save(c);
 		
-		repo.save(new BoatReservation(c, new Date(), 66, 77, b1));
-		repo.save(new BoatReservation(c, new Date(), 4444, 77, b2));
+		//repo.save(new BoatReservation(c, new Date(), 66, 77, b1));
+		//repo.save(new BoatReservation(c, new Date(), 4444, 77, b2));
 
 		
     	Iterable<BoatReservation> res = repo.findAllByUser(c);
