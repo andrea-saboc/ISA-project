@@ -19,13 +19,14 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import com.example.isa.service.implemented.AdventureService;
 
 
-
-
 @SpringBootApplication
 @EnableWebMvc
 public class IsaApplication extends SpringBootServletInitializer implements CommandLineRunner {
 	@Autowired
 	AdventureService as;
+
+	@Autowired
+	BoatOwnerRepository boatOwnerRepository;
 	
 	@Autowired
 	BoatReservationRepository repo;
@@ -38,6 +39,8 @@ public class IsaApplication extends SpringBootServletInitializer implements Comm
 	@Autowired
 	AddressRepository addressRepository;
 	@Autowired
+	AdditionalServiceRepository additionalServiceRepository;
+	@Autowired
 	private PasswordEncoder passwordEncoder;
     
 	public static void main(String[] args) {
@@ -46,6 +49,10 @@ public class IsaApplication extends SpringBootServletInitializer implements Comm
 	@Override
 	public void run(String... args) throws Exception {
 
+		BoatOwner newBoatOwner = new BoatOwner("Mark", "Markijani", "St Marc", "Italy", "Italy", "54646", "markijan@gmail.com",passwordEncoder.encode("123"), "I want to advertise", "boat", true);
+		newBoatOwner = boatOwnerRepository.save(newBoatOwner);
+
+
 		
 		Boat b1 = new Boat("Milicija", "promo milicije");
 		Boat b2 = new Boat("Malicija", "promo malicije");
@@ -53,8 +60,27 @@ public class IsaApplication extends SpringBootServletInitializer implements Comm
 		b1.setAddress(adr1);
 		Address adr2 = new Address("St Marcus Aurelius 23/788", "Honolulu", "Hawaii" );
 		b2.setAddress(adr2);
-		//addressRepository.save(adr1);
-		//addressRepository.save(adr2);
+		b2.setBoatOwner(newBoatOwner);
+
+		b1 = boatRepo.save(b1);
+		b2 = boatRepo.save(b2);
+
+		AdditionalService aservice1 = new AdditionalService("wifi", 12, 30, b1);
+		AdditionalService aservice2 = new AdditionalService("captain", 50, 100, b1);
+		Set<AdditionalService> additionalServices = new HashSet<>();
+		additionalServices.add(aservice1);
+		additionalServices.add(aservice2);
+
+		b1.setAdditionalServices(additionalServices);
+
+		AdditionalService aservice11 = new AdditionalService("champagne", 12, 30, b2);
+		AdditionalService aservice22 = new AdditionalService("bathroom", 50, 100, b2);
+		Set<AdditionalService> additionalServicess = new HashSet<>();
+		additionalServicess.add(aservice11);
+		additionalServicess.add(aservice22);
+
+		b2.setAdditionalServices(additionalServicess);
+
 		boatRepo.save(b1);
 		boatRepo.save(b2);		
 		
@@ -93,7 +119,7 @@ public class IsaApplication extends SpringBootServletInitializer implements Comm
     	
     	for(BoatReservation r: res){
     		System.out.println(r.getBoat().getName());
-    	}	
+    	}
 
 
 	}

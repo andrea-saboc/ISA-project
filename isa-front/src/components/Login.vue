@@ -77,7 +77,7 @@ export default{
         window.location.reload()
       }
       else if(type === "BoatOwner"){
-        router.push("/about")
+        router.push("/boatOwnerHomePage")
         return;
       }
 

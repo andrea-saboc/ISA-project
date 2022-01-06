@@ -93,7 +93,7 @@
       <hr class="my-4">
       <div class="col-11">
         <label for="promodesc" class="form-label">Promotional description</label>
-        <textarea class="form-control" placeholder="Write a description" id="promodesc" style="height: 100px"></textarea>
+        <textarea class="form-control" placeholder="Write a description" id="promodesc" style="height: 100px" v-model="promoDescription"></textarea>
       </div>
 
       <div class="double-field">
@@ -107,31 +107,67 @@
         </div>
       </div>
       <div class="double-field">
-
       </div>
       <hr class="my-4">
       <div class="col-11">
         <label for="cancellb" class="form-label">Cancellation conditions</label>
-        <textarea class="form-control" placeholder="Define cancellation conditions" id="cancellb" style="height: 100px"></textarea>
+        <textarea class="form-control" placeholder="Define cancellation conditions" id="cancellb" style="height: 100px" v-model="cancellationPolicy"></textarea>
       </div>
       <hr class="my-4">
       <h5>Rules</h5>
       <div class="double-field">
         <div class="col-8">
-          <input type="text" class="form-control" id="new-rule" placeholder="E.g. Smoking is not allowed" required>
+          <input type="text" class="form-control" id="new-rule" placeholder="E.g. Smoking is not allowed" >
         </div>
         <div class="col-3">
           <button type="button" class="btn btn-secondary btn-sm" id="rr" v-on:click="addRule" >Add rule</button>
         </div>
       </div>
       <div class="my-11">
-        <label v-for="(rule, index) in rules">
+        <label v-for="(rule, index) in rules"
+               :key="index">
           {{index+1}}. {{rule}}
-
         </label>
       </div>
       <hr class="my-4">
-
+      <h5>Additional services</h5>
+      <hr class="my-4">
+      <div class="double-field">
+        <div class="col-5">
+          <label for="new-additional-service-name" class="form-label">New service's name</label>
+          <input type="text" class="form-control" id="new-additional-service-name" placeholder="Service name" >
+        </div>
+        <div class="col-2">
+          <label for="new-additional-service-hour" class="form-label">Price per hour</label>
+          <input type="number" class="form-control" id="new-additional-service-hour">
+        </div>
+        <div class="col-2">
+          <label for="new-additional-service-day" class="form-label">Price per day</label>
+          <input type="number" class="form-control" id="new-additional-service-day">
+        </div>
+        <div class="col-3">
+          <br>
+          <button type="button" class="btn btn-secondary btn-sm" id="as" v-on:click="addAdditionalService">Add service</button>
+        </div>
+      </div>
+      <hr class="my-4">
+      <h5>Renting pricelist</h5>
+      <hr class="my-4">
+      <div class="double-field">
+        <div class="col-3">
+          <label for="boat-price-per-hour" class="form-label">Price per hour</label>
+          <input type="number" class="form-control" id="boat-price-per-hour" v-model="pricePerHour">
+        </div>
+        <div class="col-3">
+          <label for="boat-price-per-day" class="form-label">Price per day</label>
+          <input type="number" class="form-control" id="boat-price-per-day" v-model="pricePerDay">
+        </div>
+        <div class="col-3">
+          <label for="boat-price-per-seven" class="form-label">Price for seven days</label>
+          <input type="number" class="form-control" id="boat-price-per-seven" v-model="priceForSevenDays">
+        </div>
+      </div>
+<hr>
       <button class="w-100 btn btn-primary btn-lg" type="submit" @click="registerBoat">Register a boat</button>
     </form>
 
@@ -168,7 +204,14 @@ export default {
       imgExter : new Array(),
       rules : new Array(),
       selectedExteriorImages : new Array(),
-      selectedInteriorImages : new Array()
+      selectedInteriorImages : new Array(),
+      additionalServices : new Array(),
+      additionalServiceName : '',
+      additionalServicePricePerHour : '',
+      additionalServicePricePerDay : '',
+      pricePerHour: '',
+      pricePerDay: '',
+      priceForSevenDays: ''
 
     }
     },
@@ -178,13 +221,23 @@ export default {
       this.rules.push(rule)
       document.getElementById('new-rule').value='';
     },
+    addAdditionalService(){
+      var name = document.getElementById('new-additional-service-name').value;
+      var hour = document.getElementById('new-additional-service-hour').value;
+      var day = document.getElementById('new-additional-service-day').value;
+      this.additionalServices.push({name: name, pricePerHour: hour, pricePerDay: day });
+      document.getElementById('new-additional-service-name').value='';
+      document.getElementById('new-additional-service-hour').value='';
+      document.getElementById('new-additional-service-day').value='';
+
+    },
     onExteriorImagesSelected(event){
       this.imgExter = new Array()
       console.log(typeof(this.imgExter))
       console.log(event)
       this.selectedExteriorImages = event.target.files
       console.log(this.selectedExteriorImages)
-      const reader = new FileReader()
+      //const reader = new FileReader()
       console.log("selected exterior image length is", this.selectedExteriorImages)
       for (var img in this.selectedExteriorImages){
         console.log(isNaN(img))
@@ -214,7 +267,7 @@ export default {
       console.log(event)
       this.selectedInteriorImages = event.target.files
       console.log(this.selectedInteriorImages)
-      const reader = new FileReader()
+      //const reader = new FileReader()
       console.log("selected exterior image length is", this.selectedInteriorImages)
       for (var img in this.selectedInteriorImages){
         console.log(isNaN(img))
@@ -265,7 +318,16 @@ export default {
             "InteriorImages": this.imgInter,
             "ExteriorImages": this.imgExter,
             "capacity": this.capacity,
-            "rules": this.rules
+            "rules": this.rules,
+            "pricePerHour": this.pricePerHour,
+            "pricePerDay": this.pricePerDay,
+            "priceForSevenDays": this.priceForSevenDays,
+            "additionalServices": this.additionalServices
+
+          }, {
+            headers: {
+              'Authorization' : this.$store.getters.tokenString
+            }
           })
           .then(response => {
             alert(response.data)

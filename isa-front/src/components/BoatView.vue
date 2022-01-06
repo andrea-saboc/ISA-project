@@ -25,7 +25,7 @@
     <div class="colinfo">
   <br class="sm">
   <p style="text-transform: uppercase; font-size: 18px; color: gray">
-    {{boatToShow.type}} tgfgf
+    {{boatToShow.type}}
   </p>
   <p class="fw-bold" style="font-size: 30px; font-weight: bolder; text-transform: uppercase">
     {{boatToShow.name}}
@@ -33,7 +33,7 @@
   </p>
   <br class="sm">
   <p style="font-size: 18px">
-    Offered by BoatOwner
+    Offered by {{boatOwner.name}} {{boatOwner.surname}}
     <br>
     {{address.address}}, {{address.city}}, {{address.country}}
   </p>
@@ -120,11 +120,10 @@
           </p>
         </div>
         </div>
+      </div>
       <hr>
       <div class="engine-information">
-        <p style="font-weight: bolder; font-size: 26px">
-          Additional information
-        </p>
+
         <div class="engine-information-list">
           <div class="einfo">
             <div class="navigation-icon">
@@ -170,47 +169,165 @@
         <p style="font-weight: bolder; font-size: 26px">
           Rules
         </p>
-        <p v-for="rule in boatToShow.rules">
-          {{rule}}
+        <p v-for="rule in boatToShow.rules"
+           :key="rule.id">
+          {{rule.rule}}
         </p>
 
       </div>
+      <hr>
+      <p style="font-weight: bolder; font-size: 26px">
+        Calendar
+      </p>
+      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Add availability period</button>
+      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Add availability for {{boatToShow.name}}</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16">
+                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+              </svg></button>
+            </div>
+            <div class="modal-body">
+              <v-date-picker mode="dateTime" is24hr v-model="startDateTime">
+                <template v-slot="{ inputValue, inputEvents }">
+                  <input
+                      class="px-2 py-1 border rounded focus:outline-none focus:border-blue-300"
+                      :value="inputValue"
+                      v-on="inputEvents"
+                  />
+                </template>
+              </v-date-picker>
+              <v-date-picker  mode="dateTime" is24hr v-model="endDateTime">
+                <template v-slot="{ inputValue, inputEvents }">
+                  <input
+                      class="px-2 py-1 border rounded focus:outline-none focus:border-blue-300"
+                      :value="inputValue"
+                      v-on="inputEvents"
+                  />
+                </template>
+              </v-date-picker>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary" v-on:click="addAvailabilityPeriod" data-bs-dismiss="modal">Add</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <br>
+      <v-calendar :columns="$screens({ default: 1, lg: 2 })" style="width: 100%; height: 30%" :attributes='calendar_attributes'
+                  :available-dates='availableDates'/>
+<hr>
+
+
 
     </div>
 
 
     </div>
   </div>
-</div>
+
 
 </template>
-
 <script>
 import axios from 'axios'
+import {devServer} from "../../vue.config";
 export default {
   name: "BoatView",
+  setup() {
+    return {
+      coords: [54, 39],
+    }
+  },
   data: function (){
     return{
+      startDateTime: '',
+      endDateTime: '',
       boatToShow: [],
-      address: []
+      address: [],
+      boatOwner: [],
+      value: '',
+      availablePeriods: [],
+      availableDates: [],
+      calendar_attributes: [
+        {
+          key: 'today',
+          highlight: 'red',
+          dates: new Date(),
+        },
+      ]
     }
 
   },
   mounted() {
     var path = window.location.href;
     var boatId = path.split('/boat/')[1].replaceAll('%20', ' ');
+    alert("boat id: ", boatId.toString())
     axios
     .get('http://localhost:8080/boat', {
       params:
           {
             id : boatId
-          }
+          },
+      headers: {
+        'Authorization' : this.$store.getters.tokenString
+      }
     })
     .then(response =>{
       this.boatToShow = response.data
       console.log(this.boatToShow.address)
       this.address = this.boatToShow.address
+      console.log(response.data)
+      this.boatOwner = this.boatToShow.boatOwner
+      axios
+          .post(devServer.proxy + "/getBoatAvailability", {
+            "boatId" : this.boatToShow.id
+          }, { headers: {
+              'Authorization' : this.$store.getters.tokenString
+            }
+          })
+          .then(response =>{
+            this.availablePeriods = response.data
+            console.log("Available periods for boat: ", this.availablePeriods)
+            this.calculateAvailableDaysForCalendar()
+          })
     })
+
+
+  },
+  methods:{
+    calculateAvailableDaysForCalendar(){
+      for(var tmp in this.availablePeriods) {
+        var startDate = new Date(this.availablePeriods[tmp].startDate);
+        var endDate = new Date(this.availablePeriods[tmp].endDate)
+        this.availableDates.push({
+          start: new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate()),
+          end: new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate())
+        });
+      }
+    },
+    addAvailabilityPeriod(){
+      alert(this.startDateTime, "and", this.endDateTime)
+      axios
+      .post(devServer.proxy + "/addAvailablePeriodForBoat", {
+        "boatId" : this.boatToShow.id,
+        "startTime" : this.startDateTime,
+        "endTime" : this.endDateTime
+      }, {
+        headers: {
+          'Authorization' : this.$store.getters.tokenString
+        }
+      })
+      .then(response => {
+        this.availablePeriods = response.data
+        console.log("New available periods: ", this.availablePeriods )
+        this.calculateAvailableDaysForCalendar()
+      })
+
+    }
 
   }
 }
@@ -221,7 +338,7 @@ export default {
 <style scoped>
 .boat-view{
   horiz-align: center;
-  width: 70%;
+  width: 80%;
   margin-left: 15%;
   height: 100%;
 }
@@ -285,8 +402,11 @@ export default {
 
 }
 
-.boat-view .row .colinfo{
-  width: 70%;
+.boat-view .row .colinfo {
+  width: 60%;
 }
+
+
+
 
 </style>

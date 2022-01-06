@@ -7,13 +7,11 @@
     <ul class="list-unstyled ps-0" style="margin-top: 4%">
       <li class="mb-1">
         <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="true">
-          Home
+          Boats
         </button>
         <div class="collapse show" id="home-collapse">
           <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-            <li><a href="#" class="link-dark rounded">Overview</a></li>
-            <li><a href="#" class="link-dark rounded">Updates</a></li>
-            <li><a href="#" class="link-dark rounded">Reports</a></li>
+            <li v-for="boat in boats"><a  v-on:click="DisplayBoat(boat.id)" class="link-dark rounded">{{boat.name}}</a></li>
           </ul>
         </div>
       </li>
@@ -67,6 +65,9 @@
     <div v-if="display=='profile'">
       <Profile></Profile>
     </div>
+    <div v-if="display=='boat'">
+      <BoatView></BoatView>
+    </div>
   </div>
 </div>
 
@@ -75,16 +76,43 @@
 <script>
 import BoatRegistration from "./BoatRegistration";
 import Profile from "./Profile";
+import BoatView from "./BoatView";
+import axios from "axios";
+import {devServer} from "../../vue.config";
 export default {
   name: "BoatOwnerHomePage",
-  components: {BoatRegistration, Profile},
+  components: {BoatRegistration, Profile, BoatView},
   data: function(){
     return{
-      display: 'boatRegistration'
+      display: 'boatRegistration',
+      boats: [],
+      idBoat: null
     }
   },
+  mounted() {
+    if(window.location.href.includes('/boat/')){
+      this.display = 'boat'
+    }
+    axios.get(devServer.proxy+"/ownersBoats", {
+      headers: {
+        'Authorization' : this.$store.getters.tokenString
+      }
+    })
+        .then(response => {
+          this.boats = response.data;
+        })
+  },
   methods: {
+    DisplayBoat(id){
+      var path = window.location.href
+      if (path.includes('/boat/')){
+        path = path.split('/boat/')[0]
+      }
+      window.location.href =path+ "/boat/"+id.toString();
+
+    },
     DisplayBoatRegistration() {
+
         this.display = 'boatRegistration'
     },
     DisplayProfile(){

@@ -49,7 +49,6 @@ public class Image {
         }
         imgPath = imagePathName;
         img = imagePathName;
-
         }
 
     @ManyToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)

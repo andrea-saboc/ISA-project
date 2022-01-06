@@ -21,7 +21,7 @@ import BoatView from "../components/BoatView";
 import BoatRegistration from "../components/BoatRegistration";
 import MansionRegistration from "../components/MansionRegistration";
 import MansionView from "../components/MansionView";
-
+import MapView from "../components/MapView";
 
 const routes = [
   {
@@ -96,6 +96,7 @@ const routes = [
     },
     {
         path: '/boatOwnerHomePage',
+        alias: '/boatOwnerHomePage/boat/:id',
         name: 'BoatOwnerHomePage',
         component: BoatOwnerHomePage
     },
@@ -118,6 +119,11 @@ const routes = [
         path: '/mansionRegistration',
         name: 'MansionRegistration',
         component: MansionRegistration
+    },
+    {
+        path: '/maptest',
+        name: "MapView",
+        component: MapView
     }
 
 ]
@@ -127,4 +133,7 @@ const router = createRouter({
   routes
 })
 
+
+
 export default router
+

@@ -1,5 +1,6 @@
 package com.example.isa.dto;
 
+import com.example.isa.model.AdditionalService;
 import com.example.isa.model.Address;
 import com.example.isa.model.Boat;
 
@@ -18,6 +19,9 @@ public class BoatRegistrationDTO {
     public boolean radar;
     public boolean VHFradio;
     public boolean fishfinder;
+    public double pricePerHour;
+    public double pricePerDay;
+    public double priceForSevenDays;
     public String address;
     public String city;
     public String country;
@@ -28,10 +32,11 @@ public class BoatRegistrationDTO {
     public Set<String> ExteriorImages;
     public int capacity;
     public Set<String> rules;
+    public Set<AdditionalService> additionalServices;
 
     public BoatRegistrationDTO(){}
 
-    public BoatRegistrationDTO(String name, String type, String cancellationPolicy, double length, int numberOfEngines, double enginePower, double maxSpeed, boolean GPS, boolean radar, boolean VHFradio, boolean fishfinder, String address, String city, String country, String longitude, String latitude, String promoDescription, Set<String> interiorImages, Set<String> exteriorImages, int capacity, Set<String> rules) {
+    public BoatRegistrationDTO(String name, String type, String cancellationPolicy, double length, int numberOfEngines, double enginePower, double maxSpeed, boolean GPS, boolean radar, boolean VHFradio, boolean fishfinder, double pricePerHour, double pricePerDay, double priceForSevenDays, String address, String city, String country, String longitude, String latitude, String promoDescription, Set<String> interiorImages, Set<String> exteriorImages, int capacity, Set<String> rules) {
         this.name = name;
         this.type = type;
         this.cancellationPolicy = cancellationPolicy;
@@ -43,6 +48,9 @@ public class BoatRegistrationDTO {
         this.radar = radar;
         this.VHFradio = VHFradio;
         this.fishfinder = fishfinder;
+        this.pricePerHour = pricePerHour;
+        this.pricePerDay = pricePerDay;
+        this.priceForSevenDays = priceForSevenDays;
         this.address = address;
         this.city = city;
         this.country = country;
@@ -69,6 +77,9 @@ public class BoatRegistrationDTO {
                 ", radar=" + radar +
                 ", VHFradio=" + VHFradio +
                 ", fishfinder=" + fishfinder +
+                ", pricePerHour=" + pricePerHour +
+                ", pricePerDay=" + pricePerDay +
+                ", priceForSevenDays=" + priceForSevenDays +
                 ", address='" + address + '\'' +
                 ", city='" + city + '\'' +
                 ", country='" + country + '\'' +
@@ -248,5 +259,29 @@ public class BoatRegistrationDTO {
 
     public void setRules(Set<String> rules) {
         this.rules = rules;
+    }
+
+    public double getPricePerHour() {
+        return pricePerHour;
+    }
+
+    public void setPricePerHour(double pricePerHour) {
+        this.pricePerHour = pricePerHour;
+    }
+
+    public double getPricePerDay() {
+        return pricePerDay;
+    }
+
+    public void setPricePerDay(double pricePerDay) {
+        this.pricePerDay = pricePerDay;
+    }
+
+    public double getPriceForSevenDays() {
+        return priceForSevenDays;
+    }
+
+    public void setPriceForSevenDays(double priceForSevenDays) {
+        this.priceForSevenDays = priceForSevenDays;
     }
 }

@@ -114,6 +114,7 @@
 <script>
 import axios from 'axios'
 import Popper from 'popper.js'
+import {devServer} from "../../vue.config";
 export default{
     name: 'boats',
     data: function(){
@@ -135,7 +136,11 @@ export default{
         },
     mounted(){
         axios
-            .get('http://localhost:8080/boats')
+            .get(devServer.proxy+ '/boats', {
+              headers: {
+                'Authorization' : this.$store.getters.tokenString
+              }
+            })
             .then(response => {
                 this.boats = response.data;
                 alert(this.boats);
@@ -168,14 +173,21 @@ export default{
            console.log(this.reservationForm.startDate)
            console.log(this.reservationForm.startTime)
             axios
-            .post('http://localhost:8080/reservations/availableBoats',this.reservationForm)
+            .post('http://localhost:8080/reservations/availableBoats',this.reservationForm, {
+              headers: {
+                'Authorization' : this.$store.getters.tokenString
+              }
+            })
+                .then(response => {
+                  alert(response.data)
+                  this.messege = response.data
+                })
             .then(response => {
                this.boats = response.data
                console.log(response.data)
             });
         },
      showboat(value){
-          alert(value.id)
        window.location.href = "/boat/"+value.id.toString();
      }
 

@@ -14,21 +14,26 @@ public class Boat {
 	private Long id;
 	
 	private String name;
+	@Column(columnDefinition = "TEXT")
 	private String promoDescription;
+	@Column(columnDefinition = "TEXT")
 	private String cancellationPolicy;
 	private float avgGrade;
 	private int capacity;
-	public String type;
-	public double length;
-	public int numberOfEngines;
-	public double enginePower;
-	public double maxSpeed;
-	public boolean GPS;
-	public boolean radar;
-	public boolean VHFradio;
-	public boolean fishfinder;
+	private String type;
+	private double length;
+	private int numberOfEngines;
+	private double enginePower;
+	private double maxSpeed;
+	private boolean GPS;
+	private boolean radar;
+	private boolean VHFradio;
+	private boolean fishfinder;
+	private double pricePerHour;
+	private double pricePerDay;
+	private double priceForSevenDays;
 
-	@ManyToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+	@ManyToOne(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER)
 	@JoinColumn(name = "owner_id", referencedColumnName = "id", nullable = true)
 	public BoatOwner boatOwner;
 
@@ -41,8 +46,8 @@ public class Boat {
 	public Set<Image> ExteriorImages = new HashSet<Image>();
 	@ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER, mappedBy = "boat")
 	public Set<Rule> rules = new HashSet<Rule>();
-
-
+	@OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER, mappedBy = "boat")
+	public Set<AdditionalService> additionalServices = new HashSet<>();
 
 
 	public Boat(String ime_mi_je_brod, String neka_adresa, String promo_opis_moj, float v) {
@@ -75,9 +80,6 @@ public class Boat {
 	public void setCancellationPolicy(String cancellationPolicy) {
 		this.cancellationPolicy = cancellationPolicy;
 	}
-
-
-
 
 
 	public void setId(Long id) {
@@ -230,5 +232,37 @@ public class Boat {
 
 	public void setBoatOwner(BoatOwner boatOwner) {
 		this.boatOwner = boatOwner;
+	}
+
+	public double getPricePerHour() {
+		return pricePerHour;
+	}
+
+	public void setPricePerHour(double pricePerHour) {
+		this.pricePerHour = pricePerHour;
+	}
+
+	public double getPricePerDay() {
+		return pricePerDay;
+	}
+
+	public void setPricePerDay(double pricePerDay) {
+		this.pricePerDay = pricePerDay;
+	}
+
+	public double getPriceForSevenDays() {
+		return priceForSevenDays;
+	}
+
+	public void setPriceForSevenDays(double priceForSevenDays) {
+		this.priceForSevenDays = priceForSevenDays;
+	}
+
+	public Set<AdditionalService> getAdditionalServices() {
+		return additionalServices;
+	}
+
+	public void setAdditionalServices(Set<AdditionalService> additionalServices) {
+		this.additionalServices = additionalServices;
 	}
 }

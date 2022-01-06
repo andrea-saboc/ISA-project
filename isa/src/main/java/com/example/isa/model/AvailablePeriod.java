@@ -27,18 +27,26 @@ public class AvailablePeriod {
     
 	private Date startDate;
 	private Date endDate;
+
 	
 	@ManyToOne(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER)
     @JoinColumn(name = "boat_id", referencedColumnName = "id", nullable = true)
     private Boat boat;
 
-
+	public AvailablePeriod(Long id, Date startDate, Date endDate, Boat boat) {
+		this.id = id;
+		this.startDate = startDate;
+		this.endDate = endDate;
+		this.boat = boat;
+	}
 
 	public AvailablePeriod(Date startDate, Date endDate) {
 		super();
 		this.startDate = startDate;
 		this.endDate = endDate;
 	}
+
+
 	
 	public AvailablePeriod() {}
 
@@ -72,9 +80,21 @@ public class AvailablePeriod {
 		this.endDate = endDate;
 		this.boat = boat;
 	}
-	
-	
-	
-	
-	
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	@Override
+	public String toString() {
+		return "AvailablePeriod{" +
+				", startDate=" + startDate +
+				", endDate=" + endDate +
+				", boat=" + boat +
+				'}';
+	}
 }
