@@ -103,18 +103,28 @@ public class BoatReservationService {
 		BoatReservation res = boatReservationRepo.findById(resId);
 
 		AvailablePeriod periodBefore = availablePeriodsRepo.checkIfPeriodHasEndDate(res.getStartDate());
-		AvailablePeriod periodAfter = availablePeriodsRepo.checkIfPeriodHasStartDate(res.getEndDate());
+		AvailablePeriod periodAfter = availablePeriodsRepo.checkIfPeriodHasStartDate(res.getEndDate());		
+		AvailablePeriod periodToAdd;
 		
-		if(periodBefore!=null && periodAfter!=null)
-			availablePeriodsRepo.save(new AvailablePeriod(periodBefore.getStartDate(),periodAfter.getEndDate(),res.getBoat()));			
-		else if (periodBefore==null && periodAfter!=null)
-			availablePeriodsRepo.save(new AvailablePeriod(res.getStartDate(),periodAfter.getEndDate(),res.getBoat()));
-		else if (periodBefore!=null && periodAfter==null)
-			availablePeriodsRepo.save(new AvailablePeriod(periodBefore.getStartDate(),res.getEndDate(),res.getBoat()));
+		if(periodBefore!=null && periodAfter!=null) {
+			availablePeriodsRepo.deleteById(periodBefore.getId());
+			availablePeriodsRepo.deleteById(periodAfter.getId());
+			periodToAdd = new AvailablePeriod(periodBefore.getStartDate(),periodAfter.getEndDate(),res.getBoat());	
+		}
+		else if (periodBefore==null && periodAfter!=null) {
+			availablePeriodsRepo.deleteById(periodAfter.getId());
+			periodToAdd = new AvailablePeriod(res.getStartDate(),periodAfter.getEndDate(),res.getBoat());
+		}
+		else if (periodBefore!=null && periodAfter==null) {
+			availablePeriodsRepo.deleteById(periodBefore.getId());
+			periodToAdd = new AvailablePeriod(periodBefore.getStartDate(),res.getEndDate(),res.getBoat());
+		}
 		else 
-			availablePeriodsRepo.save(new AvailablePeriod(res.getStartDate(),res.getEndDate(),res.getBoat()));
-
-		availablePeriodsRepo.deleteById(availablePeriodsRepo.getPeriodOfInterest(res.getStartDate(), res.getEndDate()).getId());		
+			periodToAdd = new AvailablePeriod(res.getStartDate(),res.getEndDate(),res.getBoat());
+		
+		
+		availablePeriodsRepo.save(periodToAdd);
+		//availablePeriodsRepo.deleteById(availablePeriodsRepo.getPeriodOfInterest(res.getStartDate(), res.getEndDate()).getId());		
 		boatReservationRepo.deleteById(resId);
 		return null;
 	}
