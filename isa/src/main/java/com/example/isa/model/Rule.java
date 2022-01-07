@@ -17,13 +17,17 @@ public class Rule {
     @JoinColumn(name = "boat_id", referencedColumnName = "id", nullable = true)
     private Set<Boat> boat = new HashSet<Boat>();
 
+    @ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+    @JoinColumn(name = "mansion_id", referencedColumnName = "id", nullable = true)
+    private Set<Mansion> mansions = new HashSet<Mansion>();
+
     public Rule(){}
     public Rule(String rule){
         this.rule = rule;
     }
 
 
-
+    public void addMansion(Mansion newMansion) {mansions.add(newMansion);}
     public void addBoat(Boat newBoat){
         boat.add(newBoat);
     }

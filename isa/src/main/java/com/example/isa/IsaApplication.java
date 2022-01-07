@@ -92,6 +92,8 @@ public class IsaApplication extends SpringBootServletInitializer implements Comm
 		availablePeriods.add(new AvailablePeriod(new Date(),new Date()));
 		availablePeriods.add(new AvailablePeriod(new Date(),new Date()));
 		availablePeriods.add(new AvailablePeriod(new Date(),new Date()));
+
+
 		
 		
 

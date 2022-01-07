@@ -1,15 +1,11 @@
 package com.example.isa.controller;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import com.example.isa.dto.AddAvailablePeriodDTO;
-import com.example.isa.dto.BDTO;
 import com.example.isa.dto.BoatRegistrationDTO;
 import com.example.isa.dto.LongIdDTO;
 import com.example.isa.model.AvailablePeriod;
-import org.postgresql.largeobject.LargeObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

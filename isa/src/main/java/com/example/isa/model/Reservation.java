@@ -1,6 +1,7 @@
 package com.example.isa.model;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -42,6 +43,14 @@ public class Reservation {
 	private Date endDate;
 	private int numberOfGuests;
 	private double totalPrice;
+
+	@ManyToMany
+	public Set<AdditionalService> additionalServices = new HashSet<AdditionalService>();
+
+	public void addService(AdditionalService service) {
+		//service.addReservation(this);
+		additionalServices.add(service);
+	}
 	
 		
 	public Reservation(String type, User user, Date startDate, Date endDate, int numberOfGuests,double totalPrice) {

@@ -22,6 +22,20 @@ public class Image {
     @JoinColumn(name = "boat_id")
     private Boat boat;
 
+    @ManyToOne(cascade = {CascadeType.ALL, CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE, CascadeType.REFRESH, CascadeType.DETACH})
+    @JoinColumn(name = "mansion_id")
+    private Mansion mansion;
+
+    @ManyToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+    @JoinColumn(name = "boat_exter_id", referencedColumnName = "id", nullable = true)
+    private Boat boatExter;
+
+    @ManyToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+    @JoinColumn(name = "boat_inter_id", referencedColumnName = "id", nullable = true)
+    private Boat boatInter;
+
+
+
     public void saveImage() {
         String imageString = img.split(",")[1];
         BufferedImage imageDone = null;
@@ -51,13 +65,7 @@ public class Image {
         img = imagePathName;
         }
 
-    @ManyToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
-    @JoinColumn(name = "boat_exter_id", referencedColumnName = "id", nullable = true)
-    private Boat boatExter;
 
-    @ManyToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
-    @JoinColumn(name = "boat_inter_id", referencedColumnName = "id", nullable = true)
-    private Boat boatInter;
 
     public Boat getBoat() {
         return boat;

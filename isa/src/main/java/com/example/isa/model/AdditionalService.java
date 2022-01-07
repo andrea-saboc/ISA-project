@@ -20,7 +20,7 @@ import javax.persistence.Table;
 public class AdditionalService {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "available_period_id")
+    @Column(name = "id")
     private Long id;
 
     private String name;
@@ -29,17 +29,16 @@ public class AdditionalService {
     @ManyToOne
     @JoinColumn(name = "boat_id", referencedColumnName = "id", nullable = true)
     private Boat boat;
-    
 
-    /*
-    @ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
-    @JoinColumn(name = "boat_res_id", referencedColumnName = "id", nullable = true)
-    private Set<BoatReservation> boatReservations = new HashSet<BoatReservation>();
-    
-    public void addReservation(BoatReservation newRes){
-    	boatReservations.add(newRes);
-    }
-    */
+    @ManyToOne
+    @JoinColumn(name = "mansion_id", referencedColumnName = "id", nullable = true)
+    private Mansion mansion;
+
+
+    @ManyToMany
+    private Set<Reservation> boatReservations = new HashSet<Reservation>();
+
+
     
 	public AdditionalService(){}
 
