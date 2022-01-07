@@ -21,11 +21,11 @@ public class BoatService {
 	@Autowired
 	private BoatOwnerRepository boatOwnerRepository;
 	@Autowired
-	private AvailablePeriodRepository availablePeriodRepository;
+	private BoatAvailablePeriodRepository availablePeriodRepository;
 	@Autowired
 	private AdditionalServiceRepository additionalServiceRepository;
 
-	public BoatService(BoatsRepository br, ImageRepository ir, BoatOwnerRepository bor, AvailablePeriodRepository apr, AdditionalServiceRepository additionalServiceRepository){
+	public BoatService(BoatsRepository br, ImageRepository ir, BoatOwnerRepository bor, BoatAvailablePeriodRepository apr, AdditionalServiceRepository additionalServiceRepository){
 		this.boatsRepository = br;
 		this.imageRepository = ir;
 		this.boatOwnerRepository = bor;

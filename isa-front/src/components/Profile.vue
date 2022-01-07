@@ -185,12 +185,12 @@ export default{
          axios
          .post('http://localhost:8080/updateUser',this.user)
          .then(response => {
-            alert('user is updated')
+            console.log(response.data)
          });
       },
       ChangePassword(){
          
-         if(this.oldPassword === user.password && this.newPassword === this.newPasswordRepeated){
+         if(this.oldPassword === this.user.password && this.newPassword === this.newPasswordRepeated){
             this.user.password = this.newPassword;
             this.UpdateUser();
          }
@@ -204,7 +204,7 @@ export default{
          }
       })
          .then(response => {
-            alert('submited')
+            console.log(response.data)
       });
 
       }

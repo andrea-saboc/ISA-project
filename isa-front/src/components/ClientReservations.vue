@@ -6,16 +6,17 @@
             <button class="btn btn-primary" v-on:click=DisplayCurrentReservations>Active reservations</button>
          </div>
          <div v-if="display == 'current'">
-            <div  v-for="res in currentReservations">
+            <div  v-for="res in currentReservations"  :key="res">
                <div class="card text-dark bg-light mt-3">
                   <div class="card-header h4">
-                     {{}}
+                     {{res.reservationType}},{{res.entityName}},{{res.entityAddress}}
                   </div>
                   <div class="card-body">
-                     <label>Start date: {{res.startDate}}.</label>
-                     <label>Number of days: {{res.durationInDays}}.</label>
-                     <label>Number of guests: {{res.numberOfClients}}.</label>
-                     <div><button class="btn btn-danger" v-on:click="CancelReservation()">Cancel reservation</button></div>
+                     <label>Start date: {{res.startDate}}.</label><br>
+                     <label>End date: {{res.endDate}}.</label><br>
+                     <label>Number of guests: {{res.numberOfGuests}}.</label><br>
+                     <label>Total price: {{res.totalPrice}}.</label>
+                     <div v-if="res.allowedCancelation"><button class="btn btn-danger" v-on:click="CancelReservation(res)">Cancel reservation</button></div>
                   </div>
                </div>
             </div>
@@ -46,7 +47,7 @@
                     <li><button class="dropdown-item" v-on:click=SortByDuration>Duration</button></li>
                   </ul>
                </div>
-               <button class = "btn btn-primary" v-on:click=sortReservations>Sort</button>
+               <button class = "btn btn-primary" v-on:click=SortReservations>Sort</button>
             </div>
 
 
@@ -55,7 +56,7 @@
 
 
             <div v-if="displayPastReservations == 'mansions'">
-               <div v-for="res in pastBoatReservations">
+               <div v-for="res in pastBoatReservations" :key="res">
                   <div class="text-dark bg-light mt-3">
                      <div class="card-header h4">
                         {{res.mansion.name}}
@@ -98,7 +99,7 @@
 
 
             <div v-if="displayPastReservations == 'boats'">
-               <div v-for="res in pastBoatReservations">
+               <div v-for="res in pastBoatReservations" :key="res">
                   <div class="text-dark bg-light mt-3">
                      <div class="card-header h4">
                         {{res.boat.name}}
@@ -142,7 +143,7 @@
 
 
             <div v-if="displayPastReservations == 'adventures'">
-               <div v-for="res in pastAdventureReservations">
+               <div v-for="res in pastAdventureReservations" :key="res">
                   <div class="text-dark bg-light mt-3">
                      <div class="card-header h4">
                         Naziv vikendice
@@ -171,14 +172,9 @@
 
 <script>
 import axios from 'axios'
-import Mansions from './Mansions.vue'
-import Boats from './Boats.vue'
-import Adventures from './Adventures.vue'
 
 export default {
   name: 'clientReservations',
-  components: { Mansions, Boats, Adventures
-  },
   data: function(){
       return{
 
@@ -204,69 +200,82 @@ export default {
       }
   },
   mounted(){
-       axios
-         .get('http://localhost:8080/reservations')
-         .then(response => {
-            this.currentReservations = response.data
-            console.log(response.data)
-          });
+     this.LoadReservations()
+  },
+  methods:{
 
-      axios
-         .get('http://localhost:8080/reservations/mansions')
+   LoadReservations(){
+         axios
+         .get('http://localhost:8080/reservations',{
+            headers: {
+               'Authorization' : this.$store.getters.tokenString
+            }
+         })
          .then(response => {
-            this.pastMansionReservations = response.data
-            console.log(response.data)
-          });
-      
-      axios
+            this.currentReservations = response.data       
+      });
+
+   },
+    DisplayMansions(){  
+      console.log('showing mansions')     
+      this.displayPastReservations = 'mansions'
+    },
+    DisplayBoats(){ 
+
+       axios
          .get('http://localhost:8080/reservations/boats',{
             headers: {
                'Authorization' : this.$store.getters.tokenString
             }
          })
          .then(response => {
-            this.pastBoatReservations = response.data       
-      });
-
-  },
-  methods:{
-    DisplayMansions(){  
-      console.log('showing mansions')     
-      this.displayPastReservations = 'mansions'
-    },
-    DisplayBoats(){ 
-      console.log('showing boats')  
+            this.pastBoatReservations = response.data
+            console.log(response.data)
+          });
       this.displayPastReservations = 'boats'
     },
     DisplayAdventures(){
       this.displayPastReservations = 'adventures'
     },
     DisplayPastReservations(){
+         axios
+         .get('http://localhost:8080/reservations/mansions',{
+            headers: {
+               'Authorization' : this.$store.getters.tokenString
+            }
+         })
+         .then(response => {
+            this.pastMansionReservations = response.data
+            console.log(response.data)
+          });
+       
         this.display = 'past'
     },
     DisplayCurrentReservations(){
+ 
       this.display = 'current'
     },
-    ShowFeedbackBox(res){
-      this.givingFeedback = res;
-    },
-    CancelGivingFeedback(res){
+
+    CancelGivingFeedback(){
       this.givingFeedback = 'None';
     },
     SubmitFeedback(){
-
+       console.log('submit')
     },
     SortByDate(){
-      this.sortReservations = 'Date'
+       alert('rijesi prob')
+      //this.sortReservations = 'Date'
     },
     SortByPrice(){
-      this.sortReservations = 'Price'
+              alert('rijesi prob')
+      //this.sortReservations = 'Price'
     },
     SortByDuration(){
-      this.sortReservations = 'Duration'
+              alert('rijesi prob')
+      //this.sortReservations = 'Duration'
     },
-    sortReservations(){
-
+    SortReservations(){
+       console.log('sort res..')
     },    
 
 
@@ -292,7 +301,9 @@ export default {
       { url ='http://localhost:8080/feedbacks/addMansionOwnerFeedback'}
       else if (this.displayPastReservations == 'boats')
       { url ='http://localhost:8080/feedbacks/addBoatOwnerFeedback'}
-      else{}
+      else{
+         console.log('adventures..')
+      }
        
          console.log(feedback)
           axios
@@ -303,7 +314,7 @@ export default {
          }
       })
          .then(response => {
-            alert('submited')
+            console.log(response.data)
             this.ownerFeedbackGrade='';
             this.ownerFeedbackContent='';
             this.$router.go(0);
@@ -321,7 +332,7 @@ export default {
       { url ='http://localhost:8080/feedbacks/addMansionFeedback'}
       else if (this.displayPastReservations == 'boats')
       { url ='http://localhost:8080/feedbacks/addBoatFeedback'}
-      else{}
+      else{          console.log('adventures..')}
        
          console.log(feedback)
           axios
@@ -332,12 +343,30 @@ export default {
          }
       })
          .then(response => {
-            alert('submited')
+            console.log
+            alert(response.data)
             this.feedbackContent='';
             this.feedbackGrade='';
             this.$router.go(0);
       });
 
+
+    },
+    CancelReservation(res){
+
+         var url=''
+         if(res.reservationType == 'BOAT'){url ='http://localhost:8080/reservations/cancelBoatReservation' }
+         axios
+         .post(url,res.reservationId,{
+         headers: {
+         'Authorization' : this.$store.getters.tokenString,
+         'Content-Type': 'application/json'
+         }
+      })
+         .then(response => {
+            this.LoadReservations()
+            console.log(response.data)
+      });
 
     }
 

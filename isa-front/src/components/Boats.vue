@@ -22,10 +22,13 @@
               <label class="form-control">Select start time:</label><input v-model="reservationForm.startTime" class="form-control" placeholder="Select time" type="time" id="example"><br>
             </div>
             <div class="input-group input-group-lg">
-              <label class="form-control">Number of days:</label><input v-model="reservationForm.numberOfDays" class="form-control" type="number"><br>
+              <label class="form-control">Number of days:</label><input v-model="reservationForm.numberOfDays" class="form-control" type="number" min="0"><br>
             </div>
             <div class="input-group input-group-lg">
-              <label class="form-control">Number of guests:</label><input v-model="reservationForm.numberOfGuests" class="form-control" type="number"><br>
+              <label class="form-control">Number of hours:</label><input v-model="reservationForm.numberOfHours" class="form-control" type="number" min="2"><br>
+            </div>
+            <div class="input-group input-group-lg">
+              <label class="form-control">Number of guests:</label><input v-model="reservationForm.numberOfGuests" class="form-control" type="number" min="1"><br>
             </div>
             <br>
             <label>Optional:</label><br>
@@ -91,16 +94,18 @@
                     <p class="card-text">{{value.promoDescription}}</p>
                     <p class="card-text"><small class="text-muted">{{value.address}}</small></p>
                   </div>
+
                   <div class="bg-light p-3 text-left" v-if="makingReservation">
-                    <p class="card-text">Price: 150</p>
+                    <p class="card-text">Price: {{value.totalPrice}}</p>
                     <p class="card-text">Average grade: {{value.avgGrade}}</p>
+                    <p class="card-text">Cancellation policy: {{value.cancellationPolicy}}</p>
                     <p>Add additional services to your reservation: </p>
 
-                    <div v-for="(s,index) in additionalServices"
+                    <div v-for="(s,index) in value.additionalServices"
                          :key="index">
                       <div class="custom-control custom-checkbox mb-3">
-                        <input type="checkbox" class="custom-control-input" :id="value.name+index" required>
-                        <label class="custom-control-label" :for="value.name+index">{{s.name}}</label>
+                        <input type="checkbox" class="custom-control-input" :id="value.boatId+index" required>
+                        <label class="custom-control-label" :for="value.boatId+index">{{s}}</label>
                       </div>
                     </div>
 
@@ -202,6 +207,7 @@ export default{
                'startTime': '',
                'numberOfGuests': '',
                'numberOfDays': '',
+               'numberOfHours': '',
                'location': '',
                'grade': '',
 
@@ -258,17 +264,16 @@ export default{
         SearchForReservations(){
 
            this.makingReservation = true;
-
-           console.log(this.reservationForm.startDate)
-           console.log(this.reservationForm.startTime)
             axios
-            .post('http://localhost:8080/reservations/availableBoats',this.reservationForm, {
+            .post(devServer.proxy+ '/reservations/availableBoats',this.reservationForm, {
               headers: {
-                'Authorization' : this.$store.getters.tokenString
+                'Authorization' : this.$store.getters.tokenString,
+                'Content-Type': 'application/json'
               }
             })
             .then(response => {
-               this.boats = response.data
+              console.log(response.data)
+              this.boats = response.data
             });
         },
      showboat(value){
@@ -291,29 +296,24 @@ export default{
     MakeBoatReservation(b){
 
        var boatReservation ={
-          boatId : b.id,
+          boatId : b.boatId,
           additionalServices :[],
           numberOfGuests: this.reservationForm.numberOfGuests,
           price: 500,
           startDate: this.reservationForm.startDate,
           startTime: this.reservationForm.startTime,
-          numberOfDays: this.reservationForm.numberOfDays
+          numberOfDays: this.reservationForm.numberOfDays,
+          numberOfHours: this.reservationForm.numberOfHours
        }
 
+      /*
+      for(let index of b.additinalServicesId){
+        var name = document.getElementById(b.boatId+index).checked;
+        alert(name)
+        //if(name == true) {boatReservation.additionalServices.push(index)}
+      }
+      */
       console.log(boatReservation)
-
-
-      var id = '#'+b.name+'2'
-      alert(id)
-
-       /*if ($(id).is(":checked"))
-         {
-         alert('checkovan')
-         }
-         boatReservation.additionalServices.push(1);
-
-         console.log(boatReservation)
-
          axios
          .post('http://localhost:8080/reservations/createBoatReservation',boatReservation,{
          headers: {
@@ -323,7 +323,7 @@ export default{
       })
          .then(response => {
             alert('submited', response)
-      });*/
+      });
 
 
     }

@@ -1,15 +1,19 @@
 package com.example.isa.model;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-
-import javax.persistence.*;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "AdditionalService")
@@ -25,8 +29,19 @@ public class AdditionalService {
     @ManyToOne
     @JoinColumn(name = "boat_id", referencedColumnName = "id", nullable = true)
     private Boat boat;
+    
 
-    public AdditionalService(){}
+    /*
+    @ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+    @JoinColumn(name = "boat_res_id", referencedColumnName = "id", nullable = true)
+    private Set<BoatReservation> boatReservations = new HashSet<BoatReservation>();
+    
+    public void addReservation(BoatReservation newRes){
+    	boatReservations.add(newRes);
+    }
+    */
+    
+	public AdditionalService(){}
 
     public AdditionalService(String name, double pricePerDay, double pricePerHour, Boat boat) {
         this.name = name;

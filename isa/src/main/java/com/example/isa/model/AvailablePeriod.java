@@ -17,15 +17,16 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "AvailablePeriod")
+@Table(name = "BoatAvailablePeriod")
 public class AvailablePeriod {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "available_period_id")
     private Long id;
-    
+    @Column(name = "start_date")    
 	private Date startDate;
+    @Column(name = "end_date")
 	private Date endDate;
 
 	

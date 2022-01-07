@@ -15,7 +15,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.example.isa.constants.AvailablePeriodConstants;
 import com.example.isa.model.Boat;
-import com.example.isa.repository.AvailablePeriodRepository;
+import com.example.isa.repository.BoatAvailablePeriodRepository;
 import com.example.isa.repository.BoatRepository;
 
 
@@ -26,7 +26,7 @@ import com.example.isa.repository.BoatRepository;
 public class ReservationSuggestionServiceTest {
 
 	@Mock
-	AvailablePeriodRepository periodsRepository;
+	BoatAvailablePeriodRepository periodsRepository;
 	
 	@Mock
 	BoatRepository boatRepository;
