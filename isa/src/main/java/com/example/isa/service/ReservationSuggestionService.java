@@ -10,9 +10,12 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.isa.dto.PotentialReservationDTO;
 import com.example.isa.dto.ReservationSearchDTO;
+import com.example.isa.model.AdditionalService;
 import com.example.isa.model.AvailablePeriod;
 import com.example.isa.model.Boat;
+import com.example.isa.repository.AdditionalServiceRepository;
 import com.example.isa.repository.BoatAvailablePeriodRepository;
 import com.example.isa.repository.BoatRepository;
 
@@ -24,8 +27,10 @@ public class ReservationSuggestionService {
 	BoatRepository boatRepository;
 	@Autowired
 	BoatAvailablePeriodRepository periodsRepository;
-
-	public List<Boat> getAvailableBoats(ReservationSearchDTO formParams){
+	@Autowired
+	AdditionalServiceRepository additionalServicesRepository;
+	
+	public List<PotentialReservationDTO> getAvailableBoats(ReservationSearchDTO formParams){
 			
 	String sDate = formParams.getStartDate()+" "+formParams.getStartTime();
 	System.out.println(sDate);
@@ -38,11 +43,11 @@ public class ReservationSuggestionService {
         Calendar cal = Calendar.getInstance();
         cal.setTime(startDate);
  
-        // add 1 days to current day
-        cal.add(Calendar.DAY_OF_MONTH, formParams.getNumberOfDays()); 
+        cal.add(Calendar.DAY_OF_MONTH, formParams.getNumberOfDays());
+        cal.add(Calendar.HOUR, formParams.getNumberOfHours()); 
         Date endDate = cal.getTime();
         System.out.println("Adding days to start date: "+endDate);
-	    return getAvailableBoatsBetweenDates(startDate,endDate);
+	    return createPotentialReservations(getAvailableBoatsBetweenDates(startDate,endDate));
 	    
 		} catch (ParseException e) {
 		System.out.println("PUČE!");
@@ -50,6 +55,29 @@ public class ReservationSuggestionService {
 		}
 			
 	return null;
+	}
+	
+	public List<PotentialReservationDTO> createPotentialReservations(List<Boat> boats){
+		System.out.println("USLI U PRAVLJENJE RES..");
+		List<PotentialReservationDTO> ret = new ArrayList<PotentialReservationDTO>();
+		for(Boat b : boats) {
+			
+			List<String> services = new ArrayList<String>();
+			List<Long> servicesId = new ArrayList<Long>();
+			
+			for(AdditionalService a: additionalServicesRepository.findAllByBoat(b)) {
+				
+				String serviceInfo = a.getName() + " ( Price per hour: "+a.getPricePerHour()+ ". Price per day: "+a.getPricePerDay()+" ).";
+				services.add(serviceInfo);
+				System.out.println(serviceInfo);
+				servicesId.add(a.getId());
+			}
+			
+			ret.add(new PotentialReservationDTO(b.getId(), b.getName(), b.getPromoDescription(), b.getAvgGrade(), b.getCapacity(),
+					b.getCancellationPolicy(), b.getPricePerHour(), b.getPricePerDay(),10.00,
+					services, servicesId));
+		}
+		return ret;
 	}
 	
 	public List<Boat> FilterByLocationAndAvgGrade(String location, float avgGrade,List<Boat> boats){

@@ -5,24 +5,26 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.example.isa.dto.BoatReservationDTO;
+import com.example.isa.model.AdditionalService;
 import com.example.isa.model.AvailablePeriod;
 import com.example.isa.model.Boat;
 import com.example.isa.model.BoatReservation;
 import com.example.isa.model.MansionReservation;
 import com.example.isa.model.Reservation;
 import com.example.isa.model.User;
+import com.example.isa.repository.AdditionalServiceRepository;
 import com.example.isa.repository.BoatAvailablePeriodRepository;
 import com.example.isa.repository.BoatRepository;
 import com.example.isa.repository.BoatReservationRepository;
-import com.example.isa.repository.MansionReservationRepository;
-import com.example.isa.repository.UserRepository;
 
 @Service
 public class BoatReservationService {
@@ -33,6 +35,8 @@ public class BoatReservationService {
 	BoatRepository boatRepo;
 	@Autowired
 	BoatAvailablePeriodRepository availablePeriodsRepo;
+	@Autowired
+	AdditionalServiceRepository additinalServicesRepo;
 	
 	public Iterable<BoatReservation> GetBoatReservationHistory(User u){
 		return boatReservationRepo.findAllByUser(u);
@@ -59,7 +63,8 @@ public class BoatReservationService {
 			Date startDate=formatter.parse(sDate);			
 	        Calendar cal = Calendar.getInstance();
 	        cal.setTime(startDate);
-	        cal.add(Calendar.DAY_OF_MONTH, res.getNumberOfDays()); 
+	        cal.add(Calendar.DAY_OF_MONTH, res.getNumberOfDays());
+	        cal.add(Calendar.HOUR, res.getNumberOfHours()); 
 	        Date endDate = cal.getTime();
 	                
 	        System.out.println("Adding days to start date: "+endDate);
@@ -77,8 +82,14 @@ public class BoatReservationService {
 	        	AvailablePeriod periodAfter = new AvailablePeriod(endDate,period.getEndDate(),period.getBoat());
 	        	availablePeriodsRepo.save(periodAfter);
 	        }
+	        /*
+	        Set<AdditionalService> services = new HashSet<AdditionalService>();
+	        for(long id : res.getAdditionalServices()) {
+	        	newBoatReservation.addService(additinalServicesRepo.findById(id).orElse(null));
+	        }
 	        
 	        
+	        */
 	        availablePeriodsRepo.delete(period);
 		    return boatReservationRepo.save(newBoatReservation);
 		    

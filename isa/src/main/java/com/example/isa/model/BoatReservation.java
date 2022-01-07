@@ -9,7 +9,7 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 
 @Entity
@@ -28,9 +28,16 @@ public class BoatReservation extends Reservation{
 	@JoinColumn(name = "owner_feedback_id")
 	private ClientFeedback boatOwnerFeedback;
 	
+/*
+	@ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER, mappedBy = "additional_service")
+	public Set<AdditionalService> additionalServices = new HashSet<AdditionalService>();
 
+	public void addService(AdditionalService service){
+		//service.addReservation(this);
+		additionalServices.add(service);
+	}
+	*/
 	
-
 	public BoatReservation(User user, Date startDate, Date endDate, int numberOfGuests, double totalPrice,
 			Boat boat) {
 		super("BOAT", user, startDate, endDate, numberOfGuests, totalPrice);

@@ -1,6 +1,7 @@
 package com.example.isa.model;
 
 import java.util.Date;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
@@ -12,6 +13,8 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -39,6 +42,7 @@ public class Reservation {
 	private Date endDate;
 	private int numberOfGuests;
 	private double totalPrice;
+	
 		
 	public Reservation(String type, User user, Date startDate, Date endDate, int numberOfGuests,double totalPrice) {
 		super();

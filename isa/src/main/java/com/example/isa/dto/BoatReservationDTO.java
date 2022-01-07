@@ -12,6 +12,7 @@ public class BoatReservationDTO {
 	private String startDate;
 	private String startTime;
 	private int numberOfDays;
+	private int numberOfHours;
 	
 	
 	public long getBoatId() {
@@ -56,8 +57,17 @@ public class BoatReservationDTO {
 	public void setNumberOfDays(int numberOfDays) {
 		this.numberOfDays = numberOfDays;
 	}
+
+	
+	public BoatReservationDTO() {}
+	public int getNumberOfHours() {
+		return numberOfHours;
+	}
+	public void setNumberOfHours(int numberOfHours) {
+		this.numberOfHours = numberOfHours;
+	}
 	public BoatReservationDTO(long boatId, List<Long> additionalServices, int numberOfGuests, double price,
-			String startDate, String startTime, int numberOfDays) {
+			String startDate, String startTime, int numberOfDays, int numberOfHours) {
 		super();
 		this.boatId = boatId;
 		this.additionalServices = additionalServices;
@@ -66,7 +76,8 @@ public class BoatReservationDTO {
 		this.startDate = startDate;
 		this.startTime = startTime;
 		this.numberOfDays = numberOfDays;
+		this.numberOfHours = numberOfHours;
 	}
 	
-	public BoatReservationDTO() {}
+	
 }

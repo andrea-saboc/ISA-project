@@ -15,11 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.isa.dto.ActiveReservationDTO;
 import com.example.isa.dto.BoatReservationDTO;
+import com.example.isa.dto.PotentialReservationDTO;
 import com.example.isa.dto.ReservationSearchDTO;
-import com.example.isa.model.Boat;
 import com.example.isa.model.BoatReservation;
 import com.example.isa.model.MansionReservation;
-import com.example.isa.model.Reservation;
 import com.example.isa.model.User;
 import com.example.isa.repository.BoatRepository;
 import com.example.isa.repository.ClientRepository;
@@ -84,7 +83,7 @@ public class ClientReservationController {
         
     @RequestMapping(method = RequestMethod.POST,value = "/reservations/availableBoats", produces = MediaType.APPLICATION_JSON_VALUE)
     @CrossOrigin(origins = "*")
-    public ResponseEntity<Iterable<Boat>> getAvailableBoats(@RequestBody ReservationSearchDTO search){
+    public ResponseEntity<List<PotentialReservationDTO>> getAvailableBoats(@RequestBody ReservationSearchDTO search){
     	
     	System.out.println("USli u kontroler");
         try {

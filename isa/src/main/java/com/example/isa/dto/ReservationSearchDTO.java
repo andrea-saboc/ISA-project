@@ -8,6 +8,7 @@ public class ReservationSearchDTO {
 	private String startTime;
 	private int numberOfClients;
 	private int numberOfDays;
+	private int numberOfHours;
 	private String location;
 	private float grade;
 	public String getStartDate() {
@@ -46,21 +47,27 @@ public class ReservationSearchDTO {
 	public void setGrade(float grade) {
 		this.grade = grade;
 	}
+
+	public int getNumberOfHours() {
+		return numberOfHours;
+	}
+	public void setNumberOfHours(int numberOfHours) {
+		this.numberOfHours = numberOfHours;
+	}
 	
+	public ReservationSearchDTO() {}
 	
 	public ReservationSearchDTO(String startDate, String startTime, int numberOfClients, int numberOfDays,
-			String location, float grade) {
+			int numberOfHours, String location, float grade) {
 		super();
 		this.startDate = startDate;
 		this.startTime = startTime;
 		this.numberOfClients = numberOfClients;
 		this.numberOfDays = numberOfDays;
+		this.numberOfHours = numberOfHours;
 		this.location = location;
 		this.grade = grade;
 	}
-	
-	public ReservationSearchDTO() {}
-
 
 	
 	
