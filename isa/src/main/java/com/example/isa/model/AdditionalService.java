@@ -25,7 +25,8 @@ public class AdditionalService {
     @ManyToOne
     @JoinColumn(name = "boat_id", referencedColumnName = "id", nullable = true)
     private Boat boat;
-
+    
+ 
     public AdditionalService(){}
 
     public AdditionalService(String name, double pricePerDay, double pricePerHour, Boat boat) {

@@ -123,8 +123,7 @@ public class BoatReservationService {
 			periodToAdd = new AvailablePeriod(res.getStartDate(),res.getEndDate(),res.getBoat());
 		
 		
-		availablePeriodsRepo.save(periodToAdd);
-		//availablePeriodsRepo.deleteById(availablePeriodsRepo.getPeriodOfInterest(res.getStartDate(), res.getEndDate()).getId());		
+		availablePeriodsRepo.save(periodToAdd);	
 		boatReservationRepo.deleteById(resId);
 		return null;
 	}

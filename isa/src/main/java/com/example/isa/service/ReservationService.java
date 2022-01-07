@@ -1,6 +1,8 @@
 package com.example.isa.service;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +49,14 @@ public class ReservationService {
 	
 	public boolean isCancellationAllowed(Reservation r) {
 		
-		return true;
+		Date reservationStart = r.getStartDate();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(reservationStart);
+        cal.add(Calendar.DAY_OF_MONTH, -3); 
+        
+        Date reservationDate = cal.getTime();       
+		Date todayDate = new Date();
+		return todayDate.before(reservationDate);
 	}
 
 }
