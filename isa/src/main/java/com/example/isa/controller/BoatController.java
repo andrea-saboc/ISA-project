@@ -30,7 +30,6 @@ public class BoatController {
 	public BoatController(BoatService bs){
 		this.service = bs;
 	}
-
 	@RequestMapping(method = RequestMethod.GET, value = "/boat",produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> getBoatById(@RequestParam Long id) throws JsonProcessingException{
 		System.out.println("We are searchinng for" +id);

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.isa.dto.BoatReservationDTO;
 import com.example.isa.dto.ReservationSearchDTO;
 import com.example.isa.model.Boat;
 import com.example.isa.model.BoatReservation;
@@ -40,6 +41,7 @@ public class ReservationController {
 	ClientRepository clients;
 	@Autowired
 	ReservationSuggestionService suggestionService;
+	
 	
 	
     @RequestMapping(method = RequestMethod.GET,value = "/reservations/boats", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -83,6 +85,19 @@ public class ReservationController {
     	System.out.println("USli u kontroler");
         try {
             return new ResponseEntity<>(suggestionService.getAvailableBoats(search), HttpStatus.OK);
+        } catch (Exception e){
+        	System.out.println(e);
+            return  new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    @RequestMapping(method = RequestMethod.POST,value = "/reservations/createBoatReservation", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @CrossOrigin(origins = "*")
+    public ResponseEntity<BoatReservation> createBoatReservation(@RequestBody BoatReservationDTO res){
+    	
+    	System.out.println("USli u kontroler");
+        try {
+            return new ResponseEntity<>(service.createBoatReservation(res), HttpStatus.OK);
         } catch (Exception e){
         	System.out.println(e);
             return  new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);

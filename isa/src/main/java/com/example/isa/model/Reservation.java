@@ -36,17 +36,18 @@ public class Reservation {
 	private User user;
 
 	private Date startDate;
-	private int durationInDays;
-	private int numberOfClients;
-	private float price;
+	private Date endDate;
+	private int numberOfGuests;
+	private double totalPrice;
 		
-	public Reservation(String type, User user, Date startDate, int durationInDays, int numberOfClients) {
+	public Reservation(String type, User user, Date startDate, Date endDate, int numberOfGuests,double totalPrice) {
 		super();
 		this.type = type;
 		this.user = user;
 		this.startDate = startDate;
-		this.durationInDays = durationInDays;
-		this.numberOfClients = numberOfClients;
+		this.endDate = endDate;
+		this.numberOfGuests = numberOfGuests;
+		this.totalPrice = totalPrice;
 	}
 	
 	
@@ -75,18 +76,7 @@ public class Reservation {
 	public void setStartDate(Date startDate) {
 		this.startDate = startDate;
 	}
-	public int getDurationInDays() {
-		return durationInDays;
-	}
-	public void setDurationInDays(int durationInDays) {
-		this.durationInDays = durationInDays;
-	}
-	public int getNumberOfClients() {
-		return numberOfClients;
-	}
-	public void setNumberOfClients(int numberOfClients) {
-		this.numberOfClients = numberOfClients;
-	}
+
 
 
 
@@ -102,17 +92,46 @@ public class Reservation {
 
 
 
-	public float getPrice() {
-		return price;
+	public Date getEndDate() {
+		return endDate;
 	}
 
 
 
 
-	public void setPrice(float price) {
-		this.price = price;
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
 	}
-	
+
+
+
+
+	public int getNumberOfGuests() {
+		return numberOfGuests;
+	}
+
+
+
+
+	public void setNumberOfGuests(int numberOfGuests) {
+		this.numberOfGuests = numberOfGuests;
+	}
+
+
+
+
+	public double getTotalPrice() {
+		return totalPrice;
+	}
+
+
+
+
+	public void setTotalPrice(double totalPrice) {
+		this.totalPrice = totalPrice;
+	}
+
+
 	
 	
 	

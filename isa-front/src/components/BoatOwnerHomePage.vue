@@ -11,7 +11,8 @@
         </button>
         <div class="collapse show" id="home-collapse">
           <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-            <li v-for="boat in boats"><a  v-on:click="DisplayBoat(boat.id)" class="link-dark rounded">{{boat.name}}</a></li>
+            <li v-for="boat in boats"
+                :key="boat.id"><a  v-on:click="DisplayBoat(boat.id)" class="link-dark rounded">{{boat.name}}</a></li>
           </ul>
         </div>
       </li>

@@ -46,8 +46,7 @@ public class Boat {
 	public Set<Image> ExteriorImages = new HashSet<Image>();
 	@ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER, mappedBy = "boat")
 	public Set<Rule> rules = new HashSet<Rule>();
-	@OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER, mappedBy = "boat")
-	public Set<AdditionalService> additionalServices = new HashSet<>();
+
 
 
 	public Boat(String ime_mi_je_brod, String neka_adresa, String promo_opis_moj, float v) {
@@ -258,11 +257,4 @@ public class Boat {
 		this.priceForSevenDays = priceForSevenDays;
 	}
 
-	public Set<AdditionalService> getAdditionalServices() {
-		return additionalServices;
-	}
-
-	public void setAdditionalServices(Set<AdditionalService> additionalServices) {
-		this.additionalServices = additionalServices;
-	}
 }

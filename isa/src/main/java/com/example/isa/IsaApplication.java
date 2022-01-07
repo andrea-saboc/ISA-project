@@ -67,22 +67,15 @@ public class IsaApplication extends SpringBootServletInitializer implements Comm
 
 		AdditionalService aservice1 = new AdditionalService("wifi", 12, 30, b1);
 		AdditionalService aservice2 = new AdditionalService("captain", 50, 100, b1);
-		Set<AdditionalService> additionalServices = new HashSet<>();
-		additionalServices.add(aservice1);
-		additionalServices.add(aservice2);
-
-		b1.setAdditionalServices(additionalServices);
-
 		AdditionalService aservice11 = new AdditionalService("champagne", 12, 30, b2);
 		AdditionalService aservice22 = new AdditionalService("bathroom", 50, 100, b2);
-		Set<AdditionalService> additionalServicess = new HashSet<>();
-		additionalServicess.add(aservice11);
-		additionalServicess.add(aservice22);
 
-		b2.setAdditionalServices(additionalServicess);
+		additionalServiceRepository.save(aservice1);
+		additionalServiceRepository.save(aservice2);
+		additionalServiceRepository.save(aservice11);
+		additionalServiceRepository.save(aservice22);
 
-		boatRepo.save(b1);
-		boatRepo.save(b2);		
+
 		
 		AvailablePeriod a1 = new AvailablePeriod(new GregorianCalendar(2022, Calendar.JANUARY, 1).getTime(),new GregorianCalendar(2022, Calendar.JANUARY, 10).getTime(),b1);
 		AvailablePeriod a2 = new AvailablePeriod(new GregorianCalendar(2022, Calendar.JANUARY, 20).getTime(),new GregorianCalendar(2022, Calendar.JANUARY, 28).getTime(),b1);
@@ -111,8 +104,8 @@ public class IsaApplication extends SpringBootServletInitializer implements Comm
 		c.setPassword(passwordEncoder.encode("igi"));
 		userRepo.save(c);
 		
-		repo.save(new BoatReservation(c, new Date(), 66, 77, b1));
-		repo.save(new BoatReservation(c, new Date(), 4444, 77, b2));
+		//repo.save(new BoatReservation(c, new Date(), 66, 77, b1));
+		//repo.save(new BoatReservation(c, new Date(), 4444, 77, b2));
 
 		
     	Iterable<BoatReservation> res = repo.findAllByUser(c);

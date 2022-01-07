@@ -45,8 +45,6 @@ public class BoatService {
 		Boat newBoat = createBoat(dto);
 		newBoat = boatsRepository.save(newBoat);
 		Set<AdditionalService> additionalServices = addBoatToServices(dto.additionalServices, newBoat);
-		newBoat.setAdditionalServices(additionalServices);
-		newBoat = boatsRepository.save(newBoat);
 		return newBoat;
     }
 
@@ -55,6 +53,7 @@ public class BoatService {
 		for (AdditionalService as: additionalServices) {
 			AdditionalService as1 = as;
 			as1.setBoat(boat);
+			additionalServiceRepository.save(as1);
 			additionalServiceWithBoat.add(as1);
 		}
 		return additionalServiceWithBoat;
@@ -131,6 +130,7 @@ public class BoatService {
 
 	public List<Boat> getByOwnerId() {
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		System.out.println("Trying to cast to User:"+ user);
 		BoatOwner boatOwner = boatOwnerRepository.findById(user.getId()).get();
 		List<Boat> ownersBoats = boatsRepository.findBoatByBoatOwner(boatOwner);
 		return ownersBoats;
