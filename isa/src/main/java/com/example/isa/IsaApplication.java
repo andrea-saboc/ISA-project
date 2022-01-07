@@ -35,7 +35,7 @@ public class IsaApplication extends SpringBootServletInitializer implements Comm
 	@Autowired
 	UserRepository userRepo;
 	@Autowired
-	AvailablePeriodRepository periodRepo;
+	BoatAvailablePeriodRepository periodRepo;
 	@Autowired
 	AddressRepository addressRepository;
 	@Autowired
@@ -113,7 +113,11 @@ public class IsaApplication extends SpringBootServletInitializer implements Comm
     	for(BoatReservation r: res){
     		System.out.println(r.getBoat().getName());
     	}
-
+    	
+    	//AvailablePeriod a =  periodRepo.getPeriodOfInterest(a1.getStartDate(),a1.getEndDate());
+    	
+    	System.out.println("Datum od interesa");
+    	//System.out.println(a.getEndDate().toString());
 
 	}
 	

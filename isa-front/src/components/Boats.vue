@@ -302,7 +302,7 @@ export default{
 
       console.log(boatReservation)
 
-
+      /*  
       var id = '#'+b.name+'2'
       alert(id)
 
@@ -312,8 +312,8 @@ export default{
          }
          boatReservation.additionalServices.push(1);
 
-         console.log(boatReservation)
-
+         alert(boatReservation)
+        */
          axios
          .post('http://localhost:8080/reservations/createBoatReservation',boatReservation,{
          headers: {
@@ -323,7 +323,7 @@ export default{
       })
          .then(response => {
             alert('submited', response)
-      });*/
+      });
 
 
     }

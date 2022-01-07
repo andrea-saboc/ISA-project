@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import com.example.isa.dto.ReservationSearchDTO;
 import com.example.isa.model.AvailablePeriod;
 import com.example.isa.model.Boat;
-import com.example.isa.repository.AvailablePeriodRepository;
+import com.example.isa.repository.BoatAvailablePeriodRepository;
 import com.example.isa.repository.BoatRepository;
 
 
@@ -23,7 +23,7 @@ public class ReservationSuggestionService {
 	@Autowired
 	BoatRepository boatRepository;
 	@Autowired
-	AvailablePeriodRepository periodsRepository;
+	BoatAvailablePeriodRepository periodsRepository;
 
 	public List<Boat> getAvailableBoats(ReservationSearchDTO formParams){
 			

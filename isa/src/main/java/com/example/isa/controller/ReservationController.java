@@ -22,7 +22,7 @@ import com.example.isa.model.Reservation;
 import com.example.isa.model.User;
 import com.example.isa.repository.BoatRepository;
 import com.example.isa.repository.ClientRepository;
-import com.example.isa.service.ReservationService;
+import com.example.isa.service.BoatReservationService;
 import com.example.isa.service.ReservationSuggestionService;
 import com.example.isa.service.implemented.UserService;
 
@@ -32,7 +32,7 @@ import com.example.isa.service.implemented.UserService;
 public class ReservationController {
 	
 	@Autowired 
-	ReservationService service;
+	BoatReservationService service;
 	@Autowired
 	UserService userService;	
 	@Autowired
