@@ -30,10 +30,6 @@ public class BoatReservationService {
 	@Autowired 
 	BoatReservationRepository boatReservationRepo;
 	@Autowired
-	MansionReservationRepository mansionReservationRepo;
-	@Autowired
-	UserRepository userRepo;
-	@Autowired
 	BoatRepository boatRepo;
 	@Autowired
 	BoatAvailablePeriodRepository availablePeriodsRepo;
@@ -43,7 +39,7 @@ public class BoatReservationService {
 	}
 	
 	public Iterable<MansionReservation> GetMansionReservationHistory(User u){
-		return mansionReservationRepo.findAllByUser(u);
+		return null;
 	}
 	
 	public List<Reservation> GetUserReservations(User u){
@@ -57,17 +53,12 @@ public class BoatReservationService {
 	public BoatReservation createBoatReservation(BoatReservationDTO res) {
 		
 		String sDate = res.getStartDate()+" "+res.getStartTime();
-		System.out.println(sDate);
-		
 		SimpleDateFormat formatter=new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		
 		try {
-			Date startDate=formatter.parse(sDate);
-			
+			Date startDate=formatter.parse(sDate);			
 	        Calendar cal = Calendar.getInstance();
 	        cal.setTime(startDate);
-	 
-	        // add 1 days to current day
 	        cal.add(Calendar.DAY_OF_MONTH, res.getNumberOfDays()); 
 	        Date endDate = cal.getTime();
 	                
@@ -77,10 +68,7 @@ public class BoatReservationService {
 					boatRepo.findById(res.getBoatId()).orElse(new Boat()));
 	        
 	        AvailablePeriod period = availablePeriodsRepo.getPeriodOfInterest(startDate, startDate);
-	        
-	        System.out.println("TRAZIM PERIOD ZA");
-	        System.out.println(startDate.toString());
-	        
+	         
 	        if(!period.getStartDate().equals(startDate)) {
 	        	AvailablePeriod periodBefore = new AvailablePeriod(period.getStartDate(),startDate,period.getBoat());
 	        	availablePeriodsRepo.save(periodBefore);
@@ -107,6 +95,28 @@ public class BoatReservationService {
 	public User getLoggedUser() {
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		return user;
+	}
+	
+	
+	public BoatReservation cancelBoatReservation(long resId) {
+		
+		BoatReservation res = boatReservationRepo.findById(resId);
+
+		AvailablePeriod periodBefore = availablePeriodsRepo.checkIfPeriodHasEndDate(res.getStartDate());
+		AvailablePeriod periodAfter = availablePeriodsRepo.checkIfPeriodHasStartDate(res.getEndDate());
+		
+		if(periodBefore!=null && periodAfter!=null)
+			availablePeriodsRepo.save(new AvailablePeriod(periodBefore.getStartDate(),periodAfter.getEndDate(),res.getBoat()));			
+		else if (periodBefore==null && periodAfter!=null)
+			availablePeriodsRepo.save(new AvailablePeriod(res.getStartDate(),periodAfter.getEndDate(),res.getBoat()));
+		else if (periodBefore!=null && periodAfter==null)
+			availablePeriodsRepo.save(new AvailablePeriod(periodBefore.getStartDate(),res.getEndDate(),res.getBoat()));
+		else 
+			availablePeriodsRepo.save(new AvailablePeriod(res.getStartDate(),res.getEndDate(),res.getBoat()));
+
+		availablePeriodsRepo.deleteById(availablePeriodsRepo.getPeriodOfInterest(res.getStartDate(), res.getEndDate()).getId());		
+		boatReservationRepo.deleteById(resId);
+		return null;
 	}
 	
 }

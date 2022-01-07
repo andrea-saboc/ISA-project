@@ -114,10 +114,11 @@ public class IsaApplication extends SpringBootServletInitializer implements Comm
     		System.out.println(r.getBoat().getName());
     	}
     	
-    	//AvailablePeriod a =  periodRepo.getPeriodOfInterest(a1.getStartDate(),a1.getEndDate());
+    	AvailablePeriod a =  periodRepo.checkIfPeriodHasStartDate(a2.getStartDate());
     	
-    	System.out.println("Datum od interesa");
-    	//System.out.println(a.getEndDate().toString());
+    	System.out.println("Da li ga nadjeee");
+    	if(a != null)
+    	System.out.println(a.getStartDate());
 
 	}
 	

@@ -13,9 +13,17 @@ import com.example.isa.model.Boat;
 public interface BoatAvailablePeriodRepository extends JpaRepository<AvailablePeriod, Long> {
     List<AvailablePeriod> findByBoat(Boat boat);
  
-    //"select a from Article a where a.creationDateTime <= :creationDateTime"  
-    //SELECT * FROM public.available_period WHERE start_date >= '2020-01-01' AND end_date < '2020-02-01';
+
     @Query(value = "SELECT available_period_id,start_date,end_date,boat_id FROM public.boat_available_period u WHERE u.start_date <= :startDate AND u.end_date >= :endDate",
     		nativeQuery = true)
     AvailablePeriod getPeriodOfInterest(@Param("startDate") Date startDate,@Param("endDate") Date endDate);
+    
+    
+    @Query(value = "SELECT available_period_id,start_date,end_date,boat_id FROM public.boat_available_period u WHERE u.end_date = :endDate",
+    		nativeQuery = true)   
+    AvailablePeriod checkIfPeriodHasEndDate(@Param("endDate") Date endDate);   
+    
+    @Query(value = "SELECT available_period_id,start_date,end_date,boat_id FROM public.boat_available_period u WHERE u.start_date = :startDate",
+    		nativeQuery = true)   
+    AvailablePeriod checkIfPeriodHasStartDate(@Param("startDate") Date startDate); 
 }
