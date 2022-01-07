@@ -22,13 +22,13 @@
               <label class="form-control">Select start time:</label><input v-model="reservationForm.startTime" class="form-control" placeholder="Select time" type="time" id="example"><br>
             </div>
             <div class="input-group input-group-lg">
-              <label class="form-control">Number of days:</label><input v-model="reservationForm.numberOfDays" class="form-control" type="number"><br>
+              <label class="form-control">Number of days:</label><input v-model="reservationForm.numberOfDays" class="form-control" type="number" min="0"><br>
             </div>
             <div class="input-group input-group-lg">
-              <label class="form-control">Number of hours:</label><input v-model="reservationForm.numberOfHours" class="form-control" type="number"><br>
+              <label class="form-control">Number of hours:</label><input v-model="reservationForm.numberOfHours" class="form-control" type="number" min="2"><br>
             </div>
             <div class="input-group input-group-lg">
-              <label class="form-control">Number of guests:</label><input v-model="reservationForm.numberOfGuests" class="form-control" type="number"><br>
+              <label class="form-control">Number of guests:</label><input v-model="reservationForm.numberOfGuests" class="form-control" type="number" min="1"><br>
             </div>
             <br>
             <label>Optional:</label><br>
@@ -306,11 +306,13 @@ export default{
           numberOfHours: this.reservationForm.numberOfHours
        }
 
-
+      /*
       for(let index of b.additinalServicesId){
         var name = document.getElementById(b.boatId+index).checked;
-        if(name == true) {boatReservation.additionalServices.push(index)}
+        alert(name)
+        //if(name == true) {boatReservation.additionalServices.push(index)}
       }
+      */
       console.log(boatReservation)
          axios
          .post('http://localhost:8080/reservations/createBoatReservation',boatReservation,{
