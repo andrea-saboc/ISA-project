@@ -1,4 +1,4 @@
-package com.example.isa.service;
+package com.example.isa.service.reservations;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

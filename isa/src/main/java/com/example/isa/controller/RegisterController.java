@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.isa.dto.AdvertiserRegistrationDTO;
 import com.example.isa.dto.ClientRegistrationDTO;
 import com.example.isa.service.AdvertiserRegisterService;
-import com.example.isa.service.implemented.ClientRegistrationService;
+import com.example.isa.service.ClientRegistrationService;
 
 @RestController
 @RequestMapping(value = "/register", produces = MediaType.APPLICATION_JSON_VALUE)

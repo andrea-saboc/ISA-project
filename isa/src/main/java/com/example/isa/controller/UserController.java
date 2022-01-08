@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.isa.model.Client;
 import com.example.isa.model.User;
-import com.example.isa.service.implemented.UserService;
+import com.example.isa.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 @RestController

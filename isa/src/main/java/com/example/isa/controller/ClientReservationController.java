@@ -23,12 +23,12 @@ import com.example.isa.model.MansionReservation;
 import com.example.isa.model.User;
 import com.example.isa.repository.BoatRepository;
 import com.example.isa.repository.ClientRepository;
-import com.example.isa.service.BoatReservationService;
-import com.example.isa.service.BoatReservationSuggestionService;
-import com.example.isa.service.MansionReservationService;
-import com.example.isa.service.MansionReservationSuggestionService;
-import com.example.isa.service.ReservationService;
-import com.example.isa.service.implemented.UserService;
+import com.example.isa.service.UserService;
+import com.example.isa.service.reservations.BoatReservationService;
+import com.example.isa.service.reservations.BoatReservationSuggestionService;
+import com.example.isa.service.reservations.MansionReservationService;
+import com.example.isa.service.reservations.MansionReservationSuggestionService;
+import com.example.isa.service.reservations.ReservationService;
 
 
 

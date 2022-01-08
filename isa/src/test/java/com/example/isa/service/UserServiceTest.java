@@ -19,7 +19,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.example.isa.model.Client;
 import com.example.isa.repository.ClientRepository;
-import com.example.isa.service.implemented.UserService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest

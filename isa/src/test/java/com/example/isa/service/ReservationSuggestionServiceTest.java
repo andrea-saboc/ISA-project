@@ -17,6 +17,7 @@ import com.example.isa.constants.AvailablePeriodConstants;
 import com.example.isa.model.Boat;
 import com.example.isa.repository.BoatAvailablePeriodRepository;
 import com.example.isa.repository.BoatRepository;
+import com.example.isa.service.reservations.BoatReservationSuggestionService;
 
 
 

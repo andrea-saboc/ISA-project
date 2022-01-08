@@ -1,5 +1,7 @@
-package com.example.isa.service;
+package com.example.isa.service.reservations;
 
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -45,7 +47,8 @@ public class ReservationService {
 		List<ActiveReservationDTO> ret = new ArrayList<ActiveReservationDTO>();
 		for(BoatReservation r: boatResRepo.findAllByUser(getLoggedUser())) {
 			
-			ret.add(new ActiveReservationDTO(r.getId(), r.getType(), r.getStartDate().toString(), r.getEndDate().toString(),
+			Format formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+			ret.add(new ActiveReservationDTO(r.getId(), r.getType(),formatter.format(r.getStartDate()),formatter.format(r.getEndDate()),
 					r.getNumberOfGuests(),null, r.getTotalPrice(),r.getBoat().getName(),
 					r.getBoat().getAddress().getCountry() + ", "+r.getBoat().getAddress().getCity()+", "+r.getBoat().getAddress().getAddress(),
 					r.getBoat().getPromoDescription(), isCancellationAllowed(r)));
@@ -57,7 +60,8 @@ public class ReservationService {
 		List<ActiveReservationDTO> ret = new ArrayList<ActiveReservationDTO>();
 		for(MansionReservation r: mansionResRepo.findAllByUser(getLoggedUser())) {
 			
-			ret.add(new ActiveReservationDTO(r.getId(), r.getType(), r.getStartDate().toString(), r.getEndDate().toString(),
+			Format formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+			ret.add(new ActiveReservationDTO(r.getId(), r.getType(), formatter.format(r.getStartDate()) ,formatter.format(r.getEndDate()),
 					r.getNumberOfGuests(),null, r.getTotalPrice(),r.getMansion().getName(),
 					r.getMansion().getAddress().getCountry() + ", "+r.getMansion().getAddress().getCity()+", "+r.getMansion().getAddress().getAddress(),
 					r.getMansion().getPromoDescription(), isCancellationAllowed(r)));

@@ -18,7 +18,7 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 import com.example.isa.security.RestAuthenticationEntryPoint;
 import com.example.isa.security.TokenAuthenticationFilter;
 import com.example.isa.security.TokenUtils;
-import com.example.isa.service.implemented.UserCredentialsService;
+import com.example.isa.service.UserCredentialsService;
 
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
