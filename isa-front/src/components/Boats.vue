@@ -278,13 +278,15 @@ export default {
                 numberOfHours: this.reservationForm.numberOfHours
             }
 
-            /*
+            
             for(let index of b.additinalServicesId){
-              var name = document.getElementById(b.boatId+index).checked;
-              alert(name)
-              //if(name == true) {boatReservation.additionalServices.push(index)}
+               let i=index-1
+              var name = document.getElementById(b.boatId+i).checked;
+              //alert(name)
+              //alert(b.boatId+i)
+              if(name == true) {boatReservation.additionalServices.push(index)}
             }
-            */
+            
             console.log(boatReservation)
             axios
                 .post(devServer.proxy + '/reservations/createBoatReservation', boatReservation, {

@@ -4,13 +4,16 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.example.isa.dto.ReservationDTO;
+import com.example.isa.model.AdditionalService;
 import com.example.isa.model.MansionAvailablePeriod;
 import com.example.isa.model.MansionReservation;
 import com.example.isa.model.User;
@@ -60,14 +63,13 @@ public class MansionReservationService {
 	        	MansionAvailablePeriod periodAfter = new MansionAvailablePeriod(endDate,period.getEndDate(),period.getMansion());
 	        	availablePeriodsRepo.save(periodAfter);
 	        }
-	        /*
-	        Set<AdditionalService> services = new HashSet<AdditionalService>();
+	        
+			Set<AdditionalService> services = new HashSet<AdditionalService>();
 	        for(long id : res.getAdditionalServices()) {
-	        	newBoatReservation.addService(additinalServicesRepo.findById(id).orElse(null));
+	        	services.add(additinalServicesRepo.findById(id).orElse(null));
 	        }
-	        
-	        
-	        */
+	        newBoatReservation.setAdditionalServices(services);
+			
 	        availablePeriodsRepo.delete(period);
 		    return mansionReservationRepo.save(newBoatReservation);
 		    

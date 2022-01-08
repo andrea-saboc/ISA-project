@@ -70,14 +70,14 @@ public class BoatReservationService {
 	        	BoatAvailablePeriod periodAfter = new BoatAvailablePeriod(endDate,period.getEndDate(),period.getBoat());
 	        	availablePeriodsRepo.save(periodAfter);
 	        }
-	        /*
+	        
 	        Set<AdditionalService> services = new HashSet<AdditionalService>();
 	        for(long id : res.getAdditionalServices()) {
-	        	newBoatReservation.addService(additinalServicesRepo.findById(id).orElse(null));
+	        	services.add(additinalServicesRepo.findById(id).orElse(null));
 	        }
+	        newBoatReservation.setAdditionalServices(services);
 	        
 	        
-	        */
 	        availablePeriodsRepo.delete(period);
 		    return boatReservationRepo.save(newBoatReservation);
 		    
