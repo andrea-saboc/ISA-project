@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.isa.dto.ActiveReservationDTO;
-import com.example.isa.dto.ReservationDTO;
 import com.example.isa.dto.PotentialBoatReservationDTO;
 import com.example.isa.dto.PotentialMansionReservationDTO;
+import com.example.isa.dto.ReservationDTO;
 import com.example.isa.dto.ReservationSearchDTO;
 import com.example.isa.model.BoatReservation;
 import com.example.isa.model.MansionReservation;
@@ -25,6 +25,7 @@ import com.example.isa.repository.BoatRepository;
 import com.example.isa.repository.ClientRepository;
 import com.example.isa.service.BoatReservationService;
 import com.example.isa.service.BoatReservationSuggestionService;
+import com.example.isa.service.MansionReservationService;
 import com.example.isa.service.MansionReservationSuggestionService;
 import com.example.isa.service.ReservationService;
 import com.example.isa.service.implemented.UserService;
@@ -36,6 +37,8 @@ public class ClientReservationController {
 	
 	@Autowired 
 	BoatReservationService boatResService;
+	@Autowired 
+	MansionReservationService mansionResService;
 	@Autowired
 	UserService userService;	
 	@Autowired
@@ -124,14 +127,39 @@ public class ClientReservationController {
         }
     }
     
+    @RequestMapping(method = RequestMethod.POST,value = "/reservations/createMansionReservation", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @CrossOrigin(origins = "*")
+    public ResponseEntity<MansionReservation> createMansionReservation(@RequestBody ReservationDTO res){
+    	
+    	System.out.println("USli u kontroler");
+        try {
+            return new ResponseEntity<>(mansionResService.createMansionReservation(res), HttpStatus.OK);
+        } catch (Exception e){
+        	System.out.println(e);
+            return  new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
 
     @RequestMapping(method = RequestMethod.POST,value = "/reservations/cancelBoatReservation", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @CrossOrigin(origins = "*")
-    public ResponseEntity<BoatReservation> cancelReservation(@RequestBody long  resId){
+    public ResponseEntity<BoatReservation> cancelBoatReservation(@RequestBody long  resId){
     	
     	System.out.println("USli u kontroler");
         try {
             return new ResponseEntity<>(boatResService.cancelBoatReservation(resId), HttpStatus.OK);
+        } catch (Exception e){
+        	System.out.println(e);
+            return  new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    @RequestMapping(method = RequestMethod.POST,value = "/reservations/cancelMansionReservation", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @CrossOrigin(origins = "*")
+    public ResponseEntity<MansionReservation> cancelMansionReservation(@RequestBody long  resId){
+    	
+        try {
+            return new ResponseEntity<>(mansionResService.cancelMansionReservation(resId), HttpStatus.OK);
         } catch (Exception e){
         	System.out.println(e);
             return  new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);

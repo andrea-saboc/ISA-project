@@ -82,27 +82,25 @@
                   <div v-on:click="ShowMansion(value)">
                     <h5 class="card-title">{{value.name}}</h5>
                     <p class="card-text">{{value.promoDescription}}</p>
-                    <p class="card-text"><small class="text-muted">{{value.address.address}},{{value.address.city}},{{value.address.country}}</small></p>
+                    <p v-if="!makingReservation" class="card-text"><small class="text-muted">{{value.address.address}},{{value.address.city}},{{value.address.country}}</small></p>
                   </div>
 
-                  <div class="bg-light p-3 text-left" v-if="makingReservation">
-                    <p class="card-text">Price: {{value.totalPrice}}</p>
-                    <p class="card-text">Average grade: {{value.avgGrade}}</p>
-                    <p class="card-text">Cancellation policy: {{value.cancellationPolicy}}</p>
+                    <div class="bg-light p-3 text-left" v-if="makingReservation">
+                    
                     <p>Add additional services to your reservation: </p>
-
                     <div v-for="(s,index) in value.additionalServices"
                          :key="index">
                       <div class="custom-control custom-checkbox mb-3">
-                        <input type="checkbox" class="custom-control-input" :id="value.boatId+index" required>
-                        <label class="custom-control-label" :for="value.boatId+index">{{s}}</label>
+                        <input type="checkbox" class="custom-control-input" :id="value.mansionId+index" required>
+                        <label class="custom-control-label" :for="value.mansionId+index">{{s}}</label>
                       </div>
                     </div>
 
+                     <button class="btn btn-primary" v-on:click=MakeMansionReservation(value)>Make a reservation</button>
 
-                    <button class="btn btn-primary" v-on:click=MakeMansionReservation
-                    (value)>Make a reservation</button>
                   </div>
+
+
                 </div>
               </div>
             </div>
@@ -117,26 +115,9 @@
                 <div class="card-body">
                   <h5 class="card-title">{{value.name}}</h5>
                   <p class="card-text">{{value.promoDescription}}</p>
-                    <p class="card-text"><small class="text-muted">{{value.address.address}},{{value.address.city}},{{value.address.country}}</small></p>
+                    <p v-if="!makingReservation" class="card-text"><small class="text-muted">{{value.address.address}},{{value.address.city}},{{value.address.country}}</small></p>
                  
-                                    <div class="bg-light p-3 text-left" v-if="makingReservation">
-                    <p class="card-text">Price: {{value.totalPrice}}</p>
-                    <p class="card-text">Average grade: {{value.avgGrade}}</p>
-                    <p class="card-text">Cancellation policy: {{value.cancellationPolicy}}</p>
-                    <p>Add additional services to your reservation: </p>
 
-                    <div v-for="(s,index) in value.additionalServices"
-                         :key="index">
-                      <div class="custom-control custom-checkbox mb-3">
-                        <input type="checkbox" class="custom-control-input" :id="value.boatId+index" required>
-                        <label class="custom-control-label" :for="value.boatId+index">{{s}}</label>
-                      </div>
-                    </div>
-
-
-                    <button class="btn btn-primary" v-on:click=MakeMansionReservation
-                    (value)>Make a reservation</button>
-                  </div>
                 </div>
               </div>
             </div>
@@ -257,7 +238,7 @@ export default{
         },
         SearchForReservations(){
 
-           this.makingReservation = true;
+            this.makingReservation = true;
             axios
             .post(devServer.proxy+ '/reservations/availableMansions',this.reservationForm, {
               headers: {
@@ -266,7 +247,9 @@ export default{
               }
             })
             .then(response => {
+              
               console.log(response.data)
+              alert('came back')
               this.mansions = response.data
             });
         },
@@ -286,7 +269,7 @@ export default{
     MakeMansionReservation(b){
 
        var mansionReservation ={
-          boatId : b.boatId,
+          entityId : b.mansionId,
           additionalServices :[],
           numberOfGuests: this.reservationForm.numberOfGuests,
           price: 500,
@@ -298,7 +281,7 @@ export default{
 
       /*
       for(let index of b.additinalServicesId){
-        var name = document.getElementById(b.boatId+index).checked;
+        var name = document.getElementById(b.mansionId+index).checked;
         alert(name)
         //if(name == true) {mansionReservation.additionalServices.push(index)}
       }

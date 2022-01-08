@@ -62,7 +62,7 @@ public class BoatReservationService {
 	        System.out.println("Adding days to start date: "+endDate);
 	        
 	        BoatReservation newBoatReservation = new BoatReservation(getLoggedUser(), startDate,endDate, res.getNumberOfGuests(), res.getPrice(),
-					boatRepo.findById(res.getBoatId()).orElse(new Boat()));
+					boatRepo.findById(res.getEntityId()).orElse(new Boat()));
 	        
 	        BoatAvailablePeriod period = availablePeriodsRepo.getPeriodOfInterest(startDate, startDate);
 	         

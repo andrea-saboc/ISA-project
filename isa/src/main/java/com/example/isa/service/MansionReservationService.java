@@ -47,7 +47,7 @@ public class MansionReservationService {
 	        System.out.println("Adding days to start date: "+endDate);
 	        
 	        MansionReservation newBoatReservation = new MansionReservation(getLoggedUser(),startDate, endDate, res.getNumberOfGuests(),
-	    			20.00, mansionRepo.findById(res.getBoatId()));
+	    			20.00, mansionRepo.findById(res.getEntityId()));
 	        
 	        MansionAvailablePeriod period = availablePeriodsRepo.getPeriodOfInterest(startDate, startDate);
 	         

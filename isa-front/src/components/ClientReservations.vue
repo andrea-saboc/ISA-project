@@ -201,6 +201,8 @@ export default {
   },
   mounted(){
      this.LoadReservations()
+     this.LoadMansionReservationHistory()
+     this.LoadBoatReservationHistory()
   },
   methods:{
 
@@ -216,29 +218,8 @@ export default {
       });
 
    },
-    DisplayMansions(){  
-      console.log('showing mansions')     
-      this.displayPastReservations = 'mansions'
-    },
-    DisplayBoats(){ 
-
-       axios
-         .get('http://localhost:8080/reservations/boats',{
-            headers: {
-               'Authorization' : this.$store.getters.tokenString
-            }
-         })
-         .then(response => {
-            this.pastBoatReservations = response.data
-            console.log(response.data)
-          });
-      this.displayPastReservations = 'boats'
-    },
-    DisplayAdventures(){
-      this.displayPastReservations = 'adventures'
-    },
-    DisplayPastReservations(){
-         axios
+   LoadMansionReservationHistory(){
+        axios
          .get('http://localhost:8080/reservations/mansions',{
             headers: {
                'Authorization' : this.$store.getters.tokenString
@@ -248,7 +229,32 @@ export default {
             this.pastMansionReservations = response.data
             console.log(response.data)
           });
-       
+   },
+   LoadBoatReservationHistory(){
+         axios
+         .get('http://localhost:8080/reservations/boats',{
+            headers: {
+               'Authorization' : this.$store.getters.tokenString
+            }
+         })
+         .then(response => {
+            this.pastBoatReservations = response.data
+            console.log(response.data)
+          });
+
+   },
+    DisplayMansions(){  
+      console.log('showing mansions')     
+      this.displayPastReservations = 'mansions'
+    },
+    DisplayBoats(){ 
+      this.displayPastReservations = 'boats'
+    },
+    DisplayAdventures(){
+      this.displayPastReservations = 'adventures'
+    },
+    DisplayPastReservations(){
+
         this.display = 'past'
     },
     DisplayCurrentReservations(){
@@ -263,16 +269,13 @@ export default {
        console.log('submit')
     },
     SortByDate(){
-       alert('rijesi prob')
-      //this.sortReservations = 'Date'
+      this.sortReservations = 'Date'
     },
     SortByPrice(){
-              alert('rijesi prob')
-      //this.sortReservations = 'Price'
+      this.sortReservations = 'Price'
     },
     SortByDuration(){
-              alert('rijesi prob')
-      //this.sortReservations = 'Duration'
+      this.sortReservations = 'Duration'
     },
     SortReservations(){
        console.log('sort res..')
@@ -328,10 +331,8 @@ export default {
 
        }
       var url=''
-      if(this.displayPastReservations == 'mansions')
-      { url ='http://localhost:8080/feedbacks/addMansionFeedback'}
-      else if (this.displayPastReservations == 'boats')
-      { url ='http://localhost:8080/feedbacks/addBoatFeedback'}
+      if(this.displayPastReservations == 'mansions'){ url ='http://localhost:8080/feedbacks/addMansionFeedback'}
+      if(this.displayPastReservations == 'boats'){ url ='http://localhost:8080/feedbacks/addBoatFeedback'}
       else{          console.log('adventures..')}
        
          console.log(feedback)
@@ -356,6 +357,7 @@ export default {
 
          var url=''
          if(res.reservationType == 'BOAT'){url ='http://localhost:8080/reservations/cancelBoatReservation' }
+         if(res.reservationType == 'MANSION'){url ='http://localhost:8080/reservations/cancelMansionReservation' }
          axios
          .post(url,res.reservationId,{
          headers: {

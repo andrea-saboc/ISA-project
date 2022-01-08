@@ -92,7 +92,7 @@
                   <div v-on:click="showboat(value)">
                     <h5 class="card-title">{{value.name}}</h5>
                     <p class="card-text">{{value.promoDescription}}</p>
-                    <p class="card-text"><small class="text-muted">{{value.address.address}},{{value.address.city}},{{value.address.country}}</small></p>
+                    <p v-if="!makingReservation" class="card-text"><small class="text-muted">{{value.address.address}},{{value.address.city}},{{value.address.country}}</small></p>
                   </div>
 
                   <div class="bg-light p-3 text-left" v-if="makingReservation">
@@ -126,7 +126,7 @@
                 <div class="card-body">
                   <h5 class="card-title">{{value.name}}</h5>
                   <p class="card-text">{{value.promoDescription}}</p>
-                    <p class="card-text"><small class="text-muted">{{value.address.address}},{{value.address.city}},{{value.address.country}}</small></p>
+                    <p v-if="!makingReservation" class="card-text"><small class="text-muted">{{value.address.address}},{{value.address.city}},{{value.address.country}}</small></p>
                  
                                     <div class="bg-light p-3 text-left" v-if="makingReservation">
                     <p class="card-text">Price: {{value.totalPrice}}</p>
@@ -292,7 +292,7 @@ export default{
     MakeBoatReservation(b){
 
        var boatReservation ={
-          boatId : b.boatId,
+          entityId : b.boatId,
           additionalServices :[],
           numberOfGuests: this.reservationForm.numberOfGuests,
           price: 500,
