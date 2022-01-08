@@ -5,7 +5,7 @@ import java.util.List;
 import com.example.isa.dto.AddAvailablePeriodDTO;
 import com.example.isa.dto.BoatRegistrationDTO;
 import com.example.isa.dto.LongIdDTO;
-import com.example.isa.model.AvailablePeriod;
+import com.example.isa.model.BoatAvailablePeriod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -78,9 +78,9 @@ public class BoatController {
 
 	@RequestMapping(method = RequestMethod.POST, value = "/getBoatAvailability", produces = MediaType.APPLICATION_JSON_VALUE)
 	@CrossOrigin(origins = "*")
-	public ResponseEntity<List<AvailablePeriod>> getAvailablePeriod(@RequestBody LongIdDTO dto) throws JsonProcessingException{
+	public ResponseEntity<List<BoatAvailablePeriod>> getAvailablePeriod(@RequestBody LongIdDTO dto) throws JsonProcessingException{
 		System.out.println("In getting availability for boats");
-		List<AvailablePeriod> boatAvailabilities = service.getBoatAvailbilities(dto.boatId);
+		List<BoatAvailablePeriod> boatAvailabilities = service.getBoatAvailbilities(dto.boatId);
 		ObjectMapper mapper = new ObjectMapper();
 		System.out.print("Before coverting" + boatAvailabilities.toString());
 		String jsonString = mapper.writeValueAsString(boatAvailabilities);
@@ -93,7 +93,7 @@ public class BoatController {
 	@CrossOrigin(origins = "*")
 	public ResponseEntity<String> addAvailablePeriodForBoat(@RequestBody AddAvailablePeriodDTO dto) throws JsonProcessingException{
 		System.out.println("Adding available period for boat!");
-		List<AvailablePeriod> boatAvailabilities = service.addBoatAvailabilities(dto);
+		List<BoatAvailablePeriod> boatAvailabilities = service.addBoatAvailabilities(dto);
 		ObjectMapper mapper = new ObjectMapper();
 		System.out.print("Before coverting" + boatAvailabilities.toString());
 		String jsonString = mapper.writeValueAsString(boatAvailabilities);

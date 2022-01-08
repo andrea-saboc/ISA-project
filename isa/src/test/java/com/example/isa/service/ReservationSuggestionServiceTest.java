@@ -32,7 +32,7 @@ public class ReservationSuggestionServiceTest {
 	BoatRepository boatRepository;
 	
 	@InjectMocks
-	private ReservationSuggestionService service;
+	private BoatReservationSuggestionService service;
 	
 	@Test
 	public void CheckDateRangeValid() {

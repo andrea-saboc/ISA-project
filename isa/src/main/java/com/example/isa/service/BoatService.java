@@ -136,17 +136,17 @@ public class BoatService {
 		return ownersBoats;
 	}
 
-	public List<AvailablePeriod> getBoatAvailbilities(Long boatId) {
+	public List<BoatAvailablePeriod> getBoatAvailbilities(Long boatId) {
 		Boat boat = boatsRepository.findById(boatId).get();
-		List<AvailablePeriod> boatAvailability = availablePeriodRepository.findByBoat(boat);
+		List<BoatAvailablePeriod> boatAvailability = availablePeriodRepository.findByBoat(boat);
 		return boatAvailability;
 	}
 
-	public List<AvailablePeriod> addBoatAvailabilities(AddAvailablePeriodDTO dto) {
+	public List<BoatAvailablePeriod> addBoatAvailabilities(AddAvailablePeriodDTO dto) {
 		Boat boat = boatsRepository.findById(dto.boatId).get();
-		AvailablePeriod availablePeriod = new AvailablePeriod(dto.startTime, dto.endTime, boat);
+		BoatAvailablePeriod availablePeriod = new BoatAvailablePeriod(dto.startTime, dto.endTime, boat);
 		availablePeriodRepository.save(availablePeriod);
-		List<AvailablePeriod> boatNewAvailability = availablePeriodRepository.findByBoat(boat);
+		List<BoatAvailablePeriod> boatNewAvailability = availablePeriodRepository.findByBoat(boat);
 		return boatNewAvailability;
 	}
 }

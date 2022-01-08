@@ -10,10 +10,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.isa.dto.PotentialReservationDTO;
+import com.example.isa.dto.PotentialBoatReservationDTO;
 import com.example.isa.dto.ReservationSearchDTO;
 import com.example.isa.model.AdditionalService;
-import com.example.isa.model.AvailablePeriod;
+import com.example.isa.model.BoatAvailablePeriod;
 import com.example.isa.model.Boat;
 import com.example.isa.repository.AdditionalServiceRepository;
 import com.example.isa.repository.BoatAvailablePeriodRepository;
@@ -21,7 +21,7 @@ import com.example.isa.repository.BoatRepository;
 
 
 @Service
-public class ReservationSuggestionService {
+public class BoatReservationSuggestionService {
 	
 	@Autowired
 	BoatRepository boatRepository;
@@ -30,7 +30,7 @@ public class ReservationSuggestionService {
 	@Autowired
 	AdditionalServiceRepository additionalServicesRepository;
 	
-	public List<PotentialReservationDTO> getAvailableBoats(ReservationSearchDTO formParams){
+	public List<PotentialBoatReservationDTO> getAvailableBoats(ReservationSearchDTO formParams){
 			
 	String sDate = formParams.getStartDate()+" "+formParams.getStartTime();
 	System.out.println(sDate);
@@ -57,9 +57,9 @@ public class ReservationSuggestionService {
 	return null;
 	}
 	
-	public List<PotentialReservationDTO> createPotentialReservations(List<Boat> boats){
+	public List<PotentialBoatReservationDTO> createPotentialReservations(List<Boat> boats){
 		System.out.println("USLI U PRAVLJENJE RES..");
-		List<PotentialReservationDTO> ret = new ArrayList<PotentialReservationDTO>();
+		List<PotentialBoatReservationDTO> ret = new ArrayList<PotentialBoatReservationDTO>();
 		for(Boat b : boats) {
 			
 			List<String> services = new ArrayList<String>();
@@ -73,7 +73,7 @@ public class ReservationSuggestionService {
 				servicesId.add(a.getId());
 			}
 			
-			ret.add(new PotentialReservationDTO(b.getId(), b.getName(), b.getPromoDescription(), b.getAvgGrade(), b.getCapacity(),
+			ret.add(new PotentialBoatReservationDTO(b.getId(), b.getName(), b.getPromoDescription(), b.getAvgGrade(), b.getCapacity(),
 					b.getCancellationPolicy(), b.getPricePerHour(), b.getPricePerDay(),10.00,
 					services, servicesId));
 		}
@@ -96,7 +96,7 @@ public class ReservationSuggestionService {
 		
 		List<Boat> ret = new ArrayList<Boat>();
 		
-		for(AvailablePeriod p: periodsRepository.findAll()) {
+		for(BoatAvailablePeriod p: periodsRepository.findAll()) {
 			
 			if(isDateInBetweenIncludingEndPoints(p.getStartDate(),p.getEndDate(),startDate) &&
 					isDateInBetweenIncludingEndPoints(p.getStartDate(),p.getEndDate(),endDate) &&

@@ -17,7 +17,6 @@ import com.example.isa.model.Mansion;
 import com.example.isa.model.MansionComplaint;
 import com.example.isa.model.MansionReservation;
 import com.example.isa.model.User;
-import com.example.isa.repository.BoatOwnerRepository;
 import com.example.isa.repository.BoatRepository;
 import com.example.isa.repository.BoatReservationRepository;
 import com.example.isa.repository.ClientRepository;
@@ -52,7 +51,7 @@ public class ClientComplaintService {
 	}
 	public Complaint addMansionComplaint(ClientComplaintDTO dto) {
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		return complaintRepository.save(new MansionComplaint(clientRepo.findByEmail(user.getEmail()), dto.getContent(),mansionRepository.findById(dto.getEntityId()).orElse(new Mansion())));
+		return complaintRepository.save(new MansionComplaint(clientRepo.findByEmail(user.getEmail()), dto.getContent(),mansionRepository.findById(dto.getEntityId())));
 	
 	}
 	public List<Boat> getBoats() {

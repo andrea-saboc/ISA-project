@@ -14,8 +14,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.isa.dto.ActiveReservationDTO;
-import com.example.isa.dto.BoatReservationDTO;
-import com.example.isa.dto.PotentialReservationDTO;
+import com.example.isa.dto.ReservationDTO;
+import com.example.isa.dto.PotentialBoatReservationDTO;
+import com.example.isa.dto.PotentialMansionReservationDTO;
 import com.example.isa.dto.ReservationSearchDTO;
 import com.example.isa.model.BoatReservation;
 import com.example.isa.model.MansionReservation;
@@ -23,8 +24,9 @@ import com.example.isa.model.User;
 import com.example.isa.repository.BoatRepository;
 import com.example.isa.repository.ClientRepository;
 import com.example.isa.service.BoatReservationService;
+import com.example.isa.service.BoatReservationSuggestionService;
+import com.example.isa.service.MansionReservationSuggestionService;
 import com.example.isa.service.ReservationService;
-import com.example.isa.service.ReservationSuggestionService;
 import com.example.isa.service.implemented.UserService;
 
 
@@ -41,7 +43,9 @@ public class ClientReservationController {
 	@Autowired
 	ClientRepository clients;
 	@Autowired
-	ReservationSuggestionService suggestionService;
+	BoatReservationSuggestionService boatSuggestionService;
+	@Autowired
+	MansionReservationSuggestionService mansionSuggestionService;
 	@Autowired
 	ReservationService reservationService;
 	
@@ -71,8 +75,6 @@ public class ClientReservationController {
     @CrossOrigin(origins = "*")
     public ResponseEntity<List<ActiveReservationDTO>> getUserReservations(){
     	
-		//User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		//System.out.println(user.getEmail());
         try {
             return new ResponseEntity<>(reservationService.getActiveReservations(), HttpStatus.OK);
         } catch (Exception e){
@@ -83,20 +85,35 @@ public class ClientReservationController {
         
     @RequestMapping(method = RequestMethod.POST,value = "/reservations/availableBoats", produces = MediaType.APPLICATION_JSON_VALUE)
     @CrossOrigin(origins = "*")
-    public ResponseEntity<List<PotentialReservationDTO>> getAvailableBoats(@RequestBody ReservationSearchDTO search){
+    public ResponseEntity<List<PotentialBoatReservationDTO>> getAvailableBoats(@RequestBody ReservationSearchDTO search){
     	
     	System.out.println("USli u kontroler");
         try {
-            return new ResponseEntity<>(suggestionService.getAvailableBoats(search), HttpStatus.OK);
+            return new ResponseEntity<>(boatSuggestionService.getAvailableBoats(search), HttpStatus.OK);
         } catch (Exception e){
         	System.out.println(e);
             return  new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     
+    @RequestMapping(method = RequestMethod.POST,value = "/reservations/availableMansions", produces = MediaType.APPLICATION_JSON_VALUE)
+    @CrossOrigin(origins = "*")
+    public ResponseEntity<List<PotentialMansionReservationDTO>> getAvailableMansions(@RequestBody ReservationSearchDTO search){
+    	
+    	System.out.println("USli u kontroler");
+        try {
+            return new ResponseEntity<>(mansionSuggestionService.getAvailableMansions(search), HttpStatus.OK);
+        } catch (Exception e){
+        	System.out.println(e);
+            return  new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    
+    
     @RequestMapping(method = RequestMethod.POST,value = "/reservations/createBoatReservation", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @CrossOrigin(origins = "*")
-    public ResponseEntity<BoatReservation> createBoatReservation(@RequestBody BoatReservationDTO res){
+    public ResponseEntity<BoatReservation> createBoatReservation(@RequestBody ReservationDTO res){
     	
     	System.out.println("USli u kontroler");
         try {

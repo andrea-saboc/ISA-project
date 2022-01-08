@@ -18,7 +18,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "BoatAvailablePeriod")
-public class AvailablePeriod {
+public class BoatAvailablePeriod {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,14 +34,14 @@ public class AvailablePeriod {
     @JoinColumn(name = "boat_id", referencedColumnName = "id", nullable = true)
     private Boat boat;
 
-	public AvailablePeriod(Long id, Date startDate, Date endDate, Boat boat) {
+	public BoatAvailablePeriod(Long id, Date startDate, Date endDate, Boat boat) {
 		this.id = id;
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.boat = boat;
 	}
 
-	public AvailablePeriod(Date startDate, Date endDate) {
+	public BoatAvailablePeriod(Date startDate, Date endDate) {
 		super();
 		this.startDate = startDate;
 		this.endDate = endDate;
@@ -49,7 +49,7 @@ public class AvailablePeriod {
 
 
 	
-	public AvailablePeriod() {}
+	public BoatAvailablePeriod() {}
 
 	public Date getStartDate() {
 		return startDate;
@@ -75,7 +75,7 @@ public class AvailablePeriod {
 		this.boat = boat;
 	}
 
-	public AvailablePeriod(Date startDate, Date endDate, Boat boat) {
+	public BoatAvailablePeriod(Date startDate, Date endDate, Boat boat) {
 		super();
 		this.startDate = startDate;
 		this.endDate = endDate;
