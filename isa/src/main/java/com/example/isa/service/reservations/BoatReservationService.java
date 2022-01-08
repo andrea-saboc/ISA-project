@@ -1,4 +1,4 @@
-package com.example.isa.service;
+package com.example.isa.service.reservations;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -13,9 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import com.example.isa.dto.BoatReservationDTO;
+import com.example.isa.dto.ReservationDTO;
 import com.example.isa.model.AdditionalService;
-import com.example.isa.model.AvailablePeriod;
+import com.example.isa.model.BoatAvailablePeriod;
 import com.example.isa.model.Boat;
 import com.example.isa.model.BoatReservation;
 import com.example.isa.model.MansionReservation;
@@ -38,23 +38,11 @@ public class BoatReservationService {
 	@Autowired
 	AdditionalServiceRepository additinalServicesRepo;
 	
-	public Iterable<BoatReservation> GetBoatReservationHistory(User u){
-		return boatReservationRepo.findAllByUser(u);
+	public Iterable<BoatReservation> GetBoatReservationHistory(){
+		return boatReservationRepo.findAllByUser(getLoggedUser());
 	}
-	
-	public Iterable<MansionReservation> GetMansionReservationHistory(User u){
-		return null;
-	}
-	
-	public List<Reservation> GetUserReservations(User u){
-		
-		List<Reservation> ret = new ArrayList<Reservation>();
-		ret.addAll(boatReservationRepo.findAllByUser(u));
-		
-		return ret;
-	}
-	
-	public BoatReservation createBoatReservation(BoatReservationDTO res) {
+
+	public BoatReservation createBoatReservation(ReservationDTO res) {
 		
 		String sDate = res.getStartDate()+" "+res.getStartTime();
 		SimpleDateFormat formatter=new SimpleDateFormat("yyyy-MM-dd HH:mm");
@@ -70,16 +58,16 @@ public class BoatReservationService {
 	        System.out.println("Adding days to start date: "+endDate);
 	        
 	        BoatReservation newBoatReservation = new BoatReservation(getLoggedUser(), startDate,endDate, res.getNumberOfGuests(), res.getPrice(),
-					boatRepo.findById(res.getBoatId()).orElse(new Boat()));
+					boatRepo.findById(res.getEntityId()).orElse(new Boat()));
 	        
-	        AvailablePeriod period = availablePeriodsRepo.getPeriodOfInterest(startDate, startDate);
+	        BoatAvailablePeriod period = availablePeriodsRepo.getPeriodOfInterest(startDate, startDate);
 	         
 	        if(!period.getStartDate().equals(startDate)) {
-	        	AvailablePeriod periodBefore = new AvailablePeriod(period.getStartDate(),startDate,period.getBoat());
+	        	BoatAvailablePeriod periodBefore = new BoatAvailablePeriod(period.getStartDate(),startDate,period.getBoat());
 	        	availablePeriodsRepo.save(periodBefore);
 	        }
 	        if(!period.getEndDate().equals(endDate)) {
-	        	AvailablePeriod periodAfter = new AvailablePeriod(endDate,period.getEndDate(),period.getBoat());
+	        	BoatAvailablePeriod periodAfter = new BoatAvailablePeriod(endDate,period.getEndDate(),period.getBoat());
 	        	availablePeriodsRepo.save(periodAfter);
 	        }
 	        /*
@@ -113,25 +101,25 @@ public class BoatReservationService {
 		
 		BoatReservation res = boatReservationRepo.findById(resId);
 
-		AvailablePeriod periodBefore = availablePeriodsRepo.checkIfPeriodHasEndDate(res.getStartDate());
-		AvailablePeriod periodAfter = availablePeriodsRepo.checkIfPeriodHasStartDate(res.getEndDate());		
-		AvailablePeriod periodToAdd;
+		BoatAvailablePeriod periodBefore = availablePeriodsRepo.checkIfPeriodHasEndDate(res.getStartDate());
+		BoatAvailablePeriod periodAfter = availablePeriodsRepo.checkIfPeriodHasStartDate(res.getEndDate());		
+		BoatAvailablePeriod periodToAdd;
 		
 		if(periodBefore!=null && periodAfter!=null) {
 			availablePeriodsRepo.deleteById(periodBefore.getId());
 			availablePeriodsRepo.deleteById(periodAfter.getId());
-			periodToAdd = new AvailablePeriod(periodBefore.getStartDate(),periodAfter.getEndDate(),res.getBoat());	
+			periodToAdd = new BoatAvailablePeriod(periodBefore.getStartDate(),periodAfter.getEndDate(),res.getBoat());	
 		}
 		else if (periodBefore==null && periodAfter!=null) {
 			availablePeriodsRepo.deleteById(periodAfter.getId());
-			periodToAdd = new AvailablePeriod(res.getStartDate(),periodAfter.getEndDate(),res.getBoat());
+			periodToAdd = new BoatAvailablePeriod(res.getStartDate(),periodAfter.getEndDate(),res.getBoat());
 		}
 		else if (periodBefore!=null && periodAfter==null) {
 			availablePeriodsRepo.deleteById(periodBefore.getId());
-			periodToAdd = new AvailablePeriod(periodBefore.getStartDate(),res.getEndDate(),res.getBoat());
+			periodToAdd = new BoatAvailablePeriod(periodBefore.getStartDate(),res.getEndDate(),res.getBoat());
 		}
 		else 
-			periodToAdd = new AvailablePeriod(res.getStartDate(),res.getEndDate(),res.getBoat());
+			periodToAdd = new BoatAvailablePeriod(res.getStartDate(),res.getEndDate(),res.getBoat());
 		
 		
 		availablePeriodsRepo.save(periodToAdd);	

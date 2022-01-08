@@ -8,6 +8,8 @@ import java.util.Set;
 
 import com.example.isa.model.*;
 import com.example.isa.repository.*;
+import com.example.isa.service.AdventureService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -15,8 +17,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-
-import com.example.isa.service.implemented.AdventureService;
 
 
 @SpringBootApplication
@@ -42,6 +42,11 @@ public class IsaApplication extends SpringBootServletInitializer implements Comm
 	AdditionalServiceRepository additionalServiceRepository;
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+	
+	@Autowired
+	MansionAvailablePeriodRepository mperiodRepo;
+	@Autowired
+	MansionRepository mrepo;
     
 	public static void main(String[] args) {
 		SpringApplication.run(IsaApplication.class, args);
@@ -77,10 +82,10 @@ public class IsaApplication extends SpringBootServletInitializer implements Comm
 
 
 		
-		AvailablePeriod a1 = new AvailablePeriod(new GregorianCalendar(2022, Calendar.JANUARY, 1).getTime(),new GregorianCalendar(2022, Calendar.JANUARY, 10).getTime(),b1);
-		AvailablePeriod a2 = new AvailablePeriod(new GregorianCalendar(2022, Calendar.JANUARY, 20).getTime(),new GregorianCalendar(2022, Calendar.JANUARY, 28).getTime(),b1);
-		AvailablePeriod a3 = new AvailablePeriod(new GregorianCalendar(2022, Calendar.MARCH, 1).getTime(),new GregorianCalendar(2022, Calendar.MARCH, 16).getTime(),b2);
-		AvailablePeriod a4 = new AvailablePeriod(new GregorianCalendar(2022, Calendar.JUNE, 1).getTime(),new GregorianCalendar(2022, Calendar.JUNE, 21).getTime(),b2);
+		BoatAvailablePeriod a1 = new BoatAvailablePeriod(new GregorianCalendar(2022, Calendar.JANUARY, 1).getTime(),new GregorianCalendar(2022, Calendar.JANUARY, 10).getTime(),b1);
+		BoatAvailablePeriod a2 = new BoatAvailablePeriod(new GregorianCalendar(2022, Calendar.JANUARY, 20).getTime(),new GregorianCalendar(2022, Calendar.JANUARY, 28).getTime(),b1);
+		BoatAvailablePeriod a3 = new BoatAvailablePeriod(new GregorianCalendar(2022, Calendar.MARCH, 1).getTime(),new GregorianCalendar(2022, Calendar.MARCH, 16).getTime(),b2);
+		BoatAvailablePeriod a4 = new BoatAvailablePeriod(new GregorianCalendar(2022, Calendar.JUNE, 1).getTime(),new GregorianCalendar(2022, Calendar.JUNE, 21).getTime(),b2);
 		
 		
 		periodRepo.save(a1);
@@ -88,11 +93,16 @@ public class IsaApplication extends SpringBootServletInitializer implements Comm
 		periodRepo.save(a3);		
 		periodRepo.save(a4);
 		
-		Set<AvailablePeriod> availablePeriods = new HashSet<AvailablePeriod>();
-		availablePeriods.add(new AvailablePeriod(new Date(),new Date()));
-		availablePeriods.add(new AvailablePeriod(new Date(),new Date()));
-		availablePeriods.add(new AvailablePeriod(new Date(),new Date()));
-
+		Mansion m = mrepo.findById(1);
+		MansionAvailablePeriod a11 = new MansionAvailablePeriod(new GregorianCalendar(2022, Calendar.JANUARY, 1).getTime(),new GregorianCalendar(2022, Calendar.JANUARY, 10).getTime(),m);
+		MansionAvailablePeriod a22 = new MansionAvailablePeriod(new GregorianCalendar(2022, Calendar.JANUARY, 20).getTime(),new GregorianCalendar(2022, Calendar.JANUARY, 28).getTime(),m);
+		MansionAvailablePeriod a33 = new MansionAvailablePeriod(new GregorianCalendar(2022, Calendar.MARCH, 1).getTime(),new GregorianCalendar(2022, Calendar.MARCH, 16).getTime(),m);
+		MansionAvailablePeriod a44 = new MansionAvailablePeriod(new GregorianCalendar(2022, Calendar.JUNE, 1).getTime(),new GregorianCalendar(2022, Calendar.JUNE, 21).getTime(),m);
+		
+		mperiodRepo.save(a11);
+		mperiodRepo.save(a22);		
+		mperiodRepo.save(a33);		
+		mperiodRepo.save(a44);
 
 		
 		
@@ -116,7 +126,7 @@ public class IsaApplication extends SpringBootServletInitializer implements Comm
     		System.out.println(r.getBoat().getName());
     	}
     	
-    	AvailablePeriod a =  periodRepo.checkIfPeriodHasStartDate(a2.getStartDate());
+    	BoatAvailablePeriod a =  periodRepo.checkIfPeriodHasStartDate(a2.getStartDate());
     	
     	System.out.println("Da li ga nadjeee");
     	if(a != null)

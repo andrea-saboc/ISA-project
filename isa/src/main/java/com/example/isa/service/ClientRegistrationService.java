@@ -1,4 +1,4 @@
-package com.example.isa.service.implemented;
+package com.example.isa.service;
 
 import javax.mail.MessagingException;
 

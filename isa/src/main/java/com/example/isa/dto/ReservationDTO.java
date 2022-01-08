@@ -3,9 +3,9 @@ package com.example.isa.dto;
 import java.util.List;
 
 
-public class BoatReservationDTO {
+public class ReservationDTO {
 	
-	private long boatId;
+	private long entityId;
 	private List<Long> additionalServices;
 	private int numberOfGuests;
 	private double price;
@@ -15,11 +15,11 @@ public class BoatReservationDTO {
 	private int numberOfHours;
 	
 	
-	public long getBoatId() {
-		return boatId;
+	public long getEntityId() {
+		return entityId;
 	}
-	public void setBoatId(long boatId) {
-		this.boatId = boatId;
+	public void setEntityId(long boatId) {
+		this.entityId = boatId;
 	}
 	public List<Long> getAdditionalServices() {
 		return additionalServices;
@@ -59,17 +59,17 @@ public class BoatReservationDTO {
 	}
 
 	
-	public BoatReservationDTO() {}
+	public ReservationDTO() {}
 	public int getNumberOfHours() {
 		return numberOfHours;
 	}
 	public void setNumberOfHours(int numberOfHours) {
 		this.numberOfHours = numberOfHours;
 	}
-	public BoatReservationDTO(long boatId, List<Long> additionalServices, int numberOfGuests, double price,
+	public ReservationDTO(long boatId, List<Long> additionalServices, int numberOfGuests, double price,
 			String startDate, String startTime, int numberOfDays, int numberOfHours) {
 		super();
-		this.boatId = boatId;
+		this.entityId = boatId;
 		this.additionalServices = additionalServices;
 		this.numberOfGuests = numberOfGuests;
 		this.price = price;

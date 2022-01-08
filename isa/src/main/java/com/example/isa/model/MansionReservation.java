@@ -30,14 +30,13 @@ public class MansionReservation extends Reservation{
 
 
 
+
 	public MansionReservation(User user, Date startDate, Date endDate, int numberOfGuests,
-			double totalPrice, Mansion mansion, ClientFeedback mansionFeedback, ClientFeedback mansionOwnerFeedback) {
+			double totalPrice, Mansion mansion) {
 		super("MANSION", user, startDate, endDate, numberOfGuests, totalPrice);
 		this.mansion = mansion;
-		this.mansionFeedback = mansionFeedback;
-		this.mansionOwnerFeedback = mansionOwnerFeedback;
 	}
-
+	
 	public MansionReservation() {
 		super();
 	}
