@@ -4,10 +4,12 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -43,16 +45,30 @@ public class Reservation {
 	private Date endDate;
 	private int numberOfGuests;
 	private double totalPrice;
+	
 
 	@ManyToMany
+	@JoinTable(name="reservation_services",
+    	joinColumns=@JoinColumn(name="reservation_id"),
+       inverseJoinColumns=@JoinColumn(name="service_id "))
 	public Set<AdditionalService> additionalServices = new HashSet<AdditionalService>();
 
 	public void addService(AdditionalService service) {
-		//service.addReservation(this);
+		service.addReservation(this);
 		additionalServices.add(service);
 	}
 	
 		
+	public Set<AdditionalService> getAdditionalServices() {
+		return additionalServices;
+	}
+
+
+	public void setAdditionalServices(Set<AdditionalService> additionalServices) {
+		this.additionalServices = additionalServices;
+	}
+
+
 	public Reservation(String type, User user, Date startDate, Date endDate, int numberOfGuests,double totalPrice) {
 		super();
 		this.type = type;

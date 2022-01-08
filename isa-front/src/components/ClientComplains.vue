@@ -15,7 +15,7 @@
             </ul>
          </div>
          <div  v-if="display == 'mansions'">
-            <div v-for="m in mansions">
+            <div v-for="m in mansions" :key="m">
                <div class="card mb-3">
                   <img class="card-img-top" src="../assets/yacht.jpg" alt="Mansion name">
                   <div class="card-body">
@@ -43,7 +43,7 @@
             </div>
          </div>
          <div v-if="display == 'boats'">
-            <div v-for="m in boats">
+            <div v-for="m in boats" :key="m">
                <div class="card mb-3">
                   <img class="card-img-top" src="../assets/yacht.jpg" alt="Mansion name">
                   <div class="card-body">
@@ -71,7 +71,7 @@
             </div>
          </div>
          <div v-if="display == 'adventures'">
-            <div v-for="m in adventures">
+            <div v-for="m in adventures" :key="m">
                <div class="card mb-3">
                   <img class="card-img-top" src="../assets/yacht.jpg" alt="Mansion name">
                   <div class="card-body">
@@ -101,9 +101,6 @@
 </template>
 <script>
    import axios from 'axios'
-   import Mansions from './Mansions.vue'
-   import Boats from './Boats.vue'
-   import Adventures from './Adventures.vue'
    
    export default {
    data(){
@@ -185,6 +182,7 @@
             }
          })
             .then(response => {
+               console.log(response.data)
                alert('submited')
          });
    
@@ -204,6 +202,7 @@
             }
          })
             .then(response => {
+               console.log(response.data)
                alert('submited')
          });
        },
@@ -230,6 +229,7 @@
             }
          })
             .then(response => {
+               console.log(response.data)
                alert('submited')
          });
    
@@ -249,6 +249,7 @@
             }
          })
             .then(response => {
+               console.log(response.data)
                alert('submited')
          });
    
@@ -259,7 +260,7 @@
    
        },
        SubmitInstructorComplain(m){
-   
+          console.log(m)
        },    
        ShowInstructorComplainBox(m){
          if (this.givingInstructorComplain == m){ this.givingInstructorComplain = 'None'; return}

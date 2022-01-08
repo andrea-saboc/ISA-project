@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+//import axios from 'axios'
 import Listing from './Listing.vue'
 
 export default {

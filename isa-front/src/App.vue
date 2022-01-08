@@ -47,8 +47,8 @@
 </template>
 
 <script>
-import {useStore} from "vuex"
-import axios from 'axios'
+//import {useStore} from "vuex"
+//import axios from 'axios'
 export default{
   data(){
     return{

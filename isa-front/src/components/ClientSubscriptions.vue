@@ -4,7 +4,7 @@
 <br>
 <hr>
 <h2>Mansions:</h2>
- <div v-for="m in mansions">
+ <div v-for="m in mansions" :key="m">
     <div class="card mb-3">
         <div class="card-body">
             <h5 class="card-title">{{m.name}}</h5>
@@ -18,7 +18,7 @@
 <br>
 <hr>
 <h2>Boats:</h2>
- <div v-for="m in boats">
+ <div v-for="m in boats" :key="m">
     <div class="card mb-3">
         <div class="card-body">
             <h5 class="card-title">{{m.name}}</h5>
@@ -32,7 +32,7 @@
 <br>
 <hr>
 <h2>Instructors:</h2>
- <div v-for="m in instructors">
+ <div v-for="m in instructors" :key="m">
     <div class="card mb-3">
         <div class="card-body">
             <h5 class="card-title">{{m.name}}</h5>
@@ -46,8 +46,8 @@
 </section>
 </template>
 <script>
-import axios from 'axios'
-import Popper from 'popper.js'
+//import axios from 'axios'
+//import Popper from 'popper.js'
 export default{
     name: 'boats',
     data: function(){
@@ -75,7 +75,7 @@ export default{
     },
     methods:{
        CancelSubsciption(s){
-
+           console.log(s)
        }
 
     }

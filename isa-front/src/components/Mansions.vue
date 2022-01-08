@@ -233,7 +233,6 @@ export default {
                 .then(response => {
 
                     console.log(response.data)
-                    alert('came back')
                     this.mansions = response.data
                 });
         },
@@ -263,13 +262,12 @@ export default {
                 numberOfHours: this.reservationForm.numberOfHours
             }
 
-            /*
             for(let index of b.additinalServicesId){
-              var name = document.getElementById(b.mansionId+index).checked;
-              alert(name)
-              //if(name == true) {mansionReservation.additionalServices.push(index)}
+               let i=index-1
+              var name = document.getElementById(b.boatId+i).checked;
+              if(name == true) {mansionReservation.additionalServices.push(index)}
             }
-            */
+
             console.log(mansionReservation)
             axios
                 .post(devServer.proxy +'/reservations/createMansionReservation', mansionReservation, {

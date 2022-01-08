@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-
+import com.example.isa.model.BoatAvailablePeriod;
 import com.example.isa.model.BoatReservation;
 import com.example.isa.model.User;
 
@@ -16,7 +16,5 @@ public interface BoatReservationRepository extends JpaRepository<BoatReservation
 
 	List<BoatReservation> findAllByUser(User user);
 	BoatReservation findById(long id);
-	
-    
 	
 }

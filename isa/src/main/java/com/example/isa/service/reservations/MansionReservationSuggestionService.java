@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.example.isa.dto.PotentialMansionReservationDTO;
 import com.example.isa.dto.ReservationSearchDTO;
 import com.example.isa.model.AdditionalService;
+import com.example.isa.model.Boat;
 import com.example.isa.model.Mansion;
 import com.example.isa.model.MansionAvailablePeriod;
 import com.example.isa.repository.AdditionalServiceRepository;
@@ -46,7 +47,7 @@ public class MansionReservationSuggestionService {
 
 	        Date endDate = cal.getTime();
 	        System.out.println("Adding days to start date: "+endDate);
-		    return createPotentialReservations(getAvailableMansionsBetweenDates(startDate,endDate));
+		    return createPotentialReservations(getAvailableMansionsBetweenDates(startDate,endDate),formParams);
 		    
 			} catch (ParseException e) {
 			System.out.println("PUČE!");
@@ -56,7 +57,7 @@ public class MansionReservationSuggestionService {
 		return null;
 		}
 		
-		public List<PotentialMansionReservationDTO> createPotentialReservations(List<Mansion> mansions){
+		public List<PotentialMansionReservationDTO> createPotentialReservations(List<Mansion> mansions,ReservationSearchDTO formParams){
 
 			List<PotentialMansionReservationDTO> ret = new ArrayList<PotentialMansionReservationDTO>();
 			for(Mansion m : mansions) {
@@ -72,10 +73,21 @@ public class MansionReservationSuggestionService {
 				}
 				
 				ret.add(new PotentialMansionReservationDTO(m.getId(), m.getName(), m.getPromoDescription(), m.getAvgGrade(),
-						m.getPricePerDay(), m.getPriceForSevenDays(), 20,services,servicesId));
+						m.getPricePerDay(), m.getPriceForSevenDays(), calculateReservationPrice(formParams,m),services,servicesId));
 			}
 			return ret;
-	}
+		}
+	
+		public double calculateReservationPrice(ReservationSearchDTO formParams,Mansion mansion) {
+			
+			double price = 0.00;
+			int numberOfWeeks = formParams.getNumberOfDays()/7;
+			int numberOfDays = formParams.getNumberOfDays() - numberOfWeeks * 7;
+			price += numberOfWeeks * mansion.getPriceForSevenDays();
+			price += numberOfDays * mansion.getPricePerDay();
+			
+			return price;
+		}
 		
 	public List<Mansion> FilterByLocationAndAvgGrade(String location, float avgGrade,List<Mansion> boats){
 		

@@ -2,15 +2,19 @@ package com.example.isa.service.reservations;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.example.isa.dto.ReservationDTO;
+import com.example.isa.model.AdditionalService;
 import com.example.isa.model.MansionAvailablePeriod;
 import com.example.isa.model.MansionReservation;
 import com.example.isa.model.User;
@@ -60,14 +64,16 @@ public class MansionReservationService {
 	        	MansionAvailablePeriod periodAfter = new MansionAvailablePeriod(endDate,period.getEndDate(),period.getMansion());
 	        	availablePeriodsRepo.save(periodAfter);
 	        }
-	        /*
-	        Set<AdditionalService> services = new HashSet<AdditionalService>();
+	        
+			Set<AdditionalService> services = new HashSet<AdditionalService>();
 	        for(long id : res.getAdditionalServices()) {
-	        	newBoatReservation.addService(additinalServicesRepo.findById(id).orElse(null));
+	        	AdditionalService service = additinalServicesRepo.findById(id).orElse(null);
+	        	services.add(service);
+	        	newBoatReservation.setTotalPrice( newBoatReservation.getTotalPrice()
+	        			+calculateAdditionalServicesPrice(newBoatReservation,res,service));
 	        }
-	        
-	        
-	        */
+	        newBoatReservation.setAdditionalServices(services);
+			
 	        availablePeriodsRepo.delete(period);
 		    return mansionReservationRepo.save(newBoatReservation);
 		    
@@ -79,6 +85,15 @@ public class MansionReservationService {
 		return null;
 	}
 	
+	public double calculateAdditionalServicesPrice(MansionReservation bres,ReservationDTO res,AdditionalService service) {
+		
+		double initialPrice = bres.getTotalPrice();
+		int numberOfWeeks = res.getNumberOfDays() / 7;
+		int numberOfDays = res.getNumberOfDays() - 7*numberOfWeeks;
+		//dodati i za per week i additinal service
+		initialPrice += service.getPricePerHour() * res.getNumberOfHours();
+		return initialPrice;
+	}
 
 	
 	public User getLoggedUser() {
@@ -120,8 +135,14 @@ public class MansionReservationService {
 
 
 	public List<MansionReservation> GetMansionReservationHistory() {
-		// TODO Auto-generated method stub
-		return null;
+		
+		Date today = new Date();
+		List<MansionReservation> res = new ArrayList<MansionReservation>();
+		for(MansionReservation m: mansionReservationRepo.findAllByUser(getLoggedUser())) {
+			if(m.getEndDate().before(today))
+				res.add(m);
+		}
+		return res;
 	}
 	
 

@@ -52,7 +52,9 @@ public class ClientReservationController {
 	
 	
     @RequestMapping(method = RequestMethod.GET,value = "/reservations/boats", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Iterable<BoatReservation>> getBoatReservations(){
+    public ResponseEntity<List<BoatReservation>> getBoatReservations(){
+    	
+    	System.out.println("TRAZI SE BOATS");
     	try {
             return new ResponseEntity<>(boatResService.GetBoatReservationHistory(), HttpStatus.OK);
         } catch (Exception e){
@@ -61,7 +63,7 @@ public class ClientReservationController {
 
     }
     @RequestMapping(method = RequestMethod.GET,value = "/reservations/mansions", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Iterable<MansionReservation>> getMansionReservations(){
+    public ResponseEntity<List<MansionReservation>> getMansionReservations(){
 
         try {
             return new ResponseEntity<>(mansionResService.GetMansionReservationHistory(), HttpStatus.OK);
@@ -99,7 +101,7 @@ public class ClientReservationController {
     @CrossOrigin(origins = "*")
     public ResponseEntity<List<PotentialMansionReservationDTO>> getAvailableMansions(@RequestBody ReservationSearchDTO search){
     	
-    	System.out.println("USli u kontroler");
+
         try {
             return new ResponseEntity<>(mansionSuggestionService.getAvailableMansions(search), HttpStatus.OK);
         } catch (Exception e){
