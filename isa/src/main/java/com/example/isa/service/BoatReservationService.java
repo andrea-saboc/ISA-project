@@ -38,14 +38,10 @@ public class BoatReservationService {
 	@Autowired
 	AdditionalServiceRepository additinalServicesRepo;
 	
-	public Iterable<BoatReservation> GetBoatReservationHistory(User u){
-		return boatReservationRepo.findAllByUser(u);
+	public Iterable<BoatReservation> GetBoatReservationHistory(){
+		return boatReservationRepo.findAllByUser(getLoggedUser());
 	}
-	
-	public Iterable<MansionReservation> GetMansionReservationHistory(User u){
-		return null;
-	}
-	
+
 	public BoatReservation createBoatReservation(ReservationDTO res) {
 		
 		String sDate = res.getStartDate()+" "+res.getStartTime();

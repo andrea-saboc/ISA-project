@@ -39,16 +39,13 @@ public class ClientReservationController {
 	BoatReservationService boatResService;
 	@Autowired 
 	MansionReservationService mansionResService;
-	@Autowired
-	UserService userService;	
-	@Autowired
-	BoatRepository repo;
-	@Autowired
-	ClientRepository clients;
+	
+
 	@Autowired
 	BoatReservationSuggestionService boatSuggestionService;
 	@Autowired
 	MansionReservationSuggestionService mansionSuggestionService;
+	
 	@Autowired
 	ReservationService reservationService;
 	
@@ -56,9 +53,8 @@ public class ClientReservationController {
 	
     @RequestMapping(method = RequestMethod.GET,value = "/reservations/boats", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Iterable<BoatReservation>> getBoatReservations(){
-		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        try {
-            return new ResponseEntity<>(boatResService.GetBoatReservationHistory(clients.findByEmail(user.getEmail())), HttpStatus.OK);
+    	try {
+            return new ResponseEntity<>(boatResService.GetBoatReservationHistory(), HttpStatus.OK);
         } catch (Exception e){
             return  new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -68,7 +64,7 @@ public class ClientReservationController {
     public ResponseEntity<Iterable<MansionReservation>> getMansionReservations(){
 
         try {
-            return new ResponseEntity<>(boatResService.GetMansionReservationHistory(clients.findByEmail("igi@gmail.com")), HttpStatus.OK);
+            return new ResponseEntity<>(mansionResService.GetMansionReservationHistory(), HttpStatus.OK);
         } catch (Exception e){
             return  new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }

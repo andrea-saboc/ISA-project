@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -113,6 +114,13 @@ public class MansionReservationService {
 		
 		availablePeriodsRepo.save(periodToAdd);	
 		mansionReservationRepo.deleteById(resId);
+		return null;
+	}
+
+
+
+	public List<MansionReservation> GetMansionReservationHistory() {
+		// TODO Auto-generated method stub
 		return null;
 	}
 	
