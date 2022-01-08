@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.isa.dto.ReservationDTO;
 import com.example.isa.model.AdditionalService;
+import com.example.isa.model.BoatReservation;
 import com.example.isa.model.MansionAvailablePeriod;
 import com.example.isa.model.MansionReservation;
 import com.example.isa.model.User;
@@ -66,7 +67,10 @@ public class MansionReservationService {
 	        
 			Set<AdditionalService> services = new HashSet<AdditionalService>();
 	        for(long id : res.getAdditionalServices()) {
-	        	services.add(additinalServicesRepo.findById(id).orElse(null));
+	        	AdditionalService service = additinalServicesRepo.findById(id).orElse(null);
+	        	services.add(service);
+	        	newBoatReservation.setTotalPrice( newBoatReservation.getTotalPrice()
+	        			+calculateAdditionalServicesPrice(newBoatReservation,res,service));
 	        }
 	        newBoatReservation.setAdditionalServices(services);
 			
@@ -81,6 +85,15 @@ public class MansionReservationService {
 		return null;
 	}
 	
+	public double calculateAdditionalServicesPrice(MansionReservation bres,ReservationDTO res,AdditionalService service) {
+		
+		double initialPrice = bres.getTotalPrice();
+		int numberOfWeeks = res.getNumberOfDays() / 7;
+		int numberOfDays = res.getNumberOfDays() - 7*numberOfWeeks;
+		//dodati i za per week i additinal service
+		initialPrice += service.getPricePerHour() * res.getNumberOfHours();
+		return initialPrice;
+	}
 
 	
 	public User getLoggedUser() {

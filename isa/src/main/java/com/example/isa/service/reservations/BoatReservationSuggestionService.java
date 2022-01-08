@@ -13,8 +13,8 @@ import org.springframework.stereotype.Service;
 import com.example.isa.dto.PotentialBoatReservationDTO;
 import com.example.isa.dto.ReservationSearchDTO;
 import com.example.isa.model.AdditionalService;
-import com.example.isa.model.BoatAvailablePeriod;
 import com.example.isa.model.Boat;
+import com.example.isa.model.BoatAvailablePeriod;
 import com.example.isa.repository.AdditionalServiceRepository;
 import com.example.isa.repository.BoatAvailablePeriodRepository;
 import com.example.isa.repository.BoatRepository;
@@ -47,7 +47,7 @@ public class BoatReservationSuggestionService {
         cal.add(Calendar.HOUR, formParams.getNumberOfHours()); 
         Date endDate = cal.getTime();
         System.out.println("Adding days to start date: "+endDate);
-	    return createPotentialReservations(getAvailableBoatsBetweenDates(startDate,endDate));
+	    return createPotentialReservations(getAvailableBoatsBetweenDates(startDate,endDate),formParams);
 	    
 		} catch (ParseException e) {
 		System.out.println("PUČE!");
@@ -57,7 +57,7 @@ public class BoatReservationSuggestionService {
 	return null;
 	}
 	
-	public List<PotentialBoatReservationDTO> createPotentialReservations(List<Boat> boats){
+	public List<PotentialBoatReservationDTO> createPotentialReservations(List<Boat> boats,ReservationSearchDTO formParams){
 		System.out.println("USLI U PRAVLJENJE RES..");
 		List<PotentialBoatReservationDTO> ret = new ArrayList<PotentialBoatReservationDTO>();
 		for(Boat b : boats) {
@@ -74,10 +74,19 @@ public class BoatReservationSuggestionService {
 			}
 			
 			ret.add(new PotentialBoatReservationDTO(b.getId(), b.getName(), b.getPromoDescription(), b.getAvgGrade(), b.getCapacity(),
-					b.getCancellationPolicy(), b.getPricePerHour(), b.getPricePerDay(),10.00,
+					b.getCancellationPolicy(), b.getPricePerHour(), b.getPricePerDay(),calculateReservationPrice(formParams,b),
 					services, servicesId));
 		}
 		return ret;
+	}
+	
+	public double calculateReservationPrice(ReservationSearchDTO formParams,Boat boat) {
+		
+		double price = 0.00;
+		price += formParams.getNumberOfDays() * boat.getPricePerDay();
+		price += formParams.getNumberOfHours() * boat.getPricePerHour();
+		
+		return price;
 	}
 	
 	public List<Boat> FilterByLocationAndAvgGrade(String location, float avgGrade,List<Boat> boats){

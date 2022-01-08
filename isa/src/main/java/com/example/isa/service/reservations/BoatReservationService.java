@@ -73,7 +73,10 @@ public class BoatReservationService {
 	        
 	        Set<AdditionalService> services = new HashSet<AdditionalService>();
 	        for(long id : res.getAdditionalServices()) {
-	        	services.add(additinalServicesRepo.findById(id).orElse(null));
+	        	AdditionalService service = additinalServicesRepo.findById(id).orElse(null);
+	        	services.add(service);
+	        	newBoatReservation.setTotalPrice( newBoatReservation.getTotalPrice()
+	        			+calculateAdditionalServicesPrice(newBoatReservation,res,service));
 	        }
 	        newBoatReservation.setAdditionalServices(services);
 	        
@@ -89,6 +92,13 @@ public class BoatReservationService {
 		return null;
 	}
 	
+	public double calculateAdditionalServicesPrice(BoatReservation bres,ReservationDTO res,AdditionalService service) {
+		
+		double initialPrice = bres.getTotalPrice();
+		initialPrice += service.getPricePerDay() * res.getNumberOfDays();
+		initialPrice += service.getPricePerHour() * res.getNumberOfHours();
+		return initialPrice;
+	}
 
 	
 	public User getLoggedUser() {
