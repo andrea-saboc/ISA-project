@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+//import axios from 'axios'
 import Mansions from './Mansions.vue'
 import Boats from './Boats.vue'
 import Adventures from './Adventures.vue'

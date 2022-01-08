@@ -18,7 +18,7 @@
 </template>
 <script>
 import axios from 'axios'
-import {onBeforeMount} from "vue";
+//import {onBeforeMount} from "vue";
 export default{
     data(){
         return{

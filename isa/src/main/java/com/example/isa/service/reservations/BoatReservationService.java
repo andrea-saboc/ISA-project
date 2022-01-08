@@ -15,11 +15,9 @@ import org.springframework.stereotype.Service;
 
 import com.example.isa.dto.ReservationDTO;
 import com.example.isa.model.AdditionalService;
-import com.example.isa.model.BoatAvailablePeriod;
 import com.example.isa.model.Boat;
+import com.example.isa.model.BoatAvailablePeriod;
 import com.example.isa.model.BoatReservation;
-import com.example.isa.model.MansionReservation;
-import com.example.isa.model.Reservation;
 import com.example.isa.model.User;
 import com.example.isa.repository.AdditionalServiceRepository;
 import com.example.isa.repository.BoatAvailablePeriodRepository;
@@ -38,9 +36,6 @@ public class BoatReservationService {
 	@Autowired
 	AdditionalServiceRepository additinalServicesRepo;
 	
-	public Iterable<BoatReservation> GetBoatReservationHistory(){
-		return boatReservationRepo.findAllByUser(getLoggedUser());
-	}
 
 	public BoatReservation createBoatReservation(ReservationDTO res) {
 		
@@ -135,6 +130,19 @@ public class BoatReservationService {
 		availablePeriodsRepo.save(periodToAdd);	
 		boatReservationRepo.deleteById(resId);
 		return null;
+	}
+	
+	public List<BoatReservation> GetBoatReservationHistory(){
+		
+		Date today = new Date();
+		List<BoatReservation> res = new ArrayList<BoatReservation>();
+		for(BoatReservation m: boatReservationRepo.findAllByUser(getLoggedUser())) {
+			if(m.getEndDate().before(today))
+				res.add(m);
+		}
+		System.out.println("KOLIKO IMA BOATS "+res.size());
+		return res;
+
 	}
 	
 }

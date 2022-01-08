@@ -2,6 +2,7 @@ package com.example.isa.service.reservations;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
@@ -14,7 +15,6 @@ import org.springframework.stereotype.Service;
 
 import com.example.isa.dto.ReservationDTO;
 import com.example.isa.model.AdditionalService;
-import com.example.isa.model.BoatReservation;
 import com.example.isa.model.MansionAvailablePeriod;
 import com.example.isa.model.MansionReservation;
 import com.example.isa.model.User;
@@ -135,8 +135,14 @@ public class MansionReservationService {
 
 
 	public List<MansionReservation> GetMansionReservationHistory() {
-		// TODO Auto-generated method stub
-		return null;
+		
+		Date today = new Date();
+		List<MansionReservation> res = new ArrayList<MansionReservation>();
+		for(MansionReservation m: mansionReservationRepo.findAllByUser(getLoggedUser())) {
+			if(m.getEndDate().before(today))
+				res.add(m);
+		}
+		return res;
 	}
 	
 

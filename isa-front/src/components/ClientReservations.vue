@@ -47,10 +47,10 @@
                <button class = "btn btn-primary" v-on:click=SortReservations>Sort</button>
             </div>
             <div v-if="displayPastReservations == 'mansions'">
-               <div v-for="res in pastBoatReservations" :key="res">
+               <div v-for="res in pastMansionReservations" :key="res">
                   <div class="text-dark bg-light mt-3">
                      <div class="card-header h4">
-                        {{res.mansion.name}}
+                        {{res.mansion.name}},{{res.boat.address.address}},{{res.boat.address.city}}
                      </div>
                      <div class="card-body">
                         <label>Start date: {{res.startDate}}</label><br>
@@ -86,10 +86,10 @@
                <div v-for="res in pastBoatReservations" :key="res">
                   <div class="text-dark bg-light mt-3">
                      <div class="card-header h4">
-                        {{res.boat.name}}
+                        {{res.boat.name}},{{res.boat.address.address}},{{res.boat.address.city}}
                      </div>
                      <div class="card-body">
-                        <label>Start date: {{res.startDate}}</label><br>
+                        <label>Start date: {{  format_date(new Date(res.startDate))}}</label><br>
                         <label>Duration in days: {{res.durationInDays}}</label><br>
                         <label>Number of guests : {{res.numberOfClients}}</label><br>
                         <blockquote class="blockquote mb-0">
@@ -147,7 +147,8 @@
 </template>
 
 <script>
-import axios from 'axios'
+import axios from 'axios';
+import moment from 'moment';
 import {devServer} from "../../vue.config";
 export default {
     name: 'clientReservations',
@@ -221,9 +222,11 @@ export default {
         },
         DisplayMansions() {
             console.log('showing mansions')
+            console.log(this.pastMansionReservations)
             this.displayPastReservations = 'mansions'
         },
         DisplayBoats() {
+            console.log(this.pastBoatReservations)
             this.displayPastReservations = 'boats'
         },
         DisplayAdventures() {
@@ -361,8 +364,14 @@ export default {
                     console.log(response.data)
                 });
 
+        },
+        format_date(value){
+         if (value) {
+           return moment(String(value)).format('MM.DD.YYYY HH:mm')
+          }
         }
+      }
 
-    }
+    
 }
 </script>

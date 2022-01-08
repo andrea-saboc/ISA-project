@@ -233,7 +233,6 @@ export default {
                 .then(response => {
 
                     console.log(response.data)
-                    alert('came back')
                     this.mansions = response.data
                 });
         },
