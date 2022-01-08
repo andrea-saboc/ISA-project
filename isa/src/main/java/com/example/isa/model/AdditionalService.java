@@ -11,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -20,7 +21,7 @@ import javax.persistence.Table;
 public class AdditionalService {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    //@Column(name = "id")
     private Long id;
 
     private String name;
@@ -36,8 +37,14 @@ public class AdditionalService {
 
 
     @ManyToMany
-    private Set<Reservation> boatReservations = new HashSet<Reservation>();
-
+    @JoinTable(name="reservation_services",
+    joinColumns=@JoinColumn(name="service_id"),
+       inverseJoinColumns=@JoinColumn(name="reservation_id"))
+    private Set<Reservation> reservations = new HashSet<Reservation>();
+    
+    public void addReservation(Reservation newBoat){
+    	reservations.add(newBoat);
+    }
 
     
 	public AdditionalService(){}
