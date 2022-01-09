@@ -1,11 +1,15 @@
 <template>
 
-<div>
-Welcome to AdventureLand! You can now login to our site: 
+<section class="bg-dark text-light p-5 text-center text-sm-start">
+<div v-if="valid">
+   <h1> Welcome to AdventureLand! You can now <a href="/login">login </a>to our site </h1>
 </div>
 
+<div v-if="!valid">
+    <h1>Something went wrong. Try registering again. </h1>
+</div>
 
-
+</section>
 
 </template>
 <script>
@@ -17,7 +21,7 @@ export default {
 name: "AccountActivation",
   data() {
     return {
-      message: ''
+      valid: ''
     }
   },
   mounted() {
@@ -26,8 +30,8 @@ name: "AccountActivation",
             let url = window.location.href
             var code = url.split('/')[4]
             alert(code)
-            
-            axios
+
+              axios
                 .post(devServer.proxy + '/checkActivationCode', code, {
                     headers: {
                         'Authorization': this.$store.getters.tokenString,
@@ -35,9 +39,10 @@ name: "AccountActivation",
                     }
                 })
                 .then(response => {
-                  this.message = response.data
-                  alert('submited', response)
-                });
+                  this.valid = response.data
+                  alert(response.data)
+                });          
+ 
             
   },
   methods: {

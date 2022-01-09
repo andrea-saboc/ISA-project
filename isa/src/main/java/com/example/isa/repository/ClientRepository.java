@@ -8,5 +8,6 @@ import com.example.isa.model.Client;
 public interface ClientRepository extends JpaRepository<Client, Long>{
 	
 	Client findByEmail(String email);
+	Client findByActivationCode(String code);
 	Client findByBlockedAndActivationCode(boolean blocked,String code);
 }

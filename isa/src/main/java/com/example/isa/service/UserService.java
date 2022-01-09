@@ -71,6 +71,12 @@ public class UserService {
         return user;
    
     }
+    
+    public void activateUser(String code) {
+    	Client client = clientRepository.findByBlockedAndActivationCode(true, code);
+    	client.setBlocked(false);
+    	clientRepository.save(client);
+    }
 	public User createDeletionRequest(String reason) {
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		System.out.println(user.getName());

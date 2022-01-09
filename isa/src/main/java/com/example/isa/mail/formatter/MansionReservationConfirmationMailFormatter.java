@@ -8,7 +8,7 @@ import com.example.isa.model.MansionReservation;
 public class MansionReservationConfirmationMailFormatter {
     public String getText(MansionReservation reservation) {
     	
-		Format formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+		Format formatter = new SimpleDateFormat("dd.MM.yyyy, HH:mm");
     	String content = "";
     	content += " Start date " + formatter.format(reservation.getStartDate()) +".\n";
     	content += " End date " + formatter.format(reservation.getEndDate()) +".\n";
