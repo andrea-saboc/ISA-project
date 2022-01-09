@@ -49,8 +49,8 @@
       </svg>
     </div>
     <div class="info">
-
-      <button v-if="!clientSubscribed" class="btn btn-primary" v-on:click="SubscribeClient">Subscribe</button>
+    <div v-if="clientSubscribed != 'true'">
+      <button  class="btn btn-primary" v-on:click="SubscribeClient">Subscribe</button></div>
       <h4>Description</h4>
       {{boatToShow.promoDescription}}
     </div>
@@ -281,6 +281,7 @@ export default {
     })
     .then(response =>{
       this.boatToShow = response.data
+      this.CheckClientSubscription(this.boatToShow)
       console.log(this.boatToShow.address)
       this.address = this.boatToShow.address
       console.log(response.data)
@@ -299,7 +300,7 @@ export default {
           })
     })
 
-    this.CheckClientSubscription()
+
   },
   methods:{
     calculateAvailableDaysForCalendar(){
@@ -346,17 +347,17 @@ export default {
                 });
 
     },
-    CheckClientSubscription(){
-      alert(this.boatToShow.id)
+    CheckClientSubscription(boat){
+      alert(boat)
             axios
-                .post(devServer.proxy + '/subscriptions/checkBoatSubscription', this.boatToShow, {
+                .post(devServer.proxy + '/subscriptions/checkBoatSubscription', boat, {
                     headers: {
                         'Authorization': this.$store.getters.tokenString,
                         'Content-Type': 'application/json'
                     }
                 })
                 .then(response => {                   
-                    alert('trebalo bi tru il fals' + response.data)
+                    alert(response.data)
                     this.clientSubscribed = response.data
                 });
 

@@ -63,13 +63,4 @@ INSERT INTO public.mansion(
 	id, avg_grade, name, price_for_seven_days, price_per_day, promo_description, address_id, owner_id)
 	VALUES (8, 9, 'Bobanka', 250, 50, 'Najbolji promo',12, 2);
 	
-	
-	INSERT INTO public.additional_service(
-	available_period_id, name, price_per_day, price_per_hour, boat_id, mansion_id)
-	VALUES (123, 'Internet', 23, 0, null, 1);
-	INSERT INTO public.additional_service(
-	available_period_id, name, price_per_day, price_per_hour, boat_id, mansion_id)
-	VALUES (123, 'TV', 45, 0, null, 2);
-	INSERT INTO public.additional_service(
-	id, name, price_per_day, price_per_hour, boat_id, mansion_id)
-	VALUES (7, 'housekeeper', 12, 30, null, 1);
+

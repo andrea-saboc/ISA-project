@@ -46,7 +46,8 @@ public class SubscriptionService {
 		return mansionSubRepo.findAllBySubscriber(getLoggedUser());
 	}
 	public Boolean checkBoatSubscription(Boat boat) {
-		System.out.println("d ali je user subs  "+boatSubsRepo.findBySubscriberAndBoat(getLoggedUser(), boat).getSubscriber().getName());
+		System.out.println("U check subs");
+		//System.out.println("d ali je user subs  "+boatSubsRepo.findBySubscriberAndBoat(getLoggedUser(), boat).getSubscriber().getName());
 		return boatSubsRepo.findBySubscriberAndBoat(getLoggedUser(), boat) != null? true:false;
 	}
 
