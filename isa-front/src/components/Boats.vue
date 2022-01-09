@@ -294,7 +294,8 @@ export default {
                     }
                 })
                 .then(response => {
-                    alert('submited', response)
+                  this.LoadBoats()
+                  alert('submited', response)
                 });
 
 

@@ -14,7 +14,7 @@ import ClientSubscriptions from '../components/ClientSubscriptions.vue'
 import ViewRegistration from '../components/ViewRegistration.vue'
 import ClientHomePage from '../components/ClientHomePage.vue'
 import ClientComplains from '../components/ClientComplains.vue'
-
+import AccountActivation from '../components/AccountActivation.vue'
 import MansionOwnerHomePage from "../components/MansionOwnerHomePage";
 import BoatOwnerHomePage from "../components/BoatOwnerHomePage";
 import BoatView from "../components/BoatView";
@@ -109,6 +109,11 @@ const routes = [
         path: '/boat/:id',
         name: 'BoatView',
         component: BoatView
+    },
+    {
+        path: '/activation/:code',
+        name: 'AccountActivation',
+        component: AccountActivation
     },
     {
         path: '/mansion',

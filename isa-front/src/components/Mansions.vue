@@ -107,6 +107,17 @@
                            <p class="card-text">{{value.promoDescription}}</p>
                            <p v-if="!makingReservation" class="card-text"><small class="text-muted">{{value.address.address}},{{value.address.city}},{{value.address.country}}</small></p>
                         </div>
+                        <div class="bg-light p-3 text-left" v-if="makingReservation">
+                              <p>Add additional services to your reservation: </p>
+                              <div v-for="(s,index) in value.additionalServices"
+                                 :key="index">
+                                 <div class="custom-control custom-checkbox mb-3">
+                                    <input type="checkbox" class="custom-control-input" :id="value.mansionId+index" required>
+                                    <label class="custom-control-label" :for="value.mansionId+index">{{s}}</label>
+                                 </div>
+                              </div>
+                              <button class="btn btn-primary" v-on:click=MakeMansionReservation(value)>Make a reservation</button>
+                           </div>
                      </div>
                   </div>
                </div>
@@ -329,6 +340,7 @@ export default {
                 })
                 .then(response => {
                     alert('submited', response)
+                    this.LoadMansions()
                 });
 
 

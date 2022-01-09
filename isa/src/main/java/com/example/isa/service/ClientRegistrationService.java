@@ -34,13 +34,13 @@ public class ClientRegistrationService {
 		client.setPassword(passwordEncoder.encode(clientDto.getPassword()));
 		String activationCode = RandomString.make(64);
 	    client.setActivationCode(activationCode);
-	    client.setBlocked(false);
+	    client.setBlocked(true);
 	    sendActivationLink(client,siteUrl);
 		return userRepository.save(client);
 	}
 	
     private void sendActivationLink(Client client, String siteUrl) throws MessagingException {
-        String verifyURL = siteUrl + "/activation?code=" + client.getActivationCode() + "&email=" + client.getEmail();
+        String verifyURL = siteUrl + "/activation/" + client.getActivationCode();
         
         System.out.println("Url je ");
         System.out.println(verifyURL);
