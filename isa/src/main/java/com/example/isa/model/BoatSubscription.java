@@ -26,9 +26,12 @@ public class BoatSubscription extends Subscription{
 		this.boat = boat;
 	}
 	
-	public BoatSubscription(User user, Boat boat) {
 
+	public BoatSubscription(User subscriber, Boat boat) {
+		super(subscriber);
+		this.boat = boat;
 	}
+
 	public BoatSubscription() {}
 
 }

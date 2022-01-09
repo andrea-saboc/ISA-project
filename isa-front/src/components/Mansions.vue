@@ -58,7 +58,7 @@
                   <li><button class="dropdown-item" v-on:click=SortResultByAvgGrade>Average grade</button></li>
                </ul>
             </div>
-            <button class = "btn-lg btn-primary">Sort</button><br><br>
+            <button class = "btn-lg btn-primary" v-on:click=SortResults>Sort</button><br><br>
          </div>
          <br>
          <br>
@@ -164,7 +164,7 @@ export default {
         return {
             user: null,
             makingReservation: false,
-            sortSearchResult: 'Prize',
+            sortSearchResult: 'Price',
             sort: 'Name',
 
             search: 'Name',
@@ -242,9 +242,8 @@ export default {
            var filteredList =[]
             if (this.search == 'Name') {
                for(var m of this.mansions){
-                  if(m.name.toLowerCase().includes(this.searchValue)){ filteredList.push(m)}
-               }
-               console.log(filteredList)
+                  if(m.name.toLowerCase().includes(this.searchValue.toLowerCase())){ filteredList.push(m)}
+               }console.log(filteredList)
                this.mansions = filteredList
             } else if (this.search == 'Grade') {
                for(var mm of this.mansions){
@@ -258,7 +257,7 @@ export default {
                   mmm.address.country.toLowerCase().includes(this.searchValue) ||
                   mmm.address.city.toLowerCase().includes(this.searchValue)
                   ){ filteredList.push(mmm)}
-               }
+               }console.log(filteredList)
                this.mansions = filteredList
             }
         },
@@ -286,6 +285,16 @@ export default {
         },
         SortResultByPrice() {
             this.sortSearchResult = 'Price'
+        },
+        SortResults(){
+
+            if (this.sortSearchResult == 'Price') {
+               alert('sorting by price')
+                this.mansions.sort((b, a) => (a.totalPrice > b.totalPrice) ? 1 : ((b.totalPrice > a.totalPrice) ? -1 : 0));
+            } else{
+                this.mansions.sort((a, b) => (a.avgGrade > b.avgGrade) ? 1 : ((b.avgGrade > a.avgGrade) ? -1 : 0));
+            }
+
         },
         CancelMakingReservation() {
             this.makingReservation = false

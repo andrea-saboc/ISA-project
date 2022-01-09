@@ -46,13 +46,18 @@ public class Subscription {
 		this.subscriber = subscriber;
 	}
 
+	public Subscription(User subscriber) {
+		super();
+		this.subscriber = subscriber;
+	}
+	
+	
 	public Subscription(Long id, User subscriber) {
 		super();
 		this.id = id;
 		this.subscriber = subscriber;
 	}
-	
-	
+
 	public Subscription() {}
 	
 	

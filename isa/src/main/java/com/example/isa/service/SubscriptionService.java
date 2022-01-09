@@ -8,9 +8,11 @@ import org.springframework.stereotype.Service;
 
 import com.example.isa.model.Boat;
 import com.example.isa.model.BoatSubscription;
+import com.example.isa.model.Mansion;
+import com.example.isa.model.MansionSubscription;
 import com.example.isa.model.User;
-import com.example.isa.repository.BoatRepository;
 import com.example.isa.repository.BoatSubscriptionRepository;
+import com.example.isa.repository.MansionSubscriptionRepository;
 
 @Service
 public class SubscriptionService {
@@ -18,21 +20,34 @@ public class SubscriptionService {
 	@Autowired
 	BoatSubscriptionRepository boatSubsRepo;
 	@Autowired
-	BoatRepository boatRepo;
+	MansionSubscriptionRepository mansionSubRepo;
 	
 	public User getLoggedUser() {	
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		return user;
 	}
-	public BoatSubscription newBoatSubscription(long id) {
-		System.out.println("id u servisu je "+id);
-		System.out.println("Pronadjeni brod je " );
-		System.out.println(boatRepo.findById(id).orElse(new Boat()).getName());
-		return boatSubsRepo.save(new BoatSubscription(getLoggedUser(),boatRepo.findById(id).orElse(new Boat())));
+	public BoatSubscription newBoatSubscription(Boat boat) {
+		return boatSubsRepo.save(new BoatSubscription(getLoggedUser(),boat));
 	}
-	
+	public MansionSubscription newMansionSubscription(Mansion mansion) {
+		return mansionSubRepo.save(new MansionSubscription(getLoggedUser(), mansion));
+	}
+	public void cancelBoatSubscription(BoatSubscription boat) {
+		boatSubsRepo.delete(boat);
+	}	
+	public void cancelMansionSubscription(MansionSubscription mansion) {
+		mansionSubRepo.delete(mansion);
+	}	
 	public List<BoatSubscription> getClientBoatSubscription(){
 		return boatSubsRepo.findAllBySubscriber(getLoggedUser());
+	}
+	
+	public List<MansionSubscription> getClientMansionSubscription(){
+		return mansionSubRepo.findAllBySubscriber(getLoggedUser());
+	}
+	public Boolean checkBoatSubscription(Boat boat) {
+		System.out.println("d ali je user subs  "+boatSubsRepo.findBySubscriberAndBoat(getLoggedUser(), boat).getSubscriber().getName());
+		return boatSubsRepo.findBySubscriberAndBoat(getLoggedUser(), boat) != null? true:false;
 	}
 
 }

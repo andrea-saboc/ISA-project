@@ -63,8 +63,8 @@ export default{
       console.log(type)
       let router = this.$router;
       if (type === 'Client') {
-        window.location.reload()
-        router.push("/listing");
+        //window.location.reload()
+        router.push("/clientHomePage");
         return
         }
       else if(type === 'MansionOwner'){

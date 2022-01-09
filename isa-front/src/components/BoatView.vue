@@ -50,7 +50,7 @@
     </div>
     <div class="info">
 
-      <button class="btn btn-primary" v-on:click="SubscribeClient"></button>
+      <button v-if="!clientSubscribed" class="btn btn-primary" v-on:click="SubscribeClient">Subscribe</button>
       <h4>Description</h4>
       {{boatToShow.promoDescription}}
     </div>
@@ -246,6 +246,7 @@ export default {
   },
   data: function (){
     return{
+      clientSubscribed: '',
       startDateTime: '',
       endDateTime: '',
       boatToShow: [],
@@ -298,7 +299,7 @@ export default {
           })
     })
 
-
+    this.CheckClientSubscription()
   },
   methods:{
     calculateAvailableDaysForCalendar(){
@@ -333,7 +334,7 @@ export default {
     SubscribeClient(){
       alert(this.boatToShow.id)
             axios
-                .post(devServer.proxy + '/subscriptions/newBoatSubscription', this.boatToShow.id, {
+                .post(devServer.proxy + '/subscriptions/newBoatSubscription', this.boatToShow, {
                     headers: {
                         'Authorization': this.$store.getters.tokenString,
                         'Content-Type': 'application/json'
@@ -342,6 +343,21 @@ export default {
                 .then(response => {
                     alert('submited')
                     console.log(response.data)
+                });
+
+    },
+    CheckClientSubscription(){
+      alert(this.boatToShow.id)
+            axios
+                .post(devServer.proxy + '/subscriptions/checkBoatSubscription', this.boatToShow, {
+                    headers: {
+                        'Authorization': this.$store.getters.tokenString,
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => {                   
+                    alert('trebalo bi tru il fals' + response.data)
+                    this.clientSubscribed = response.data
                 });
 
     }
