@@ -112,7 +112,7 @@ public class IsaApplication extends SpringBootServletInitializer implements Comm
 		
 
 		Client c = new Client("Igor","Stojanovic", "Address", "City", "Serbiania", "468438",
-				"igi@gmail.com", "igi", 0,0);
+				"littlevamp999@gmail.com", "igi", 0,0);
 		c.setPassword(passwordEncoder.encode("igi"));
 		userRepo.save(c);
 		

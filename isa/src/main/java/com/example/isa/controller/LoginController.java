@@ -13,9 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.isa.dto.LoginDTO;
 import com.example.isa.dto.UserTokenState;
-import com.example.isa.model.User;
-import com.example.isa.repository.UserRepository;
 import com.example.isa.service.LoginService;
+import com.example.isa.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 @RestController
@@ -24,7 +23,7 @@ public class LoginController {
 	@Autowired	
 	LoginService loginService;
 	@Autowired
-	UserRepository repo;
+	UserService userService;
 
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/login",consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE )
@@ -37,5 +36,16 @@ public class LoginController {
 		
 	}
 	
+
+	
+	@RequestMapping(method = RequestMethod.POST, value = "/checkActivationCode",consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
+	@CrossOrigin(origins = "*")
+	public boolean checkActivationCode(@RequestBody String code) throws JsonProcessingException{
+		
+		System.out.println("controller hit" + code);
+		boolean valid = loginService.checkActivationCode(code);
+		if(valid) userService.activateUser(code);
+        return valid;	
+	}
 
 }

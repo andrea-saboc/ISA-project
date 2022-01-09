@@ -8,8 +8,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.isa.dto.ClientRegistrationDTO;
-import com.example.isa.mail.AccountActivationFormatter;
 import com.example.isa.mail.MailService;
+import com.example.isa.mail.formatter.AccountActivationFormatter;
 import com.example.isa.model.Client;
 import com.example.isa.repository.UserRepository;
 
@@ -34,17 +34,17 @@ public class ClientRegistrationService {
 		client.setPassword(passwordEncoder.encode(clientDto.getPassword()));
 		String activationCode = RandomString.make(64);
 	    client.setActivationCode(activationCode);
-	    client.setBlocked(false);
+	    client.setBlocked(true);
 	    sendActivationLink(client,siteUrl);
 		return userRepository.save(client);
 	}
 	
     private void sendActivationLink(Client client, String siteUrl) throws MessagingException {
-        String verifyURL = siteUrl + "/activation?code=" + client.getActivationCode() + "&email=" + client.getEmail();
+        String verifyURL = siteUrl + "/activation/" + client.getActivationCode();
         
         System.out.println("Url je ");
         System.out.println(verifyURL);
-        mailService.sendMail(client.getEmail(), verifyURL, new AccountActivationFormatter());
+        mailService.sendClientRegistrationMail(client.getEmail(), verifyURL, new AccountActivationFormatter());
     }
 
 	public boolean clientExists(String email) {

@@ -62,9 +62,6 @@ public class User implements UserDetails{
 
 	private List<Role> authorities;
     
-    @Column(name = "last_password_reset_date")
-    protected Date lastPasswordResetDate;
-
 
 	public User() {
 		// TODO Auto-generated constructor stub
@@ -238,15 +235,6 @@ public class User implements UserDetails{
 		// TODO Auto-generated method stub
 		return !this.blocked;
 	}
-	
-    public void setLastPasswordResetDate(Date lastPasswordResetDate) {
-        this.lastPasswordResetDate = lastPasswordResetDate;
-    }
-    
-    public Date getLastPasswordResetDate() {
-        return this.lastPasswordResetDate;
-    }
-
 
 	public void setAuthorities(List<Role> authorities) {
 		this.authorities = authorities;

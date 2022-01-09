@@ -58,7 +58,7 @@
                   <li><button class="dropdown-item" v-on:click=SortResultByAvgGrade>Average grade</button></li>
                </ul>
             </div>
-            <button class = "btn-lg btn-primary">Sort</button><br><br>
+            <button class = "btn-lg btn-primary" v-on:click=SortResults>Sort</button><br><br>
          </div>
          <br>
          <br>
@@ -73,7 +73,7 @@
                   :key="index">
                   <div v-if="index % 2 == 0">
                      <div class="card mb-3">
-                        <img src="../assets/yacht.jpg" class="card-img-top img-fluid w-30" v-on:click="ShowMansion(value)">
+                        <img src="../assets/mansion.jpg" class="card-img-top img-fluid w-30" v-on:click="ShowMansion(value)">
                         <div class="card-body">
                            <div v-on:click="ShowMansion(value)">
                               <h5 class="card-title">{{value.name}}</h5>
@@ -101,12 +101,23 @@
                   :key="index">
                   <div v-if="index % 2 != 0">
                      <div class="card mb-3" v-on:click="ShowMansion(value)">
-                        <img src="../assets/yacht.jpg" class="card-img-top img-fluid w-30">
+                        <img src="../assets/mansion.jpg" class="card-img-top img-fluid w-30">
                         <div class="card-body">
                            <h5 class="card-title">{{value.name}}</h5>
                            <p class="card-text">{{value.promoDescription}}</p>
                            <p v-if="!makingReservation" class="card-text"><small class="text-muted">{{value.address.address}},{{value.address.city}},{{value.address.country}}</small></p>
                         </div>
+                        <div class="bg-light p-3 text-left" v-if="makingReservation">
+                              <p>Add additional services to your reservation: </p>
+                              <div v-for="(s,index) in value.additionalServices"
+                                 :key="index">
+                                 <div class="custom-control custom-checkbox mb-3">
+                                    <input type="checkbox" class="custom-control-input" :id="value.mansionId+index" required>
+                                    <label class="custom-control-label" :for="value.mansionId+index">{{s}}</label>
+                                 </div>
+                              </div>
+                              <button class="btn btn-primary" v-on:click=MakeMansionReservation(value)>Make a reservation</button>
+                           </div>
                      </div>
                   </div>
                </div>
@@ -123,14 +134,14 @@
             {{search}}
             </button>
             <ul class="dropdown-menu" aria-labelledby="dropdown1">
-               <li><button class="dropdown-item" >Name</button></li>
-               <li><button class="dropdown-item" >Location</button></li>
-               <li><button class="dropdown-item" >Grade</button></li>
+               <li><button class="dropdown-item" v-on:click="SearchByName()">Name</button></li>
+               <li><button class="dropdown-item" v-on:click="SearchByLocation()">Location</button></li>
+               <li><button class="dropdown-item" v-on:click="SearchByGrade()">Grade</button></li>
             </ul>
          </div>
          <div class="input-group mt-2">
-            <input type="text" class="form-control" aria-label="Search boats...">
-            <button class = "btn btn-primary btn-lg">Search</button>
+            <input type="text" class="form-control" aria-label="Search boats..." v-model="searchValue">
+            <button class = "btn btn-primary btn-lg" v-on:click="Search()">Search</button>
          </div>
       </div>
       <div class="card-body">
@@ -164,9 +175,11 @@ export default {
         return {
             user: null,
             makingReservation: false,
-            sortSearchResult: 'Prize',
+            sortSearchResult: 'Price',
             sort: 'Name',
+
             search: 'Name',
+            searchValue: '',
             reservationForm: {
                 'startDate': '',
                 'startTime': '',
@@ -212,13 +225,52 @@ export default {
         Sort() {
 
             if (this.sort == 'Name') {
+               alert('sorting by name')
                 this.mansions.sort((b, a) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0));
             } else if (this.sort == 'Grade') {
                 this.mansions.sort((a, b) => (a.avgGrade > b.avgGrade) ? 1 : ((b.avgGrade > a.avgGrade) ? -1 : 0));
             } else if (this.sort == 'Location') {
-                this.mansions.sort((b, a) => (a.address > b.address) ? 1 : ((b.address > a.address) ? -1 : 0));
+               alert('sorting by name')
+                this.mansions.sort((b, a) => (a.address.address > b.address.address) ? 1 : ((b.address.address > a.address.address) ? -1 : 0));
             }
 
+        },
+        SearchByName() {
+            this.search = 'Name';
+        },
+        SearchByGrade() {
+            this.search = 'Grade';
+        },
+        SearchByLocation() {
+            this.search = 'Location';
+        },
+        Search(){
+           alert('searching')
+           console.log(this.mansions)
+           //this.LoadMansions()
+
+           
+           var filteredList =[]
+            if (this.search == 'Name') {
+               for(var m of this.mansions){
+                  if(m.name.toLowerCase().includes(this.searchValue.toLowerCase())){ filteredList.push(m)}
+               }console.log(filteredList)
+               this.mansions = filteredList
+            } else if (this.search == 'Grade') {
+               for(var mm of this.mansions){
+                  if(mm.avgGrade > this.searchValue){ filteredList.push(mm)}
+               }
+               this.mansions = filteredList
+
+            } else if (this.search == 'Location') {
+                for(var mmm of this.mansions){
+                  if( mmm.address.address.toLowerCase().includes(this.searchValue) ||
+                  mmm.address.country.toLowerCase().includes(this.searchValue) ||
+                  mmm.address.city.toLowerCase().includes(this.searchValue)
+                  ){ filteredList.push(mmm)}
+               }console.log(filteredList)
+               this.mansions = filteredList
+            }
         },
         SearchForReservations() {
 
@@ -244,6 +296,16 @@ export default {
         },
         SortResultByPrice() {
             this.sortSearchResult = 'Price'
+        },
+        SortResults(){
+
+            if (this.sortSearchResult == 'Price') {
+               alert('sorting by price')
+                this.mansions.sort((b, a) => (a.totalPrice > b.totalPrice) ? 1 : ((b.totalPrice > a.totalPrice) ? -1 : 0));
+            } else{
+                this.mansions.sort((a, b) => (a.avgGrade > b.avgGrade) ? 1 : ((b.avgGrade > a.avgGrade) ? -1 : 0));
+            }
+
         },
         CancelMakingReservation() {
             this.makingReservation = false
@@ -278,6 +340,7 @@ export default {
                 })
                 .then(response => {
                     alert('submited', response)
+                    this.LoadMansions()
                 });
 
 

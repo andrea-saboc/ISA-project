@@ -282,8 +282,6 @@ export default {
             for(let index of b.additinalServicesId){
                let i=index-1
               var name = document.getElementById(b.boatId+i).checked;
-              //alert(name)
-              //alert(b.boatId+i)
               if(name == true) {boatReservation.additionalServices.push(index)}
             }
             
@@ -296,7 +294,8 @@ export default {
                     }
                 })
                 .then(response => {
-                    alert('submited', response)
+                  this.LoadBoats()
+                  alert('submited', response)
                 });
 
 

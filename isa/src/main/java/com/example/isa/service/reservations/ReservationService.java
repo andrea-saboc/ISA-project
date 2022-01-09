@@ -47,7 +47,7 @@ public class ReservationService {
 		List<ActiveReservationDTO> ret = new ArrayList<ActiveReservationDTO>();
 		for(BoatReservation r: boatResRepo.findAllByUser(getLoggedUser())) {
 			
-			Format formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+			Format formatter = new SimpleDateFormat("dd.MM.yyyy, HH:mm");
 			ret.add(new ActiveReservationDTO(r.getId(), r.getType(),formatter.format(r.getStartDate()),formatter.format(r.getEndDate()),
 					r.getNumberOfGuests(),null, r.getTotalPrice(),r.getBoat().getName(),
 					r.getBoat().getAddress().getCountry() + ", "+r.getBoat().getAddress().getCity()+", "+r.getBoat().getAddress().getAddress(),
@@ -60,7 +60,7 @@ public class ReservationService {
 		List<ActiveReservationDTO> ret = new ArrayList<ActiveReservationDTO>();
 		for(MansionReservation r: mansionResRepo.findAllByUser(getLoggedUser())) {
 			
-			Format formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+			Format formatter = new SimpleDateFormat("dd.MM.yyyy, HH:mm");
 			ret.add(new ActiveReservationDTO(r.getId(), r.getType(), formatter.format(r.getStartDate()) ,formatter.format(r.getEndDate()),
 					r.getNumberOfGuests(),null, r.getTotalPrice(),r.getMansion().getName(),
 					r.getMansion().getAddress().getCountry() + ", "+r.getMansion().getAddress().getCity()+", "+r.getMansion().getAddress().getAddress(),

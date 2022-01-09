@@ -10,8 +10,9 @@ import org.springframework.stereotype.Service;
 
 import com.example.isa.dto.LoginDTO;
 import com.example.isa.dto.UserTokenState;
+import com.example.isa.model.Client;
 import com.example.isa.model.User;
-import com.example.isa.repository.UserRepository;
+import com.example.isa.repository.ClientRepository;
 import com.example.isa.security.TokenUtils;
 
 @Service
@@ -22,7 +23,7 @@ public class LoginService {
     @Autowired
     private AuthenticationManager authenticationManager;
     @Autowired
-    private UserRepository userRepository;
+    private ClientRepository clientRepo;
     @Autowired
     private PasswordEncoder passwordEncoder;
     
@@ -75,5 +76,17 @@ public class LoginService {
         String accessToken = tokenUtils.generateToken(username);
         int accessExpiresIn = tokenUtils.getExpiredIn();
         return new UserTokenState(userType, accessToken, accessExpiresIn);
+    }
+    
+    public boolean checkActivationCode(String code) {
+    	
+    	Client c = clientRepo.findByActivationCode(code);
+
+    	System.out.println("Pronadjeni user je"+c.getName());
+    	if(c!= null) {
+    		if(c.isBlocked()) 
+				return true;
+    	}
+    	return false;
     }
 }

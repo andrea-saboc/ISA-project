@@ -9,12 +9,16 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.mail.MessagingException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.example.isa.dto.ReservationDTO;
+import com.example.isa.mail.formatter.AccountActivationFormatter;
 import com.example.isa.model.AdditionalService;
+import com.example.isa.model.Client;
 import com.example.isa.model.MansionAvailablePeriod;
 import com.example.isa.model.MansionReservation;
 import com.example.isa.model.User;
@@ -131,7 +135,6 @@ public class MansionReservationService {
 		mansionReservationRepo.deleteById(resId);
 		return null;
 	}
-
 
 
 	public List<MansionReservation> GetMansionReservationHistory() {

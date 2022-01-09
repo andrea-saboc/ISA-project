@@ -49,6 +49,8 @@
       </svg>
     </div>
     <div class="info">
+    <div v-if="clientSubscribed != 'true'">
+      <button  class="btn btn-primary" v-on:click="SubscribeClient">Subscribe</button></div>
       <h4>Description</h4>
       {{boatToShow.promoDescription}}
     </div>
@@ -244,6 +246,7 @@ export default {
   },
   data: function (){
     return{
+      clientSubscribed: '',
       startDateTime: '',
       endDateTime: '',
       boatToShow: [],
@@ -278,6 +281,7 @@ export default {
     })
     .then(response =>{
       this.boatToShow = response.data
+      this.CheckClientSubscription(this.boatToShow)
       console.log(this.boatToShow.address)
       this.address = this.boatToShow.address
       console.log(response.data)
@@ -326,6 +330,36 @@ export default {
         console.log("New available periods: ", this.availablePeriods )
         this.calculateAvailableDaysForCalendar()
       })
+
+    },
+    SubscribeClient(){
+      alert(this.boatToShow.id)
+            axios
+                .post(devServer.proxy + '/subscriptions/newBoatSubscription', this.boatToShow, {
+                    headers: {
+                        'Authorization': this.$store.getters.tokenString,
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => {
+                    alert('submited')
+                    console.log(response.data)
+                });
+
+    },
+    CheckClientSubscription(boat){
+      alert(boat)
+            axios
+                .post(devServer.proxy + '/subscriptions/checkBoatSubscription', boat, {
+                    headers: {
+                        'Authorization': this.$store.getters.tokenString,
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => {                   
+                    alert(response.data)
+                    this.clientSubscribed = response.data
+                });
 
     }
 

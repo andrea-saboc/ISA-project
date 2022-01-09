@@ -14,7 +14,7 @@ public class Client extends User{
 	
 	private static final long serialVersionUID = 1L;
 	
-    @Column(name = "client_activation_code", length = 64)
+    //@Column(name = "client_activation_code", length = 64)
     private String activationCode;
 
     @Column(name = "client_penalty_points")

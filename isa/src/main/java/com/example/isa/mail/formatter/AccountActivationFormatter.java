@@ -1,10 +1,10 @@
-package com.example.isa.mail;
+package com.example.isa.mail.formatter;
 
 
 public class AccountActivationFormatter {
 	
     public String getText(String link) {
-        return " Click to verify your registration  " + link;
+        return " Click on this activation code to verify your registration  " + link;
     }
 
     public String getSubject() {
