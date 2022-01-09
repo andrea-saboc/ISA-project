@@ -49,6 +49,8 @@
       </svg>
     </div>
     <div class="info">
+
+      <button class="btn btn-primary" v-on:click="SubscribeClient"></button>
       <h4>Description</h4>
       {{boatToShow.promoDescription}}
     </div>
@@ -326,6 +328,21 @@ export default {
         console.log("New available periods: ", this.availablePeriods )
         this.calculateAvailableDaysForCalendar()
       })
+
+    },
+    SubscribeClient(){
+      alert(this.boatToShow.id)
+            axios
+                .post(devServer.proxy + '/subscriptions/newBoatSubscription', this.boatToShow.id, {
+                    headers: {
+                        'Authorization': this.$store.getters.tokenString,
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => {
+                    alert('submited')
+                    console.log(response.data)
+                });
 
     }
 

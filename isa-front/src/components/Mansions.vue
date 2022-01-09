@@ -73,7 +73,7 @@
                   :key="index">
                   <div v-if="index % 2 == 0">
                      <div class="card mb-3">
-                        <img src="../assets/yacht.jpg" class="card-img-top img-fluid w-30" v-on:click="ShowMansion(value)">
+                        <img src="../assets/mansion.jpg" class="card-img-top img-fluid w-30" v-on:click="ShowMansion(value)">
                         <div class="card-body">
                            <div v-on:click="ShowMansion(value)">
                               <h5 class="card-title">{{value.name}}</h5>
@@ -101,7 +101,7 @@
                   :key="index">
                   <div v-if="index % 2 != 0">
                      <div class="card mb-3" v-on:click="ShowMansion(value)">
-                        <img src="../assets/yacht.jpg" class="card-img-top img-fluid w-30">
+                        <img src="../assets/mansion.jpg" class="card-img-top img-fluid w-30">
                         <div class="card-body">
                            <h5 class="card-title">{{value.name}}</h5>
                            <p class="card-text">{{value.promoDescription}}</p>
@@ -123,14 +123,14 @@
             {{search}}
             </button>
             <ul class="dropdown-menu" aria-labelledby="dropdown1">
-               <li><button class="dropdown-item" >Name</button></li>
-               <li><button class="dropdown-item" >Location</button></li>
-               <li><button class="dropdown-item" >Grade</button></li>
+               <li><button class="dropdown-item" v-on:click="SearchByName()">Name</button></li>
+               <li><button class="dropdown-item" v-on:click="SearchByLocation()">Location</button></li>
+               <li><button class="dropdown-item" v-on:click="SearchByGrade()">Grade</button></li>
             </ul>
          </div>
          <div class="input-group mt-2">
-            <input type="text" class="form-control" aria-label="Search boats...">
-            <button class = "btn btn-primary btn-lg">Search</button>
+            <input type="text" class="form-control" aria-label="Search boats..." v-model="searchValue">
+            <button class = "btn btn-primary btn-lg" v-on:click="Search()">Search</button>
          </div>
       </div>
       <div class="card-body">
@@ -166,7 +166,9 @@ export default {
             makingReservation: false,
             sortSearchResult: 'Prize',
             sort: 'Name',
+
             search: 'Name',
+            searchValue: '',
             reservationForm: {
                 'startDate': '',
                 'startTime': '',
@@ -212,13 +214,53 @@ export default {
         Sort() {
 
             if (this.sort == 'Name') {
+               alert('sorting by name')
                 this.mansions.sort((b, a) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0));
             } else if (this.sort == 'Grade') {
                 this.mansions.sort((a, b) => (a.avgGrade > b.avgGrade) ? 1 : ((b.avgGrade > a.avgGrade) ? -1 : 0));
             } else if (this.sort == 'Location') {
-                this.mansions.sort((b, a) => (a.address > b.address) ? 1 : ((b.address > a.address) ? -1 : 0));
+               alert('sorting by name')
+                this.mansions.sort((b, a) => (a.address.address > b.address.address) ? 1 : ((b.address.address > a.address.address) ? -1 : 0));
             }
 
+        },
+        SearchByName() {
+            this.search = 'Name';
+        },
+        SearchByGrade() {
+            this.search = 'Grade';
+        },
+        SearchByLocation() {
+            this.search = 'Location';
+        },
+        Search(){
+           alert('searching')
+           console.log(this.mansions)
+           //this.LoadMansions()
+
+           
+           var filteredList =[]
+            if (this.search == 'Name') {
+               for(var m of this.mansions){
+                  if(m.name.toLowerCase().includes(this.searchValue)){ filteredList.push(m)}
+               }
+               console.log(filteredList)
+               this.mansions = filteredList
+            } else if (this.search == 'Grade') {
+               for(var mm of this.mansions){
+                  if(mm.avgGrade > this.searchValue){ filteredList.push(mm)}
+               }
+               this.mansions = filteredList
+
+            } else if (this.search == 'Location') {
+                for(var mmm of this.mansions){
+                  if( mmm.address.address.toLowerCase().includes(this.searchValue) ||
+                  mmm.address.country.toLowerCase().includes(this.searchValue) ||
+                  mmm.address.city.toLowerCase().includes(this.searchValue)
+                  ){ filteredList.push(mmm)}
+               }
+               this.mansions = filteredList
+            }
         },
         SearchForReservations() {
 
