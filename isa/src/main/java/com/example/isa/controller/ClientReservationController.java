@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,12 +17,9 @@ import com.example.isa.dto.PotentialBoatReservationDTO;
 import com.example.isa.dto.PotentialMansionReservationDTO;
 import com.example.isa.dto.ReservationDTO;
 import com.example.isa.dto.ReservationSearchDTO;
+import com.example.isa.mail.MailService;
 import com.example.isa.model.BoatReservation;
 import com.example.isa.model.MansionReservation;
-import com.example.isa.model.User;
-import com.example.isa.repository.BoatRepository;
-import com.example.isa.repository.ClientRepository;
-import com.example.isa.service.UserService;
 import com.example.isa.service.reservations.BoatReservationService;
 import com.example.isa.service.reservations.BoatReservationSuggestionService;
 import com.example.isa.service.reservations.MansionReservationService;
@@ -48,7 +44,8 @@ public class ClientReservationController {
 	
 	@Autowired
 	ReservationService reservationService;
-	
+	@Autowired
+	private MailService<String> mailService;
 	
 	
     @RequestMapping(method = RequestMethod.GET,value = "/reservations/boats", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -114,11 +111,13 @@ public class ClientReservationController {
     
     @RequestMapping(method = RequestMethod.POST,value = "/reservations/createBoatReservation", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @CrossOrigin(origins = "*")
-    public ResponseEntity<BoatReservation> createBoatReservation(@RequestBody ReservationDTO res){
+    public ResponseEntity<String> createBoatReservation(@RequestBody ReservationDTO res){
     	
     	System.out.println("USli u kontroler");
         try {
-            return new ResponseEntity<>(boatResService.createBoatReservation(res), HttpStatus.OK);
+        	BoatReservation newReservation = boatResService.createBoatReservation(res);
+        	mailService.sendBoatReservationConfirmationMail(boatResService.getLoggedUser(), newReservation);
+            return new ResponseEntity<>("Reservation successfull!", HttpStatus.OK);
         } catch (Exception e){
         	System.out.println(e);
             return  new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -127,11 +126,13 @@ public class ClientReservationController {
     
     @RequestMapping(method = RequestMethod.POST,value = "/reservations/createMansionReservation", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @CrossOrigin(origins = "*")
-    public ResponseEntity<MansionReservation> createMansionReservation(@RequestBody ReservationDTO res){
+    public ResponseEntity<String> createMansionReservation(@RequestBody ReservationDTO res){
     	
     	System.out.println("USli u kontroler");
         try {
-            return new ResponseEntity<>(mansionResService.createMansionReservation(res), HttpStatus.OK);
+        	MansionReservation newReservation = mansionResService.createMansionReservation(res);
+        	mailService.sendMansionReservationConfirmationMail(boatResService.getLoggedUser(), newReservation);
+            return new ResponseEntity<>("Reservation successfull!", HttpStatus.OK);
         } catch (Exception e){
         	System.out.println(e);
             return  new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
