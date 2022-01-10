@@ -53,7 +53,7 @@ public class Image {
             e.printStackTrace();
         }
 
-        String imagePathName= "Images"+File.separator+"Boats"+File.separator+ imgId + ".png";
+        String imagePathName= "main"+File.separator+"resources"+File.separator+"public"+File.separator+"images"+File.separator+ imgId + ".png";
 
         try {
             File outputfile = new File(new File("."+File.separator+"src").getCanonicalPath()+File.separator+imagePathName);
