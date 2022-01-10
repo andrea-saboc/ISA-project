@@ -71,6 +71,45 @@ public class Client extends User{
 	public void setLoyaltyPoints(int loyaltyPoints) {
 		this.loyaltyPoints = loyaltyPoints;
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((activationCode == null) ? 0 : activationCode.hashCode());
+		result = prime * result + loyaltyPoints;
+		result = prime * result + penaltyPoints;
+		result = prime * result + ((role == null) ? 0 : role.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Client other = (Client) obj;
+		if (activationCode == null) {
+			if (other.activationCode != null)
+				return false;
+		} else if (!activationCode.equals(other.activationCode))
+			return false;
+		if (loyaltyPoints != other.loyaltyPoints)
+			return false;
+		if (penaltyPoints != other.penaltyPoints)
+			return false;
+		if (role == null) {
+			if (other.role != null)
+				return false;
+		} else if (!role.equals(other.role))
+			return false;
+		return true;
+	}
+	
+	
     
     
 

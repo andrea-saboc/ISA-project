@@ -2,17 +2,23 @@ package com.example.isa.controller;
 
 import java.util.List;
 
-import com.example.isa.dto.AddAvailablePeriodDTO;
-import com.example.isa.dto.BoatRegistrationDTO;
-import com.example.isa.dto.LongIdDTO;
-import com.example.isa.model.BoatAvailablePeriod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
+import com.example.isa.dto.AddAvailablePeriodDTO;
+import com.example.isa.dto.BoatRegistrationDTO;
+import com.example.isa.dto.LongIdDTO;
 import com.example.isa.model.Boat;
+import com.example.isa.model.BoatAvailablePeriod;
 import com.example.isa.service.BoatService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -36,9 +42,10 @@ public class BoatController {
 		return new ResponseEntity<>(jsonString, HttpStatus.OK);
 
 	}
-
+	
+    @PreAuthorize("hasRole('ROLE_CLIENT')")   
 	@RequestMapping(method = RequestMethod.GET, value = "/boats",produces = MediaType.APPLICATION_JSON_VALUE)
-	@CrossOrigin(origins = "*")
+	//@CrossOrigin(origins = "*")
 	public ResponseEntity<String> getAllBoats() throws JsonProcessingException{
 		
 		List <Boat> boats = service.getAll();

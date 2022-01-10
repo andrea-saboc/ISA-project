@@ -82,6 +82,8 @@ public class TokenUtils {
         final String username = getUsernameFromToken(token);
         final Date created = getIssuedAtDateFromToken(token);
         
+        System.out.println("IZVUCEN USERNAME IZ TOKENA "+username);
+        System.out.println("USERNAME IZ USERDETAILS "+ userDetails.getUsername());
         return (username != null && username.equals(userDetails.getUsername()));
     }
      

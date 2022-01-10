@@ -12,8 +12,8 @@ import com.example.isa.repository.UserRepository;
 @Service
 public class UserCredentialsService implements UserDetailsService{
 	
-	@Autowired
-	private UserRepository repo;
+
+	private final UserRepository repo;
 	
 	public UserCredentialsService(UserRepository userRepository){
 		this.repo = userRepository;
