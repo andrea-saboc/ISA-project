@@ -1,182 +1,90 @@
 <template>
-<div class="homeb-view">
-  <div class="b-example-divider">
+<section class ="bg-dark text-light p-5 text-center text-sm-start">
 
-  <div class="flex-shrink-0 p-3 bg-white" style="width: 280px;">
-    <span class="fw-semibold" style="font-size: 20px; margin-bottom: 4%;">Client home page</span>
-    <ul class="list-unstyled ps-0" style="margin-top: 4%">
-      <li class="mb-1">
-        <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="true">
-          Boats
-        </button>
-        <div class="collapse show" id="home-collapse">
-          <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-            <li v-for="boat in boats"
-                :key="boat.id"><a  v-on:click="DisplayBoat(boat.id)" class="link-dark rounded">{{boat.name}}</a></li>
-          </ul>
-        </div>
-      </li>
-      <li class="mb-1">
-        <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#dashboard-collapse" aria-expanded="false">
-          Dashboard
-        </button>
-        <div class="collapse" id="dashboard-collapse">
-          <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-            <li><a href="#" class="link-dark rounded">Overview</a></li>
-            <li><a href="#" class="link-dark rounded">Weekly</a></li>
-            <li><a href="#" class="link-dark rounded">Monthly</a></li>
-            <li><a href="#" class="link-dark rounded">Annually</a></li>
-          </ul>
-        </div>
-      </li>
-      <li class="mb-1">
-        <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#orders-collapse" aria-expanded="false">
-          Orders
-        </button>
-        <div class="collapse" id="orders-collapse">
-          <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-            <li><a href="#" class="link-dark rounded">New</a></li>
-            <li><a href="#" class="link-dark rounded">Processed</a></li>
-            <li><a href="#" class="link-dark rounded">Shipped</a></li>
-            <li><a href="#" class="link-dark rounded">Returned</a></li>
-          </ul>
-        </div>
-      </li>
-      <li class="border-top my-3"></li>
-      <li class="mb-1">
-        <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#account-collapse" aria-expanded="false">
-          Account
-        </button>
-        <div class="collapse" id="account-collapse">
-          <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-            <li><a v-on:click="DisplayProfile" class="link-dark rounded">Profile</a></li>
-            <li><a href="#" class="link-dark rounded">Settings</a></li>
-            <li><a href="#" class="link-dark rounded">Sign out</a></li>
-          </ul>
-        </div>
-      </li>
-    </ul>
+<h1>Client home page:</h1>
+
+<div class="btn-group btn-group-justified" role="group" aria-label="...">
+  <div class="btn-group" role="group">
+    <button type="button" class="btn btn-default" v-on:click="ShowListing">Offers</button>
   </div>
+  <div class="btn-group" role="group">
+    <button type="button" class="btn btn-default" v-on:click="ShowReservations">Reservations</button>
   </div>
-  <div class="router-elem">
-    <div v-if="display == 'Listing'">
-      <Boats></Boats>
-    </div>
-    <div v-if="display == 'Mansions'">
-      <Mansions></Mansions>
-    </div>
-    <div v-if="display == 'Adventures'">
-      <Adventures></Adventures>
-    </div>
-    <div v-if="display == 'Profile'">
-      <Profile></Profile>
-    </div>
+  <div class="btn-group" role="group">
+    <button type="button" class="btn btn-default" v-on:click="ShowComplains">Complains</button>
+  </div>
+  <div class="btn-group" role="group">
+    <button type="button" class="btn btn-default" v-on:click="ShowSubscriptions">Subscriptions</button>
+  </div>
+  <div class="btn-group" role="group">
+    <button type="button" class="btn btn-default" v-on:click="ShowProfile">Profile</button>
+  </div>
+  <div class="btn-group" role="group">
+    <button type="button" class="btn btn-danger" v-on:click="Logout">Logout</button>
   </div>
 </div>
+</section>
 
+<div v-if="display == 'Listing'">
+  <Listing></Listing>
+</div>
+<div v-if="display == 'Reservations'">
+  <ClientReservations></ClientReservations>
+</div>
+<div v-if="display == 'Complains'">
+  <ClientComplains></ClientComplains>
+</div>
+<div v-if="display == 'Subscriptions'">
+  <ClientSubscriptions></ClientSubscriptions>
+</div>
+<div v-if="display == 'Profile'">
+  <Profile></Profile>
+</div>
 </template>
 
 <script>
-import Boats from "./Boats";
-import Mansions from "./Mansions";
-import Adventures from "./Adventures";
-import Profile from "./Profile";
-//import axios from "axios";
-//import {devServer} from "../../vue.config";
+//import axios from 'axios'
+import Listing from './Listing.vue'
+import ClientReservations from './ClientReservations.vue'
+import ClientComplains from './ClientComplains.vue'
+import ClientSubscriptions from './ClientSubscriptions.vue'
+import Profile from './Profile.vue'
 export default {
-  name: "ClientHomePage",
-  components: {Boats,Mansions,Adventures,Profile},
-  data: function(){
+  name: 'Home',
+  components: { Listing,ClientReservations,ClientComplains,ClientSubscriptions,Profile
+  },
+  data: function() {
     return{
-      display: 'Listing'
+
+      display:'Listing'
     }
   },
-  mounted() {
-
-  },
-  methods: {
-
-    DisplayListing() {
-        this.display = 'Listing'
+  methods:{
+    ShowListing(){
+      this.display = 'Listing'
     },
-    DisplayProfile(){
-      this.display = 'profile';
+    ShowReservations(){
+      this.display = 'Reservations'
+    },
+    ShowComplains(){
+      this.display = 'Complains'
+    },
+    ShowSubscriptions(){
+      this.display = 'Subscriptions'
+    },
+    ShowProfile(){
+      this.display = 'Profile'
+    },
+    Logout(){
+      this.$store.commit('logOut');
+      this.$router.push("/home");
+      this.user = null 
+      console.log(this.user)   
     }
   }
 }
+
+
 </script>
-
-<style scoped>
-.homeb-view {
-  display: flex;
-  flex-direction: row;
-  height: 100%;
-  overflow-x: auto;
-  overflow-y: hidden;
-  margin-left: 5%;
-}
-
-b-example-divider {
-  background-color: #ada9a9;
-
-}
-
-
-.nav-flush .nav-link {
-  border-radius: 0;
-}
-
-.btn-toggle {
-  display: inline-flex;
-  align-items: center;
-  padding: .25rem .5rem;
-  font-weight: 600;
-  color: rgba(0, 0, 0, .65);
-  background-color: transparent;
-  border: 0;
-}
-.btn-toggle:hover,
-.btn-toggle:focus {
-  color: rgba(0, 0, 0, .85);
-  background-color: #d2f4ea;
-}
-
-.btn-toggle::before {
-  width: 1.25em;
-  line-height: 0;
-  content: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='rgba%280,0,0,.5%29' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 14l6-6-6-6'/%3e%3c/svg%3e");
-  transition: transform .35s ease;
-  transform-origin: .5em 50%;
-}
-
-.btn-toggle[aria-expanded="true"] {
-  color: rgba(0, 0, 0, .85);
-}
-.btn-toggle[aria-expanded="true"]::before {
-  transform: rotate(90deg);
-}
-
-.btn-toggle-nav a {
-  display: inline-flex;
-  padding: .1875rem .5rem;
-  margin-top: .125rem;
-  margin-left: 1.25rem;
-  text-decoration: none;
-}
-.btn-toggle-nav a:hover,
-.btn-toggle-nav a:focus {
-  background-color: #white;
-}
-
-
-
-.fw-semibold { font-weight: 600; }
-.lh-tight { line-height: 1.25; }
-
-.router-elem{
-  align-self: right;
-  width: 100%;
-  background-color: white;
-}
-
+<style>
 </style>

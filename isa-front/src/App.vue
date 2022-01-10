@@ -12,23 +12,11 @@
         <li v-if="user === null" class="nav-item">
           <a href="/clientRegistration" class="nav-link">Register</a>
         </li>
-        <li v-if="user === 'Client'" class="nav-item">
-          <a href="/clientReservations" class="nav-link">Reservations</a>
-        </li>
-        <li v-if="user === 'Client'" class="nav-item">
-          <a href="/clientSubscriptions" class="nav-link">Subscriptions</a>
-        </li>
-        <li v-if="user === 'Client'" class="nav-item">
-          <a href="/clientComplains" class="nav-link">Complains</a>
-        </li>
          <li v-if="user === 'Administrator'" class="nav-item">
           <a href="/profile" class="nav-link">Profile Admina</a>
         </li>
         <li v-if="user === 'Administrator'" class="nav-item">
           <a href="/viewRegistration" class="nav-link">View registrations users</a>
-        </li>
-        <li v-if="user === 'Client'" class="nav-item">
-          <a href="/profile" class="nav-link">Profile</a>
         </li>
           <li v-if="user === 'BoatOwner'" class="nav-item">
             <a href="/boatOwnerHomePage" class="nav-link">Home page</a>
