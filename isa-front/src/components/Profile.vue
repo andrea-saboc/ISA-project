@@ -87,8 +87,9 @@
 </div>
 
 </div>
-</section>
-<section>
+<br>
+<br>
+<br>
 
 <button class = "btn btn-danger btn-lg" data-bs-toggle="modal" data-bs-target="#del">Request deleting account
       </button>

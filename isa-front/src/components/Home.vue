@@ -8,8 +8,8 @@
       <p class="lead my-4">
         This is some kind of description or whatever.. Ovdje bi mozda mogla i slika?
       </p>
-      <button class = "btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#login">Login
-      </button>
+      <a type="button" class = "btn btn-primary btn-lg"  href="/login">Login
+      </a>
 <div class="modal fade" id="login" tabindex="-1" role="dialog" aria-labelledby="login" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -30,13 +30,21 @@
 </div>
       </div>
       <div>
+      <h1>Dont have an account?</h1>
+      <p class="lead my-4">
+        This is some kind of description or whatever.. Ovdje bi mozda mogla i slika?
+      </p>
+      <a type="button" class = "btn btn-primary btn-lg"  href="/clientRegistration">Register
+      </a>
+      </div>
+      <div>
         <img class="img-fluid w-30 s-sm-block" src = "">
       </div>
     </div>
   </div>
 </section>
 <section class="p-10">
-  <div class ="container" py-30>
+  <div py-30>
    <listing></listing>
   </div>
 </section>

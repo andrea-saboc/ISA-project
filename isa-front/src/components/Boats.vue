@@ -1,9 +1,5 @@
 <template>
    <section v-if="user === 'Client' && !makingReservation" class="bg-light text-sm-start">
-      <div class=" text-center">
-         <button type="button" class = "btn btn-primary btn-lg " data-toggle="modal" data-target="#res">Make a reservation
-         </button>
-      </div>
       <div class="modal fade" id="res" tabindex="-1" role="dialog" aria-labelledby="ress" aria-hidden="true">
          <div class="modal-dialog" role="dialog">
             <div class="modal-content">
@@ -68,7 +64,7 @@
          <button class = "btn-lg btn-outline-secondary" v-on:click=CancelMakingReservation>Go back </button>
       </div>
    </div>
-   <section class="p-5">
+   <section>
       <div class = "container">
          <div class="row text-center">
             <div class="col-md">
@@ -135,8 +131,15 @@
       </div>
    </section>
    <div v-if="!makingReservation" class="card text-white bg-dark ml-100 mb-100" style="max-width: 20rem; position: fixed;bottom: 10px; right: 10px">
-      <div class="card-header">Search or sort boats</div>
+      <div class="card-header"></div>
       <div class="card-body">
+      <div v-if="user === 'Client' && !makingReservation">
+         <button type="button" class = "btn btn-primary btn-lg " data-toggle="modal" data-target="#res">Make a reservation
+         </button>
+         <br>
+         <br>
+      </div>
+         <h5>Search or sort boats</h5>
          <label>Chose search category:</label>
          <div class="dropdown mt-3">
             <button class="btn btn-secondary dropdown-toggle" type="button"  id="dropdown1" data-bs-toggle="dropdown">
@@ -263,6 +266,7 @@ export default {
             this.sortSearchResult = 'Price'
         },
         CancelMakingReservation() {
+           this.makingReservation = false;
             this.LoadBoats()
         },
         MakeBoatReservation(b) {

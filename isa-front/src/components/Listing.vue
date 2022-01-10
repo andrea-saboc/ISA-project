@@ -1,5 +1,5 @@
 <template>
-<section >
+<section  class ="container">
 <br>
   <hr>
 <div class="input-group mb-3">
@@ -9,8 +9,6 @@
 
 </div>
   <hr>
-<br>
-<br>
 <div py-50>
     <div v-if="display == 'mansions'">
         <mansions></mansions>

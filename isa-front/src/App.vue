@@ -2,7 +2,7 @@
   <nav class = "navbar navbar-expand-lg bg-dark navbar-dark">
     <div class="container">
       <a v-if="user === null" href="/home" class="navbar-brand">Adventureland</a>
-      <a v-if="user === 'Client' || user == 'MansionOwner' || user === 'BoatOwner'" href="/boats" class="navbar-brand">Adventureland</a>
+      <a v-if="user === 'Client' || user == 'MansionOwner' || user === 'BoatOwner'" href="/listing" class="navbar-brand">Adventureland</a>
       <div class="collapse navbar-collapse">
         <ul class ="navbar-nav ms-auto">
         <li v-if="user === 'MansionOwner'" class ="nav-item" >
@@ -23,9 +23,6 @@
           </li>
         <li v-if="user === null" class="nav-item">
           <a href="/login" class="nav-link">Login</a>
-        </li>
-        <li v-if="user !== null" class="nav-item">
-          <button class="btn btn-danger" v-on:click="Logout">Logout</button>
         </li>
         </ul>
       </div>
