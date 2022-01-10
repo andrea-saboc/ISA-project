@@ -220,8 +220,43 @@
         </div>
       </div>
       <br>
-      <v-calendar :columns="$screens({ default: 1, lg: 2 })" style="width: 100%; height: 30%" :attributes='calendar_attributes'
+      <v-calendar :columns="$screens({ default: 1, lg: 2 })" style="width: 100%;" :attributes='calendar_attributes'
                   :available-dates='availableDates'/>
+      <hr>
+      <p style="font-weight: bolder; font-size: 26px">
+        Location
+      </p>
+      <p style="font-size: 18px;">
+        {{address.address}}, {{address.city}}, {{address.country}}
+        <br>
+        {{address.latitude}}, {{address.longitude}}
+      </p>
+      <ol-map :loadTilesWhileAnimating="true" :loadTilesWhileInteracting="true" style="height:400px">
+
+        <ol-view ref="view" :center="[address.longitude,address.latitude]" :rotation="rotation" :zoom="zoom" :projection="projection" />
+
+        <ol-tile-layer>
+          <ol-source-osm />
+        </ol-tile-layer>
+
+        <ol-vector-layer>
+          <ol-source-vector>
+            <ol-feature>
+              <ol-geom-point :coordinates="[address.longitude,address.latitude]"></ol-geom-point>
+              <ol-style>
+                <ol-style-circle radius="5">
+                  <ol-style-fill color="white"></ol-style-fill>
+                  <ol-style-stroke color="red" :width="10" ></ol-style-stroke>
+                </ol-style-circle>
+              </ol-style>
+            </ol-feature>
+
+          </ol-source-vector>
+
+        </ol-vector-layer>
+
+      </ol-map>
+      <hr>
 <hr>
 
 
@@ -235,15 +270,11 @@
 
 </template>
 <script>
+import {ref} from "vue";
 import axios from 'axios'
 import {devServer} from "../../vue.config";
 export default {
   name: "BoatView",
-  setup() {
-    return {
-      coords: [54, 39],
-    }
-  },
   data: function (){
     return{
       clientSubscribed: '',
@@ -264,6 +295,16 @@ export default {
       ]
     }
 
+  },
+  setup() {
+    const projection = ref('EPSG:4326')
+    const zoom = ref(8)
+    const rotation = ref(0)
+    return {
+      projection,
+      zoom,
+      rotation
+    }
   },
   mounted() {
     var path = window.location.href;
@@ -375,6 +416,7 @@ export default {
   width: 80%;
   margin-left: 15%;
   height: 100%;
+  padding-bottom: 5%;
 }
 
 .boat-view .top-slider{
