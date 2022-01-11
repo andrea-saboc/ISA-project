@@ -101,7 +101,7 @@
 </template>
 <script>
    import axios from 'axios'
-   
+   import {devServer} from "../../vue.config";  
    export default {
    data(){
        return{
@@ -123,26 +123,28 @@
    
    },
    mounted(){
+
             axios
-            .get('http://localhost:8080/complaints/boats',{
-               headers: {
-                  'Authorization' : this.$store.getters.tokenString
-               }
-            })
-            .then(response => {
-               this.boats = response.data;
-               console.log(this.boats)      
-         });
-             axios
-            .get('http://localhost:8080/complaints/mansions',{
-               headers: {
-                  'Authorization' : this.$store.getters.tokenString
-               }
-            })
-            .then(response => {
-               this.boats = response.data;
-               console.log(this.boats)      
-         });
+                .get(devServer.proxy + '/complaints/boats', {
+                    headers: {
+                        'Authorization': this.$store.getters.tokenString
+                    }
+                })
+                .then(response => {
+                    console.log(response.data)
+                    this.boats = response.data;
+                });
+
+            axios
+                .get(devServer.proxy + '/complaints/mansions', {
+                    headers: {
+                        'Authorization': this.$store.getters.tokenString
+                    }
+                })
+                .then(response => {
+                    console.log(response.data)
+                    this.mansions = response.data;
+                });
    
    
    },

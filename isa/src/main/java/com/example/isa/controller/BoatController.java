@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +21,7 @@ import com.example.isa.dto.LongIdDTO;
 import com.example.isa.dto.SearchDTO;
 import com.example.isa.model.Boat;
 import com.example.isa.model.BoatAvailablePeriod;
-import com.example.isa.model.Mansion;
+import com.example.isa.model.User;
 import com.example.isa.service.BoatFilteringService;
 import com.example.isa.service.BoatService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -52,6 +54,10 @@ public class BoatController {
 	//@CrossOrigin(origins = "*")
 	public ResponseEntity<String> getAllBoats() throws JsonProcessingException{
 		
+		System.out.println("Unutar boats ");
+		
+		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		System.out.println("USER IZ KON "+user.getEmail());
 		List <Boat> boats = service.getAll();
 		ObjectMapper mapper = new ObjectMapper();
 		String jsonString = mapper.writeValueAsString(boats);

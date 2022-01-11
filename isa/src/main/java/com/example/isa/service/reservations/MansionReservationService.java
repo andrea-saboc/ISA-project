@@ -133,8 +133,10 @@ public class MansionReservationService {
 			periodToAdd = new MansionAvailablePeriod(res.getStartDate(),res.getEndDate(),res.getMansion());
 		
 		
-		availablePeriodsRepo.save(periodToAdd);	
-		mansionReservationRepo.deleteById(resId);
+		availablePeriodsRepo.save(periodToAdd);
+		MansionReservation m = mansionReservationRepo.findById(resId);
+		m.setCancelled(true);
+		mansionReservationRepo.save(m);
 		return null;
 	}
 

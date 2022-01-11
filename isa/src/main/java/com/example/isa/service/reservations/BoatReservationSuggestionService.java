@@ -49,7 +49,9 @@ public class BoatReservationSuggestionService {
         cal.add(Calendar.HOUR, formParams.getNumberOfHours()); 
         Date endDate = cal.getTime();
         System.out.println("Adding days to start date: "+endDate);
-	    return createPotentialReservations(getAvailableBoatsBetweenDates(startDate,endDate),formParams);
+        List<Boat> boats = FilterByLocationAndAvgGrade(formParams.getLocation(),
+        		formParams.getGrade(),getAvailableBoatsBetweenDates(startDate,endDate));
+	    return createPotentialReservations(boats,formParams);
 	    
 		} catch (ParseException e) {
 		System.out.println("PUČE!");

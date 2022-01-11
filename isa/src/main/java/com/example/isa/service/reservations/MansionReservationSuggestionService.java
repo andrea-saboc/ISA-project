@@ -49,7 +49,10 @@ public class MansionReservationSuggestionService {
 
 	        Date endDate = cal.getTime();
 	        System.out.println("Adding days to start date: "+endDate);
-		    return createPotentialReservations(getAvailableMansionsBetweenDates(startDate,endDate),formParams);
+	        
+	        List<Mansion> mansions = FilterByLocationAndAvgGrade(formParams.getLocation(),
+	        		formParams.getGrade(),getAvailableMansionsBetweenDates(startDate,endDate));
+		    return createPotentialReservations(mansions,formParams);
 		    
 			} catch (ParseException e) {
 			System.out.println("PUČE!");
