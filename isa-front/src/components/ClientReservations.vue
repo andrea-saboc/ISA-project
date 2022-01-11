@@ -50,7 +50,7 @@
                <div v-for="res in pastMansionReservations" :key="res">
                   <div class="text-dark bg-light mt-3">
                      <div class="card-header h4">
-                        {{res.mansion.name}},{{res.boat.address.address}},{{res.boat.address.city}}
+                        {{res.mansion.name}},{{res.mansion.address.address}},{{res.mansion.address.city}}
                      </div>
                      <div class="card-body">
                         <label>Start date: {{res.startDate}}</label><br>

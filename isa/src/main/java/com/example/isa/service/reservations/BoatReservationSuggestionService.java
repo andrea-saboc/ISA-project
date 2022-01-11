@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.isa.dto.PotentialBoatReservationDTO;
 import com.example.isa.dto.ReservationSearchDTO;
@@ -21,6 +22,7 @@ import com.example.isa.repository.BoatRepository;
 
 
 @Service
+@Transactional(readOnly=true)
 public class BoatReservationSuggestionService {
 	
 	@Autowired

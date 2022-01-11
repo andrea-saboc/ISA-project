@@ -12,6 +12,7 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.isa.dto.ReservationDTO;
 import com.example.isa.model.AdditionalService;
@@ -25,6 +26,7 @@ import com.example.isa.repository.BoatRepository;
 import com.example.isa.repository.BoatReservationRepository;
 
 @Service
+@Transactional(readOnly=true)
 public class BoatReservationService {
 
 	@Autowired 
@@ -36,7 +38,7 @@ public class BoatReservationService {
 	@Autowired
 	AdditionalServiceRepository additinalServicesRepo;
 	
-
+	@Transactional(readOnly = false)
 	public BoatReservation createBoatReservation(ReservationDTO res) {
 		
 		String sDate = res.getStartDate()+" "+res.getStartTime();
@@ -101,7 +103,7 @@ public class BoatReservationService {
 		return user;
 	}
 	
-	
+	@Transactional(readOnly = false)
 	public BoatReservation cancelBoatReservation(long resId) {
 		
 		BoatReservation res = boatReservationRepo.findById(resId);
@@ -142,6 +144,8 @@ public class BoatReservationService {
 		}
 		System.out.println("KOLIKO IMA BOATS "+res.size());
 		return res;
+		
+		//return boatReservationRepo.findAllByUser(getLoggedUser());
 
 	}
 	

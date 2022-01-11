@@ -146,14 +146,14 @@
             {{search}}
             </button>
             <ul class="dropdown-menu" aria-labelledby="dropdown1">
-               <li><button class="dropdown-item" >Name</button></li>
-               <li><button class="dropdown-item" >Location</button></li>
-               <li><button class="dropdown-item" >Grade</button></li>
+               <li><button class="dropdown-item" v-on:click=SearchByName>Name</button></li>
+               <li><button class="dropdown-item" v-on:click=SearchByLocation>Location</button></li>
+               <li><button class="dropdown-item" v-on:click=SearchByGrade>Grade</button></li>
             </ul>
          </div>
          <div class="input-group mt-2">
-            <input type="text" class="form-control" aria-label="Search boats...">
-            <button class = "btn btn-primary btn-lg">Search</button>
+            <input type="text" class="form-control" aria-label="Search boats..." v-model="searchValue">
+            <button class = "btn btn-primary btn-lg" v-on:click=Search>Search</button>
          </div>
       </div>
       <div class="card-body">
@@ -190,6 +190,7 @@ export default {
             sortSearchResult: 'Prize',
             sort: 'Name',
             search: 'Name',
+            searchValue: '',
             reservationForm: {
                 'startDate': '',
                 'startTime': '',
@@ -240,6 +241,36 @@ export default {
             } else if (this.sort == 'Location') {
                 this.boats.sort((b, a) => (a.address > b.address) ? 1 : ((b.address > a.address) ? -1 : 0));
             }
+        },
+        SearchByGrade(){
+           this.search = 'Grade'
+        },
+        SearchByLocation(){
+            this.search = 'Location'
+        },
+        SearchByName(){
+            this.search = 'Name'
+        },
+        Search(){
+
+           var searchParams={
+              'type': this.search,
+              'value': this.searchValue 
+           }
+            console.log(searchParams)
+
+            axios
+                .post(devServer.proxy + '/boats/search', searchParams, {
+                    headers: {
+                        'Authorization': this.$store.getters.tokenString,
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => {
+
+                    console.log(response.data)
+                    this.boats = response.data
+                });
         },
         SearchForReservations() {
 
