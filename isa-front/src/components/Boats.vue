@@ -211,7 +211,10 @@ export default {
     },
     methods: {
 
+       
         LoadBoats() {
+           console.log(this.$store.getters.tokenString)
+           alert(this.$store.getters.tokenString)
             axios
                 .get(devServer.proxy + '/boats', {
                     headers: {

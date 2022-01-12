@@ -70,11 +70,11 @@ INSERT INTO public.mansion(
 	id, avg_grade, name, price_for_seven_days, price_per_day, promo_description, address_id, owner_id)
 	VALUES (8, 9, 'Bobanka', 250, 50, 'Najbolji promo',12, 2);
 	
-INSERT INTO AUTHORITY (id ,name) VALUES (1, 'CLIENT');
-INSERT INTO AUTHORITY (id ,name) VALUES (2, 'ROLE_BOAT_OWNER');
-INSERT INTO AUTHORITY (id ,name) VALUES (3, 'ROLE_MANSION_OWNER');
-INSERT INTO AUTHORITY (id ,name) VALUES (4, 'ROLE_UNAUTHORISED');
-INSERT INTO AUTHORITY (id ,name) VALUES (5, 'ROLE_ADMIN');
+INSERT INTO ROLE (id ,name) VALUES (1, 'CLIENT');
+INSERT INTO ROLE (id ,name) VALUES (2, 'ROLE_BOAT_OWNER');
+INSERT INTO ROLE (id ,name) VALUES (3, 'ROLE_MANSION_OWNER');
+INSERT INTO ROLE (id ,name) VALUES (4, 'ROLE_UNAUTHORISED');
+INSERT INTO ROLE (id ,name) VALUES (5, 'ROLE_ADMIN');
 
 INSERT INTO USER_AUTHORITY (user_id, authority_id) VALUES (2, 2);
 INSERT INTO USER_AUTHORITY (user_id, authority_id) VALUES (7, 1);

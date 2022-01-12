@@ -25,7 +25,8 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     @Override
     public void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws IOException, ServletException {
-
+    	
+    	System.out.println("Usao u filter internal");
         String username;
         String authToken = tokenUtils.getToken(request);
 
@@ -34,11 +35,16 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
             if (username != null) {
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-
+                	
+                System.out.println("Treba da se validira token ");
                 if (tokenUtils.validateToken(authToken, userDetails)) {
                     TokenBasedAuthentication authentication = new TokenBasedAuthentication(userDetails);
+                    System.out.println("Sta je auth .. "+authentication == null);
+                    
                     authentication.setToken(authToken);
+                    System.out.println("Postavljanje contexta..");
                     SecurityContextHolder.getContext().setAuthentication(authentication);
+                    
                 }
             }
         }
