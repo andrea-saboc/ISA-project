@@ -7,6 +7,7 @@ import java.util.Set;
 import com.example.isa.dto.AddAvailablePeriodDTO;
 import com.example.isa.dto.BoatRegistrationDTO;
 import com.example.isa.model.*;
+import com.example.isa.model.reservations.AdditionalService;
 import com.example.isa.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;

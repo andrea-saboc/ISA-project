@@ -1,8 +1,8 @@
 package com.example.isa.dto;
 
-import com.example.isa.model.AdditionalService;
 import com.example.isa.model.Address;
 import com.example.isa.model.Boat;
+import com.example.isa.model.reservations.AdditionalService;
 
 import java.util.List;
 import java.util.Set;

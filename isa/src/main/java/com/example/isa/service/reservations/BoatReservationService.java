@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Set;
 
 import com.example.isa.model.*;
+import com.example.isa.model.reservations.AdditionalService;
+import com.example.isa.model.reservations.BoatReservation;
 import com.example.isa.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;

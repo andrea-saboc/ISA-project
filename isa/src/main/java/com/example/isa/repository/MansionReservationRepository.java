@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.example.isa.model.MansionReservation;
 import com.example.isa.model.User;
+import com.example.isa.model.reservations.MansionReservation;
 
 public interface MansionReservationRepository extends JpaRepository<MansionReservation, Long>{
 

@@ -1,4 +1,4 @@
-package com.example.isa.model;
+package com.example.isa.model.reservations;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -21,6 +21,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+
+import com.example.isa.model.User;
 
 @Entity
 @Table(name = "reservation")

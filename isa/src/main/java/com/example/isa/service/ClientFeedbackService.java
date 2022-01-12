@@ -5,10 +5,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.example.isa.dto.ClientFeedbackDTO;
-import com.example.isa.model.BoatReservation;
 import com.example.isa.model.ClientFeedback;
-import com.example.isa.model.MansionReservation;
 import com.example.isa.model.User;
+import com.example.isa.model.reservations.BoatReservation;
+import com.example.isa.model.reservations.MansionReservation;
 import com.example.isa.repository.BoatReservationRepository;
 import com.example.isa.repository.ClientFeedbackRepository;
 import com.example.isa.repository.MansionReservationRepository;

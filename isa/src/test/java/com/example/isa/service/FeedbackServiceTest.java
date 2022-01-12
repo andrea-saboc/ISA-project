@@ -8,9 +8,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 import com.example.isa.constants.FeedbackConstants;
-import com.example.isa.model.BoatReservation;
 import com.example.isa.model.ClientFeedback;
 import com.example.isa.model.User;
+import com.example.isa.model.reservations.BoatReservation;
 import com.example.isa.repository.BoatRepository;
 import com.example.isa.repository.BoatReservationRepository;
 import com.example.isa.repository.ClientFeedbackRepository;
