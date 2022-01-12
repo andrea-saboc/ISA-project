@@ -29,8 +29,7 @@ public class UserController {
 	@RequestMapping(method = RequestMethod.GET, value = "/userData",produces = MediaType.APPLICATION_JSON_VALUE )
 	//@PreAuthorize("hasRole('ROLE_CLIENT')")
 	@CrossOrigin(origins = "*")	
-	public ResponseEntity<User> getUserData(){	
-
+	public ResponseEntity<User> getUserData(){
 		return ResponseEntity.ok(userService.getLoggedUser());
 	}
 	

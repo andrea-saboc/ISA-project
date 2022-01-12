@@ -52,10 +52,7 @@ public class UserService {
 	}
 	*/
 	public User getLoggedUser() {
-		
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		
-		System.out.println(user.getSurname());
 		return user;
 	}
 	

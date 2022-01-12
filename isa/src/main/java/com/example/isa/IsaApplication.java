@@ -20,7 +20,6 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 
 @SpringBootApplication
-@EnableWebMvc
 public class IsaApplication extends SpringBootServletInitializer implements CommandLineRunner {
 	@Autowired
 	AdventureService as;

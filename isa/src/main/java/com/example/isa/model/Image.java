@@ -17,23 +17,10 @@ public class Image {
     private Integer imgId;
     private String img;
     private String imgPath;
-
-    @ManyToOne(cascade = {CascadeType.ALL, CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE, CascadeType.REFRESH, CascadeType.DETACH})
-    @JoinColumn(name = "boat_id")
-    private Boat boat;
-
-    @ManyToOne(cascade = {CascadeType.ALL, CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE, CascadeType.REFRESH, CascadeType.DETACH})
-    @JoinColumn(name = "mansion_id")
-    private Mansion mansion;
-
-    @ManyToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
-    @JoinColumn(name = "boat_exter_id", referencedColumnName = "id", nullable = true)
-    private Boat boatExter;
-
-    @ManyToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
-    @JoinColumn(name = "boat_inter_id", referencedColumnName = "id", nullable = true)
-    private Boat boatInter;
-
+    @ManyToOne
+    public Boat boat;
+    @ManyToOne
+    public Mansion mansion;
 
 
     public void saveImage() {
@@ -53,7 +40,7 @@ public class Image {
             e.printStackTrace();
         }
 
-        String imagePathName= "main"+File.separator+"resources"+File.separator+"public"+File.separator+"images"+File.separator+ imgId + ".png";
+        String imagePathName= "images"+File.separator+ imgId + ".png";
 
         try {
             File outputfile = new File(new File("."+File.separator+"src").getCanonicalPath()+File.separator+imagePathName);
@@ -65,15 +52,6 @@ public class Image {
         img = imagePathName;
         }
 
-
-
-    public Boat getBoat() {
-        return boat;
-    }
-
-    public void setBoat(Boat boat) {
-        this.boat = boat;
-    }
 
     public Image(){}
 
@@ -88,22 +66,6 @@ public class Image {
 
     public void setImgPath(String imgPath) {
         this.imgPath = imgPath;
-    }
-
-    public Boat getBoatExter() {
-        return boatExter;
-    }
-
-    public void setBoatExter(Boat boatExter) {
-        this.boatExter = boatExter;
-    }
-
-    public Boat getBoatInter() {
-        return boatInter;
-    }
-
-    public void setBoatInter(Boat boatInter) {
-        this.boatInter = boatInter;
     }
 
     public Integer getImgId() {

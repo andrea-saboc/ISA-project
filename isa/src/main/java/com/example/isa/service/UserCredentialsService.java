@@ -22,7 +22,12 @@ public class UserCredentialsService implements UserDetailsService{
 
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-		return repo.findByEmail(email);
+		User user = repo.findByEmail(email);
+		if (user == null) {
+			throw new UsernameNotFoundException(String.format("No user found with email '%s'.", email));
+		} else {
+			return user;
+		}
 	}
 
 }

@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,6 +34,7 @@ public class BoatController {
 	public BoatController(BoatService bs){
 		this.service = bs;
 	}
+
 	@RequestMapping(method = RequestMethod.GET, value = "/boat",produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> getBoatById(@RequestParam Long id) throws JsonProcessingException{
 		System.out.println("We are searchinng for" +id);
@@ -43,11 +46,10 @@ public class BoatController {
 
 	}
 	
-    @PreAuthorize("hasRole('ROLE_CLIENT')")   
+
 	@RequestMapping(method = RequestMethod.GET, value = "/boats",produces = MediaType.APPLICATION_JSON_VALUE)
-	//@CrossOrigin(origins = "*")
+	@CrossOrigin(origins = "*")
 	public ResponseEntity<String> getAllBoats() throws JsonProcessingException{
-		
 		List <Boat> boats = service.getAll();
 		ObjectMapper mapper = new ObjectMapper();
 		String jsonString = mapper.writeValueAsString(boats);

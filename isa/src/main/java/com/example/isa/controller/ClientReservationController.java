@@ -2,6 +2,7 @@ package com.example.isa.controller;
 
 import java.util.List;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -162,6 +163,21 @@ public class ClientReservationController {
         } catch (Exception e){
         	System.out.println(e);
             return  new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/getBoatOwnerReservations")
+    @CrossOrigin(origins = "*")
+    public ResponseEntity<String> getBoatOwnerReservations(){
+        try {
+            List<BoatReservation> boatReservations = boatResService.getLoggedUserReservations();
+            ObjectMapper mapper = new ObjectMapper();
+            String jsonString = mapper.writeValueAsString(boatReservations);
+            System.out.println(jsonString);
+            return new ResponseEntity<>(jsonString, HttpStatus.OK);
+
+        } catch (Exception e){
+            return new ResponseEntity<>("Bad request", HttpStatus.BAD_REQUEST);
         }
     }
 

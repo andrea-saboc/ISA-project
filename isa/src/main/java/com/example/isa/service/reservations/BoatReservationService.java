@@ -9,20 +9,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.example.isa.model.*;
+import com.example.isa.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.example.isa.dto.ReservationDTO;
-import com.example.isa.model.AdditionalService;
-import com.example.isa.model.Boat;
-import com.example.isa.model.BoatAvailablePeriod;
-import com.example.isa.model.BoatReservation;
-import com.example.isa.model.User;
-import com.example.isa.repository.AdditionalServiceRepository;
-import com.example.isa.repository.BoatAvailablePeriodRepository;
-import com.example.isa.repository.BoatRepository;
-import com.example.isa.repository.BoatReservationRepository;
 
 @Service
 public class BoatReservationService {
@@ -35,6 +28,8 @@ public class BoatReservationService {
 	BoatAvailablePeriodRepository availablePeriodsRepo;
 	@Autowired
 	AdditionalServiceRepository additinalServicesRepo;
+	@Autowired
+	BoatOwnerRepository boatOwnerRepository;
 	
 
 	public BoatReservation createBoatReservation(ReservationDTO res) {
@@ -144,5 +139,15 @@ public class BoatReservationService {
 		return res;
 
 	}
-	
+
+    public List<BoatReservation> getLoggedUserReservations() {
+		User user = getLoggedUser();
+		BoatOwner boatOwner = boatOwnerRepository.findById(user.getId()).get();
+		List<Boat> ownersBoats = boatRepo.findBoatByBoatOwner(boatOwner);
+		List<BoatReservation> boatReservations = new ArrayList<>();
+		for ( Boat boat : ownersBoats) {
+			boatReservations.addAll(boatReservationRepo.findAllByBoat(boat));
+		}
+		return boatReservations;
+    }
 }
