@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -23,7 +24,8 @@ public class SubscriptionsController {
 	
 	@Autowired
 	SubscriptionService service;
-
+	
+	@PreAuthorize("hasRole('ROLE_CLIENT')")
 	@RequestMapping(method = RequestMethod.POST, value = "/subscriptions/newBoatSubscription",produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<BoatSubscription> newBoatSubscriptions(@RequestBody Boat boat) throws JsonProcessingException{
 		
@@ -35,6 +37,7 @@ public class SubscriptionsController {
         }
 	}
 	
+	@PreAuthorize("hasRole('ROLE_CLIENT')")
 	@RequestMapping(method = RequestMethod.POST, value = "/subscriptions/newMansionSubscription",produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<MansionSubscription> newMansionSubscriptions(@RequestBody Mansion mansion) throws JsonProcessingException{
 		
@@ -44,6 +47,8 @@ public class SubscriptionsController {
             return  new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 	}
+	
+	@PreAuthorize("hasRole('ROLE_CLIENT')")
 	@RequestMapping(method = RequestMethod.GET, value = "/subscriptions/boats",produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<BoatSubscription>> getClientBoatSubscriptions() throws JsonProcessingException{
 
@@ -54,6 +59,7 @@ public class SubscriptionsController {
         }
 	}	
 	
+	@PreAuthorize("hasRole('ROLE_CLIENT')")
 	@RequestMapping(method = RequestMethod.GET, value = "/subscriptions/mansions",produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<MansionSubscription>> getClientMansionSubscriptions() throws JsonProcessingException{
 
@@ -63,6 +69,8 @@ public class SubscriptionsController {
             return  new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 	}
+	
+	@PreAuthorize("hasRole('ROLE_CLIENT')")
 	@RequestMapping(method = RequestMethod.POST, value = "/subscriptions/cancelMansionSub",produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> cancelMansionSubscriptions(@RequestBody MansionSubscription mansion) throws JsonProcessingException{
 		
@@ -73,6 +81,8 @@ public class SubscriptionsController {
             return  new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 	}
+	
+	@PreAuthorize("hasRole('ROLE_CLIENT')")
 	@RequestMapping(method = RequestMethod.POST, value = "/subscriptions/cancelBoatSub",produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> cancelBoatSubscriptions(@RequestBody BoatSubscription boat) throws JsonProcessingException{
 		
@@ -84,6 +94,8 @@ public class SubscriptionsController {
             return  new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 	}
+	
+	//@PreAuthorize("hasAnyRole('ROLE_CLIENT','ROLE_BOAT_OWNER,'ROLE_MANSION_OWNER'')")
 	@RequestMapping(method = RequestMethod.POST, value = "/subscriptions/checkBoatSubscription",produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Boolean> checkBoatSubscriptions(@RequestBody Boat boat) throws JsonProcessingException{
 		System.out.println("usli u koneojer");

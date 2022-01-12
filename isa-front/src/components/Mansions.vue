@@ -248,32 +248,37 @@ export default {
             this.search = 'Location';
         },
         Search(){
-           alert('searching')
-           console.log(this.mansions)
-           //this.LoadMansions()
+
+           var searchParams={
+              'type': this.search,
+              'value': this.searchValue 
+           }
+            console.log(searchParams)
+
+            axios
+                .post(devServer.proxy + '/mansions/search', searchParams, {
+                    headers: {
+                        'Authorization': this.$store.getters.tokenString,
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => {
+
+                    console.log(response.data)
+                    this.mansions = response.data
+                });
+
 
            
-           var filteredList =[]
-            if (this.search == 'Name') {
-               for(var m of this.mansions){
-                  if(m.name.toLowerCase().includes(this.searchValue.toLowerCase())){ filteredList.push(m)}
-               }console.log(filteredList)
-               this.mansions = filteredList
-            } else if (this.search == 'Grade') {
-               for(var mm of this.mansions){
-                  if(mm.avgGrade > this.searchValue){ filteredList.push(mm)}
-               }
-               this.mansions = filteredList
-
-            } else if (this.search == 'Location') {
-                for(var mmm of this.mansions){
-                  if( mmm.address.address.toLowerCase().includes(this.searchValue) ||
-                  mmm.address.country.toLowerCase().includes(this.searchValue) ||
-                  mmm.address.city.toLowerCase().includes(this.searchValue)
-                  ){ filteredList.push(mmm)}
-               }console.log(filteredList)
-               this.mansions = filteredList
-            }
+        },
+        Name(){
+         var list = []
+         
+         for(var m of this.mansions){
+         if(m.name.toLowerCase().includes(this.searchValue.toLowerCase())){ list.push(m); console.log(m)} 
+               }console.log(list)
+               this.mansions = list
+               return list
         },
         SearchForReservations() {
 

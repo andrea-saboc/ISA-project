@@ -14,10 +14,12 @@ import com.example.isa.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.isa.dto.ReservationDTO;
 
 @Service
+@Transactional(readOnly=true)
 public class BoatReservationService {
 
 	@Autowired 
@@ -31,7 +33,7 @@ public class BoatReservationService {
 	@Autowired
 	BoatOwnerRepository boatOwnerRepository;
 	
-
+	@Transactional(readOnly = false)
 	public BoatReservation createBoatReservation(ReservationDTO res) {
 		
 		String sDate = res.getStartDate()+" "+res.getStartTime();
@@ -96,7 +98,7 @@ public class BoatReservationService {
 		return user;
 	}
 	
-	
+	@Transactional(readOnly = false)
 	public BoatReservation cancelBoatReservation(long resId) {
 		
 		BoatReservation res = boatReservationRepo.findById(resId);
@@ -122,8 +124,10 @@ public class BoatReservationService {
 			periodToAdd = new BoatAvailablePeriod(res.getStartDate(),res.getEndDate(),res.getBoat());
 		
 		
-		availablePeriodsRepo.save(periodToAdd);	
-		boatReservationRepo.deleteById(resId);
+		availablePeriodsRepo.save(periodToAdd);
+		BoatReservation b = boatReservationRepo.findById(resId);
+		b.setCancelled(true);
+		boatReservationRepo.save(b);
 		return null;
 	}
 	
@@ -137,6 +141,8 @@ public class BoatReservationService {
 		}
 		System.out.println("KOLIKO IMA BOATS "+res.size());
 		return res;
+		
+		//return boatReservationRepo.findAllByUser(getLoggedUser());
 
 	}
 

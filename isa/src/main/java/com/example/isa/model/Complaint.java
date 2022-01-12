@@ -66,7 +66,7 @@ public class Complaint {
 		super();
 		this.author = author;
 		this.complaintContent = complaintContent;
-		this.approved = false;
+		this.approved = true;
 		this.date = new Date();
 	}
 	

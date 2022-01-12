@@ -50,7 +50,7 @@
                <div v-for="res in pastMansionReservations" :key="res">
                   <div class="text-dark bg-light mt-3">
                      <div class="card-header h4">
-                        {{res.mansion.name}},{{res.boat.address.address}},{{res.boat.address.city}}
+                        {{res.mansion.name}},{{res.mansion.address.address}},{{res.mansion.address.city}}
                      </div>
                      <div class="card-body">
                         <label>Start date: {{res.startDate}}</label><br>
@@ -257,7 +257,18 @@ export default {
             this.sortReservations = 'Duration'
         },
         SortReservations() {
-            console.log('sort res..')
+
+            if(this.sortReservations == 'Date'){
+                this.pastBoatReservations.sort((b, a) => (a.endDate > b.endDate) ? 1 : ((b.endDate > a.endDate) ? -1 : 0));
+                this.pastMansionReservations.sort((b, a) => (a.endDate > b.endDate) ? 1 : ((b.endDate > a.endDate) ? -1 : 0));          
+            }else if(this.sortReservations == 'Price'){
+                this.pastBoatReservations.sort((b, a) => (a.totalPrice > b.totalPrice) ? 1 : ((b.totalPrice > a.totalPrice) ? -1 : 0));         
+                this.pastMansionReservations.sort((b, a) => (a.totalPrice > b.totalPrice) ? 1 : ((b.totalPrice > a.totalPrice) ? -1 : 0));
+            }else{
+                this.pastBoatReservations.sort((b, a) => ((a.endDate - a.startDate) > (b.endDate - b.startDate)) ? 1 : (((b.endDate - b.startDate) > (a.endDate - a.startDate)) ? -1 : 0));         
+                this.pastMansionReservations.sort((b, a) => ((a.endDate - a.startDate) > (b.endDate - b.startDate)) ? 1 : (((b.endDate - b.startDate) > (a.endDate - a.startDate)) ? -1 : 0));
+           
+            }
         },
 
 

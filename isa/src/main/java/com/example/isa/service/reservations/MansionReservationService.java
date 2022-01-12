@@ -14,6 +14,7 @@ import javax.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.isa.dto.ReservationDTO;
 import com.example.isa.mail.formatter.AccountActivationFormatter;
@@ -28,6 +29,7 @@ import com.example.isa.repository.MansionRepository;
 import com.example.isa.repository.MansionReservationRepository;
 
 @Service
+@Transactional(readOnly=true)
 public class MansionReservationService {
 	
 	@Autowired 
@@ -39,7 +41,7 @@ public class MansionReservationService {
 	@Autowired
 	AdditionalServiceRepository additinalServicesRepo;
 	
-	
+	@Transactional(readOnly = false)
 	public MansionReservation createMansionReservation(ReservationDTO res) {
 		
 		String sDate = res.getStartDate()+" "+res.getStartTime();
@@ -105,7 +107,7 @@ public class MansionReservationService {
 		return user;
 	}
 	
-	
+	@Transactional(readOnly = false)
 	public MansionReservation cancelMansionReservation(long resId) {
 		
 		MansionReservation res = mansionReservationRepo.findById(resId);
@@ -131,8 +133,10 @@ public class MansionReservationService {
 			periodToAdd = new MansionAvailablePeriod(res.getStartDate(),res.getEndDate(),res.getMansion());
 		
 		
-		availablePeriodsRepo.save(periodToAdd);	
-		mansionReservationRepo.deleteById(resId);
+		availablePeriodsRepo.save(periodToAdd);
+		MansionReservation m = mansionReservationRepo.findById(resId);
+		m.setCancelled(true);
+		mansionReservationRepo.save(m);
 		return null;
 	}
 
