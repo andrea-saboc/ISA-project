@@ -67,7 +67,11 @@
       <h4>Cancellation policy</h4>
       {{boatToShow.cancellationPolicy}}
     </div>
+    <br>
   </div>
+    <div class="info">
+      <h4><button v-on:click="ShowReservationOffer">Show reservationOffers</button></h4>
+    </div>
     <hr>
     <div class="navigation-equipments">
       <p style="font-weight: bolder; font-size: 26px">
@@ -402,6 +406,9 @@ export default {
                     this.clientSubscribed = response.data
                 });
 
+    },
+    ShowReservationOffer(){
+      window.location.href = "/boatReservationOffers/" + this.boatToShow.id.toString();
     }
 
   }

@@ -31,9 +31,9 @@ public class BoatDiscountReservation extends DiscountReservation{
 
 
 	
-	public BoatDiscountReservation(String type, Date startDate, Date endDate, int numberOfGuests,
+	public BoatDiscountReservation(Date startDate, Date endDate, int numberOfGuests,
 			double priceWithDiscount, Boat boat) {
-		super(type, startDate, endDate, numberOfGuests, priceWithDiscount);
+		super("BOAT", startDate, endDate, numberOfGuests, priceWithDiscount);
 		this.boat = boat;
 	}
 
