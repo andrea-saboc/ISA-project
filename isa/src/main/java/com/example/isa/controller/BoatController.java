@@ -3,11 +3,13 @@ package com.example.isa.controller;
 import java.util.Collection;
 import java.util.List;
 
+import javax.management.relation.Role;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -51,7 +53,8 @@ public class BoatController {
 
 	}
 	
-	@Secured("CLIENT")  
+	@PreAuthorize("hasRole('ROLE_CLIENT')")
+	//@Secured("ROLE_BOAT_OWNER")
 	@RequestMapping(method = RequestMethod.GET, value = "/boats",produces = MediaType.APPLICATION_JSON_VALUE)
 	//@CrossOrigin(origins = "*")
 	public ResponseEntity<String> getAllBoats() throws JsonProcessingException{
@@ -62,7 +65,7 @@ public class BoatController {
 		System.out.println("USER IZ KON "+user.getEmail());
 		
 		Collection<? extends GrantedAuthority> authorities = user.getAuthorities();
-		for(var v:authorities ){
+		for(GrantedAuthority v:authorities ){
 			System.out.println(v.getAuthority());
 		}
 		System.out.println("Roles " + user.getAuthorities().getClass().toGenericString());

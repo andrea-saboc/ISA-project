@@ -11,13 +11,26 @@ INSERT INTO public.mansion_owner(
 	type, advertiser_registration_approved, advertiser_reason, id)
 	VALUES ('mansion', true, 'I am a mansion owner', 2);
 
-	INSERT INTO public.system_user(
+INSERT INTO public.system_user(
 	user_type, id, address, blocked, city, country, email, name, password, phone_number, surname)
-	VALUES ('CLIENT', 7, 'Trg 34', false, 'Paris', 'France', 'HI@gmail.com','Anja', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '78555', 'Grkovic');
+	VALUES ('CLIENT', 400, 'Trg 34', false, 'Trebinje', 'Bosnia and Herzegovina', 'littlevamp999@gmail.com','Anja', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '78555', 'Laketa');
 INSERT INTO public.client(
 	activation_code, client_loyalty_points,client_penalty_points, id)
-	VALUES ('code', 0, 0, 7);
+	VALUES ('code', 0, 0, 400);
 	
+INSERT INTO public.system_user(
+	user_type, id, address, blocked, city, country, email, name, password, phone_number, surname)
+	VALUES ('CLIENT', 401, 'Trg 34', false, 'Gacko', 'Bosnia and Herzegovina', 'mikymilane@gmail.com','Milan', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '78555', 'Milovic');
+INSERT INTO public.client(
+	activation_code, client_loyalty_points,client_penalty_points, id)
+	VALUES ('code', 0, 0, 401);
+	
+INSERT INTO public.system_user(
+	user_type, id, address, blocked, city, country, email, name, password, phone_number, surname)
+	VALUES ('CLIENT', 402, 'Trg 34', false, 'Nis', 'Serbia', 'anya@gmail.com','Anica', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '78555', 'Obrenovic');
+INSERT INTO public.client(
+	activation_code, client_loyalty_points,client_penalty_points, id)
+	VALUES ('code', 0, 0, 402);
 	
 INSERT INTO public.address(
 	id, address, city, country, latitude, longitude)
@@ -70,15 +83,18 @@ INSERT INTO public.mansion(
 	id, avg_grade, name, price_for_seven_days, price_per_day, promo_description, address_id, owner_id)
 	VALUES (8, 9, 'Bobanka', 250, 50, 'Najbolji promo',12, 2);
 	
-INSERT INTO ROLE (id ,name) VALUES (1, 'CLIENT');
+INSERT INTO ROLE (id ,name) VALUES (1, 'ROLE_CLIENT');
 INSERT INTO ROLE (id ,name) VALUES (2, 'ROLE_BOAT_OWNER');
 INSERT INTO ROLE (id ,name) VALUES (3, 'ROLE_MANSION_OWNER');
 INSERT INTO ROLE (id ,name) VALUES (4, 'ROLE_UNAUTHORISED');
 INSERT INTO ROLE (id ,name) VALUES (5, 'ROLE_ADMIN');
 
-INSERT INTO USER_AUTHORITY (user_id, authority_id) VALUES (2, 2);
+INSERT INTO USER_AUTHORITY (user_id, authority_id) VALUES (400, 1);
+INSERT INTO USER_AUTHORITY (user_id, authority_id) VALUES (401, 1);
+INSERT INTO USER_AUTHORITY (user_id, authority_id) VALUES (402, 1);
+
 INSERT INTO USER_AUTHORITY (user_id, authority_id) VALUES (7, 1);
-INSERT INTO USER_AUTHORITY (user_id, authority_id) VALUES (100, 2);
+INSERT INTO USER_AUTHORITY (user_id, authority_id) VALUES (101, 1);
 
 	
 

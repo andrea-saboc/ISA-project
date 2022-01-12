@@ -107,7 +107,7 @@ public class IsaApplication extends SpringBootServletInitializer implements Comm
 		
 		
 
-		
+		/*
 		Boat b = boatRepo.findByName("Milicija");
 		
 
@@ -125,7 +125,7 @@ public class IsaApplication extends SpringBootServletInitializer implements Comm
     	for(BoatReservation r: res){
     		System.out.println(r.getBoat().getName());
     	}
-    	
+    	*/
     	BoatAvailablePeriod a =  periodRepo.checkIfPeriodHasStartDate(a2.getStartDate());
     	
     	System.out.println("Da li ga nadjeee");

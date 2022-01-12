@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,36 +29,34 @@ public class ComplaintController {
 	@Autowired
 	private MailService<String> mailService;
 	
+	@PreAuthorize("hasRole('ROLE_CLIENT')")
 	@RequestMapping(method = RequestMethod.POST, value = "/complaints/addBoatComplain",produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
-	//@PreAuthorize("hasRole('ROLE_CLIENT')")
-	@CrossOrigin(origins = "*")	
 	public ResponseEntity<String> addBoatComplaint(@RequestBody ClientComplaintDTO dto) throws JsonProcessingException{	
 		
 		Complaint c = complaintService.addBoatComplaint(dto);
 		mailService.sendMansionComplaintEmail(c);
 		return ResponseEntity.ok("Your complaint has been submited!");
 	}
+	
+	@PreAuthorize("hasRole('ROLE_CLIENT')")
 	@RequestMapping(method = RequestMethod.POST, value = "/complaints/addBoatOwnerComplain",produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
-	//@PreAuthorize("hasRole('ROLE_CLIENT')")
-	@CrossOrigin(origins = "*")	
 	public ResponseEntity<String> addBoatOwnerComplaint(@RequestBody ClientComplaintDTO dto) throws JsonProcessingException{	
 		
 		Complaint c = complaintService.addAdvertiserComplaint(dto);
 		mailService.sendBoatOwnerComplaintEmail(c);
 		return ResponseEntity.ok("Your complaint has been submited!");
 	}
+	@PreAuthorize("hasRole('ROLE_CLIENT')")
 	@RequestMapping(method = RequestMethod.POST, value = "/complaints/addMansionComplain",produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
-	//@PreAuthorize("hasRole('ROLE_CLIENT')")
-	@CrossOrigin(origins = "*")	
 	public ResponseEntity<String> addMansionComplaint(@RequestBody ClientComplaintDTO dto) throws JsonProcessingException{	
 		
 		Complaint c = complaintService.addMansionComplaint(dto);
 		mailService.sendMansionComplaintEmail(c);
 		return ResponseEntity.ok("Your complaint has been submited!");
 	}
+	
+	@PreAuthorize("hasRole('ROLE_CLIENT')")
 	@RequestMapping(method = RequestMethod.POST, value = "/complaints/addMansionOwnerComplain",produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
-	//@PreAuthorize("hasRole('ROLE_CLIENT')")
-	@CrossOrigin(origins = "*")	
 	public ResponseEntity<String> addMansionOwnerComplaint(@RequestBody ClientComplaintDTO dto) throws JsonProcessingException{	
 		
 		Complaint c = complaintService.addAdvertiserComplaint(dto);
@@ -65,17 +64,15 @@ public class ComplaintController {
 		return ResponseEntity.ok("Your complaint has been submited!");
 	}
 	
+	@PreAuthorize("hasRole('ROLE_CLIENT')")
 	@RequestMapping(method = RequestMethod.GET, value = "/complaints/boats",produces = MediaType.APPLICATION_JSON_VALUE)
-	//@PreAuthorize("hasRole('ROLE_CLIENT')")
-	@CrossOrigin(origins = "*")	
 	public ResponseEntity<List<Boat>> complainBoats() throws JsonProcessingException{	
 		
 		return ResponseEntity.ok(complaintService.getBoats());
 	}
 	
-	@RequestMapping(method = RequestMethod.GET, value = "/complaints/mansions",produces = MediaType.APPLICATION_JSON_VALUE)
-	//@PreAuthorize("hasRole('ROLE_CLIENT')")
-	@CrossOrigin(origins = "*")	
+	@PreAuthorize("hasRole('ROLE_CLIENT')")
+	@RequestMapping(method = RequestMethod.GET, value = "/complaints/mansions",produces = MediaType.APPLICATION_JSON_VALUE)	
 	public ResponseEntity<List<Mansion>> complainMansions() throws JsonProcessingException{	
 		
 		return ResponseEntity.ok(complaintService.getMansions());
