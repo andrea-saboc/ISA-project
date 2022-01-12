@@ -110,7 +110,7 @@ public class DiscountReservation {
 		this.numberOfGuests = numberOfGuests;
 		this.priceWithDiscount = priceWithDiscount;
 		this.cancelled = true;
-		this.reserved = true;
+		this.reserved = false;
 	}
 	
 	

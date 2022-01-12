@@ -11,4 +11,5 @@ public interface BoatDiscountReservationRepository extends JpaRepository<BoatDis
 
 
 	List<BoatDiscountReservation> findAllByBoat(Boat b);
+	List<BoatDiscountReservation> findAllByBoatAndReservedFalse(Boat b);
 }
