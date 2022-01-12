@@ -313,7 +313,6 @@ export default {
   mounted() {
     var path = window.location.href;
     var boatId = path.split('/boat/')[1].replaceAll('%20', ' ');
-    alert("boat id: ", boatId.toString())
     axios
     .get('http://localhost:8080/boat', {
       params:
@@ -359,7 +358,6 @@ export default {
       }
     },
     addAvailabilityPeriod(){
-      alert(this.startDateTime, "and", this.endDateTime)
       axios
       .post(devServer.proxy + "/addAvailablePeriodForBoat", {
         "boatId" : this.boatToShow.id,
@@ -393,7 +391,6 @@ export default {
 
     },
     CheckClientSubscription(boat){
-      alert(boat)
             axios
                 .post(devServer.proxy + '/subscriptions/checkBoatSubscription', boat, {
                     headers: {

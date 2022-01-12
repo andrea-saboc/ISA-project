@@ -146,7 +146,7 @@ public class MansionReservationService {
 		Date today = new Date();
 		List<MansionReservation> res = new ArrayList<MansionReservation>();
 		for(MansionReservation m: mansionReservationRepo.findAllByUser(getLoggedUser())) {
-			if(m.getEndDate().before(today))
+			if(m.getEndDate().before(today) && !m.isCancelled())
 				res.add(m);
 		}
 		return res;

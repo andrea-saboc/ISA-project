@@ -138,7 +138,7 @@ public class BoatReservationService {
 		Date today = new Date();
 		List<BoatReservation> res = new ArrayList<BoatReservation>();
 		for(BoatReservation m: boatReservationRepo.findAllByUser(getLoggedUser())) {
-			if(m.getEndDate().before(today))
+			if(m.getEndDate().before(today) && !m.isCancelled())
 				res.add(m);
 		}
 		System.out.println("KOLIKO IMA BOATS "+res.size());

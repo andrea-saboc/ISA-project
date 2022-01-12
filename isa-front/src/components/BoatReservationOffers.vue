@@ -4,6 +4,7 @@
 <section class="container">
 <h1 class="card-title">Discount offer for {{boat.name}}</h1>
 
+<div v-if="reservations.length == 0"><br><br><br><h2 class="card-title text-center">No offers at the moment</h2><br><br><br></div>
     <div v-for="m in reservations" :key="m">
         <div class="card mb-3">
             <div class="card-body">
@@ -11,6 +12,7 @@
 
                 <p class="card-text"> Start date: {{  format_date(new Date(m.startDate))}}</p>
                 <p class="card-text"> End date: {{  format_date(new Date(m.endtDate))}}</p>
+                <p class="card-text"> Number of guests: {{  m.numberOfGuests}}</p>
                 <button class = "btn btn" v-on:click = "MakeReservation(m)">Make a reservation</button> 
             </div>
         </div>

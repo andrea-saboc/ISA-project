@@ -77,6 +77,7 @@ public class ClientReservationController {
     @CrossOrigin(origins = "*")
     public ResponseEntity<List<ActiveReservationDTO>> getUserReservations(){
     	
+		System.out.println("Geting all reservations for user");
         try {
             return new ResponseEntity<>(reservationService.getActiveReservations(), HttpStatus.OK);
         } catch (Exception e){
@@ -165,6 +166,7 @@ public class ClientReservationController {
     @CrossOrigin(origins = "*")
     public ResponseEntity<MansionReservation> cancelMansionReservation(@RequestBody long  resId){
     	
+		System.out.println("res id ..");
         try {
             return new ResponseEntity<>(mansionResService.cancelMansionReservation(resId), HttpStatus.OK);
         } catch (Exception e){
