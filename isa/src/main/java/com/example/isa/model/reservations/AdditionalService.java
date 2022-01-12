@@ -1,4 +1,4 @@
-package com.example.isa.model;
+package com.example.isa.model.reservations;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -15,6 +15,9 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import com.example.isa.model.Boat;
+import com.example.isa.model.Mansion;
 
 @Entity
 @Table(name = "AdditionalService")

@@ -3,7 +3,7 @@ package com.example.isa.mail.formatter;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 
-import com.example.isa.model.MansionReservation;
+import com.example.isa.model.reservations.MansionReservation;
 
 public class MansionReservationConfirmationMailFormatter {
     public String getText(MansionReservation reservation) {

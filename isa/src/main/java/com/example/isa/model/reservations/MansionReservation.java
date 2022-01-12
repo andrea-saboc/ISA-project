@@ -1,4 +1,4 @@
-package com.example.isa.model;
+package com.example.isa.model.reservations;
 
 import java.util.Date;
 
@@ -10,6 +10,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+
+import com.example.isa.model.ClientFeedback;
+import com.example.isa.model.Mansion;
+import com.example.isa.model.User;
 
 
 @Entity

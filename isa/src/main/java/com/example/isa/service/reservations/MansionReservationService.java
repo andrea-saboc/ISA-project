@@ -18,11 +18,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.isa.dto.ReservationDTO;
 import com.example.isa.mail.formatter.AccountActivationFormatter;
-import com.example.isa.model.AdditionalService;
 import com.example.isa.model.Client;
 import com.example.isa.model.MansionAvailablePeriod;
-import com.example.isa.model.MansionReservation;
 import com.example.isa.model.User;
+import com.example.isa.model.reservations.AdditionalService;
+import com.example.isa.model.reservations.MansionReservation;
 import com.example.isa.repository.AdditionalServiceRepository;
 import com.example.isa.repository.MansionAvailablePeriodRepository;
 import com.example.isa.repository.MansionRepository;
@@ -146,7 +146,7 @@ public class MansionReservationService {
 		Date today = new Date();
 		List<MansionReservation> res = new ArrayList<MansionReservation>();
 		for(MansionReservation m: mansionReservationRepo.findAllByUser(getLoggedUser())) {
-			if(m.getEndDate().before(today))
+			if(m.getEndDate().before(today) && !m.isCancelled())
 				res.add(m);
 		}
 		return res;

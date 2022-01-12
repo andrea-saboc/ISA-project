@@ -13,10 +13,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.isa.dto.PotentialMansionReservationDTO;
 import com.example.isa.dto.ReservationSearchDTO;
-import com.example.isa.model.AdditionalService;
 import com.example.isa.model.Boat;
 import com.example.isa.model.Mansion;
 import com.example.isa.model.MansionAvailablePeriod;
+import com.example.isa.model.reservations.AdditionalService;
 import com.example.isa.repository.AdditionalServiceRepository;
 import com.example.isa.repository.MansionAvailablePeriodRepository;
 import com.example.isa.repository.MansionRepository;

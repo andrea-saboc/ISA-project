@@ -20,8 +20,8 @@ import com.example.isa.dto.PotentialMansionReservationDTO;
 import com.example.isa.dto.ReservationDTO;
 import com.example.isa.dto.ReservationSearchDTO;
 import com.example.isa.mail.MailService;
-import com.example.isa.model.BoatReservation;
-import com.example.isa.model.MansionReservation;
+import com.example.isa.model.reservations.BoatReservation;
+import com.example.isa.model.reservations.MansionReservation;
 import com.example.isa.service.reservations.BoatReservationService;
 import com.example.isa.service.reservations.BoatReservationSuggestionService;
 import com.example.isa.service.reservations.MansionReservationService;
@@ -77,6 +77,7 @@ public class ClientReservationController {
     @CrossOrigin(origins = "*")
     public ResponseEntity<List<ActiveReservationDTO>> getUserReservations(){
     	
+		System.out.println("Geting all reservations for user");
         try {
             return new ResponseEntity<>(reservationService.getActiveReservations(), HttpStatus.OK);
         } catch (Exception e){
@@ -165,6 +166,7 @@ public class ClientReservationController {
     @CrossOrigin(origins = "*")
     public ResponseEntity<MansionReservation> cancelMansionReservation(@RequestBody long  resId){
     	
+		System.out.println("res id ..");
         try {
             return new ResponseEntity<>(mansionResService.cancelMansionReservation(resId), HttpStatus.OK);
         } catch (Exception e){

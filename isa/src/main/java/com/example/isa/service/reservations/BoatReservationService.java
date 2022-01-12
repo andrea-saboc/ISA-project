@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Set;
 
 import com.example.isa.model.*;
+import com.example.isa.model.reservations.AdditionalService;
+import com.example.isa.model.reservations.BoatReservation;
 import com.example.isa.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -52,6 +54,8 @@ public class BoatReservationService {
 	        BoatReservation newBoatReservation = new BoatReservation(getLoggedUser(), startDate,endDate, res.getNumberOfGuests(), res.getPrice(),
 					boatRepo.findById(res.getEntityId()).orElse(new Boat()));
 	        
+	        
+	        //VELIKI PROBLEM, POSMATRAS KAO DA POSTOJI SAMO JEDAN BROD,AKO VISE BRODOVA IMA PREKLAPAJUCE TERMINE OVO VRATI VISE OD JEDNOG REZ!!
 	        BoatAvailablePeriod period = availablePeriodsRepo.getPeriodOfInterest(startDate, startDate);
 	         
 	        if(!period.getStartDate().equals(startDate)) {
@@ -136,7 +140,7 @@ public class BoatReservationService {
 		Date today = new Date();
 		List<BoatReservation> res = new ArrayList<BoatReservation>();
 		for(BoatReservation m: boatReservationRepo.findAllByUser(getLoggedUser())) {
-			if(m.getEndDate().before(today))
+			if(m.getEndDate().before(today) && !m.isCancelled())
 				res.add(m);
 		}
 		System.out.println("KOLIKO IMA BOATS "+res.size());

@@ -3,12 +3,7 @@ package com.example.isa;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.HashSet;
-import java.util.Set;
-
-import com.example.isa.model.*;
-import com.example.isa.repository.*;
-import com.example.isa.service.AdventureService;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -16,7 +11,22 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+
+import com.example.isa.model.Boat;
+import com.example.isa.model.Mansion;
+import com.example.isa.model.MansionAvailablePeriod;
+import com.example.isa.model.reservations.BoatDiscountReservation;
+import com.example.isa.repository.AdditionalServiceRepository;
+import com.example.isa.repository.AddressRepository;
+import com.example.isa.repository.BoatAvailablePeriodRepository;
+import com.example.isa.repository.BoatDiscountReservationRepository;
+import com.example.isa.repository.BoatOwnerRepository;
+import com.example.isa.repository.BoatRepository;
+import com.example.isa.repository.BoatReservationRepository;
+import com.example.isa.repository.MansionAvailablePeriodRepository;
+import com.example.isa.repository.MansionRepository;
+import com.example.isa.repository.UserRepository;
+import com.example.isa.service.AdventureService;
 
 
 @SpringBootApplication
@@ -46,6 +56,9 @@ public class IsaApplication extends SpringBootServletInitializer implements Comm
 	MansionAvailablePeriodRepository mperiodRepo;
 	@Autowired
 	MansionRepository mrepo;
+	
+	@Autowired
+	BoatDiscountReservationRepository resRepo;
     
 	public static void main(String[] args) {
 		SpringApplication.run(IsaApplication.class, args);
@@ -65,7 +78,18 @@ public class IsaApplication extends SpringBootServletInitializer implements Comm
 		mperiodRepo.save(a33);		
 		mperiodRepo.save(a44);
 
+		Boat b = boatRepo.findByName("Milicija");
 		
+		resRepo.save(new BoatDiscountReservation(new Date(), new Date(), 8,200, b));
+		resRepo.save(new BoatDiscountReservation(new Date(), new Date(), 6,120, b));			
+		resRepo.save(new BoatDiscountReservation(new Date(), new Date(), 6,189, b));	
+		
+		System.out.println("Reservacije od Milicije: ");
+		
+		List<BoatDiscountReservation> re = resRepo.findAllByBoat(b);
+		for(BoatDiscountReservation r: re ) {
+			System.out.println(r.getPriceWithDiscount());
+		}
 		
 
 		/*
