@@ -54,6 +54,8 @@ public class BoatReservationService {
 	        BoatReservation newBoatReservation = new BoatReservation(getLoggedUser(), startDate,endDate, res.getNumberOfGuests(), res.getPrice(),
 					boatRepo.findById(res.getEntityId()).orElse(new Boat()));
 	        
+	        
+	        //VELIKI PROBLEM, POSMATRAS KAO DA POSTOJI SAMO JEDAN BROD,AKO VISE BRODOVA IMA PREKLAPAJUCE TERMINE OVO VRATI VISE OD JEDNOG REZ!!
 	        BoatAvailablePeriod period = availablePeriodsRepo.getPeriodOfInterest(startDate, startDate);
 	         
 	        if(!period.getStartDate().equals(startDate)) {

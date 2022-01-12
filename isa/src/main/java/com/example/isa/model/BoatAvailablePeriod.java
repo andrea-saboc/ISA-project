@@ -14,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
@@ -22,8 +23,10 @@ public class BoatAvailablePeriod {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @SequenceGenerator(name = "boat_ap_sequence_generator", sequenceName = "boat_ap_sequence", initialValue = 100)
     @Column(name = "available_period_id")
     private Long id;
+    
     @Column(name = "start_date")    
 	private Date startDate;
     @Column(name = "end_date")

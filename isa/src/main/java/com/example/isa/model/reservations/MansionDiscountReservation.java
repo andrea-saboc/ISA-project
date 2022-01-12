@@ -1,24 +1,29 @@
 package com.example.isa.model.reservations;
 
+import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+import javax.persistence.Version;
 
 import com.example.isa.model.ClientFeedback;
 import com.example.isa.model.Mansion;
-import com.example.isa.model.User;
 
 @Entity
 @DiscriminatorValue("MANSION_DISCOUNT_RESERVATION")
 public class MansionDiscountReservation extends DiscountReservation{
-	
+
+
+
 	@OneToOne
 	@JoinColumn(name = "mansion_id")
 	private Mansion mansion;
 	
+		
 	@OneToOne
 	@JoinColumn(name = "feedback_id")
 	private ClientFeedback mansionFeedback;
