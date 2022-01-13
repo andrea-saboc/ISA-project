@@ -9,20 +9,18 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.mail.MessagingException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.isa.dto.ReservationDTO;
-import com.example.isa.mail.formatter.AccountActivationFormatter;
-import com.example.isa.model.Client;
+import com.example.isa.exceptions.PeriodNoLongerAvailableException;
 import com.example.isa.model.MansionAvailablePeriod;
 import com.example.isa.model.User;
 import com.example.isa.model.reservations.AdditionalService;
 import com.example.isa.model.reservations.MansionReservation;
+import com.example.isa.model.reservations.ReservationStartEndDateFormatter;
 import com.example.isa.repository.AdditionalServiceRepository;
 import com.example.isa.repository.MansionAvailablePeriodRepository;
 import com.example.isa.repository.MansionRepository;
@@ -31,65 +29,59 @@ import com.example.isa.repository.MansionReservationRepository;
 @Service
 @Transactional(readOnly=true)
 public class MansionReservationService {
-	
-	@Autowired 
-	MansionReservationRepository mansionReservationRepo;
+
 	@Autowired
 	MansionRepository mansionRepo;
+	@Autowired 
+	MansionReservationRepository mansionReservationRepo;
+
 	@Autowired
 	MansionAvailablePeriodRepository availablePeriodsRepo;
 	@Autowired
 	AdditionalServiceRepository additinalServicesRepo;
 	
 	@Transactional(readOnly = false)
-	public MansionReservation createMansionReservation(ReservationDTO res) {
-		
-		String sDate = res.getStartDate()+" "+res.getStartTime();
-		SimpleDateFormat formatter=new SimpleDateFormat("yyyy-MM-dd HH:mm");
-		
-		try {
-			Date startDate=formatter.parse(sDate);			
-	        Calendar cal = Calendar.getInstance();
-	        cal.setTime(startDate);
-	        cal.add(Calendar.DAY_OF_MONTH, res.getNumberOfDays());
-	        cal.add(Calendar.HOUR, res.getNumberOfHours()); 
-	        Date endDate = cal.getTime();
-	                
-	        System.out.println("Adding days to start date: "+endDate);
-	        
-	        MansionReservation newBoatReservation = new MansionReservation(getLoggedUser(),startDate, endDate, res.getNumberOfGuests(),
-	    			20.00, mansionRepo.findById(res.getEntityId()));
-	        
-	        MansionAvailablePeriod period = availablePeriodsRepo.getPeriodOfInterest(startDate, startDate,res.getEntityId());
-	         
-	        if(!period.getStartDate().equals(startDate)) {
-	        	MansionAvailablePeriod periodBefore = new MansionAvailablePeriod(period.getStartDate(),startDate,period.getMansion());
-	        	availablePeriodsRepo.save(periodBefore);
-	        }
-	        if(!period.getEndDate().equals(endDate)) {
-	        	MansionAvailablePeriod periodAfter = new MansionAvailablePeriod(endDate,period.getEndDate(),period.getMansion());
-	        	availablePeriodsRepo.save(periodAfter);
-	        }
-	        
-			Set<AdditionalService> services = new HashSet<AdditionalService>();
-	        for(long id : res.getAdditionalServices()) {
-	        	AdditionalService service = additinalServicesRepo.findById(id).orElse(null);
-	        	services.add(service);
-	        	newBoatReservation.setTotalPrice( newBoatReservation.getTotalPrice()
-	        			+calculateAdditionalServicesPrice(newBoatReservation,res,service));
-	        }
-	        newBoatReservation.setAdditionalServices(services);
-			
-	        availablePeriodsRepo.delete(period);
-		    return mansionReservationRepo.save(newBoatReservation);
-		    
-			} catch (ParseException e) {
-			System.out.println("PUČE!");
-			e.printStackTrace();
-			}
+	public MansionReservation createMansionReservation(ReservationDTO res) throws PeriodNoLongerAvailableException, ParseException {
 				
-		return null;
+		ReservationStartEndDateFormatter formatter = new ReservationStartEndDateFormatter(res);
+		Date startDate = formatter.startDate;
+		Date endDate = formatter.endDate;
+		
+		MansionAvailablePeriod period = availablePeriodsRepo.getPeriodOfInterest(startDate, endDate,res.getEntityId());
+		
+		if(period == null) {
+			throw new PeriodNoLongerAvailableException();}
+		
+		else {
+			
+			 MansionReservation newBoatReservation = new MansionReservation(getLoggedUser(),startDate, endDate, res.getNumberOfGuests(),
+		    			res.getPrice(), mansionRepo.findById(res.getEntityId()));
+		        
+
+		        if(!period.getStartDate().equals(startDate)) {
+		        	MansionAvailablePeriod periodBefore = new MansionAvailablePeriod(period.getStartDate(),startDate,period.getMansion());
+		        	availablePeriodsRepo.save(periodBefore);
+		        }
+		        if(!period.getEndDate().equals(endDate)) {
+		        	MansionAvailablePeriod periodAfter = new MansionAvailablePeriod(endDate,period.getEndDate(),period.getMansion());
+		        	availablePeriodsRepo.save(periodAfter);
+		        }
+		        
+				Set<AdditionalService> services = new HashSet<AdditionalService>();
+		        for(long id : res.getAdditionalServices()) {
+		        	AdditionalService service = additinalServicesRepo.findById(id).orElse(null);
+		        	services.add(service);
+		        	newBoatReservation.setTotalPrice( newBoatReservation.getTotalPrice()
+		        			+calculateAdditionalServicesPrice(newBoatReservation,res,service));
+		        }
+		        
+		        newBoatReservation.setAdditionalServices(services);
+				
+		        availablePeriodsRepo.delete(period);
+			    return mansionReservationRepo.save(newBoatReservation);			
+		}     
 	}
+	
 	
 	public double calculateAdditionalServicesPrice(MansionReservation bres,ReservationDTO res,AdditionalService service) {
 		
