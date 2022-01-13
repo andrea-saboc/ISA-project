@@ -26,12 +26,15 @@ public class BoatDiscountReservationService {
 		return reservationRepo.findAllByBoatAndReservedFalse(boat);
     }
     
-    public BoatDiscountReservation makeBoatReservationOnDiscount(long resId) {
-    	
-    	BoatDiscountReservation res = reservationRepo.findById(resId).orElse(new BoatDiscountReservation());
-    	res.setReserved(true);
-    	res.setUser(getLoggedUser());
-    	return reservationRepo.save(res);
+    public BoatDiscountReservation makeBoatReservationOnDiscount(long resId) throws Exception {
+ 
+    	BoatDiscountReservation res = reservationRepo.findByIdAndReservedFalse(resId);
+    	if(res == null) throw new Exception();
+    	else {
+	    	res.setReserved(true);
+	    	res.setUser(getLoggedUser());
+	    	return reservationRepo.save(res);
+    	}
     }
 	
     public User getLoggedUser() {

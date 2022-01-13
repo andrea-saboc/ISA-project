@@ -60,7 +60,7 @@ public class MansionReservationService {
 	        MansionReservation newBoatReservation = new MansionReservation(getLoggedUser(),startDate, endDate, res.getNumberOfGuests(),
 	    			20.00, mansionRepo.findById(res.getEntityId()));
 	        
-	        MansionAvailablePeriod period = availablePeriodsRepo.getPeriodOfInterest(startDate, startDate);
+	        MansionAvailablePeriod period = availablePeriodsRepo.getPeriodOfInterest(startDate, startDate,res.getEntityId());
 	         
 	        if(!period.getStartDate().equals(startDate)) {
 	        	MansionAvailablePeriod periodBefore = new MansionAvailablePeriod(period.getStartDate(),startDate,period.getMansion());
