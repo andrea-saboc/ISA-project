@@ -24,12 +24,15 @@ public class MansionDiscountReservationService {
 		return reservationRepo.findAllByMansion(mansion);
     }
     
-    public MansionDiscountReservation makeBoatReservationOnDiscount(long resId) {
+    public MansionDiscountReservation makeBoatReservationOnDiscount(long resId) throws Exception {
     	
     	MansionDiscountReservation res = reservationRepo.findById(resId).orElse(new MansionDiscountReservation());
+    	if(res == null) throw new Exception();
+    	else {
     	res.setReserved(true);
     	res.setUser(getLoggedUser());
     	return reservationRepo.save(res);
+    	}
     }
 	
     public User getLoggedUser() {
