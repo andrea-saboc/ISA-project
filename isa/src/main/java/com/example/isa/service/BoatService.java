@@ -7,6 +7,7 @@ import java.util.Set;
 import com.example.isa.dto.AddAvailablePeriodDTO;
 import com.example.isa.dto.BoatRegistrationDTO;
 import com.example.isa.model.*;
+import com.example.isa.model.reservations.AdditionalService;
 import com.example.isa.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -65,7 +66,7 @@ public class BoatService {
 		Address boatAddress = new Address();
 		boatAddress.setAddress(dto.address);
 		boatAddress.setCity(dto.city);
-		boatAddress.setCity(dto.country);
+		boatAddress.setCountry(dto.country);
 		boatAddress.setLatitude(dto.latitude);
 		boatAddress.setLongitude(dto.longitude);
 		Boat newBoat = new Boat();
@@ -99,19 +100,12 @@ public class BoatService {
 		Set<Image> convertedImages = new HashSet<>();
 		for (String s: Images) {
 			Image newImage = new Image();
-			newImage = setBoat(newImage, boat, inter);
 			newImage = imageRepository.save(newImage);
 			newImage.setImg(s);
 			newImage.saveImage();
 			convertedImages.add(newImage);
 		}
 		return convertedImages;
-	}
-
-	private Image setBoat(Image newImage, Boat boat, boolean inter) {
-		if (inter) newImage.setBoatInter(boat);
-		else newImage.setBoatExter(boat);
-		return newImage;
 	}
 
 	private Set<Rule> convertString2Rule(Set<String> Rules, Boat boat){

@@ -3,12 +3,7 @@ package com.example.isa;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.HashSet;
-import java.util.Set;
-
-import com.example.isa.model.*;
-import com.example.isa.repository.*;
-import com.example.isa.service.AdventureService;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -16,11 +11,25 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+
+import com.example.isa.model.Boat;
+import com.example.isa.model.Mansion;
+import com.example.isa.model.MansionAvailablePeriod;
+import com.example.isa.model.reservations.BoatDiscountReservation;
+import com.example.isa.repository.AdditionalServiceRepository;
+import com.example.isa.repository.AddressRepository;
+import com.example.isa.repository.BoatAvailablePeriodRepository;
+import com.example.isa.repository.BoatDiscountReservationRepository;
+import com.example.isa.repository.BoatOwnerRepository;
+import com.example.isa.repository.BoatRepository;
+import com.example.isa.repository.BoatReservationRepository;
+import com.example.isa.repository.MansionAvailablePeriodRepository;
+import com.example.isa.repository.MansionRepository;
+import com.example.isa.repository.UserRepository;
+import com.example.isa.service.AdventureService;
 
 
 @SpringBootApplication
-@EnableWebMvc
 public class IsaApplication extends SpringBootServletInitializer implements CommandLineRunner {
 	@Autowired
 	AdventureService as;
@@ -47,6 +56,9 @@ public class IsaApplication extends SpringBootServletInitializer implements Comm
 	MansionAvailablePeriodRepository mperiodRepo;
 	@Autowired
 	MansionRepository mrepo;
+	
+	@Autowired
+	BoatDiscountReservationRepository resRepo;
     
 	public static void main(String[] args) {
 		SpringApplication.run(IsaApplication.class, args);
@@ -54,44 +66,6 @@ public class IsaApplication extends SpringBootServletInitializer implements Comm
 	@Override
 	public void run(String... args) throws Exception {
 
-		BoatOwner newBoatOwner = new BoatOwner("Mark", "Markijani", "St Marc", "Italy", "Italy", "54646", "markijan@gmail.com",passwordEncoder.encode("123"), "I want to advertise", "boat", true);
-		newBoatOwner = boatOwnerRepository.save(newBoatOwner);
-
-
-		
-		Boat b1 = new Boat("Milicija", "promo milicije");
-		Boat b2 = new Boat("Malicija", "promo malicije");
-		Address adr1 = new Address("Marka Mljanova 30", "Novi Sad", "Srbija");
-		b1.setAddress(adr1);
-		Address adr2 = new Address("St Marcus Aurelius 23/788", "Honolulu", "Hawaii" );
-		b2.setAddress(adr2);
-		b2.setBoatOwner(newBoatOwner);
-
-		b1 = boatRepo.save(b1);
-		b2 = boatRepo.save(b2);
-
-		AdditionalService aservice1 = new AdditionalService("wifi", 12, 30, b1);
-		AdditionalService aservice2 = new AdditionalService("captain", 50, 100, b1);
-		AdditionalService aservice11 = new AdditionalService("champagne", 12, 30, b2);
-		AdditionalService aservice22 = new AdditionalService("bathroom", 50, 100, b2);
-
-		additionalServiceRepository.save(aservice1);
-		additionalServiceRepository.save(aservice2);
-		additionalServiceRepository.save(aservice11);
-		additionalServiceRepository.save(aservice22);
-
-
-		
-		BoatAvailablePeriod a1 = new BoatAvailablePeriod(new GregorianCalendar(2022, Calendar.JANUARY, 1).getTime(),new GregorianCalendar(2022, Calendar.JANUARY, 10).getTime(),b1);
-		BoatAvailablePeriod a2 = new BoatAvailablePeriod(new GregorianCalendar(2022, Calendar.JANUARY, 20).getTime(),new GregorianCalendar(2022, Calendar.JANUARY, 28).getTime(),b1);
-		BoatAvailablePeriod a3 = new BoatAvailablePeriod(new GregorianCalendar(2022, Calendar.MARCH, 1).getTime(),new GregorianCalendar(2022, Calendar.MARCH, 16).getTime(),b2);
-		BoatAvailablePeriod a4 = new BoatAvailablePeriod(new GregorianCalendar(2022, Calendar.JUNE, 1).getTime(),new GregorianCalendar(2022, Calendar.JUNE, 21).getTime(),b2);
-		
-		
-		periodRepo.save(a1);
-		periodRepo.save(a2);		
-		periodRepo.save(a3);		
-		periodRepo.save(a4);
 		
 		Mansion m = mrepo.findById(1);
 		MansionAvailablePeriod a11 = new MansionAvailablePeriod(new GregorianCalendar(2022, Calendar.JANUARY, 1).getTime(),new GregorianCalendar(2022, Calendar.JANUARY, 10).getTime(),m);
@@ -104,10 +78,21 @@ public class IsaApplication extends SpringBootServletInitializer implements Comm
 		mperiodRepo.save(a33);		
 		mperiodRepo.save(a44);
 
+		Boat b = boatRepo.findByName("Milicija");
 		
+		resRepo.save(new BoatDiscountReservation(new Date(), new Date(), 8,200, b));
+		resRepo.save(new BoatDiscountReservation(new Date(), new Date(), 6,120, b));			
+		resRepo.save(new BoatDiscountReservation(new Date(), new Date(), 6,189, b));	
+		
+		System.out.println("Reservacije od Milicije: ");
+		
+		List<BoatDiscountReservation> re = resRepo.findAllByBoat(b);
+		for(BoatDiscountReservation r: re ) {
+			System.out.println(r.getPriceWithDiscount());
+		}
 		
 
-		
+		/*
 		Boat b = boatRepo.findByName("Milicija");
 		
 
@@ -125,12 +110,7 @@ public class IsaApplication extends SpringBootServletInitializer implements Comm
     	for(BoatReservation r: res){
     		System.out.println(r.getBoat().getName());
     	}
-    	
-    	BoatAvailablePeriod a =  periodRepo.checkIfPeriodHasStartDate(a2.getStartDate());
-    	
-    	System.out.println("Da li ga nadjeee");
-    	if(a != null)
-    	System.out.println(a.getStartDate());
+    	*/
 
 	}
 	

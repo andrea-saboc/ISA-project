@@ -353,5 +353,21 @@ public class User implements UserDetails{
 		return true;
 	}
 
-
+	@Override
+	public String toString() {
+		return "User{" +
+				"role='" + role + '\'' +
+				", id=" + id +
+				", name='" + name + '\'' +
+				", surname='" + surname + '\'' +
+				", address='" + address + '\'' +
+				", city='" + city + '\'' +
+				", country='" + country + '\'' +
+				", phoneNumber='" + phoneNumber + '\'' +
+				", email='" + email + '\'' +
+				", password='" + password + '\'' +
+				", blocked=" + blocked +
+				", authorities=" + authorities +
+				'}';
+	}
 }

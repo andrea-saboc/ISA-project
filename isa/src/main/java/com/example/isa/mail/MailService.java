@@ -12,9 +12,10 @@ import org.springframework.stereotype.Service;
 import com.example.isa.mail.formatter.AccountActivationFormatter;
 import com.example.isa.mail.formatter.BoatReservationConfirmationMailFormatter;
 import com.example.isa.mail.formatter.MansionReservationConfirmationMailFormatter;
-import com.example.isa.model.BoatReservation;
-import com.example.isa.model.MansionReservation;
+import com.example.isa.model.Complaint;
 import com.example.isa.model.User;
+import com.example.isa.model.reservations.BoatReservation;
+import com.example.isa.model.reservations.MansionReservation;
 
 @Service
 public class MailService<T> {
@@ -63,4 +64,24 @@ public class MailService<T> {
 	    	
 	    	mailSender.send(message);
 	    }
+
+		public void sendMansionComplaintEmail(Complaint c) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+		public void sendMansionOwnerComplaintEmail(Complaint c) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+		public void sendBoatComplaintEmail(Complaint c) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+		public void sendBoatOwnerComplaintEmail(Complaint c) {
+			// TODO Auto-generated method stub
+			
+		}
 }

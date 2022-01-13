@@ -2,15 +2,13 @@ package com.example.isa.service;
 
 import java.util.List;
 
+import com.example.isa.model.*;
+import com.example.isa.repository.BoatOwnerRepository;
+import com.example.isa.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import com.example.isa.model.Boat;
-import com.example.isa.model.BoatSubscription;
-import com.example.isa.model.Mansion;
-import com.example.isa.model.MansionSubscription;
-import com.example.isa.model.User;
 import com.example.isa.repository.BoatSubscriptionRepository;
 import com.example.isa.repository.MansionSubscriptionRepository;
 
@@ -21,6 +19,10 @@ public class SubscriptionService {
 	BoatSubscriptionRepository boatSubsRepo;
 	@Autowired
 	MansionSubscriptionRepository mansionSubRepo;
+	@Autowired
+	BoatOwnerRepository boatOwnerRepository;
+	@Autowired
+	ClientRepository clientRepository;
 	
 	public User getLoggedUser() {	
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -51,4 +53,10 @@ public class SubscriptionService {
 		return boatSubsRepo.findBySubscriberAndBoat(getLoggedUser(), boat) != null? true:false;
 	}
 
+	public List<BoatSubscription> getClientBoatSubscriptionByBoatOwner(Long id) {
+		Client client = clientRepository.findById(id).get();
+		System.out.print("Klijent za koga trazimo pretplate" + client.toString());
+		List<BoatSubscription> boatSubscriptions = boatSubsRepo.findAllBySubscriber(client);
+		return boatSubscriptions;
+	}
 }

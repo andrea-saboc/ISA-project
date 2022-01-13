@@ -64,7 +64,11 @@
       <h4>Cancellation policy</h4>
       {{boatToShow.cancellationPolicy}}
     </div>
+    <br>
   </div>
+    <div class="info">
+      <h4><button v-on:click="ShowReservationOffer">Show reservationOffers</button></h4>
+    </div>
     <hr>
     <div class="navigation-equipments">
       <p style="font-weight: bolder; font-size: 26px">
@@ -406,7 +410,6 @@ export default {
       }
     },
     addAvailabilityPeriod(){
-      alert(this.startDateTime, "and", this.endDateTime)
       axios
       .post(devServer.proxy + "/addAvailablePeriodForBoat", {
         "boatId" : this.boatToShow.id,
@@ -440,7 +443,6 @@ export default {
 
     },
     CheckClientSubscription(boat){
-      alert(boat)
             axios
                 .post(devServer.proxy + '/subscriptions/checkBoatSubscription', boat, {
                     headers: {
@@ -454,9 +456,12 @@ export default {
                 });
 
     },
-    getImg(image){
-      alert(devServer.proxy+"\\"+image.img)
-      return devServer.proxy+"\\"+image.img;
+    getImg(image) {
+      alert(devServer.proxy + "\\" + image.img)
+      return devServer.proxy + "\\" + image.img;
+    },
+    ShowReservationOffer(){
+      window.location.href = "/boatReservationOffers/" + this.boatToShow.id.toString();
     }
 
   }

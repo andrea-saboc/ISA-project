@@ -9,19 +9,21 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.isa.dto.PotentialMansionReservationDTO;
 import com.example.isa.dto.ReservationSearchDTO;
-import com.example.isa.model.AdditionalService;
 import com.example.isa.model.Boat;
 import com.example.isa.model.Mansion;
 import com.example.isa.model.MansionAvailablePeriod;
+import com.example.isa.model.reservations.AdditionalService;
 import com.example.isa.repository.AdditionalServiceRepository;
 import com.example.isa.repository.MansionAvailablePeriodRepository;
 import com.example.isa.repository.MansionRepository;
 import com.example.isa.repository.MansionReservationRepository;
 
 @Service
+@Transactional(readOnly=true)
 public class MansionReservationSuggestionService {
 
 	@Autowired 
@@ -47,7 +49,10 @@ public class MansionReservationSuggestionService {
 
 	        Date endDate = cal.getTime();
 	        System.out.println("Adding days to start date: "+endDate);
-		    return createPotentialReservations(getAvailableMansionsBetweenDates(startDate,endDate),formParams);
+	        
+	        List<Mansion> mansions = FilterByLocationAndAvgGrade(formParams.getLocation(),
+	        		formParams.getGrade(),getAvailableMansionsBetweenDates(startDate,endDate));
+		    return createPotentialReservations(mansions,formParams);
 		    
 			} catch (ParseException e) {
 			System.out.println("PUČE!");

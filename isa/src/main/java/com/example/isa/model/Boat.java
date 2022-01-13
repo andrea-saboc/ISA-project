@@ -40,9 +40,9 @@ public class Boat {
 	@OneToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
 	@JoinColumn(name = "address_id", referencedColumnName = "id", nullable = true)
 	private Address address;
-	@OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER, mappedBy = "boatInter")
+	@OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
 	public Set<Image> InteriorImages = new HashSet<Image>();
-	@OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER, mappedBy = "boatExter")
+	@OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
 	public Set<Image> ExteriorImages = new HashSet<Image>();
 	@ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER, mappedBy = "boat")
 	public Set<Rule> rules = new HashSet<Rule>();
@@ -257,4 +257,30 @@ public class Boat {
 		this.priceForSevenDays = priceForSevenDays;
 	}
 
+	@Override
+	public String toString() {
+		return "Boat{" +
+				"id=" + id +
+				", name='" + name + '\'' +
+				", promoDescription='" + promoDescription + '\'' +
+				", cancellationPolicy='" + cancellationPolicy + '\'' +
+				", avgGrade=" + avgGrade +
+				", capacity=" + capacity +
+				", type='" + type + '\'' +
+				", length=" + length +
+				", numberOfEngines=" + numberOfEngines +
+				", enginePower=" + enginePower +
+				", maxSpeed=" + maxSpeed +
+				", GPS=" + GPS +
+				", radar=" + radar +
+				", VHFradio=" + VHFradio +
+				", fishfinder=" + fishfinder +
+				", pricePerHour=" + pricePerHour +
+				", pricePerDay=" + pricePerDay +
+				", priceForSevenDays=" + priceForSevenDays +
+				", boatOwner=" + boatOwner +
+				", address=" + address +
+				", rules=" + rules +
+				'}';
+	}
 }

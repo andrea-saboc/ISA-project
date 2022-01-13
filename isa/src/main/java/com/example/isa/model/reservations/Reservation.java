@@ -1,4 +1,4 @@
-package com.example.isa.model;
+package com.example.isa.model.reservations;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -21,6 +21,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+
+import com.example.isa.model.User;
 
 @Entity
 @Table(name = "reservation")
@@ -45,6 +47,7 @@ public class Reservation {
 	private Date endDate;
 	private int numberOfGuests;
 	private double totalPrice;
+	private boolean cancelled;
 	
 
 	@ManyToMany
@@ -71,6 +74,7 @@ public class Reservation {
 
 	public Reservation(String type, User user, Date startDate, Date endDate, int numberOfGuests,double totalPrice) {
 		super();
+		this.cancelled = false;
 		this.type = type;
 		this.user = user;
 		this.startDate = startDate;
@@ -158,6 +162,16 @@ public class Reservation {
 
 	public void setTotalPrice(double totalPrice) {
 		this.totalPrice = totalPrice;
+	}
+
+
+	public boolean isCancelled() {
+		return cancelled;
+	}
+
+
+	public void setCancelled(boolean cancelled) {
+		this.cancelled = cancelled;
 	}
 
 

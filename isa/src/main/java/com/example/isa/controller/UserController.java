@@ -3,6 +3,7 @@ package com.example.isa.controller;
 import java.security.Principal;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -29,9 +30,13 @@ public class UserController {
 	@RequestMapping(method = RequestMethod.GET, value = "/userData",produces = MediaType.APPLICATION_JSON_VALUE )
 	//@PreAuthorize("hasRole('ROLE_CLIENT')")
 	@CrossOrigin(origins = "*")	
-	public ResponseEntity<User> getUserData(){	
+	public ResponseEntity<User> getUserData(){
+		try{
+			return ResponseEntity.ok(userService.getLoggedUser());
+		}catch (Exception e){
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		}
 
-		return ResponseEntity.ok(userService.getLoggedUser());
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/updateUser",produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)

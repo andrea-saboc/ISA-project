@@ -9,22 +9,19 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.example.isa.model.*;
+import com.example.isa.model.reservations.AdditionalService;
+import com.example.isa.model.reservations.BoatReservation;
+import com.example.isa.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.isa.dto.ReservationDTO;
-import com.example.isa.model.AdditionalService;
-import com.example.isa.model.Boat;
-import com.example.isa.model.BoatAvailablePeriod;
-import com.example.isa.model.BoatReservation;
-import com.example.isa.model.User;
-import com.example.isa.repository.AdditionalServiceRepository;
-import com.example.isa.repository.BoatAvailablePeriodRepository;
-import com.example.isa.repository.BoatRepository;
-import com.example.isa.repository.BoatReservationRepository;
 
 @Service
+@Transactional(readOnly=true)
 public class BoatReservationService {
 
 	@Autowired 
@@ -35,8 +32,10 @@ public class BoatReservationService {
 	BoatAvailablePeriodRepository availablePeriodsRepo;
 	@Autowired
 	AdditionalServiceRepository additinalServicesRepo;
+	@Autowired
+	BoatOwnerRepository boatOwnerRepository;
 	
-
+	@Transactional(readOnly = false)
 	public BoatReservation createBoatReservation(ReservationDTO res) {
 		
 		String sDate = res.getStartDate()+" "+res.getStartTime();
@@ -55,6 +54,8 @@ public class BoatReservationService {
 	        BoatReservation newBoatReservation = new BoatReservation(getLoggedUser(), startDate,endDate, res.getNumberOfGuests(), res.getPrice(),
 					boatRepo.findById(res.getEntityId()).orElse(new Boat()));
 	        
+	        
+	        //VELIKI PROBLEM, POSMATRAS KAO DA POSTOJI SAMO JEDAN BROD,AKO VISE BRODOVA IMA PREKLAPAJUCE TERMINE OVO VRATI VISE OD JEDNOG REZ!!
 	        BoatAvailablePeriod period = availablePeriodsRepo.getPeriodOfInterest(startDate, startDate);
 	         
 	        if(!period.getStartDate().equals(startDate)) {
@@ -101,7 +102,7 @@ public class BoatReservationService {
 		return user;
 	}
 	
-	
+	@Transactional(readOnly = false)
 	public BoatReservation cancelBoatReservation(long resId) {
 		
 		BoatReservation res = boatReservationRepo.findById(resId);
@@ -127,8 +128,10 @@ public class BoatReservationService {
 			periodToAdd = new BoatAvailablePeriod(res.getStartDate(),res.getEndDate(),res.getBoat());
 		
 		
-		availablePeriodsRepo.save(periodToAdd);	
-		boatReservationRepo.deleteById(resId);
+		availablePeriodsRepo.save(periodToAdd);
+		BoatReservation b = boatReservationRepo.findById(resId);
+		b.setCancelled(true);
+		boatReservationRepo.save(b);
 		return null;
 	}
 	
@@ -137,12 +140,24 @@ public class BoatReservationService {
 		Date today = new Date();
 		List<BoatReservation> res = new ArrayList<BoatReservation>();
 		for(BoatReservation m: boatReservationRepo.findAllByUser(getLoggedUser())) {
-			if(m.getEndDate().before(today))
+			if(m.getEndDate().before(today) && !m.isCancelled())
 				res.add(m);
 		}
 		System.out.println("KOLIKO IMA BOATS "+res.size());
 		return res;
+		
+		//return boatReservationRepo.findAllByUser(getLoggedUser());
 
 	}
-	
+
+    public List<BoatReservation> getLoggedUserReservations() {
+		User user = getLoggedUser();
+		BoatOwner boatOwner = boatOwnerRepository.findById(user.getId()).get();
+		List<Boat> ownersBoats = boatRepo.findBoatByBoatOwner(boatOwner);
+		List<BoatReservation> boatReservations = new ArrayList<>();
+		for ( Boat boat : ownersBoats) {
+			boatReservations.addAll(boatReservationRepo.findAllByBoat(boat));
+		}
+		return boatReservations;
+    }
 }
