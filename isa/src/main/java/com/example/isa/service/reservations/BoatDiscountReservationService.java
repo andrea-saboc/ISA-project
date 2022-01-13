@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import com.example.isa.exceptions.PeriodNoLongerAvailableException;
 import com.example.isa.model.Boat;
 import com.example.isa.model.User;
 import com.example.isa.model.reservations.BoatDiscountReservation;
@@ -26,10 +27,10 @@ public class BoatDiscountReservationService {
 		return reservationRepo.findAllByBoatAndReservedFalse(boat);
     }
     
-    public BoatDiscountReservation makeBoatReservationOnDiscount(long resId) throws Exception {
+    public BoatDiscountReservation makeBoatReservationOnDiscount(long resId) throws PeriodNoLongerAvailableException {
  
     	BoatDiscountReservation res = reservationRepo.findByIdAndReservedFalse(resId);
-    	if(res == null) throw new Exception();
+    	if(res == null) throw new PeriodNoLongerAvailableException();
     	else {
 	    	res.setReserved(true);
 	    	res.setUser(getLoggedUser());
