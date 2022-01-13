@@ -13,4 +13,5 @@ public interface BoatSubscriptionRepository extends JpaRepository<BoatSubscripti
 	List<BoatSubscription> findAllBySubscriber(User user);
 	BoatSubscription findById(long id);
 	BoatSubscription findBySubscriberAndBoat(User user,Boat boat);
+
 }

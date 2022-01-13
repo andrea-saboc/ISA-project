@@ -142,6 +142,28 @@ INSERT INTO public.boat_available_period(
     available_period_id, end_date, start_date, boat_id)
 VALUES (4,'2022-01-28 00:00:00', '2022-01-20 00:00:00', 5);
 
+INSERT INTO public.reservation(
+    reservation_type, id, cancelled, end_date, number_of_guests, start_date, total_price, type, system_user)
+VALUES ('boat', 1, false, '2022-02-07 00:00:00', 4, '2022-01-28 00:08:00', 230, 'boat', 400);
+INSERT INTO public.boat_reservation(
+    id, boat_id, feedback_id, owner_feedback_id)
+VALUES (1, 3, null, null);
+
+INSERT INTO public.reservation(
+    reservation_type, id, cancelled, end_date, number_of_guests, start_date, total_price, type, system_user)
+VALUES ('boat', 2, false, '2022-02-09 00:00:00', 4, '2022-02-07 00:00:00', 230, 'boat', 401);
+INSERT INTO public.boat_reservation(
+    id, boat_id, feedback_id, owner_feedback_id)
+VALUES (2, 3, null, null);
+
+INSERT INTO public.reservation(
+    reservation_type, id, cancelled, end_date, number_of_guests, start_date, total_price, type, system_user)
+VALUES ('boat', 3, false, '2022-02-09 00:00:00', 4, '2022-02-07 00:00:00', 230, 'boat', 400);
+INSERT INTO public.boat_reservation(
+    id, boat_id, feedback_id, owner_feedback_id)
+VALUES (3, 4, null, null);
+
+
 INSERT INTO ROLE (id ,name) VALUES (1, 'ROLE_CLIENT');
 INSERT INTO ROLE (id ,name) VALUES (2, 'ROLE_BOAT_OWNER');
 INSERT INTO ROLE (id ,name) VALUES (3, 'ROLE_MANSION_OWNER');
@@ -155,6 +177,65 @@ INSERT INTO USER_AUTHORITY (user_id, authority_id) VALUES (402, 1);
 INSERT INTO USER_AUTHORITY (user_id, authority_id) VALUES (5, 3);
 INSERT INTO USER_AUTHORITY (user_id, authority_id) VALUES (6, 5);
 INSERT INTO USER_AUTHORITY (user_id, authority_id) VALUES (100, 2);
+
+
+INSERT INTO public.subscription(
+    subscription_type, id, subscriber_id)
+VALUES ('BOAT_SUBSCRIPTION', 11, 400);
+INSERT INTO public.boat_subscription(
+    id, boat_id)
+VALUES (11, 3);
+
+INSERT INTO public.subscription(
+    subscription_type, id, subscriber_id)
+VALUES ('BOAT_SUBSCRIPTION', 12, 400);
+INSERT INTO public.boat_subscription(
+    id, boat_id)
+VALUES (12, 4);
+
+INSERT INTO public.subscription(
+    subscription_type, id, subscriber_id)
+VALUES ('BOAT_SUBSCRIPTION', 13, 400);
+INSERT INTO public.boat_subscription(
+    id, boat_id)
+VALUES (13, 5);
+
+INSERT INTO public.subscription(
+    subscription_type, id, subscriber_id)
+VALUES ('BOAT_SUBSCRIPTION', 14, 401);
+INSERT INTO public.boat_subscription(
+    id, boat_id)
+VALUES (14, 3);
+
+INSERT INTO public.subscription(
+    subscription_type, id, subscriber_id)
+VALUES ('BOAT_SUBSCRIPTION', 15, 401);
+INSERT INTO public.boat_subscription(
+    id, boat_id)
+VALUES (15, 6);
+
+INSERT INTO public.subscription(
+    subscription_type, id, subscriber_id)
+VALUES ('BOAT_SUBSCRIPTION', 16, 401);
+INSERT INTO public.boat_subscription(
+    id, boat_id)
+VALUES (16, 5);
+
+INSERT INTO public.subscription(
+    subscription_type, id, subscriber_id)
+VALUES ('BOAT_SUBSCRIPTION', 17, 402);
+INSERT INTO public.boat_subscription(
+    id, boat_id)
+VALUES (17, 4);
+
+INSERT INTO public.subscription(
+    subscription_type, id, subscriber_id)
+VALUES ('BOAT_SUBSCRIPTION', 18, 402);
+INSERT INTO public.boat_subscription(
+    id, boat_id)
+VALUES (18, 6);
+
+
 
 	
 

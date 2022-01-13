@@ -34,4 +34,10 @@ public class BoatSubscription extends Subscription{
 
 	public BoatSubscription() {}
 
+	@Override
+	public String toString() {
+		return "BoatSubscription{" +
+				"boat=" + boat +
+				'}';
+	}
 }

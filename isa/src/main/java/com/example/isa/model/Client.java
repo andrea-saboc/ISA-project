@@ -108,9 +108,19 @@ public class Client extends User{
 			return false;
 		return true;
 	}
-	
-	
-    
-    
 
+	@Override
+	public String toString() {
+		return "Client{" +
+				"role='" + role + '\'' +
+				", activationCode='" + activationCode + '\'' +
+				", penaltyPoints=" + penaltyPoints +
+				", loyaltyPoints=" + loyaltyPoints +
+				", id=" + id +
+				", name='" + name + '\'' +
+				", surname='" + surname + '\'' +
+				", address='" + address + '\'' +
+				", phoneNumber='" + phoneNumber + '\'' +
+				'}';
+	}
 }
