@@ -45,14 +45,19 @@ public class DiscountReservationsController {
 	@PreAuthorize("hasRole('ROLE_CLIENT')")
 	@RequestMapping(method = RequestMethod.GET, value = "/makeDiscountBoatReservation",produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> makeDiscountBoatReservation(@RequestParam Long id) throws JsonProcessingException{
-	
+		
+		try {
 		BoatDiscountReservation res = boatReservationService.makeBoatReservationOnDiscount(id);
 		
 		ObjectMapper mapper = new ObjectMapper();
 		String jsonString = mapper.writeValueAsString(res);
 		System.out.println(jsonString);
 		return new ResponseEntity<>(jsonString, HttpStatus.OK);
-
+		}
+		catch(Exception e) {
+			System.out.println("Someone already made this reservation");
+			return new ResponseEntity<>("Sorry, the offer is no longer available!", HttpStatus.OK);
+		}
 	}
 	
 

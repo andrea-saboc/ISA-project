@@ -68,10 +68,25 @@ public class IsaApplication extends SpringBootServletInitializer implements Comm
 
 		
 		Mansion m = mrepo.findById(1);
+		Mansion m1 = mrepo.findById(2);
+		
 		MansionAvailablePeriod a11 = new MansionAvailablePeriod(new GregorianCalendar(2022, Calendar.JANUARY, 1).getTime(),new GregorianCalendar(2022, Calendar.JANUARY, 10).getTime(),m);
 		MansionAvailablePeriod a22 = new MansionAvailablePeriod(new GregorianCalendar(2022, Calendar.JANUARY, 20).getTime(),new GregorianCalendar(2022, Calendar.JANUARY, 28).getTime(),m);
 		MansionAvailablePeriod a33 = new MansionAvailablePeriod(new GregorianCalendar(2022, Calendar.MARCH, 1).getTime(),new GregorianCalendar(2022, Calendar.MARCH, 16).getTime(),m);
 		MansionAvailablePeriod a44 = new MansionAvailablePeriod(new GregorianCalendar(2022, Calendar.JUNE, 1).getTime(),new GregorianCalendar(2022, Calendar.JUNE, 21).getTime(),m);
+		
+		
+		MansionAvailablePeriod a111 = new MansionAvailablePeriod(new GregorianCalendar(2022, Calendar.JANUARY, 1).getTime(),new GregorianCalendar(2022, Calendar.JANUARY, 10).getTime(),m1);
+		MansionAvailablePeriod a221 = new MansionAvailablePeriod(new GregorianCalendar(2022, Calendar.JANUARY, 20).getTime(),new GregorianCalendar(2022, Calendar.JANUARY, 28).getTime(),m1);
+		MansionAvailablePeriod a331 = new MansionAvailablePeriod(new GregorianCalendar(2022, Calendar.MARCH, 1).getTime(),new GregorianCalendar(2022, Calendar.MARCH, 16).getTime(),m1);
+		MansionAvailablePeriod a441 = new MansionAvailablePeriod(new GregorianCalendar(2022, Calendar.JUNE, 1).getTime(),new GregorianCalendar(2022, Calendar.JUNE, 21).getTime(),m1);
+				
+		mperiodRepo.save(a111);
+		mperiodRepo.save(a221);		
+		mperiodRepo.save(a331);		
+		mperiodRepo.save(a441);		
+		
+		
 		
 		mperiodRepo.save(a11);
 		mperiodRepo.save(a22);		

@@ -289,7 +289,8 @@ export default {
                 });
         },
         showboat(value) {
-            window.location.href = "/boat/" + value.id.toString();
+           console.log(value)
+           // window.location.href = "/boat/" + value.id.toString();
         },
         SortResultByAvgGrade() {
             this.sortSearchResult = 'Average grade'

@@ -21,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.isa.dto.ReservationDTO;
 
 @Service
-@Transactional(readOnly=true)
+//@Transactional(readOnly=true)
 public class BoatReservationService {
 
 	@Autowired 
@@ -35,7 +35,7 @@ public class BoatReservationService {
 	@Autowired
 	BoatOwnerRepository boatOwnerRepository;
 	
-	@Transactional(readOnly = false)
+	//@Transactional(readOnly = false)
 	public BoatReservation createBoatReservation(ReservationDTO res) {
 		
 		String sDate = res.getStartDate()+" "+res.getStartTime();
@@ -55,9 +55,8 @@ public class BoatReservationService {
 					boatRepo.findById(res.getEntityId()).orElse(new Boat()));
 	        
 	        
-	        //VELIKI PROBLEM, POSMATRAS KAO DA POSTOJI SAMO JEDAN BROD,AKO VISE BRODOVA IMA PREKLAPAJUCE TERMINE OVO VRATI VISE OD JEDNOG REZ!!
-	        BoatAvailablePeriod period = availablePeriodsRepo.getPeriodOfInterest(startDate, startDate);
-	         
+	        BoatAvailablePeriod period = availablePeriodsRepo.getPeriodOfInterest(startDate, startDate,res.getEntityId());
+
 	        if(!period.getStartDate().equals(startDate)) {
 	        	BoatAvailablePeriod periodBefore = new BoatAvailablePeriod(period.getStartDate(),startDate,period.getBoat());
 	        	availablePeriodsRepo.save(periodBefore);
@@ -74,10 +73,10 @@ public class BoatReservationService {
 	        	newBoatReservation.setTotalPrice( newBoatReservation.getTotalPrice()
 	        			+calculateAdditionalServicesPrice(newBoatReservation,res,service));
 	        }
-	        newBoatReservation.setAdditionalServices(services);
-	        
 	        
 	        availablePeriodsRepo.delete(period);
+	        newBoatReservation.setAdditionalServices(services);
+	            
 		    return boatReservationRepo.save(newBoatReservation);
 		    
 			} catch (ParseException e) {
@@ -102,7 +101,7 @@ public class BoatReservationService {
 		return user;
 	}
 	
-	@Transactional(readOnly = false)
+	//@Transactional(readOnly = false)
 	public BoatReservation cancelBoatReservation(long resId) {
 		
 		BoatReservation res = boatReservationRepo.findById(resId);
