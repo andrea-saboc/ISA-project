@@ -136,7 +136,7 @@ public class ClientReservationController {
         } catch (ParseException e){
             return  new ResponseEntity<>("Check your date again!", HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (PeriodNoLongerAvailableException e) {
-        	return  new ResponseEntity<>("This time period is no longer available! Someone made a reservation in the meantime", HttpStatus.INTERNAL_SERVER_ERROR);
+        	return  new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     
@@ -157,7 +157,7 @@ public class ClientReservationController {
         } catch (ParseException e){
             return  new ResponseEntity<>("Check your date again!", HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (PeriodNoLongerAvailableException e) {
-        	return  new ResponseEntity<>("This time period is no longer available! Someone made a reservation in the meantime", HttpStatus.INTERNAL_SERVER_ERROR);
+        	return  new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     
