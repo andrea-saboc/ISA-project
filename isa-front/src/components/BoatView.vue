@@ -2,9 +2,6 @@
 <div class="boat-view">
   <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
     <div class="carousel-inner top-slider">
-      <div class="carousel-item active">
-        <img src="../assets/yacht.jpg" class=" w-100 h-25" alt="../assets/yacht.jpg">
-      </div>
       <div class="carousel-item">
         <img src="../assets/yacht.jpg" class="d-block w-100 h-25  " alt="../assets/yacht.jpg">
       </div>
@@ -127,70 +124,68 @@
       <div class="engine-information">
 
         <div class="engine-information-list">
-          <div class="einfo">
-            <div class="navigation-icon">
+          <div class="einfo" style="align-content: center">
+            <div class="navigation-icon" style="align-content: center">
               <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-speedometer" viewBox="0 0 16 16">
                 <path d="M8 2a.5.5 0 0 1 .5.5V4a.5.5 0 0 1-1 0V2.5A.5.5 0 0 1 8 2zM3.732 3.732a.5.5 0 0 1 .707 0l.915.914a.5.5 0 1 1-.708.708l-.914-.915a.5.5 0 0 1 0-.707zM2 8a.5.5 0 0 1 .5-.5h1.586a.5.5 0 0 1 0 1H2.5A.5.5 0 0 1 2 8zm9.5 0a.5.5 0 0 1 .5-.5h1.5a.5.5 0 0 1 0 1H12a.5.5 0 0 1-.5-.5zm.754-4.246a.389.389 0 0 0-.527-.02L7.547 7.31A.91.91 0 1 0 8.85 8.569l3.434-4.297a.389.389 0 0 0-.029-.518z"/>
                 <path fill-rule="evenodd" d="M6.664 15.889A8 8 0 1 1 9.336.11a8 8 0 0 1-2.672 15.78zm-4.665-4.283A11.945 11.945 0 0 1 8 10c2.186 0 4.236.585 6.001 1.606a7 7 0 1 0-12.002 0z"/>
               </svg>
             </div>
-            <div class="navigation-name">
+            <div class="navigation-name" style="align-content: center">
               <p style="font-weight: bold; align-self: center">
                 Speed
               </p>
               <p style="">
                 {{boatToShow.maxSpeed}} km/h
               </p>
-
             </div>
           </div>
-          <div class="einfo">
-            <div class="navigation-icon">
+          <div class="einfo" style="align-content: center">
+            <div class="navigation-icon" style="align-content: center">
               <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-gear" viewBox="0 0 16 16">
                 <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z"/>
                 <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52l-.094-.319zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115l.094-.319z"/>
               </svg>
             </div>
-            <div class="navigation-name">
+            <div class="navigation-name" style="align-content: center">
               <p style="font-weight: bold; align-self: center">
                 Number of engines
               </p>
-              <p style="align-self: center; padding-left: 30%;" >
+              <p style="align-self: center;" >
                 {{boatToShow.numberOfEngines}}
               </p>
-
             </div>
           </div>
-
 
         </div>
 
       </div>
-      <hr>
-      <div class="navigation-equipments">
+      <hr v-if="boatToShow.rules!=null && boatToShow.rules.length!=0">
+      <div class="navigation-equipments" v-if="boatToShow.rules!=null && boatToShow.rules.length!=0">
         <p style="font-weight: bolder; font-size: 26px">
           Rules
         </p>
-        <p v-for="rule in boatToShow.rules"
-           :key="rule.id">
-          {{rule.rule}}
-        </p>
+        <div v-if="boatToShow.rules!=null">
+          <div v-for="rule in boatToShow.rules" :key="rule.id">
+            <p >
+              {{rule.rule}}
+            </p>
+          </div>
+
+        </div>
 
       </div>
       <hr>
       <p style="font-weight: bolder; font-size: 26px">
         Calendar
       </p>
-      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Add availability period</button>
+      <button v-if="loggedUser!=null && boatToShow.boatOwner.id==loggedUser.id" type="button" class="btn btn-primary" data-bs-toggle="modal" style="margin: 0.5%" data-bs-target="#exampleModal">Add availability period</button>
       <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title" id="exampleModalLabel">Add availability for {{boatToShow.name}}</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16">
-                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-                <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
-              </svg></button>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times" aria-hidden="true"></i></button>
             </div>
             <div class="modal-body">
               <v-date-picker mode="dateTime" is24hr v-model="startDateTime">
@@ -199,6 +194,8 @@
                       class="px-2 py-1 border rounded focus:outline-none focus:border-blue-300"
                       :value="inputValue"
                       v-on="inputEvents"
+                      style="overflow: visible"
+                      placeholder="From time"
                   />
                 </template>
               </v-date-picker>
@@ -208,6 +205,7 @@
                       class="px-2 py-1 border rounded focus:outline-none focus:border-blue-300"
                       :value="inputValue"
                       v-on="inputEvents"
+                      placeholder="To time"
                   />
                 </template>
               </v-date-picker>
@@ -257,15 +255,39 @@
 
       </ol-map>
       <hr>
+      <p style="font-weight: bolder; font-size: 26px">
+        Additional services
+      </p>
+      <div class="additional-services">
+        <table class="table table-striped">
+          <thead>
+          <tr>
+            <th>
+              Service
+            </th>
+            <th>
+              Price/h
+            </th>
+            <th>
+              Price/day
+            </th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr v-for="ar in additionalServices" :key="ar.id">
+            <td>{{ar.name}}</td>
+            <td>{{ar.pricePerHour}}</td>
+            <td>{{ar.pricePerDay}}</td>
+          </tr>
+          </tbody>
+        </table>
+
+      </div>
 <hr>
-
-
-
     </div>
-
-
     </div>
-  </div>
+</div>
+
 
 
 </template>
@@ -286,6 +308,7 @@ export default {
       value: '',
       availablePeriods: [],
       availableDates: [],
+      additionalServices : [],
       calendar_attributes: [
         {
           key: 'today',
@@ -309,7 +332,19 @@ export default {
   mounted() {
     var path = window.location.href;
     var boatId = path.split('/boat/')[1].replaceAll('%20', ' ');
-    alert("boat id: ", boatId.toString())
+    console.log("Bpat view --> boat id: ", boatId.toString())
+    axios.get(devServer.proxy + "/userData", {
+      headers: {
+        'Authorization' : this.$store.getters.tokenString
+      }
+    })
+        .then(response => {
+          console.log("Logged user in boat view: ", response.data)
+          this.loggedUser = response.data
+        }
+        ).catch(() =>{
+          this.loggedUser = null
+    })
     axios
     .get('http://localhost:8080/boat', {
       params:
@@ -320,28 +355,44 @@ export default {
         'Authorization' : this.$store.getters.tokenString
       }
     })
-    .then(response =>{
+    .then(response => {
       this.boatToShow = response.data
       this.CheckClientSubscription(this.boatToShow)
+      console.log("Boat to show:", this.boatToShow)
       console.log(this.boatToShow.address)
       this.address = this.boatToShow.address
       console.log(response.data)
       this.boatOwner = this.boatToShow.boatOwner
       axios
           .post(devServer.proxy + "/getBoatAvailability", {
-            "boatId" : this.boatToShow.id
-          }, { headers: {
-              'Authorization' : this.$store.getters.tokenString
+            "boatId": this.boatToShow.id
+          }, {
+            headers: {
+              'Authorization': this.$store.getters.tokenString
             }
           })
-          .then(response =>{
+          .then(response => {
             this.availablePeriods = response.data
             console.log("Available periods for boat: ", this.availablePeriods)
             this.calculateAvailableDaysForCalendar()
-          })
+            axios.get(devServer.proxy + "/additionalServices", {
+              params:
+                  {
+                    id: boatId
+                  },
+              headers: {
+                'Authorization': this.$store.getters.tokenString
+              }
+            }).then(resp => {
+              this.additionalServices = resp.data
+            })
+          }
+          )
+    }
+    )
+    .catch(()=>{
+      console.log("The is a trouble")
     })
-
-
   },
   methods:{
     calculateAvailableDaysForCalendar(){
@@ -402,6 +453,10 @@ export default {
                     this.clientSubscribed = response.data
                 });
 
+    },
+    getImg(image){
+      alert(devServer.proxy+"\\"+image.img)
+      return devServer.proxy+"\\"+image.img;
     }
 
   }

@@ -1,63 +1,44 @@
 <template>
-<div class="homeb-view">
-  <div class="b-example-divider">
-
-  <div class="flex-shrink-0 p-3 bg-white" style="width: 280px;">
-    <span class="fw-semibold" style="font-size: 20px; margin-bottom: 4%;">Boat owner home page</span>
-    <ul class="list-unstyled ps-0" style="margin-top: 4%">
-      <li class="mb-1">
-        <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="true">
-          Boats
-        </button>
-        <div class="collapse show" id="home-collapse">
-          <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-            <li v-for="boat in boats"
-                :key="boat.id"><a  v-on:click="DisplayBoat(boat.id)" class="link-dark rounded">{{boat.name}}</a></li>
-          </ul>
+<div class="homeb-view" v-if="loggedUser != null &&  loggedUser.advertiserType=='boat'">
+  <div class="sidebar-container side-bov">
+    <div class="sidebar-logo">
+      {{loggedUser.name}} {{loggedUser.surname}}
+    </div>
+    <ul class="sidebar-navigation">
+      <li class="header">Boats</li>
+      <li>
+        <input type="search" class="form-control form-control-dark" placeholder="Search..." v-model="search_boat" aria-label="Search">
+      </li>
+      <li>
+        <a v-on:click="DisplayBoatRegistration()">
+          <i class="fa fa-plus" aria-hidden="true"></i> Add new
+        </a>
+      </li>
+      <li v-for="boat in boats" :key="boat.id" >
+        <div  v-if="BoatSearch(boat.name)">
+          <a v-on:click="DisplayBoat(boat.id)">
+            <i class="fa fa-ship" aria-hidden="true"></i> {{boat.name}}
+          </a>
         </div>
       </li>
-      <li class="mb-1">
-        <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#dashboard-collapse" aria-expanded="false">
-          Dashboard
-        </button>
-        <div class="collapse" id="dashboard-collapse">
-          <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-            <li><a href="#" class="link-dark rounded">Overview</a></li>
-            <li><a href="#" class="link-dark rounded">Weekly</a></li>
-            <li><a href="#" class="link-dark rounded">Monthly</a></li>
-            <li><a href="#" class="link-dark rounded">Annually</a></li>
-          </ul>
-        </div>
+      <li class="header">Reservations</li>
+      <li>
+        <a href="#" v-on:click = "DisplayReservations()">
+          <i class="fa fa-calendar-check-o" aria-hidden="true"></i>  Reservations
+        </a>
       </li>
-      <li class="mb-1">
-        <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#orders-collapse" aria-expanded="false">
-          Orders
-        </button>
-        <div class="collapse" id="orders-collapse">
-          <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-            <li><a href="#" class="link-dark rounded">New</a></li>
-            <li><a href="#" class="link-dark rounded">Processed</a></li>
-            <li><a href="#" class="link-dark rounded">Shipped</a></li>
-            <li><a href="#" class="link-dark rounded">Returned</a></li>
-          </ul>
-        </div>
+      <li class="header">Profile</li>
+      <li>
+        <a href="#" v-on:click="DisplayProfile()">
+          <i class="fa fa-cog" aria-hidden="true"></i> Settings
+        </a>
       </li>
-      <li class="border-top my-3"></li>
-      <li class="mb-1">
-        <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#account-collapse" aria-expanded="false">
-          Account
-        </button>
-        <div class="collapse" id="account-collapse">
-          <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-            <li><a v-on:click="DisplayBoatRegistration" class="link-dark rounded">New boat...</a></li>
-            <li><a v-on:click="DisplayProfile" class="link-dark rounded">Profile</a></li>
-            <li><a href="#" class="link-dark rounded">Settings</a></li>
-            <li><a href="#" class="link-dark rounded">Sign out</a></li>
-          </ul>
-        </div>
+      <li>
+        <a href="#">
+          <i class="fa fa-info-circle" aria-hidden="true"></i> Information
+        </a>
       </li>
     </ul>
-  </div>
   </div>
   <div class="router-elem">
     <div v-if="display == 'boatRegistration'">
@@ -69,6 +50,9 @@
     <div v-if="display=='boat'">
       <BoatView></BoatView>
     </div>
+    <div v-if="display=='reservations'">
+      <BoatReservations></BoatReservations>
+    </div>
   </div>
 </div>
 
@@ -78,30 +62,50 @@
 import BoatRegistration from "./BoatRegistration";
 import Profile from "./Profile";
 import BoatView from "./BoatView";
+import BoatReservations from "./BoatReservations";
 import axios from "axios";
 import {devServer} from "../../vue.config";
 export default {
   name: "BoatOwnerHomePage",
-  components: {BoatRegistration, Profile, BoatView},
+  components: {BoatRegistration, Profile, BoatView, BoatReservations},
   data: function(){
     return{
       display: 'boatRegistration',
       boats: [],
-      idBoat: null
+      idBoat: null,
+      loggedUser : null,
+      search_boat : ''
     }
   },
   mounted() {
     if(window.location.href.includes('/boat/')){
       this.display = 'boat'
     }
-    axios.get(devServer.proxy+"/ownersBoats", {
+    axios.get(devServer.proxy + "/userData", {
       headers: {
         'Authorization' : this.$store.getters.tokenString
       }
     })
-        .then(response => {
-          this.boats = response.data;
+    .then(response => {
+      this.loggedUser =response.data
+      console.log("Ovaj user je ulogovan:", this.loggedUser)
+      if(this.loggedUser.advertiserType == 'boat'){
+        axios.get(devServer.proxy+"/ownersBoats", {
+          headers: {
+            'Authorization' : this.$store.getters.tokenString
+          }
         })
+            .then(response1 => {
+              console.log("brodovi vlasnika", response1.data)
+              this.boats = response1.data;
+            })
+      }
+    })
+        .catch(() => {
+          console.log('Login user is unavailable')
+          return;
+        });
+
   },
   methods: {
     DisplayBoat(id){
@@ -118,6 +122,12 @@ export default {
     },
     DisplayProfile(){
       this.display = 'profile';
+    },
+    DisplayReservations(){
+      this.display = 'reservations';
+    },
+    BoatSearch(boatName){
+      return boatName.includes(this.search_boat)
     }
   }
 }
@@ -194,6 +204,98 @@ b-example-divider {
   align-self: center;
   width: 100%;
   background-color: #eeeeee;
+}
+
+.sidebar-container {
+  position: fixed;
+  z-index: 9;
+  width: 220px;
+  height: 100%;
+  padding-top: 2%;
+  left: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  background: #1a1a1a;
+  color: #fff;
+}
+
+.content-container {
+  padding-top: 20px;
+}
+
+.sidebar-logo {
+  padding: 10px 15px 10px 30px;
+  font-size: 20px;
+  background-color: #2574A9;
+}
+
+.sidebar-navigation {
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+  position: relative;
+}
+
+.sidebar-navigation li {
+  background-color: transparent;
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  line-height: 20px;
+}
+
+.sidebar-navigation li a {
+  padding: 10px 15px 10px 30px;
+  display: block;
+  color: #fff;
+}
+
+.sidebar-navigation li .fa {
+  margin-right: 10px;
+}
+
+.sidebar-navigation li a:active,
+.sidebar-navigation li a:hover,
+.sidebar-navigation li a:focus {
+  text-decoration: none;
+  outline: none;
+}
+
+.sidebar-navigation li::before {
+  background-color: #2574A9;
+  position: absolute;
+  content: '';
+  height: 100%;
+  left: 0;
+  top: 0;
+  -webkit-transition: width 0.2s ease-in;
+  transition: width 0.2s ease-in;
+  width: 3px;
+  z-index: -1;
+}
+
+.sidebar-navigation li:hover::before {
+  width: 100%;
+}
+
+.sidebar-navigation .header {
+  font-size: 12px;
+  text-transform: uppercase;
+  background-color: #151515;
+  padding: 10px 15px 10px 30px;
+}
+
+.sidebar-navigation .header::before {
+  background-color: transparent;
+}
+
+.content-container {
+  padding-left: 220px;
+}
+
+.side-bov{
+  position: fixed;
+  margin-top: 3%;
 }
 
 </style>

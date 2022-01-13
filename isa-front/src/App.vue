@@ -1,5 +1,5 @@
 <template>
-  <nav class = "navbar navbar-expand-lg bg-dark navbar-dark">
+  <nav class = "navbar navbar-expand-lg bg-dark navbar-dark mainavbar" style="height: 8%">
     <div class="container">
       <a v-if="user === null" href="/home" class="navbar-brand">Adventureland</a>
       <a v-if="user === 'Client' || user == 'MansionOwner' || user === 'BoatOwner'" href="/listing" class="navbar-brand">Adventureland</a>
@@ -24,6 +24,9 @@
         <li v-if="user === null" class="nav-item">
           <a href="/login" class="nav-link">Login</a>
         </li>
+          <li v-if="user!=null" class="nav-item">
+            <a v-on:click="Logout">Logout</a>
+          </li>
         </ul>
       </div>
     </div>
@@ -34,16 +37,29 @@
 <script>
 //import {useStore} from "vuex"
 //import axios from 'axios'
+import axios from "axios";
+import {devServer} from "../vue.config";
+
 export default{
   data(){
     return{
-    user: null,
+      user: null,
+      loggedUser: null
     }
   },
   
   mounted(){
     this.$store.dispatch('startSession', null);   
     this.user = this.$store.state.userType;
+    axios.get(devServer.proxy + "/userData", {
+      headers: {
+        'Authorization': this.$store.getters.tokenString
+      }
+    })
+        .then(response => {
+          this.loggedUser = response.data
+          console.log("Ovaj user je ulogovan:", this.loggedUser)
+        })
 },
   methods:{
     Logout(){
@@ -64,6 +80,13 @@ export default{
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
+}
+
+.mainavbar{
+  position: fixed;
+  z-index: 10;
+  width: 100%;
+  margin-bottom: 1%;
 }
 
 

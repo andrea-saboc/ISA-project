@@ -13,6 +13,8 @@ import VCalendar from 'v-calendar';
 import VueGoogleMaps from '@fawmi/vue-google-maps'
 import OpenLayersMap from '.'
 
+window.$ = window.jQuery = require('jquery');
+
 
 
 

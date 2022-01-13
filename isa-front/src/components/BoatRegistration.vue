@@ -11,7 +11,21 @@
       <div class="double-field">
         <div class="col-5">
           <label for="boat-type" class="form-label">Boat type</label>
-          <input type="text" class="form-control" id="boat-type" placeholder="E.g. Yacht" v-model="type" required>
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <label class="input-group-text" for="inputGroupSelect01">Type</label>
+            </div>
+            <select class="custom-select" id="inputGroupSelect01" v-model="type">
+              <option selected value="">Choose...</option>
+              <option value="Motorboat">Motorboat</option>
+              <option value="Sailboat">Sailboat</option>
+              <option value="RIB">RIB</option>
+              <option value="Catamaran">Catamaran</option>
+              <option value="Houseboat">Houseboat</option>
+              <option value="Jet ski">Jet ski</option>
+              <option value="Yacht">Yacht</option>
+            </select>
+          </div>
         </div>
         <div class="col-3">
           <label for="capacity" class="form-label" >Capacity</label>
@@ -83,11 +97,11 @@
       <div class="double-field">
         <div class="col-md-5">
           <label for="longitude" class="form-label">Longitude</label>
-          <input type="text" class="form-control" id="longitude" placeholder="1223" required>
+          <input type="text" class="form-control" id="longitude" placeholder="1223" v-model="longitude" required>
         </div>
         <div class="col-md-5">
           <label for="latitude" class="form-label">Latitude</label>
-          <input type="text" class="form-control" id="latitude" placeholder="1223" required>
+          <input type="text" class="form-control" id="latitude" v-model="latitude" placeholder="1223" required>
         </div>
       </div>
       <hr class="my-4">
@@ -350,7 +364,6 @@ export default {
   border-radius: 3%;
   padding: 3%;
   background-blend-mode: lighten;
-  background-color: #37b76f;
 }
 .double-field{
   display: flex;
