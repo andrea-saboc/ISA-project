@@ -6,8 +6,6 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
 jobs:
-install:
-  	- chmod +x gradlew
   build:
     name: Build
     runs-on: ubuntu-latest
