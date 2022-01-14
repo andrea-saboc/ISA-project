@@ -2,19 +2,9 @@ package com.example.isa.model.reservations;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Set;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-import javax.persistence.Version;
+import javax.persistence.*;
 
 import com.example.isa.model.User;
 
@@ -47,6 +37,8 @@ public class DiscountReservation implements Serializable{
 	private double priceWithDiscount;
 	private boolean reserved;
 	private boolean cancelled;
+
+
 	public String getType() {
 		return type;
 	}

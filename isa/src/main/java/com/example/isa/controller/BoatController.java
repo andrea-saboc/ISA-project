@@ -54,9 +54,6 @@ public class BoatController {
 
 	}
 	
-
-	@PreAuthorize("hasRole('ROLE_CLIENT')")
-	//@Secured("ROLE_BOAT_OWNER")
 	@RequestMapping(method = RequestMethod.GET, value = "/boats",produces = MediaType.APPLICATION_JSON_VALUE)
 	@CrossOrigin(origins = "*")
 	public ResponseEntity<String> getAllBoats() throws JsonProcessingException{

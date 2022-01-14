@@ -65,6 +65,7 @@
       {{boatToShow.cancellationPolicy}}
     </div>
     <br>
+    <br>
   </div>
     <div class="info">
       <h4><button v-on:click="ShowReservationOffer">Show reservationOffers</button></h4>
@@ -224,6 +225,7 @@
       <br>
       <v-calendar :columns="$screens({ default: 1, lg: 2 })" :attributes='calendar_attributes'
                   :available-dates='availableDates'/>
+      <button v-if="loggedUser!=null && boatToShow.boatOwner.id==loggedUser.id" type="button" class="btn btn-primary" data-bs-toggle="modal" style="margin: 0.5%" data-bs-target="#addQuickResModal">Add new quick reservation</button>
       <hr>
       <p style="font-weight: bolder; font-size: 26px">
         Location
@@ -332,7 +334,7 @@
               <tbody>
               <tr v-for="as in additionalServices" :key="as.id">
                 <td><div class="form-check">
-                  <input class="form-check-input" type="checkbox" value=""  v-bind:id="as.id+'ascr'" checked=false v-on:click="addAditionalServiceToRes(as)">
+                  <input class="form-check-input" type="checkbox" value=""  v-bind:id="as.id+'ascr'"  v-on:click="addAditionalServiceToRes(as)">
                   <label class="form-check-label" for="as.id+'ascr'">
                     {{as.name}}
                   </label>
@@ -351,6 +353,52 @@
       </div>
       </div>
     </div>
+  <!-- Modal -->
+  <div class="modal fade" id="addQuickResModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Add new quick reservation</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <v-date-picker mode="dateTime" is24hr v-model="startDateTimeQuick" style="width: 100%">
+            <template v-slot="{ inputValue, inputEvents }">
+              <input
+                  class="px-2 py-1 border rounded focus:outline-none focus:border-blue-300"
+                  :value="inputValue"
+                  v-on="inputEvents"
+                  style="overflow: visible"
+                  placeholder="From time"
+              />
+            </template>
+          </v-date-picker>
+          <v-date-picker  mode="dateTime" is24hr v-model="endDateTimeQuick" style="width: 100%">
+            <template v-slot="{ inputValue, inputEvents }">
+              <input
+                  class="px-2 py-1 border rounded focus:outline-none focus:border-blue-300"
+                  :value="inputValue"
+                  v-on="inputEvents"
+                  placeholder="To time"
+              />
+            </template>
+          </v-date-picker>
+          <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon111">Number of guests</span>
+            <input type="number" class="form-control" placeholder="Number of guests" aria-label="Username" v-model="numberOfGuestsQuick" aria-describedby="basic-addon1">
+          </div>
+          <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon11">Final price</span>
+            <input type="number" class="form-control" placeholder="Price" aria-label="Username" v-model="priceQuick" aria-describedby="basic-addon1">
+          </div>
+          <button type="button" class="btn btn-primary" v-on:click="addQuickReservation">Add</button>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 
@@ -364,6 +412,10 @@ export default {
   name: "BoatView",
   data: function (){
     return{
+      startDateTimeQuick: '',
+      endDateTimeQuick: '',
+      numberOfGuestsQuick: '',
+      priceQuick: '',
       clientResEmail: '',
       clientResEmailForm: true,
       clientResEmailExists: true,
@@ -385,6 +437,7 @@ export default {
       boatReservations : [],
       reservedDates : [],
       freeDates: new Array(),
+      quickReservations: new Array(),
       calendar_attributes: [
         {
           key: 'today',
@@ -513,6 +566,50 @@ export default {
       console.log("Calculated available days:", this.availableDates)
       console.log("Calculated reserved days:", this.reservedDates)
       this.calculateFreeDaysForReservations()
+      this.calculateDiscountReservations()
+    },
+    calculateDiscountReservations(){
+      axios
+      .get(devServer.proxy + "/getBoatDiscountReservations", {
+        "boatId" : this.boatToShow.id
+      },{
+        headers: {
+          'Authorization' : this.$store.getters.tokenString
+        }
+      })
+      .then(response =>
+      {
+        this.quickReservations = response.data.freeReservations;
+        var quickReservations1 = response.data.reservedReservations;
+        for(var i in this.quickReservations){
+          var startDate = new Date(this.quickReservations[i].startDate)
+          var endDate = new Date(this.quickReservations[i].endDate)
+          this.calendar_attributes.push({
+            highlight: {
+              start: { fillMode: 'outline' },
+              base: { fillMode: 'outline' },
+              end: { fillMode: 'outline' },
+              fontcolor: 'green',
+            },
+            dates: { start: startDate, end: endDate },
+          })
+        }
+        for(var j in quickReservations1){
+          var startDate1 = new Date(this.quickReservations1[j].startDate)
+          var endDate1 = new Date(this.quickReservations1[j].endDate)
+          this.calendar_attributes.push({
+            highlight: {
+              start: { fillMode: 'outline' },
+              base: { fillMode: 'outline' },
+              end: { fillMode: 'outline' },
+              color: 'green',
+            },
+            dates: { start: startDate1, end: endDate1 },
+          })
+        }
+      }
+
+      )
     },
     calculateFreeDaysForReservations(){
       axios
@@ -647,9 +744,25 @@ export default {
       })
       .then(response =>
       alert(response.data))
+    },
+    addQuickReservation(){
+      axios.post(devServer.proxy + "/createDiscountBoatReservation", {
+        "boatId" : this.boatId,
+        "startDate" : this.startDateTimeQuick,
+        "endDate" : this.endDateTimeQuick,
+        "numberOfGuests" : this.numberOfGuestsQuick,
+        "priceWithDiscount": this.priceQuick
+      }, {
+        headers: {
+          'Authorization': this.$store.getters.tokenString,
+          'Content-Type': 'application/json'
+        }
+      })
+      this.calculateAvailableDaysForCalendar()
     }
 
-  }
+  },
+
 }
 
 

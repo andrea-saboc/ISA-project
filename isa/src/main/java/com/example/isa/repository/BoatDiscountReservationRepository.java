@@ -13,6 +13,7 @@ public interface BoatDiscountReservationRepository extends JpaRepository<BoatDis
 
 	List<BoatDiscountReservation> findAllByBoat(Boat b);
 	List<BoatDiscountReservation> findAllByBoatAndReservedFalse(Boat b);
+	List<BoatDiscountReservation> findAllByBoatAndReservedTrue(Boat b);
 	List<BoatDiscountReservation> findAllByUserAndCancelledFalseAndReservedTrue(User u);
 	
 	BoatDiscountReservation findByIdAndReservedFalse(long id);
