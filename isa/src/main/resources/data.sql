@@ -131,13 +131,13 @@ VALUES (4, 'bathroom', 12, 36, 4, null );
 
 INSERT INTO public.boat_available_period(
     available_period_id, end_date, start_date, boat_id)
-VALUES (1, '2022-01-10 00:00:00', '2022-01-01 00:00:00', 3);
+VALUES (1, '2022-03-10 00:00:00', '2022-01-01 00:00:00', 3);
 INSERT INTO public.boat_available_period(
     available_period_id, end_date, start_date, boat_id)
-VALUES (2, '2022-01-28 00:00:00', '2022-01-20 00:00:00', 3);
+VALUES (2, '2022-03-28 00:00:00', '2022-03-20 00:00:00', 3);
 INSERT INTO public.boat_available_period(
     available_period_id, end_date, start_date, boat_id)
-VALUES (3, '2022-01-28 00:00:00', '2022-01-20 00:00:00', 4);
+VALUES (3, '2022-02-20 00:00:00', '2022-01-20 00:00:00', 4);
 INSERT INTO public.boat_available_period(
     available_period_id, end_date, start_date, boat_id)
 VALUES (4,'2022-01-28 00:00:00', '2022-01-20 00:00:00', 5);

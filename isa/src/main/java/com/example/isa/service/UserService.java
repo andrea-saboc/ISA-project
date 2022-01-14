@@ -81,4 +81,17 @@ public class UserService {
 		
 		return user;
 	}
+
+    public boolean checkIfClientEmailExists(String email) {
+		boolean exsists = false;
+		try {
+			Client client = clientRepository.findByEmail(email);
+			if (client != null) {
+				exsists = true;
+			}
+		} catch (Exception e){
+			exsists = false;
+		}
+		return exsists;
     }
+}

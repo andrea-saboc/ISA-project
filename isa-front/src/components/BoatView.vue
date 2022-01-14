@@ -192,7 +192,7 @@
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times" aria-hidden="true"></i></button>
             </div>
             <div class="modal-body">
-              <v-date-picker mode="dateTime" is24hr v-model="startDateTime">
+              <v-date-picker mode="dateTime" is24hr v-model="startDateTime" style="width: 100%">
                 <template v-slot="{ inputValue, inputEvents }">
                   <input
                       class="px-2 py-1 border rounded focus:outline-none focus:border-blue-300"
@@ -203,7 +203,7 @@
                   />
                 </template>
               </v-date-picker>
-              <v-date-picker  mode="dateTime" is24hr v-model="endDateTime">
+              <v-date-picker  mode="dateTime" is24hr v-model="endDateTime" style="width: 100%">
                 <template v-slot="{ inputValue, inputEvents }">
                   <input
                       class="px-2 py-1 border rounded focus:outline-none focus:border-blue-300"
@@ -222,7 +222,7 @@
         </div>
       </div>
       <br>
-      <v-calendar :columns="$screens({ default: 1, lg: 2 })" style="width: 100%;" :attributes='calendar_attributes'
+      <v-calendar :columns="$screens({ default: 1, lg: 2 })" :attributes='calendar_attributes'
                   :available-dates='availableDates'/>
       <hr>
       <p style="font-weight: bolder; font-size: 26px">
@@ -289,6 +289,67 @@
       </div>
 <hr>
     </div>
+    <div class="coladd-reservation" v-if="loggedUser!=null && boatToShow.boatOwner!=null && loggedUser.id==boatToShow.boatOwner.id">
+      <div class="input-reservations">
+      <h5>
+        Add reservation
+      </h5>
+        <div class="mb-3">
+          <label for="exampleInputEmail1" class="form-label">Client mail</label>
+          <div class="row">
+            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" style="width: 70%; margin-right: 2%" v-model="clientResEmail" v-on="{keydown: checkEmail}">
+            <p v-if="!clientResEmailForm" style="font-size: small; font-style: italic">Invalid email.</p>
+            <p v-if="!clientResEmailExists" style="font-size: small; font-style: italic">User not registered.</p>
+          </div>
+          <label for="reservationStart" class="form-label">Select start time</label>
+          <v-date-picker mode="dateTime" is24hr v-model="clientResStartDate" id="reservationStart" :available-dates='freeDates'>
+            <template v-slot="{ inputValue, inputEvents }">
+              <input
+                  class="px-2 py-1 border rounded focus:outline-none focus:border-blue-300"
+                  :value="inputValue"
+                  v-on="inputEvents"
+                  style="overflow: visible"
+                  placeholder="From time"
+                  v-on:select="checkDateValidation"
+              />
+            </template>
+          </v-date-picker>
+          <label for="reservationEnd" class="form-label">Select start time</label>
+          <v-date-picker  mode="dateTime" is24hr id="reservationEnd" :available-dates='freeDates' v-model="clientResEndDate">
+            <template v-slot="{ inputValue, inputEvents }">
+              <input
+                  class="px-2 py-1 border rounded focus:outline-none focus:border-blue-300"
+                  :value="inputValue"
+                  v-on="inputEvents"
+                  placeholder="To time"
+              />
+            </template>
+          </v-date-picker>
+          <hr>
+          <div v-if="additionalServices!=null && additionalServices.length!=0">
+            Addition services:
+            <table>
+              <tbody>
+              <tr v-for="as in additionalServices" :key="as.id">
+                <td><div class="form-check">
+                  <input class="form-check-input" type="checkbox" value=""  v-bind:id="as.id+'ascr'" checked=false v-on:click="addAditionalServiceToRes(as)">
+                  <label class="form-check-label" for="as.id+'ascr'">
+                    {{as.name}}
+                  </label>
+                </div></td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon1">Number of guests</span>
+            <input type="number" class="form-control" min="1" max="{{boatToShow.capacity}}" v-model="clientResNumberOfGuests" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
+          </div>
+          <br>
+          <button type="button" class="btn btn-primary" style="width: 100%" v-on:click="makeReservationForClient()">Add reservation</button>
+        </div>
+      </div>
+      </div>
     </div>
 </div>
 
@@ -303,6 +364,14 @@ export default {
   name: "BoatView",
   data: function (){
     return{
+      clientResEmail: '',
+      clientResEmailForm: true,
+      clientResEmailExists: true,
+      clientResAdditionalServices: new Array(),
+      clientResStartDate: '',
+      clientResEndDate: '',
+      clientResNumberOfGuests: '',
+      loggedUser: null,
       clientSubscribed: '',
       startDateTime: '',
       endDateTime: '',
@@ -313,11 +382,14 @@ export default {
       availablePeriods: [],
       availableDates: [],
       additionalServices : [],
+      boatReservations : [],
+      reservedDates : [],
+      freeDates: new Array(),
       calendar_attributes: [
         {
           key: 'today',
           highlight: 'red',
-          dates: new Date(),
+          dates: [new Date()]
         },
       ]
     }
@@ -378,7 +450,6 @@ export default {
           .then(response => {
             this.availablePeriods = response.data
             console.log("Available periods for boat: ", this.availablePeriods)
-            this.calculateAvailableDaysForCalendar()
             axios.get(devServer.proxy + "/additionalServices", {
               params:
                   {
@@ -389,6 +460,19 @@ export default {
               }
             }).then(resp => {
               this.additionalServices = resp.data
+              axios.get(devServer.proxy + "/getReservedDatesForBoat", {
+                params:
+                    {
+                      boatId: boatId
+                    },
+                headers: {
+                  'Authorization': this.$store.getters.tokenString
+                }
+              }) .then((resp1 => {
+                this.boatReservations = resp1.data
+                console.log('Boat reservations:', this.boatReservations)
+                this.calculateAvailableDaysForCalendar()
+              }))
             })
           }
           )
@@ -408,6 +492,51 @@ export default {
           end: new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate())
         });
       }
+      for(var reservation in this.boatReservations){
+        var startDateRes = new Date(this.boatReservations[reservation].startDate)
+        var endDateRes = new Date(this.boatReservations[reservation].endDate)
+        this.reservedDates.push({
+          start: new Date(startDateRes.getFullYear(), startDateRes.getMonth(), startDateRes.getDate(), startDateRes.getHours(), startDateRes.getMinutes()),
+          end: new Date(endDateRes.getFullYear(), endDateRes.getMonth(), endDateRes.getDate(), endDateRes.getHours(), endDateRes.getMinutes())
+        });
+      }
+      for (var id in this.reservedDates){
+        this.calendar_attributes.push({
+          highlight: {
+            start: { fillMode: 'outline' },
+            base: { fillMode: 'outline' },
+            end: { fillMode: 'outline' },
+          },
+          dates: { start: this.reservedDates[id].start, end: this.reservedDates[id].end },
+        })
+      }
+      console.log("Calculated available days:", this.availableDates)
+      console.log("Calculated reserved days:", this.reservedDates)
+      this.calculateFreeDaysForReservations()
+    },
+    calculateFreeDaysForReservations(){
+      axios
+      .post(devServer.proxy + "/freeDaysForBoat", {
+        "boatId" : this.boatToShow.id
+      },
+      {
+        headers: {
+          'Authorization' : this.$store.getters.tokenString
+        }
+      })
+      .then(response =>{
+        var freePeriods = response.data
+        console.log("Calculated free", response.data)
+        for ( var i in freePeriods){
+          var startDate = new Date(freePeriods[i].startTime);
+          var endDate = new Date(freePeriods[i].endTime);
+          this.freeDates.push({
+            start: new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate()),
+            end: new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate())
+          })
+        }
+        console.log("Free dates", this.freeDates)
+      })
     },
     addAvailabilityPeriod(){
       axios
@@ -462,6 +591,62 @@ export default {
     },
     ShowReservationOffer(){
       window.location.href = "/boatReservationOffers/" + this.boatToShow.id.toString();
+    },
+    checkEmail(){
+        if (!this.validEmail(this.clientResEmail)){
+          this.clientResEmailForm = false
+        } else {
+          this.clientResEmailForm = true
+          axios.post(devServer.proxy + '/emailExistsClient', {
+            email: this.clientResEmail
+          }, {
+            headers: {
+              'Authorization': this.$store.getters.tokenString,
+              'Content-Type': 'application/json'
+            }
+          }).then(response =>{
+            this.clientResEmailExists = response.data
+            if(!this.clientResEmailExists){
+              alert("User with that email is not registered yet!")
+            }
+          })
+        }
+    },
+    validEmail: function (email) {
+      var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      return re.test(email);
+    },
+    addAditionalServiceToRes(additionalService){
+      let checkbox = document.getElementById(additionalService.id + 'ascr').checked
+      console.log("additional service is selected:", checkbox)
+      if(checkbox){
+        this.clientResAdditionalServices.push(additionalService)
+      } else{
+        for( var i = 0; i < this.clientResAdditionalServices.length; i++){
+
+          if ( this.clientResAdditionalServices[i] === additionalService) {
+            this.clientResAdditionalServices.splice(i, 1);
+          }
+
+        }
+      }
+    },
+    makeReservationForClient(){
+      axios.post(devServer.proxy+ "/makeBoatReservationClient", {
+          email : this.clientResEmail,
+          additionalServiceSet : this.clientResAdditionalServices,
+          startDate : this.clientResStartDate,
+          endDate : this.clientResEndDate,
+          "boatId" : this.boatToShow.id,
+          numberOfGuests : this.clientResNumberOfGuests
+      }, {
+        headers: {
+          'Authorization': this.$store.getters.tokenString,
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(response =>
+      alert(response.data))
     }
 
   }
@@ -540,6 +725,20 @@ export default {
 
 .boat-view .row .colinfo {
   width: 60%;
+}
+
+.coladd-reservation{
+  background-color: #e0e0e0;
+  height: 30%;
+  width: 30%;
+  margin-top: 10%;
+  margin-left: 5%;
+  border: solid 0.1px black;
+  border-radius: 11px;
+}
+
+.input-reservations{
+  padding: 6%;
 }
 
 

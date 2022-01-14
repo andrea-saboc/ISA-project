@@ -1,15 +1,15 @@
 package com.example.isa.service;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import com.example.isa.dto.AddAvailablePeriodDTO;
 import com.example.isa.dto.BoatRegistrationDTO;
 import com.example.isa.model.*;
 import com.example.isa.model.reservations.AdditionalService;
+import com.example.isa.model.reservations.BoatReservation;
 import com.example.isa.repository.*;
+import com.example.isa.service.reservations.BoatReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.availability.AvailabilityChangeEvent;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +25,8 @@ public class BoatService {
 	private BoatAvailablePeriodRepository availablePeriodRepository;
 	@Autowired
 	private AdditionalServiceRepository additionalServiceRepository;
+	@Autowired
+	private BoatReservationService boatReservationService;
 
 	public BoatService(BoatsRepository br, ImageRepository ir, BoatOwnerRepository bor, BoatAvailablePeriodRepository apr, AdditionalServiceRepository additionalServiceRepository){
 		this.boatsRepository = br;
@@ -143,4 +145,63 @@ public class BoatService {
 		List<BoatAvailablePeriod> boatNewAvailability = availablePeriodRepository.findByBoat(boat);
 		return boatNewAvailability;
 	}
+
+    public List<AddAvailablePeriodDTO> getFreeDaysForBoat(Long boatID) {
+		List<BoatAvailablePeriod> boatAvailablePeriods = getBoatAvailbilities(boatID);
+		List<BoatReservation> boatReservations = boatReservationService.getBoatReservationsByBoat(boatID);
+		List<AddAvailablePeriodDTO> availablePeriods = calculateAvailablePeriods(boatAvailablePeriods, boatReservations);
+		return availablePeriods;
+    }
+
+	private List<AddAvailablePeriodDTO> calculateAvailablePeriods(List<BoatAvailablePeriod> boatAvailablePeriods, List<BoatReservation> boatReservations) {
+		List<AddAvailablePeriodDTO> availablePeriods = new ArrayList<>();
+		for (BoatAvailablePeriod bap: boatAvailablePeriods) {
+			availablePeriods.addAll(calculateAvailablePeriodsFromAp(bap, boatReservations));
+		}
+		return availablePeriods;
+	}
+
+	private List<AddAvailablePeriodDTO> calculateAvailablePeriodsFromAp(BoatAvailablePeriod bap, List<BoatReservation> boatReservations) {
+		List<AddAvailablePeriodDTO> availablePeriods = new ArrayList<>();
+		List<BoatReservation> overlapedReservations = new ArrayList<>();
+		for (BoatReservation br: boatReservations) {
+			if ((br.getStartDate().after(bap.getStartDate()) || br.getStartDate().equals(bap.getStartDate()))
+					&& (br.getStartDate().before(bap.getEndDate()) || (br.getStartDate().equals(bap.getEndDate())))){
+				overlapedReservations.add(br);
+				}
+			}
+		availablePeriods.addAll(separatedAvailablePeriods(sortByAsc(overlapedReservations), bap));
+		return availablePeriods;
+		}
+
+	private List<AddAvailablePeriodDTO> separatedAvailablePeriods(List<BoatReservation> sortByAsc, BoatAvailablePeriod bap) {
+		List<AddAvailablePeriodDTO> availablePeriods = new ArrayList<>();
+		AddAvailablePeriodDTO right = new AddAvailablePeriodDTO(bap.getStartDate(), bap.getEndDate(), bap.getBoat().getId());
+		for (BoatReservation br : sortByAsc){
+			if (!br.getStartDate().equals(right.startTime)){
+				availablePeriods.add(new AddAvailablePeriodDTO(right.startTime, br.getStartDate(), right.boatId));
+			}
+			right.startTime = br.getEndDate();
+		}
+		if (!right.startTime.equals(right.endTime)){
+			availablePeriods.add(right);
+		}
+		return availablePeriods;
+	}
+
+	private List<BoatReservation> sortByAsc(List<BoatReservation> overlapedReservations) {
+		for(int i=0; i<overlapedReservations.size(); i++){
+			for(int j = i+1; j<overlapedReservations.size(); j++){
+				if (overlapedReservations.get(i).getStartDate().before(overlapedReservations.get(j).getStartDate())){
+					BoatReservation temp = overlapedReservations.get(i);
+					overlapedReservations.set(i, overlapedReservations.get(j));
+					overlapedReservations.set(j, temp);
+				}
+
+			}
+		}
+		return overlapedReservations;
+	}
+
+
 }

@@ -8,7 +8,9 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
+import com.example.isa.dto.MakeBoatReservationForClientDTO;
 import com.example.isa.model.*;
 import com.example.isa.model.reservations.AdditionalService;
 import com.example.isa.model.reservations.BoatReservation;
@@ -34,6 +36,8 @@ public class BoatReservationService {
 	AdditionalServiceRepository additinalServicesRepo;
 	@Autowired
 	BoatOwnerRepository boatOwnerRepository;
+	@Autowired
+	ClientRepository clientRepository;
 	
 	//@Transactional(readOnly = false)
 	public BoatReservation createBoatReservation(ReservationDTO res) {
@@ -148,7 +152,6 @@ public class BoatReservationService {
 		//return boatReservationRepo.findAllByUser(getLoggedUser());
 
 	}
-
     public List<BoatReservation> getLoggedUserReservations() {
 		User user = getLoggedUser();
 		BoatOwner boatOwner = boatOwnerRepository.findById(user.getId()).get();
@@ -159,4 +162,110 @@ public class BoatReservationService {
 		}
 		return boatReservations;
     }
+
+	public List<BoatReservation> getBoatReservationsByBoat(Long boatId) {
+		Boat boat = boatRepo.findById(boatId).get();
+		List<BoatReservation> boatReservations = boatReservationRepo.findAllByBoat(boat);
+		return boatReservations;
+	}
+
+    public boolean createBoatReservationForClient(MakeBoatReservationForClientDTO dto) {
+		if(valid(dto)){
+			Client client = clientRepository.findByEmail(dto.email);
+			Boat boat = boatRepo.findById(dto.boatId).get();
+			BoatReservation boatReservation = new BoatReservation();
+			boatReservation.setBoat(boat);
+			boatReservation.setUser(client);
+			boatReservation.setAdditionalServices(dto.additionalServiceSet);
+			boatReservation.setStartDate(dto.startDate);
+			boatReservation.setEndDate(dto.endDate);
+			boatReservation.setCancelled(false);
+			boatReservation.setNumberOfGuests(dto.numberOfGuests);
+			boatReservation.setType("BOAT");
+			boatReservation.setTotalPrice(calculateFinalPrice(boat, dto));
+			boatReservationRepo.save(boatReservation);
+			return true;
+		}
+		else return false;
+    }
+
+	private double calculateFinalPrice(Boat boat, MakeBoatReservationForClientDTO dto) {
+		double finalPrice = 0;
+		Long diff = dto.endDate.getTime() - dto.startDate.getTime();
+		Long hours = TimeUnit.HOURS.toHours(diff);
+		Long days = TimeUnit.DAYS.toDays(diff);
+		if(days > 4){
+			finalPrice += boat.getPriceForSevenDays();
+			for (AdditionalService as : dto.additionalServiceSet){
+				finalPrice+=days* as.getPricePerDay();
+			}
+		}
+		else if(hours > 5){
+			finalPrice += boat.getPricePerDay();
+			for (AdditionalService as : dto.additionalServiceSet){
+				finalPrice+= as.getPricePerDay();
+			}
+		} else{
+			finalPrice += hours * boat.getPricePerHour();
+			for (AdditionalService as : dto.additionalServiceSet){
+				finalPrice+= as.getPricePerHour();
+			}
+		}
+		return finalPrice;
+	}
+
+	private boolean valid(MakeBoatReservationForClientDTO dto) {
+		boolean valid = true;
+		if(dto.startDate.after(dto.endDate)) valid = false;
+		if(boatNotAvailable(dto)) valid = false;
+		return valid;
+	}
+
+	private boolean boatNotAvailable(MakeBoatReservationForClientDTO dto) {
+		boolean available = true;
+		Boat boat = boatRepo.findById(dto.boatId).get();
+		List<BoatAvailablePeriod> boatAvailablePeriods = availablePeriodsRepo.findByBoat(boat);
+		if(notOverlaps(boatAvailablePeriods, dto)){
+			available = false;
+			System.out.println("The boat is not available at that time!");
+		} else if(anotherReservationOverlaps(boat, dto)){
+			available = false;
+			System.out.println("There is another reservation in that period!");
+		}
+		return available;
+
+	}
+
+	private boolean anotherReservationOverlaps(Boat boat, MakeBoatReservationForClientDTO dto) {
+		boolean overlaps = false;
+		List<BoatReservation> boatReservations = boatReservationRepo.findAllByBoat(boat);
+		for (BoatReservation boatReservation : boatReservations){
+			if(((boatReservation.getStartDate().after(dto.startDate) || boatReservation.getStartDate().equals(dto.startDate))
+					&& (dto.startDate.before(boatReservation.getEndDate())))
+					||
+					(dto.endDate.after(boatReservation.getStartDate())
+					&& (dto.endDate.before(boatReservation.getEndDate()) || dto.endDate.equals(boatReservation.getEndDate())))
+			)	{
+				overlaps = true;
+				break;
+			}
+		}
+		return overlaps;
+	}
+
+	private boolean notOverlaps(List<BoatAvailablePeriod> boatAvailablePeriods, MakeBoatReservationForClientDTO dto) {
+		boolean overlaps = false;
+		for(BoatAvailablePeriod boatAvailablePeriod : boatAvailablePeriods){
+			if((dto.startDate.after(boatAvailablePeriod.getStartDate()) || dto.startDate.equals(boatAvailablePeriod.getStartDate()))
+			&& dto.startDate.before(boatAvailablePeriod.getEndDate())
+			&& (dto.endDate.before(boatAvailablePeriod.getEndDate()) || dto.endDate.equals(boatAvailablePeriod.getEndDate()))
+			&& dto.endDate.after(boatAvailablePeriod.getStartDate())){
+				overlaps=true;
+				break;
+			}
+		}
+		return !overlaps;
+	}
+
+
 }

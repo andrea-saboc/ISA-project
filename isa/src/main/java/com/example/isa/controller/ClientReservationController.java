@@ -2,23 +2,16 @@ package com.example.isa.controller;
 
 import java.util.List;
 
+import com.example.isa.dto.*;
+import com.example.isa.model.Boat;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import com.example.isa.dto.ActiveReservationDTO;
-import com.example.isa.dto.PotentialBoatReservationDTO;
-import com.example.isa.dto.PotentialMansionReservationDTO;
-import com.example.isa.dto.ReservationDTO;
-import com.example.isa.dto.ReservationSearchDTO;
 import com.example.isa.mail.MailService;
 import com.example.isa.model.reservations.BoatReservation;
 import com.example.isa.model.reservations.MansionReservation;
@@ -175,9 +168,9 @@ public class ClientReservationController {
         }
     }
 
+    @PreAuthorize("hasRole('ROLE_BOAT_OWNER')")
     @RequestMapping(method = RequestMethod.GET, value = "/getBoatOwnerReservations")
-    @CrossOrigin(origins = "*")
-    public ResponseEntity<String> getBoatOwnerReservations(){
+    public ResponseEntity<String> getBoatOwnerReservations() {
         try {
             List<BoatReservation> boatReservations = boatResService.getLoggedUserReservations();
             ObjectMapper mapper = new ObjectMapper();
@@ -185,9 +178,39 @@ public class ClientReservationController {
             System.out.println(jsonString);
             return new ResponseEntity<>(jsonString, HttpStatus.OK);
 
+        } catch (Exception e) {
+            return new ResponseEntity<>("Bad request", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PreAuthorize("hasRole('ROLE_BOAT_OWNER')")
+    @RequestMapping(method = RequestMethod.GET, value = "/getReservedDatesForBoat")
+    public ResponseEntity<String> getReservedDatesForBoat(@RequestParam Long boatId){
+        try {
+            List<BoatReservation> boatReservations = boatResService.getBoatReservationsByBoat(boatId);
+            ObjectMapper mapper = new ObjectMapper();
+            String jsonString = mapper.writeValueAsString(boatReservations);
+            System.out.println(jsonString);
+            return new ResponseEntity<>(jsonString, HttpStatus.OK);
         } catch (Exception e){
             return new ResponseEntity<>("Bad request", HttpStatus.BAD_REQUEST);
         }
     }
+
+    @PreAuthorize("hasRole('ROLE_BOAT_OWNER')")
+    @RequestMapping(method = RequestMethod.POST, value = "/makeBoatReservationClient")
+    public ResponseEntity<String> makeBoatReservationClient(@RequestBody MakeBoatReservationForClientDTO dto){
+        System.out.println(dto);
+        try{
+            Boolean success = boatResService.createBoatReservationForClient(dto);
+            if (success)
+            return new ResponseEntity<>("Reservation for client is created successfully!", HttpStatus.OK);
+            else return new ResponseEntity<>("Wrong params, try again!", HttpStatus.OK);
+        } catch (Exception e){
+            System.out.println(e);
+            return new ResponseEntity<>("Error when making a reservation!", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 
 }

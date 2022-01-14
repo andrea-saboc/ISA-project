@@ -141,4 +141,17 @@ public class BoatController {
             return  new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+	@RequestMapping(method = RequestMethod.POST, value = "/freeDaysForBoat",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@CrossOrigin(origins = "*")
+	public ResponseEntity<List<AddAvailablePeriodDTO>> getFreeDaysForBoat(@RequestBody LongIdDTO boatID){
+		System.out.println("I'm trying to get boat id:"+ boatID.boatId);
+		try{
+			List<AddAvailablePeriodDTO> av = service.getFreeDaysForBoat(boatID.boatId);
+			return new ResponseEntity<>(av , HttpStatus.OK);
+		} catch (Exception e){
+			System.out.println(e);
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 }

@@ -51,7 +51,13 @@ public class UserController {
 	@CrossOrigin(origins = "*")	
 	public ResponseEntity<User> createDeletionRequest(@RequestBody String reason) throws JsonProcessingException{	
 		return ResponseEntity.ok(userService.createDeletionRequest(reason));
-	}	
+	}
+
+	@PreAuthorize("hasRole('ROLE_BOAT_OWNER')")
+	@RequestMapping(method = RequestMethod.POST, value = "/emailExistsClient")
+	public ResponseEntity<Boolean> checkIfClientWithEmailExists(@RequestBody String email) {
+		return new ResponseEntity<>(userService.checkIfClientEmailExists(email), HttpStatus.OK);
+	}
 
 
 
