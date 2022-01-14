@@ -6,11 +6,11 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
 jobs:
+install:
+  	- chmod +x gradlew
   build:
     name: Build
     runs-on: ubuntu-latest
-    install:
-  	- chmod +x gradlew
     steps:
       - uses: actions/checkout@v2
         with:
