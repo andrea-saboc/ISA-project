@@ -347,8 +347,9 @@ export default {
                     }
                 })
                 .then(response => {
-                    alert('submited', response)
+                    console.log(response.data)
                     this.LoadMansions()
+                    this.makingReservation = false
                 });
 
 

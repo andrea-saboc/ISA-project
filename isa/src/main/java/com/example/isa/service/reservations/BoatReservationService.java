@@ -1,15 +1,12 @@
 package com.example.isa.service.reservations;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
-
 import com.example.isa.dto.MakeBoatReservationForClientDTO;
 import com.example.isa.model.*;
 import com.example.isa.model.reservations.AdditionalService;
@@ -18,9 +15,21 @@ import com.example.isa.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.example.isa.dto.ReservationDTO;
+import com.example.isa.exceptions.PeriodNoLongerAvailableException;
+import com.example.isa.model.Boat;
+import com.example.isa.model.BoatAvailablePeriod;
+import com.example.isa.model.BoatOwner;
+import com.example.isa.model.User;
+import com.example.isa.model.reservations.AdditionalService;
+import com.example.isa.model.reservations.BoatReservation;
+import com.example.isa.model.reservations.ReservationStartEndDateFormatter;
+import com.example.isa.repository.AdditionalServiceRepository;
+import com.example.isa.repository.BoatAvailablePeriodRepository;
+import com.example.isa.repository.BoatOwnerRepository;
+import com.example.isa.repository.BoatRepository;
+import com.example.isa.repository.BoatReservationRepository;
 
 @Service
 //@Transactional(readOnly=true)
@@ -40,27 +49,24 @@ public class BoatReservationService {
 	ClientRepository clientRepository;
 	
 	//@Transactional(readOnly = false)
-	public BoatReservation createBoatReservation(ReservationDTO res) {
+	public BoatReservation createBoatReservation(ReservationDTO res) throws ParseException, PeriodNoLongerAvailableException {
 		
-		String sDate = res.getStartDate()+" "+res.getStartTime();
-		SimpleDateFormat formatter=new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		
-		try {
-			Date startDate=formatter.parse(sDate);			
-	        Calendar cal = Calendar.getInstance();
-	        cal.setTime(startDate);
-	        cal.add(Calendar.DAY_OF_MONTH, res.getNumberOfDays());
-	        cal.add(Calendar.HOUR, res.getNumberOfHours()); 
-	        Date endDate = cal.getTime();
-	                
-	        System.out.println("Adding days to start date: "+endDate);
-	        
+		ReservationStartEndDateFormatter formatter = new ReservationStartEndDateFormatter(res);
+		Date startDate = formatter.startDate;
+		Date endDate = formatter.endDate;
+
+        
+        BoatAvailablePeriod period = availablePeriodsRepo.getPeriodOfInterest(startDate, startDate,res.getEntityId());
+        
+        if(period == null) {
+        	throw new PeriodNoLongerAvailableException();
+        	
+        }
+        else {
 	        BoatReservation newBoatReservation = new BoatReservation(getLoggedUser(), startDate,endDate, res.getNumberOfGuests(), res.getPrice(),
 					boatRepo.findById(res.getEntityId()).orElse(new Boat()));
 	        
-	        
-	        BoatAvailablePeriod period = availablePeriodsRepo.getPeriodOfInterest(startDate, startDate,res.getEntityId());
-
 	        if(!period.getStartDate().equals(startDate)) {
 	        	BoatAvailablePeriod periodBefore = new BoatAvailablePeriod(period.getStartDate(),startDate,period.getBoat());
 	        	availablePeriodsRepo.save(periodBefore);
@@ -82,13 +88,7 @@ public class BoatReservationService {
 	        newBoatReservation.setAdditionalServices(services);
 	            
 		    return boatReservationRepo.save(newBoatReservation);
-		    
-			} catch (ParseException e) {
-			System.out.println("PUČE!");
-			e.printStackTrace();
-			}
-				
-		return null;
+        }
 	}
 	
 	public double calculateAdditionalServicesPrice(BoatReservation bres,ReservationDTO res,AdditionalService service) {

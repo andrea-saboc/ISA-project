@@ -331,8 +331,9 @@ export default {
                     }
                 })
                 .then(response => {
-                  this.LoadBoats()
-                  alert('submited', response)
+                    console.log(response.data)
+                    this.LoadBoats()
+                    this.makingReservation = false
                 });
 
 
