@@ -16,7 +16,11 @@ export default {
   },
   mounted() {
     axios
-        .get('http://localhost:8080/proba')
+        .get('http://localhost:8080/proba',{
+      headers: {
+        'Authorization' : this.$store.getters.tokenString
+      }
+    })
         .then(response => {
           alert(response.data)
           this.messege = response.data

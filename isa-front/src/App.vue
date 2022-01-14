@@ -1,23 +1,73 @@
 <template>
-  <div id="nav">
-    <ul>
-      <li><dl><router-link to="/">Home </router-link> </dl></li>
-      <li><dl><router-link to="/about">  About  </router-link></dl></li>
-      <li v-if="!LoggedIn" style="float:right"><dl><router-link to="/clientRegistration">  Register  </router-link></dl></li>
-      <li v-if="!LoggedIn" style="float:right"><dl><router-link to="/login">  Login  </router-link></dl></li>
-      <li v-if="!LoggedIn" style="float:right"><dl><router-link to="/boats">  Boats  </router-link></dl></li>
+  <nav class = "navbar navbar-expand-lg bg-dark navbar-dark mainavbar" style="height: 8%">
+    <div class="container">
+      <a v-if="user === null" href="/home" class="navbar-brand">Adventureland</a>
+      <a v-if="user === 'Client' || user == 'MansionOwner' || user === 'BoatOwner'" href="/listing" class="navbar-brand">Adventureland</a>
+      <div class="collapse navbar-collapse">
+        <ul class ="navbar-nav ms-auto">
+        <li v-if="user === 'MansionOwner'" class ="nav-item" >
+          <a href="/mansionOwnerHomePage" class="nav-link">Home</a>
 
-      <li v-if="!LoggedIn" style="float:right"><dl><router-link to="/profile">  Profile  </router-link></dl></li>
-      <li v-if="LoggedIn" style="float:right"><dl><router-link to="/login">  Logout  </router-link></dl></li>
-    </ul>
-  </div>
-  <router-view/>
+        </li>
+        <li v-if="user === null" class="nav-item">
+          <a href="/clientRegistration" class="nav-link">Register</a>
+        </li>
+         <li v-if="user === 'Administrator'" class="nav-item">
+          <a href="/profile" class="nav-link">Profile Admina</a>
+        </li>
+        <li v-if="user === 'Administrator'" class="nav-item">
+          <a href="/viewRegistration" class="nav-link">View registrations users</a>
+        </li>
+          <li v-if="user === 'BoatOwner'" class="nav-item">
+            <a href="/boatOwnerHomePage" class="nav-link">Home page</a>
+          </li>
+        <li v-if="user === null" class="nav-item">
+          <a href="/login" class="nav-link">Login</a>
+        </li>
+          <li v-if="user!=null" class="nav-item">
+            <a v-on:click="Logout">Logout</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+    <router-view/>
 </template>
 
 <script>
+//import {useStore} from "vuex"
+//import axios from 'axios'
+import axios from "axios";
+import {devServer} from "../vue.config";
+
 export default{
   data(){
-    LoggedIn: false
+    return{
+      user: null,
+      loggedUser: null
+    }
+  },
+  
+  mounted(){
+    this.$store.dispatch('startSession', null);   
+    this.user = this.$store.state.userType;
+    axios.get(devServer.proxy + "/userData", {
+      headers: {
+        'Authorization': this.$store.getters.tokenString
+      }
+    })
+        .then(response => {
+          this.loggedUser = response.data
+          console.log("Ovaj user je ulogovan:", this.loggedUser)
+        })
+},
+  methods:{
+    Logout(){
+      this.$store.commit('logOut');
+      this.$router.push("/home");
+      this.user = null 
+      console.log(this.user)   
+    }
   }
 
 
@@ -32,29 +82,12 @@ export default{
   color: #2c3e50;
 }
 
-#nav {
-  padding: 30px;
-
+.mainavbar{
+  position: fixed;
+  z-index: 10;
+  width: 100%;
+  margin-bottom: 1%;
 }
 
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-  background-color: #dddddd;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
-
-li {
-  display: inline;
-  float: left;
-  background-color: #dddddd;
-}
-ul {
-  border: 1px solid #bbb;
-  background-color: #dddddd;
-}
 
 </style>

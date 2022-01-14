@@ -1,6 +1,25 @@
 <template>
+<section class="bg-dark text-light p-5 text-center text-sm-start">
 <div id="registrationForm">
-   <h1>Registracija</h1>
+   <h1>{{picked}} registration</h1>
+  <br>
+  <div class="radio">
+  <input type="radio" id="clientreg" value="Client" name="selecttype" v-model="picked">
+  <label for="clientreg">Client</label>
+  <input type="radio" id="ownerreg" value="Owner" name="selecttype" v-model="picked">
+  <label for="ownerreg">Advertiser</label>
+  </div>
+  <br>
+  <br>
+    <div class="selection" v-if="picked=='Owner'">
+      <select v-model="otype">
+        <option value="none" disabled selected hidden>Select what you want to advertise</option>
+        <option value="boat" >Boats</option>
+        <option value="mansion">Mansions</option>
+        <option value="fishing">Fishing classes</option>
+      </select>
+
+    </div>
    <br>
    <input placeholder="Name" class="inputKredencijali" type="text" v-model="name"/>            
    <br>
@@ -14,13 +33,16 @@
    <br>
    <input placeholder="Phone number" class="inputKredencijali" type="text" v-model="phoneNumber"/>
    <br>
-   <br>
    <input placeholder="Email" class="inputKredencijali" type="text" v-model="email"/>
    <br>
    <input placeholder="Password" class="inputKredencijali" type="password" v-model="password"/>
-   <br>
    <input placeholder="Repeat your password" class="inputKredencijali" type="password" v-model="passwordRepeated"/>
    <br>
+  <textarea  name="textar" v-if="picked=='Owner'"
+             placeholder="Give a short description about what you do and why you want to advertise yourself here..."
+              v-model="reasonadv">
+
+  </textarea>
    <br>
    <br>
    <br>
@@ -31,9 +53,11 @@
    <br>
    <br>
 </div>
+</section>
 </template>
 
 <script>
+import axios from 'axios'
 export default{
     data(){
         return{
@@ -46,37 +70,155 @@ export default{
             email: '',
             password: '',
             passwordRepeated: '',
-            fieldsFillled : true
+            fieldsFilled : true,
+            passwordValid : true,
+          picked: 'Client',
+          otype: 'none',
+          reasonadv: ''
         }
     },
-    Register(){},
-    CheckFields(){
-        if(this.name === '') this.fieldsFillled = false;
-        if(this.surname === '') this.fieldsFillled = false;
-        if(this.address === '') this.fieldsFillled = false;
-        if(this.city === '') this.fieldsFillled = false
-        if(this.country === '') this.fieldsFillled = false
-        if(this.phoneNumber === '') this.fieldsFillled = false
-        if(this.email === '') this.fieldsFillled = false
-    }
+    methods:{
 
+      Register(){
+      this.CheckIfPassworIsValid();
+      this.CheckIfFieldsAreFilled();
+      alert(this.fieldsFilled)
+        alert(this.passwordValid)
+        alert(this.picked)
+      if(this.fieldsFilled && this.passwordValid && this.picked=='Client'){
+        axios
+            .post('http://localhost:8080/register/client',
+            {
+              "name": this.name,
+              "surname": this.surname,
+              "address": this.address,
+              "city": this.city,
+              "country": this.country,
+              "phoneNumber": this.phoneNumber,
+              "email": this.email,
+              "password": this.password,
+            })
+            .then(response => {
+              alert(response.data)
+              this.messege = response.data
+            });
+        this.ClearAllFields();
+      } else if (this.fieldsFilled && this.passwordValid && this.picked=='Owner'){
+        axios
+      .post('http://localhost:8080/register/advertiser',
+            {
+              "name": this.name,
+              "surname": this.surname,
+              "address": this.address,
+              "city": this.city,
+              "country": this.country,
+              "phoneNumber": this.phoneNumber,
+              "email": this.email,
+              "password": this.password,
+              "type": this.otype,
+              "reason": this.reasonadv
+            })
+            .then(response => {
+              alert(response.data)
+              this.messege = response.data
+            });
+        this.ClearAllFields();
+      } else alert('Error in filling registration');
+
+      },
+      CheckIfFieldsAreFilled(){
+          if(this.name === ''){
+            this.fieldsFilled = false;
+            alert("Enter your name")
+            return;
+          }
+          if(this.surname === '') {
+            alert("Enter your surname")
+            this.fieldsFilled = false;
+            return;
+          }
+          if(this.address === '' || this.city === '' || this.country === '') {
+            alert("Enter your address")
+            this.fieldsFilled = false;
+            return;
+          }
+          if(this.phoneNumber === '') {
+            alert("Enter your phoneNumber")
+            this.fieldsFilled = false
+            return;
+          }
+          if(this.email === '') {
+            alert("Enter your email")
+            this.fieldsFilled = false
+            return;
+          }
+          if(this.picked == 'Owner' && (this.otype=='none' || this.reasonadv =='')){
+            alert("Select all the fields!")
+            this.fieldsFilled = false
+            return;
+          }
+          this.fieldsFilled = true
+      },
+      CheckIfPassworIsValid(){
+          if(!this.password === this.passwordRepeated) {
+            this.passwordValid = false;
+            alert("Repeat your password correctly")
+          }
+          else{
+            this.passwordValid = true;
+          }
+      },
+      ClearAllFields(){
+        this.name = "";
+        this.surname = "";
+        this.email = "";
+        this.address = "";
+        this.city = "";
+        this.country = "";
+        this.password= "";
+        this.passwordRepeated= "";
+        this.phoneNumber = "";
+        this.reasonadv ="";
+        this.passwordValid = false;
+        this.fieldsFilled = false;
+
+      }
+    }
 
 }
 </script>
 <style>
 
   #registrationForm{
+      width: 30%;
+      margin-left: 30% ;
       text-align:center;
   }
 
   #registrationForm input{
-  width: 300px;
+  width: 60%;
   margin:5px 0;
 	padding:10px;
 	border-radius:20px;
 	border: 2px solid #eee;
 	box-shadow:0 0 15px 4px rgba(0,0,0,0.06);
   }
+
+  #registrationForm .radio{
+    display: flex;
+    flex-direction: row;
+    padding: 10px;
+    border-radius:20px;
+    background: #2ECC71;
+  }
+
+  #registrationForm input[type='radio']{
+    width: 30%;
+    margin: 0;
+    border-color: purple;
+  }
+
+
 
   #registrationForm input:focus{
 	background: #FCFCFC;
@@ -96,6 +238,15 @@ export default{
 
   .buttonLogin:hover{
 	background: #333;
+  }
+
+  #registrationForm textarea{
+    font-family: inherit;
+    color: #bbbbbb;
+    width: 70%;
+    height: 200px;
+    padding: 10px;
+    border-radius: 20px;
   }
 
 </style>
