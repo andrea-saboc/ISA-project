@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.isa.dto.AdvertisersDTO;
-import com.example.isa.service.AdvertisersService;
+import com.example.isa.service.impl.AdvertisersService;
 
 
 

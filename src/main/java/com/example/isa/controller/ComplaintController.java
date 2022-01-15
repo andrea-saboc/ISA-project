@@ -17,7 +17,7 @@ import com.example.isa.mail.MailService;
 import com.example.isa.model.Boat;
 import com.example.isa.model.Complaint;
 import com.example.isa.model.Mansion;
-import com.example.isa.service.ClientComplaintService;
+import com.example.isa.service.impl.ClientComplaintService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 @RestController

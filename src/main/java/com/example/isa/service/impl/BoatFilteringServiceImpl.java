@@ -1,4 +1,4 @@
-package com.example.isa.service;
+package com.example.isa.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,39 +7,40 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.isa.dto.SearchDTO;
-import com.example.isa.model.Mansion;
-import com.example.isa.repository.MansionRepository;
+import com.example.isa.model.Boat;
+import com.example.isa.repository.BoatRepository;
 
 @Service
-public class MansionFilteringService {
+public class BoatFilteringServiceImpl {
+
 	
 	@Autowired
-	MansionRepository mansionRepo;
+	BoatRepository boatRepo;
 	
-	public List<Mansion> getAll() {
+	public List<Boat> getAll() {
 		
-		return mansionRepo.findAll();
+		return boatRepo.findAll();
 	}
 	
-	public List<Mansion> searchAll(SearchDTO search) {
+	public List<Boat> searchAll(SearchDTO search) {
 		
 		if(search.getType().equals("Name")) return SearchByName(search.getValue());
 		else if(search.getType().equals("Location")) return SearchByLocation(search.getValue());
 		else return searchByGrade(search.getValue());
 	}
 	
-	private List<Mansion> SearchByName(String value) {
-		List<Mansion> ret = new ArrayList<Mansion>();
-		for(Mansion m: getAll()) {
+	private List<Boat> SearchByName(String value) {
+		List<Boat> ret = new ArrayList<Boat>();
+		for(Boat m: getAll()) {
 			if(m.getName().toLowerCase().contains(value.toLowerCase()))
 				ret.add(m);
 		}
 		return ret;
 	}
 	
-	private List<Mansion> SearchByLocation(String value) {
-		List<Mansion> ret = new ArrayList<Mansion>();
-		for(Mansion m: getAll()) {
+	private List<Boat> SearchByLocation(String value) {
+		List<Boat> ret = new ArrayList<Boat>();
+		for(Boat m: getAll()) {
 			if(m.getAddress().getAddress().toLowerCase().contains(value.toLowerCase()) ||
 					m.getAddress().getCity().toLowerCase().contains(value.toLowerCase()) ||
 					m.getAddress().getCountry().toLowerCase().contains(value.toLowerCase()))
@@ -48,15 +49,14 @@ public class MansionFilteringService {
 		return ret;
 	}
 	
-	private List<Mansion> searchByGrade(String value) {
+	private List<Boat> searchByGrade(String value) {
 		float f=Float.parseFloat(value);
-		List<Mansion> ret = new ArrayList<Mansion>();
-		for(Mansion m: getAll()) {
+		List<Boat> ret = new ArrayList<Boat>();
+		for(Boat m: getAll()) {
 			if(m.getAvgGrade() >= f)
 				ret.add(m);
 		}
 		return ret;
 	}
-
 
 }

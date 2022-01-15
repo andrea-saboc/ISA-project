@@ -1,4 +1,4 @@
-package com.example.isa.service.reservations;
+package com.example.isa.service.impl.reservations;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -11,12 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.isa.dto.PotentialMansionReservationDTO;
+import com.example.isa.dto.PotentialReservationDTO;
 import com.example.isa.dto.ReservationSearchDTO;
 import com.example.isa.model.Boat;
 import com.example.isa.model.Mansion;
 import com.example.isa.model.MansionAvailablePeriod;
 import com.example.isa.model.reservations.AdditionalService;
+import com.example.isa.model.reservations.ReservationStartEndDateFormatter;
 import com.example.isa.repository.AdditionalServiceRepository;
 import com.example.isa.repository.MansionAvailablePeriodRepository;
 import com.example.isa.repository.MansionRepository;
@@ -24,7 +25,7 @@ import com.example.isa.repository.MansionReservationRepository;
 
 @Service
 @Transactional(readOnly=true)
-public class MansionReservationSuggestionService {
+public class MansionReservationSuggestionServiceImpl {
 
 	@Autowired 
 	MansionReservationRepository mansionReservationRepo;
@@ -35,36 +36,21 @@ public class MansionReservationSuggestionService {
 	@Autowired
 	AdditionalServiceRepository additinalServicesRepo;
 	
-	public List<PotentialMansionReservationDTO> getAvailableMansions(ReservationSearchDTO formParams) {
-		String sDate = formParams.getStartDate()+" "+formParams.getStartTime();
-		System.out.println(sDate);	
-		SimpleDateFormat formatter=new SimpleDateFormat("yyyy-MM-dd HH:mm");
-		
-		try {
-			Date startDate=formatter.parse(sDate);
-			
-	        Calendar cal = Calendar.getInstance();
-	        cal.setTime(startDate);
-	        cal.add(Calendar.DAY_OF_MONTH, formParams.getNumberOfDays());
+	public List<PotentialReservationDTO> getAvailableMansions(ReservationSearchDTO formParams) throws ParseException {
 
-	        Date endDate = cal.getTime();
-	        System.out.println("Adding days to start date: "+endDate);
-	        
-	        List<Mansion> mansions = FilterByLocationAndAvgGrade(formParams.getLocation(),
-	        		formParams.getGrade(),getAvailableMansionsBetweenDates(startDate,endDate));
-		    return createPotentialReservations(mansions,formParams);
-		    
-			} catch (ParseException e) {
-			System.out.println("PUČE!");
-			e.printStackTrace();
-			}
-				
-		return null;
+		ReservationStartEndDateFormatter formatter = new ReservationStartEndDateFormatter(formParams);
+		Date startDate = formatter.startDate;
+		Date endDate = formatter.endDate;
+		
+        List<Mansion> mansions = FilterByLocationAndAvgGrade(formParams.getLocation(),
+        		formParams.getGrade(),getAvailableMansionsBetweenDates(startDate,endDate));
+	    return createPotentialReservations(mansions,formParams);
+
 		}
 		
-		public List<PotentialMansionReservationDTO> createPotentialReservations(List<Mansion> mansions,ReservationSearchDTO formParams){
+		public List<PotentialReservationDTO> createPotentialReservations(List<Mansion> mansions,ReservationSearchDTO formParams){
 
-			List<PotentialMansionReservationDTO> ret = new ArrayList<PotentialMansionReservationDTO>();
+			List<PotentialReservationDTO> ret = new ArrayList<PotentialReservationDTO>();
 			for(Mansion m : mansions) {
 				
 				List<String> services = new ArrayList<String>();
@@ -77,7 +63,7 @@ public class MansionReservationSuggestionService {
 					servicesId.add(a.getId());
 				}
 				
-				ret.add(new PotentialMansionReservationDTO(m.getId(), m.getName(), m.getPromoDescription(), m.getAvgGrade(),
+				ret.add(new PotentialReservationDTO(m.getId(), m.getName(), m.getPromoDescription(), m.getAvgGrade(),
 						m.getPricePerDay(), m.getPriceForSevenDays(), calculateReservationPrice(formParams,m),services,servicesId));
 			}
 			return ret;

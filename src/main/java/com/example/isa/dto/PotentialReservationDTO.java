@@ -2,25 +2,51 @@ package com.example.isa.dto;
 
 import java.util.List;
 
-public class PotentialMansionReservationDTO {
+public class PotentialReservationDTO {
 
-	private long mansionId;
+	private long entityId;
 	private String name;
 	private String promoDescription;
 	private float avgGrade;
 	
 	private double pricePerDay;
+	private double pricePerHour;
 	private double pricePerSevenDays;
 	
 	
 	private double totalPrice;
 	private List<String> additionalServices;
 	private List<Long> additinalServicesId;
-	public long getMansionId() {
-		return mansionId;
+	
+	
+	private int capacity;
+	private String cancellationPolicy;
+
+	
+
+	public long getEntityId() {
+		return entityId;
 	}
-	public void setMansionId(long mansionId) {
-		this.mansionId = mansionId;
+	public void setEntityId(long entityId) {
+		this.entityId = entityId;
+	}
+	public double getPricePerHour() {
+		return pricePerHour;
+	}
+	public void setPricePerHour(double pricePerHour) {
+		this.pricePerHour = pricePerHour;
+	}
+	public int getCapacity() {
+		return capacity;
+	}
+	public void setCapacity(int capacity) {
+		this.capacity = capacity;
+	}
+	public String getCancellationPolicy() {
+		return cancellationPolicy;
+	}
+	public void setCancellationPolicy(String cancellationPolicy) {
+		this.cancellationPolicy = cancellationPolicy;
 	}
 	public String getName() {
 		return name;
@@ -70,11 +96,12 @@ public class PotentialMansionReservationDTO {
 	public void setAdditinalServicesId(List<Long> additinalServicesId) {
 		this.additinalServicesId = additinalServicesId;
 	}
-	public PotentialMansionReservationDTO(long mansionId, String name, String promoDescription, float avgGrade,
+	
+	public PotentialReservationDTO(long entityId, String name, String promoDescription, float avgGrade,
 			double pricePerDay, double pricePerSevenDays, double totalPrice, List<String> additionalServices,
 			List<Long> additinalServicesId) {
 		super();
-		this.mansionId = mansionId;
+		this.entityId = entityId;
 		this.name = name;
 		this.promoDescription = promoDescription;
 		this.avgGrade = avgGrade;
@@ -85,5 +112,22 @@ public class PotentialMansionReservationDTO {
 		this.additinalServicesId = additinalServicesId;
 	}
 	
-	public PotentialMansionReservationDTO() {}
+	public PotentialReservationDTO(long entityId, String name, String promoDescription, float avgGrade, int capacity,
+			String cancellationPolicy, double pricePerHour, double pricePerDay, double totalPrice,
+			List<String> additionalServices, List<Long> additinalServicesId) {
+		super();
+		this.entityId = entityId;
+		this.name = name;
+		this.promoDescription = promoDescription;
+		this.avgGrade = avgGrade;
+		this.capacity = capacity;
+		this.cancellationPolicy = cancellationPolicy;
+		this.pricePerHour = pricePerHour;
+		this.pricePerDay = pricePerDay;
+		this.totalPrice = totalPrice;
+		this.additionalServices = additionalServices;
+		this.additinalServicesId = additinalServicesId;
+	}
+	
+	public PotentialReservationDTO() {}
 }

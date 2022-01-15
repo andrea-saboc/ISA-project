@@ -1,4 +1,4 @@
-package com.example.isa.service;
+package com.example.isa.service.impl;
 
 import com.example.isa.model.Boat;
 import com.example.isa.model.reservations.AdditionalService;

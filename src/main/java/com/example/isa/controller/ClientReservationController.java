@@ -3,38 +3,36 @@ package com.example.isa.controller;
 import java.text.ParseException;
 import java.util.List;
 
-import com.example.isa.dto.*;
-import com.example.isa.model.Boat;
 import javax.mail.MessagingException;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
-
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.isa.dto.ActiveReservationDTO;
-import com.example.isa.dto.PotentialBoatReservationDTO;
-import com.example.isa.dto.PotentialMansionReservationDTO;
+import com.example.isa.dto.MakeBoatReservationForClientDTO;
+import com.example.isa.dto.PotentialReservationDTO;
 import com.example.isa.dto.ReservationDTO;
 import com.example.isa.dto.ReservationSearchDTO;
 import com.example.isa.exceptions.PeriodNoLongerAvailableException;
 import com.example.isa.mail.MailService;
 import com.example.isa.model.reservations.BoatReservation;
 import com.example.isa.model.reservations.MansionReservation;
-import com.example.isa.service.reservations.BoatReservationService;
-import com.example.isa.service.reservations.BoatReservationSuggestionService;
-import com.example.isa.service.reservations.MansionReservationService;
-import com.example.isa.service.reservations.MansionReservationSuggestionService;
-import com.example.isa.service.reservations.ReservationService;
+import com.example.isa.model.reservations.Reservation;
+import com.example.isa.service.impl.reservations.BoatReservationServiceImpl;
+import com.example.isa.service.impl.reservations.BoatReservationSuggestionServiceImpl;
+import com.example.isa.service.impl.reservations.MansionReservationServiceImpl;
+import com.example.isa.service.impl.reservations.MansionReservationSuggestionServiceImpl;
+import com.example.isa.service.impl.reservations.ReservationService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 
 
@@ -42,15 +40,15 @@ import com.example.isa.service.reservations.ReservationService;
 public class ClientReservationController {
 	
 	@Autowired 
-	BoatReservationService boatResService;
+	BoatReservationServiceImpl boatResService;
 	@Autowired 
-	MansionReservationService mansionResService;
+	MansionReservationServiceImpl mansionResService;
 	
 
 	@Autowired
-	BoatReservationSuggestionService boatSuggestionService;
+	BoatReservationSuggestionServiceImpl boatSuggestionService;
 	@Autowired
-	MansionReservationSuggestionService mansionSuggestionService;
+	MansionReservationSuggestionServiceImpl mansionSuggestionService;
 	
 	@Autowired
 	ReservationService reservationService;
@@ -59,11 +57,10 @@ public class ClientReservationController {
 	
 	@PreAuthorize("hasRole('ROLE_CLIENT')")
     @RequestMapping(method = RequestMethod.GET,value = "/reservations/boats", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<BoatReservation>> getBoatReservations(){
+    public ResponseEntity<List<Reservation>> getBoatReservations(){
     	
-    	System.out.println("TRAZI SE BOATS");
     	try {
-            return new ResponseEntity<>(boatResService.GetBoatReservationHistory(), HttpStatus.OK);
+            return new ResponseEntity<>(boatResService.GetReservationHistory(), HttpStatus.OK);
         } catch (Exception e){
             return  new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -71,10 +68,10 @@ public class ClientReservationController {
     }
 	@PreAuthorize("hasRole('ROLE_CLIENT')")
     @RequestMapping(method = RequestMethod.GET,value = "/reservations/mansions", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<MansionReservation>> getMansionReservations(){
+    public ResponseEntity<List<Reservation>> getMansionReservations(){
 
         try {
-            return new ResponseEntity<>(mansionResService.GetMansionReservationHistory(), HttpStatus.OK);
+            return new ResponseEntity<>(mansionResService.GetReservationHistory(), HttpStatus.OK);
         } catch (Exception e){
             return  new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -97,11 +94,11 @@ public class ClientReservationController {
 	@PreAuthorize("hasRole('ROLE_CLIENT')")
     @RequestMapping(method = RequestMethod.POST,value = "/reservations/availableBoats", produces = MediaType.APPLICATION_JSON_VALUE)
     @CrossOrigin(origins = "*")
-    public ResponseEntity<List<PotentialBoatReservationDTO>> getAvailableBoats(@RequestBody ReservationSearchDTO search){
+    public ResponseEntity<List<PotentialReservationDTO>> getAvailableBoats(@RequestBody ReservationSearchDTO search){
     	
     	System.out.println("USli u kontroler");
         try {
-            return new ResponseEntity<>(boatSuggestionService.getAvailableBoats(search), HttpStatus.OK);
+            return new ResponseEntity<>(null, HttpStatus.OK);
         } catch (Exception e){
         	System.out.println(e);
             return  new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -111,7 +108,7 @@ public class ClientReservationController {
 	@PreAuthorize("hasRole('ROLE_CLIENT')")
     @RequestMapping(method = RequestMethod.POST,value = "/reservations/availableMansions", produces = MediaType.APPLICATION_JSON_VALUE)
     @CrossOrigin(origins = "*")
-    public ResponseEntity<List<PotentialMansionReservationDTO>> getAvailableMansions(@RequestBody ReservationSearchDTO search){
+    public ResponseEntity<List<PotentialReservationDTO>> getAvailableMansions(@RequestBody ReservationSearchDTO search){
     	
 
         try {
@@ -130,10 +127,10 @@ public class ClientReservationController {
     	
     	System.out.println("USli u kontroler");
         try {
-        	BoatReservation newReservation = boatResService.createBoatReservation(res);
+        	Reservation newReservation = boatResService.createReservation(res);
         	try {
-        		mailService.sendBoatReservationConfirmationMail(boatResService.getLoggedUser(), newReservation);
-        	}catch (MessagingException e){
+        		//mailService.sendBoatReservationConfirmationMail(boatResService.getLoggedUser(), (BoatReservation) newReservation);
+        	}catch (/*Messaging*/Exception e){
         		return  new ResponseEntity<>("There is a problem with your mail!", HttpStatus.INTERNAL_SERVER_ERROR);
         	}
             return new ResponseEntity<>("Reservation successfull!", HttpStatus.OK);
@@ -151,10 +148,10 @@ public class ClientReservationController {
     	
     	System.out.println("USli u kontroler");
         try {
-        	MansionReservation newReservation = mansionResService.createMansionReservation(res);
+        	MansionReservation newReservation = mansionResService.createReservation(res);
         	try {
-        		mailService.sendMansionReservationConfirmationMail(boatResService.getLoggedUser(), newReservation);
-        	}catch (MessagingException e){
+        		//mailService.sendMansionReservationConfirmationMail(boatResService.getLoggedUser(), newReservation);
+        	}catch (/*Messaging*/Exception e){
         		return  new ResponseEntity<>("There is a problem with your mail!", HttpStatus.INTERNAL_SERVER_ERROR);
         	}
             return new ResponseEntity<>("Reservation successfull!", HttpStatus.OK);
@@ -168,11 +165,11 @@ public class ClientReservationController {
 	@PreAuthorize("hasRole('ROLE_CLIENT')")
     @RequestMapping(method = RequestMethod.POST,value = "/reservations/cancelBoatReservation", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @CrossOrigin(origins = "*")
-    public ResponseEntity<BoatReservation> cancelBoatReservation(@RequestBody long  resId){
+    public ResponseEntity<Reservation> cancelBoatReservation(@RequestBody long  resId){
     	
     	System.out.println("USli u kontroler");
         try {
-            return new ResponseEntity<>(boatResService.cancelBoatReservation(resId), HttpStatus.OK);
+            return new ResponseEntity<>(boatResService.cancelReservation(resId), HttpStatus.OK);
         } catch (Exception e){
         	System.out.println(e);
             return  new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -182,11 +179,11 @@ public class ClientReservationController {
 	@PreAuthorize("hasRole('ROLE_CLIENT')")
     @RequestMapping(method = RequestMethod.POST,value = "/reservations/cancelMansionReservation", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @CrossOrigin(origins = "*")
-    public ResponseEntity<MansionReservation> cancelMansionReservation(@RequestBody long  resId){
+    public ResponseEntity<Reservation> cancelMansionReservation(@RequestBody long  resId){
     	
 		System.out.println("res id ..");
         try {
-            return new ResponseEntity<>(mansionResService.cancelMansionReservation(resId), HttpStatus.OK);
+            return new ResponseEntity<>(mansionResService.cancelReservation(resId), HttpStatus.OK);
         } catch (Exception e){
         	System.out.println(e);
             return  new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);

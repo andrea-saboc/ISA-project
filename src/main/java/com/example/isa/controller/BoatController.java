@@ -26,8 +26,8 @@ import com.example.isa.dto.SearchDTO;
 import com.example.isa.model.Boat;
 import com.example.isa.model.BoatAvailablePeriod;
 import com.example.isa.model.User;
-import com.example.isa.service.BoatFilteringService;
-import com.example.isa.service.BoatService;
+import com.example.isa.service.impl.BoatFilteringServiceImpl;
+import com.example.isa.service.impl.BoatService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -37,7 +37,7 @@ public class BoatController {
 	@Autowired
 	private BoatService service;
 	@Autowired
-	private BoatFilteringService filteringService;
+	private BoatFilteringServiceImpl filteringService;
 
 	public BoatController(BoatService bs){
 		this.service = bs;

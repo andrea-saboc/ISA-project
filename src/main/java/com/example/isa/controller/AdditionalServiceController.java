@@ -2,7 +2,7 @@ package com.example.isa.controller;
 
 import com.example.isa.model.Boat;
 import com.example.isa.model.reservations.AdditionalService;
-import com.example.isa.service.AdditionalServiceService;
+import com.example.isa.service.impl.AdditionalServiceService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;

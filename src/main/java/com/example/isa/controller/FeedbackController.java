@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.isa.dto.ClientFeedbackDTO;
 import com.example.isa.model.ClientFeedback;
-import com.example.isa.service.ClientFeedbackService;
+import com.example.isa.service.impl.ClientFeedbackService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 @RestController

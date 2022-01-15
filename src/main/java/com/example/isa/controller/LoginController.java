@@ -14,15 +14,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.isa.dto.LoginDTO;
 import com.example.isa.dto.UserTokenState;
-import com.example.isa.service.LoginService;
 import com.example.isa.service.UserService;
+import com.example.isa.service.impl.LoginServiceImpl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 @RestController
 public class LoginController {
 	
 	@Autowired	
-	LoginService loginService;
+	LoginServiceImpl loginService;
 	@Autowired
 	UserService userService;
 

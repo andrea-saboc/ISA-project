@@ -28,7 +28,7 @@ import com.example.isa.repository.ClientRepository;
 import com.example.isa.repository.MansionAvailablePeriodRepository;
 import com.example.isa.repository.MansionRepository;
 import com.example.isa.repository.UserRepository;
-import com.example.isa.service.AdventureService;
+import com.example.isa.service.impl.AdventureService;
 
 
 @SpringBootApplication

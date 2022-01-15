@@ -1,4 +1,4 @@
-package com.example.isa.service;
+package com.example.isa.service.impl;
 import java.util.*;
 
 import com.example.isa.dto.AddAvailablePeriodDTO;
@@ -7,7 +7,8 @@ import com.example.isa.model.*;
 import com.example.isa.model.reservations.AdditionalService;
 import com.example.isa.model.reservations.BoatReservation;
 import com.example.isa.repository.*;
-import com.example.isa.service.reservations.BoatReservationService;
+import com.example.isa.service.impl.reservations.BoatReservationServiceImpl;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.availability.AvailabilityChangeEvent;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -26,7 +27,7 @@ public class BoatService {
 	@Autowired
 	private AdditionalServiceRepository additionalServiceRepository;
 	@Autowired
-	private BoatReservationService boatReservationService;
+	private BoatReservationServiceImpl boatReservationService;
 
 	public BoatService(BoatsRepository br, ImageRepository ir, BoatOwnerRepository bor, BoatAvailablePeriodRepository apr, AdditionalServiceRepository additionalServiceRepository){
 		this.boatsRepository = br;

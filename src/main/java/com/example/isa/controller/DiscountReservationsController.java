@@ -13,7 +13,8 @@ import org.springframework.web.bind.annotation.*;
 
 import com.example.isa.exceptions.PeriodNoLongerAvailableException;
 import com.example.isa.model.reservations.BoatDiscountReservation;
-import com.example.isa.service.reservations.BoatDiscountReservationService;
+import com.example.isa.model.reservations.DiscountReservation;
+import com.example.isa.service.impl.reservations.BoatDiscountReservationService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -28,7 +29,7 @@ public class DiscountReservationsController {
 	public ResponseEntity<String> getBoatDiscountReservations(@RequestParam Long id) throws JsonProcessingException{
 		System.out.println("We are searchinng for" +id);
 		
-		List<BoatDiscountReservation> res = boatReservationService.getBoatDiscountReservations(id);
+		List<DiscountReservation> res = boatReservationService.getDiscountReservations(id);
 		
 		ObjectMapper mapper = new ObjectMapper();
 		String jsonString = mapper.writeValueAsString(res);
@@ -43,8 +44,8 @@ public class DiscountReservationsController {
 	public ResponseEntity<String> makeDiscountBoatReservation(@RequestParam Long id){
 		
 		try {
-		BoatDiscountReservation res = boatReservationService.makeBoatReservationOnDiscount(id);
-		return new ResponseEntity<>("Reservation for " + res.getBoat().getName() + "successfull!", HttpStatus.OK);
+		DiscountReservation res = boatReservationService.makeReservationOnDiscount(id);
+		return new ResponseEntity<>("Reservation successfull!", HttpStatus.OK);
 		}
 		catch(PeriodNoLongerAvailableException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.OK);
@@ -67,8 +68,10 @@ public class DiscountReservationsController {
 	@CrossOrigin(origins = "*")
 	public ResponseEntity<AllBoatDiscountReservationsDTO> getBoatDiscountReservationsAll(@RequestParam Long boatId){
 		AllBoatDiscountReservationsDTO allBoatDiscountReservationsDTO = new AllBoatDiscountReservationsDTO();
-		allBoatDiscountReservationsDTO.freeReservations = boatReservationService.getBoatDiscountReservations(boatId);
-		allBoatDiscountReservationsDTO.reservedReservations = boatReservationService.getReservedBoatDiscountReservations(boatId);
+		/*
+		allBoatDiscountReservationsDTO.freeReservations = boatReservationService.getDiscountReservations(boatId);
+		allBoatDiscountReservationsDTO.reservedReservations = boatReservationService.getReservedDiscountReservations(boatId);
+		*/
 		return new ResponseEntity<>(allBoatDiscountReservationsDTO, HttpStatus.OK);
 	}
 }
