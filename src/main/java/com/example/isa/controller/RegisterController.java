@@ -57,7 +57,7 @@ public class RegisterController {
     	
         
         if (this.clientRegistrationService.clientExists(clientDto.getEmail()))
-            return new ResponseEntity<>("userExists", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("userExists",HttpStatus.OK);
         
         try {
             this.clientRegistrationService.registerClient(clientDto,getSiteURL(request));

@@ -69,11 +69,6 @@ public class UserService {
    
     }
     
-    public void activateUser(String code) {
-    	Client client = clientRepository.findByBlockedAndActivationCode(true, code);
-    	client.setBlocked(false);
-    	clientRepository.save(client);
-    }
 	public User createDeletionRequest(String reason) {
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		System.out.println(user.getName());
@@ -93,5 +88,24 @@ public class UserService {
 			exsists = false;
 		}
 		return exsists;
+    }
+    
+    public boolean checkActivationCode(String code) {
+    	
+    	
+    	System.out.println("akt kod koji se trazi "+ code);
+    	Client c = clientRepository.findByActivationCode(code);
+
+    	
+    	if(c!= null) {
+    		c.setBlocked(false);
+    		clientRepository.save(c);
+    		return true;  		
+    	}else
+    		return false;
+    }
+    
+    public boolean userAlreadyActivated(String code) {   	
+    	return clientRepository.findByActivationCodeAndBlockedFalse(code) != null;
     }
 }

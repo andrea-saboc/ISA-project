@@ -1,8 +1,16 @@
 <template>
 <section class="bg-dark text-light p-5 text-center text-sm-start">
 <div id="loginForm">
+
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
    <h1>Login</h1>
-   <br>
    <br>
    <input placeholder="Email" class="inputKredencijali" type="text" v-model="email"/>
    <br>
@@ -11,13 +19,21 @@
    <br>
    <br>
    <button class="buttonLogin" v-on:click="Login">Login</button>
-   <br>
-   <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
 </div>
 </section>
 </template>
 <script>
 import axios from 'axios'
+import {devServer} from "../../vue.config";
 //import {onBeforeMount} from "vue";
 export default{
     data(){
@@ -38,17 +54,21 @@ export default{
         let store = this.$store;
         if(!this.fieldEmpty){
           axios
-              .post('http://localhost:8080/login',
+              .post(devServer.proxy +'/login',
               {
                 "email": this.email,
                 "password": this.password
               })
               .then(response => {
-                console.log(response)
+                if(!response.data){
+                  alert('Bad username or password')
+                  return
+                }
+
                 store.dispatch('startSession', response.data);
                 console.log('User got the token:',this.$store.getters.tokenString)
                 this.dispatch(response.data.userType);
-                console.log('user type isss')
+                console.log('User type is:')
                 console.log(this.$store.state.userType)
               });
         }else alert('error in filling form');
