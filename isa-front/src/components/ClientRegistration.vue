@@ -1,7 +1,9 @@
 <template>
 <section class="bg-dark text-light p-5 text-center text-sm-start">
 <div id="registrationForm">
-   <h1>{{picked}} registration</h1>
+<br>
+<br>
+   <h1>{{picked}} Registration</h1>
   <br>
   <div class="radio">
   <input type="radio" id="clientreg" value="Client" name="selecttype" v-model="picked">
@@ -58,6 +60,8 @@
 
 <script>
 import axios from 'axios'
+import {devServer} from "../../vue.config";
+
 export default{
     data(){
         return{
@@ -82,12 +86,10 @@ export default{
       Register(){
       this.CheckIfPassworIsValid();
       this.CheckIfFieldsAreFilled();
-      alert(this.fieldsFilled)
-        alert(this.passwordValid)
-        alert(this.picked)
+
       if(this.fieldsFilled && this.passwordValid && this.picked=='Client'){
         axios
-            .post('http://localhost:8080/register/client',
+            .post(devServer.proxy + '/register/client',
             {
               "name": this.name,
               "surname": this.surname,
@@ -99,13 +101,15 @@ export default{
               "password": this.password,
             })
             .then(response => {
+              if(response.data == 'userExists')
               alert(response.data)
-              this.messege = response.data
+              this.message = response.data;
+              return;
             });
         this.ClearAllFields();
       } else if (this.fieldsFilled && this.passwordValid && this.picked=='Owner'){
         axios
-      .post('http://localhost:8080/register/advertiser',
+      .post(devServer.proxy +'/register/advertiser',
             {
               "name": this.name,
               "surname": this.surname,
@@ -120,7 +124,7 @@ export default{
             })
             .then(response => {
               alert(response.data)
-              this.messege = response.data
+              this.message = response.data
             });
         this.ClearAllFields();
       } else alert('Error in filling registration');
@@ -153,7 +157,7 @@ export default{
             return;
           }
           if(this.picked == 'Owner' && (this.otype=='none' || this.reasonadv =='')){
-            alert("Select all the fields!")
+            alert("Fill out the fields!")
             this.fieldsFilled = false
             return;
           }

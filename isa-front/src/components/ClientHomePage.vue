@@ -1,6 +1,8 @@
 <template>
 <section class ="bg-dark text-light p-5 text-center text-sm-start">
-
+<br>
+<br>
+<br>
 <h1>Client home page:</h1>
 
 <div class="btn-group btn-group-justified" role="group" aria-label="...">

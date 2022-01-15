@@ -13,6 +13,7 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.example.isa.model.Boat;
+import com.example.isa.model.Client;
 import com.example.isa.model.Mansion;
 import com.example.isa.model.MansionAvailablePeriod;
 import com.example.isa.model.reservations.BoatDiscountReservation;
@@ -23,6 +24,7 @@ import com.example.isa.repository.BoatDiscountReservationRepository;
 import com.example.isa.repository.BoatOwnerRepository;
 import com.example.isa.repository.BoatRepository;
 import com.example.isa.repository.BoatReservationRepository;
+import com.example.isa.repository.ClientRepository;
 import com.example.isa.repository.MansionAvailablePeriodRepository;
 import com.example.isa.repository.MansionRepository;
 import com.example.isa.repository.UserRepository;
@@ -43,6 +45,9 @@ public class IsaApplication extends SpringBootServletInitializer implements Comm
 	BoatRepository boatRepo;
 	@Autowired
 	UserRepository userRepo;
+	
+	@Autowired
+	ClientRepository clientRepo;
 	@Autowired
 	BoatAvailablePeriodRepository periodRepo;
 	@Autowired
@@ -126,6 +131,14 @@ public class IsaApplication extends SpringBootServletInitializer implements Comm
     		System.out.println(r.getBoat().getName());
     	}
     	*/
+		
+		Client c = new Client();
+		c.setActivationCode("123");
+		clientRepo.save(c);
+		
+		Client cl = clientRepo.findByActivationCode("123");
+		System.out.println("dal je client null ...");
+		System.out.println(cl == null);
 
 	}
 	
