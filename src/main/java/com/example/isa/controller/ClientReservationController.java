@@ -227,8 +227,8 @@ public class ClientReservationController {
     public ResponseEntity<String> makeBoatReservationClient(@RequestBody MakeBoatReservationForClientDTO dto){
         System.out.println(dto);
         try{
-            Boolean success = boatResService.createBoatReservationForClient(dto);
-            if (success)
+            BoatReservation boatReservation = boatResService.createBoatReservationForClient(dto);
+            if (boatReservation!=null)
             return new ResponseEntity<>("Reservation for client is created successfully!", HttpStatus.OK);
             else return new ResponseEntity<>("Wrong params, try again!", HttpStatus.OK);
         } catch (Exception e){

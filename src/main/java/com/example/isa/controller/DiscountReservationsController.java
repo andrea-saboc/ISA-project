@@ -59,7 +59,7 @@ public class DiscountReservationsController {
 		}
 		catch (Exception e){
 			System.out.println(e);
-			return new ResponseEntity<>(null, HttpStatus.OK);
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
 		}
 	}
 

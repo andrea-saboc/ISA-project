@@ -13,7 +13,6 @@ public class ReservationStartEndDateFormatter  {
 	private ReservationDTO reservation;
 	public Date startDate;
 	public Date endDate;
-	
 	public ReservationStartEndDateFormatter(ReservationDTO reservation) throws ParseException {
 		this.reservation = reservation;
 		getStartDate();
@@ -21,9 +20,13 @@ public class ReservationStartEndDateFormatter  {
 	}
 	
 	public void getStartDate()  throws ParseException {		
-		
-		SimpleDateFormat formatter=new SimpleDateFormat("yyyy-MM-dd HH:mm");
-		this.startDate =  formatter.parse(reservation.getStartDate() + " " +reservation.getStartTime());		
+		if(reservation.startDateTime == null){
+			SimpleDateFormat formatter=new SimpleDateFormat("yyyy-MM-dd HH:mm");
+			this.startDate =  formatter.parse(reservation.getStartDate() + " " +reservation.getStartTime());
+		} else{
+			this.startDate = reservation.startDateTime;
+		}
+
 	}
 	
 	public void getEndDate() {

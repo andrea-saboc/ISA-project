@@ -1,5 +1,7 @@
 package com.example.isa.service.reservations;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import com.example.isa.dto.AddNewDiscountReservationBoatDTO;
@@ -58,9 +60,19 @@ public class BoatDiscountReservationService {
 		boatDiscountReservation.setPriceWithDiscount(dto.priceWithDiscount);
 		boatDiscountReservation.setNumberOfGuests(dto.numberOfGuests);
 		boatDiscountReservation.setStartDate(dto.startDate);
-		boatDiscountReservation.setEndDate(dto.endDate);
+		boatDiscountReservation.setEndDate(getEndDate(dto));
 		boatDiscountReservation.setType("BOAT");
 		reservationRepo.save(boatDiscountReservation);
 		return boatDiscountReservation;
+	}
+
+	public Date getEndDate(AddNewDiscountReservationBoatDTO reservation) {
+		Date endDate;
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(reservation.startDate);
+		cal.add(Calendar.DAY_OF_MONTH, reservation.days);
+		cal.add(Calendar.HOUR, reservation.hours);
+		endDate = cal.getTime();
+		return endDate;
 	}
 }

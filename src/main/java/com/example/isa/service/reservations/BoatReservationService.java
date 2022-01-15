@@ -1,16 +1,13 @@
 package com.example.isa.service.reservations;
 
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
+
+import com.example.isa.dto.AddNewDiscountReservationBoatDTO;
 import com.example.isa.dto.MakeBoatReservationForClientDTO;
 import com.example.isa.model.*;
-import com.example.isa.model.reservations.AdditionalService;
-import com.example.isa.model.reservations.BoatReservation;
+import com.example.isa.model.reservations.*;
 import com.example.isa.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,7 +21,6 @@ import com.example.isa.model.BoatOwner;
 import com.example.isa.model.User;
 import com.example.isa.model.reservations.AdditionalService;
 import com.example.isa.model.reservations.BoatReservation;
-import com.example.isa.model.reservations.ReservationStartEndDateFormatter;
 import com.example.isa.repository.AdditionalServiceRepository;
 import com.example.isa.repository.BoatAvailablePeriodRepository;
 import com.example.isa.repository.BoatOwnerRepository;
@@ -47,6 +43,8 @@ public class BoatReservationService {
 	BoatOwnerRepository boatOwnerRepository;
 	@Autowired
 	ClientRepository clientRepository;
+	@Autowired
+	BoatReservationSuggestionService boatReservationSuggestionService;
 	
 	//@Transactional(readOnly = false)
 	public BoatReservation createBoatReservation(ReservationDTO res) throws ParseException, PeriodNoLongerAvailableException {
@@ -57,7 +55,7 @@ public class BoatReservationService {
 		Date endDate = formatter.endDate;
 
         
-        BoatAvailablePeriod period = availablePeriodsRepo.getPeriodOfInterest(startDate, startDate,res.getEntityId());
+        BoatAvailablePeriod period = availablePeriodsRepo.getPeriodOfInterest(startDate, endDate,res.getEntityId());
         
         if(period == null) {
         	throw new PeriodNoLongerAvailableException();
@@ -78,11 +76,13 @@ public class BoatReservationService {
 	        Set<AdditionalService> services = new HashSet<AdditionalService>();
 	        for(long id : res.getAdditionalServices()) {
 	        	AdditionalService service = additinalServicesRepo.findById(id).orElse(null);
-	        	services.add(service);
-	        	newBoatReservation.setTotalPrice( newBoatReservation.getTotalPrice()
-	        			+calculateAdditionalServicesPrice(newBoatReservation,res,service));
+				if(service!=null){
+					services.add(service);
+					newBoatReservation.setTotalPrice( newBoatReservation.getTotalPrice()
+							+calculateAdditionalServicesPrice(newBoatReservation,res,service));
+				}
+
 	        }
-	        
 	        availablePeriodsRepo.delete(period);
 	        newBoatReservation.setAdditionalServices(services);
 	            
@@ -168,103 +168,60 @@ public class BoatReservationService {
 		return boatReservations;
 	}
 
-    public boolean createBoatReservationForClient(MakeBoatReservationForClientDTO dto) {
-		if(valid(dto)){
-			Client client = clientRepository.findByEmail(dto.email);
-			Boat boat = boatRepo.findById(dto.boatId).get();
-			BoatReservation boatReservation = new BoatReservation();
-			boatReservation.setBoat(boat);
-			boatReservation.setUser(client);
-			boatReservation.setAdditionalServices(dto.additionalServiceSet);
-			boatReservation.setStartDate(dto.startDate);
-			boatReservation.setEndDate(dto.endDate);
-			boatReservation.setCancelled(false);
-			boatReservation.setNumberOfGuests(dto.numberOfGuests);
-			boatReservation.setType("BOAT");
-			boatReservation.setTotalPrice(calculateFinalPrice(boat, dto));
-			boatReservationRepo.save(boatReservation);
-			return true;
+    public BoatReservation createBoatReservationForClient(MakeBoatReservationForClientDTO dto) throws ParseException, PeriodNoLongerAvailableException{
+		ReservationDTO res = convertMakeBoatReservationForClientDTO2Reservation(dto);
+		ReservationStartEndDateFormatter formatter = new ReservationStartEndDateFormatter(res);
+		Date startDate = formatter.startDate;
+		Date endDate = formatter.endDate;
+
+		BoatAvailablePeriod period = availablePeriodsRepo.getPeriodOfInterest(startDate, endDate,res.getEntityId());
+
+		if(period == null) {
+			throw new PeriodNoLongerAvailableException();
 		}
-		else return false;
+		else {
+			Client client = clientRepository.findByEmail(dto.email);
+			Boat boat = boatRepo.findById(res.getEntityId()).orElse(new Boat());
+			BoatReservation newBoatReservation = new BoatReservation(client, startDate,endDate, res.getNumberOfGuests(),
+					boatReservationSuggestionService.calculateReservationPrice(res.getNumberOfDays(), res.getNumberOfHours(), boat),
+					boat);
+
+			if(!period.getStartDate().equals(startDate)) {
+				BoatAvailablePeriod periodBefore = new BoatAvailablePeriod(period.getStartDate(),startDate,period.getBoat());
+				availablePeriodsRepo.save(periodBefore);
+			}
+			if(!period.getEndDate().equals(endDate)) {
+				BoatAvailablePeriod periodAfter = new BoatAvailablePeriod(endDate,period.getEndDate(),period.getBoat());
+				availablePeriodsRepo.save(periodAfter);
+			}
+
+			Set<AdditionalService> services = new HashSet<AdditionalService>();
+			for(long id : res.getAdditionalServices()) {
+				AdditionalService service = additinalServicesRepo.findById(id).orElse(null);
+				if(service!=null){
+					services.add(service);
+					newBoatReservation.setTotalPrice( newBoatReservation.getTotalPrice()
+							+calculateAdditionalServicesPrice(newBoatReservation,res,service));
+				}
+
+			}
+			availablePeriodsRepo.delete(period);
+			newBoatReservation.setAdditionalServices(services);
+
+			return boatReservationRepo.save(newBoatReservation);
+		}
     }
 
-	private double calculateFinalPrice(Boat boat, MakeBoatReservationForClientDTO dto) {
-		double finalPrice = 0;
-		Long diff = dto.endDate.getTime() - dto.startDate.getTime();
-		Long hours = TimeUnit.HOURS.toHours(diff);
-		Long days = TimeUnit.DAYS.toDays(diff);
-		if(days > 4){
-			finalPrice += boat.getPriceForSevenDays();
-			for (AdditionalService as : dto.additionalServiceSet){
-				finalPrice+=days* as.getPricePerDay();
-			}
-		}
-		else if(hours > 5){
-			finalPrice += boat.getPricePerDay();
-			for (AdditionalService as : dto.additionalServiceSet){
-				finalPrice+= as.getPricePerDay();
-			}
-		} else{
-			finalPrice += hours * boat.getPricePerHour();
-			for (AdditionalService as : dto.additionalServiceSet){
-				finalPrice+= as.getPricePerHour();
-			}
-		}
-		return finalPrice;
+	private ReservationDTO convertMakeBoatReservationForClientDTO2Reservation(MakeBoatReservationForClientDTO dto) {
+		ReservationDTO reservation = new ReservationDTO();
+		reservation.setAdditionalServices(dto.additionalServiceSet);
+		reservation.setEntityId(dto.boatId);
+		reservation.startDateTime = dto.startDate;
+		reservation.setNumberOfDays(dto.days);
+		reservation.setNumberOfHours(dto.hours);
+		reservation.setNumberOfGuests(dto.numberOfGuests);
+		reservation.setPrice(0);
+		return reservation;
 	}
-
-	private boolean valid(MakeBoatReservationForClientDTO dto) {
-		boolean valid = true;
-		if(dto.startDate.after(dto.endDate)) valid = false;
-		if(boatNotAvailable(dto)) valid = false;
-		return valid;
-	}
-
-	private boolean boatNotAvailable(MakeBoatReservationForClientDTO dto) {
-		boolean available = true;
-		Boat boat = boatRepo.findById(dto.boatId).get();
-		List<BoatAvailablePeriod> boatAvailablePeriods = availablePeriodsRepo.findByBoat(boat);
-		if(notOverlaps(boatAvailablePeriods, dto)){
-			available = false;
-			System.out.println("The boat is not available at that time!");
-		} else if(anotherReservationOverlaps(boat, dto)){
-			available = false;
-			System.out.println("There is another reservation in that period!");
-		}
-		return available;
-
-	}
-
-	private boolean anotherReservationOverlaps(Boat boat, MakeBoatReservationForClientDTO dto) {
-		boolean overlaps = false;
-		List<BoatReservation> boatReservations = boatReservationRepo.findAllByBoat(boat);
-		for (BoatReservation boatReservation : boatReservations){
-			if(((boatReservation.getStartDate().after(dto.startDate) || boatReservation.getStartDate().equals(dto.startDate))
-					&& (dto.startDate.before(boatReservation.getEndDate())))
-					||
-					(dto.endDate.after(boatReservation.getStartDate())
-					&& (dto.endDate.before(boatReservation.getEndDate()) || dto.endDate.equals(boatReservation.getEndDate())))
-			)	{
-				overlaps = true;
-				break;
-			}
-		}
-		return overlaps;
-	}
-
-	private boolean notOverlaps(List<BoatAvailablePeriod> boatAvailablePeriods, MakeBoatReservationForClientDTO dto) {
-		boolean overlaps = false;
-		for(BoatAvailablePeriod boatAvailablePeriod : boatAvailablePeriods){
-			if((dto.startDate.after(boatAvailablePeriod.getStartDate()) || dto.startDate.equals(boatAvailablePeriod.getStartDate()))
-			&& dto.startDate.before(boatAvailablePeriod.getEndDate())
-			&& (dto.endDate.before(boatAvailablePeriod.getEndDate()) || dto.endDate.equals(boatAvailablePeriod.getEndDate()))
-			&& dto.endDate.after(boatAvailablePeriod.getStartDate())){
-				overlaps=true;
-				break;
-			}
-		}
-		return !overlaps;
-	}
-
 
 }

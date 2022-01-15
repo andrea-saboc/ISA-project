@@ -20,8 +20,8 @@ import javax.persistence.Table;
 public class BoatAvailablePeriod{
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
-    @SequenceGenerator(name = "sequenceGenerator",  sequenceName = "bperiod_id_seq")
+    @SequenceGenerator(name = "sequenceGenerator",  sequenceName = "bperiod_id_seq", initialValue = 100)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @Column(name = "available_period_id")
     public Long id;
     

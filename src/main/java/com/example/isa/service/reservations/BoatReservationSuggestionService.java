@@ -78,17 +78,17 @@ public class BoatReservationSuggestionService {
 			}
 			
 			ret.add(new PotentialBoatReservationDTO(b.getId(), b.getName(), b.getPromoDescription(), b.getAvgGrade(), b.getCapacity(),
-					b.getCancellationPolicy(), b.getPricePerHour(), b.getPricePerDay(),calculateReservationPrice(formParams,b),
+					b.getCancellationPolicy(), b.getPricePerHour(), b.getPricePerDay(),calculateReservationPrice(formParams.getNumberOfDays(), formParams.getNumberOfHours(),b),
 					services, servicesId));
 		}
 		return ret;
 	}
 	
-	public double calculateReservationPrice(ReservationSearchDTO formParams,Boat boat) {
+	public double calculateReservationPrice(int days, int hours, Boat boat) {
 		
 		double price = 0.00;
-		price += formParams.getNumberOfDays() * boat.getPricePerDay();
-		price += formParams.getNumberOfHours() * boat.getPricePerHour();
+		price += days * boat.getPricePerDay();
+		price += hours * boat.getPricePerHour();
 		
 		return price;
 	}

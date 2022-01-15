@@ -1,5 +1,6 @@
 package com.example.isa.dto;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -11,6 +12,7 @@ public class ReservationDTO {
 	private double price;
 	private String startDate;
 	private String startTime;
+	public Date startDateTime;
 	private int numberOfDays;
 	private int numberOfHours;
 	

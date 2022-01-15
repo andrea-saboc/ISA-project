@@ -85,7 +85,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                                     .antMatchers("/subscriptions/checkBoatSubscription").permitAll()
                                     .antMatchers("/ownersBoats").permitAll()
                                     .antMatchers("/getBoatAvailability").permitAll()
-                                    .antMatchers("/addAvailablePeriodForBoat").permitAll()
+                                    .antMatchers("/getBoatDiscountReservations").permitAll()
                 .antMatchers("/resources/**").permitAll()
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                 .anyRequest().authenticated().and()

@@ -1,16 +1,14 @@
 package com.example.isa.dto;
 
-import com.example.isa.model.reservations.AdditionalService;
-
 import java.util.Date;
-import java.util.Map;
-import java.util.Set;
+import java.util.List;
 
 public class MakeBoatReservationForClientDTO {
     public String email;
-    public Set<AdditionalService> additionalServiceSet;
+    public List<Long> additionalServiceSet;
     public Date startDate;
-    public Date endDate;
+    public int days;
+    public  int hours;
     public Long boatId;
     public int numberOfGuests;
 
@@ -22,7 +20,8 @@ public class MakeBoatReservationForClientDTO {
                 "email='" + email + '\'' +
                 ", additionalServiceSet=" + additionalServiceSet +
                 ", startDate=" + startDate +
-                ", endDate=" + endDate +
+                ", days=" + days +
+                ", hours=" + hours +
                 ", boatId=" + boatId +
                 ", numberOfGuests=" + numberOfGuests +
                 '}';

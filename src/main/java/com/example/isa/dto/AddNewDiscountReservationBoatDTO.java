@@ -7,7 +7,8 @@ import java.util.Date;
 public class AddNewDiscountReservationBoatDTO {
     public Long boatId;
     public Date startDate;
-    public Date endDate;
+    public int days;
+    public int hours;
     public int numberOfGuests;
     public double priceWithDiscount;
 
