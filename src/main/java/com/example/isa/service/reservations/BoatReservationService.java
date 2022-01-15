@@ -61,7 +61,6 @@ public class BoatReservationService {
         
         if(period == null) {
         	throw new PeriodNoLongerAvailableException();
-        	
         }
         else {
 	        BoatReservation newBoatReservation = new BoatReservation(getLoggedUser(), startDate,endDate, res.getNumberOfGuests(), res.getPrice(),
