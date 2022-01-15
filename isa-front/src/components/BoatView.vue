@@ -344,6 +344,20 @@
 
       </div>
       </div>
+      <hr>
+      <p style="font-weight: bolder; font-size: 26px">
+        Images
+      </p>
+      <div v-if="(boatToShow.InteriorImages!=null && boatToShow.InteriorImages.length!=0) || (boatToShow.ExteriorImages!=null && boatToShow.ExteriorImages.length>0)">
+        <div class="gallery">
+          <figure v-for="inImg in boatToShow.InteriorImages" :key="inImg.id" class="gallery__item galleritem-1">
+          <img v-bind:src="getImg(inImg)" class="gallery-img" alt="Image 1">
+          </figure>
+          <figure v-for="inImg in boatToShow.ExteriorImages" :key="inImg.id" class="gallery__item galleritem-1">
+            <img v-bind:src="getImg(inImg)" class="gallery-img" alt="Image 1">
+          </figure>
+        </div>
+      </div>
 <hr>
     </div>
     <div class="coladd-reservation" v-if="loggedUser!=null && boatToShow.boatOwner!=null && loggedUser.id==boatToShow.boatOwner.id">
@@ -725,7 +739,6 @@ export default {
 
     },
     getImg(image) {
-      alert(devServer.proxy + "\\" + image.img)
       return devServer.proxy + "\\" + image.img;
     },
     ShowReservationOffer(){
@@ -905,6 +918,17 @@ export default {
   display: flex;
   flex-direction: row;
   margin-top: 5%;
+}
+
+.gallery {
+  display: grid;
+  grid-gap: 10px;
+}
+
+.gallery-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 
