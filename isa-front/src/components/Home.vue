@@ -1,6 +1,10 @@
 
 <template>
 <section class="bg-dark text-light p-5 text-center text-sm-start">
+<br>
+<br>
+<br>
+
   <div class = "container pt-100">
     <div class = "d-sm-flex align-items-center justify-content-between">
       <div>

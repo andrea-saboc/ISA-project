@@ -47,8 +47,6 @@ public class MansionReservationServiceImpl implements ReservationService{
 	@Autowired
 	AuthenticationService authenticationService;
 	
-
-	
 	
 	
 	@Override

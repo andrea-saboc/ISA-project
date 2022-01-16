@@ -116,8 +116,9 @@
     <br>
     <br>
   </div>
+  <hr>
     <div class="info">
-      <h4><button v-on:click="ShowReservationOffer">Show reservationOffers</button></h4>
+      <h2><button class="btn btn-lg-link" v-on:click="ShowReservationOffer">Show reservationOffers</button></h2>
     </div>
     <hr>
     <div class="navigation-equipments">

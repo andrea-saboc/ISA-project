@@ -57,14 +57,7 @@ public class BoatController {
 	@RequestMapping(method = RequestMethod.GET, value = "/boats",produces = MediaType.APPLICATION_JSON_VALUE)
 	@CrossOrigin(origins = "*")
 	public ResponseEntity<String> getAllBoats() throws JsonProcessingException{
-		System.out.println("Unutar boats ");
-		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		System.out.println("USER IZ KON "+user.getEmail());
-		Collection<? extends GrantedAuthority> authorities = user.getAuthorities();
-		for(GrantedAuthority v:authorities ){
-			System.out.println(v.getAuthority());
-		}
-		System.out.println("Roles " + user.getAuthorities().getClass().toGenericString());
+
 		List <Boat> boats = service.getAll();
 		ObjectMapper mapper = new ObjectMapper();
 		String jsonString = mapper.writeValueAsString(boats);

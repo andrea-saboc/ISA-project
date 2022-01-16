@@ -9,6 +9,7 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.isa.dto.CustomReservationForClientDto;
 import com.example.isa.dto.ReservationDto;
@@ -32,7 +33,7 @@ import com.example.isa.service.AuthenticationService;
 import com.example.isa.service.ReservationService;
 
 @Service
-//@Transactional(readOnly=true)
+@Transactional(readOnly=true)
 public class BoatReservationServiceImpl implements ReservationService{
 
 	@Autowired 
@@ -73,6 +74,7 @@ public class BoatReservationServiceImpl implements ReservationService{
 	}
 	
 	@Override
+	@Transactional(readOnly=false)
     public BoatReservation createReservationForClient(CustomReservationForClientDto dto) throws PeriodNoLongerAvailableException, ParseException{
     	
 		ReservationDto res = new ReservationDto(dto);
