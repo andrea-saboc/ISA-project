@@ -2,7 +2,10 @@
 <br>
 <br>
 <section class="container">
-<h1 class="card-title">Discount offer for {{boat.name}}</h1>
+<br>
+<br>
+<br>
+<h1 class="card-title">Discount offers for {{boat.name}}</h1>
 
 <div v-if="reservations.length == 0"><br><br><br><h2 class="card-title text-center">No offers at the moment</h2><br><br><br></div>
     <div v-for="m in reservations" :key="m">

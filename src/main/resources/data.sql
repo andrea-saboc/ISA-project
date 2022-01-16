@@ -164,6 +164,29 @@ INSERT INTO public.boat_reservation(
 VALUES (3, 4, null, null);
 
 
+
+INSERT INTO public.reservation(
+    reservation_type, id, cancelled, end_date, number_of_guests, start_date, total_price, type, system_user)
+VALUES ('MANSION', 4, false, '2021-01-05 00:00:00', 4, '2021-01-03 00:08:00', 89, 'MANSION', 400);
+INSERT INTO public.mansion_reservation(
+    id, mansion_id, feedback_id, owner_feedback_id)
+VALUES (4, 3, null, null);
+
+INSERT INTO public.reservation(
+    reservation_type, id, cancelled, end_date, number_of_guests, start_date, total_price, type, system_user)
+VALUES ('MANSION', 5, false, '2021-01-11 00:00:00', 4, '2021-01-10 00:08:00', 200, 'MANSION', 400);
+INSERT INTO public.mansion_reservation(
+    id, mansion_id, feedback_id, owner_feedback_id)
+VALUES (5, 1, null, null);
+
+INSERT INTO public.reservation(
+    reservation_type, id, cancelled, end_date, number_of_guests, start_date, total_price, type, system_user)
+VALUES ('MANSION', 6, false, '2021-04-13 00:00:00', 4, '2021-04-10 00:08:00', 22, 'MANSION', 400);
+INSERT INTO public.mansion_reservation(
+    id, mansion_id, feedback_id, owner_feedback_id)
+VALUES (6, 2, null, null);
+
+
 INSERT INTO ROLE (id ,name) VALUES (1, 'ROLE_CLIENT');
 INSERT INTO ROLE (id ,name) VALUES (2, 'ROLE_BOAT_OWNER');
 INSERT INTO ROLE (id ,name) VALUES (3, 'ROLE_MANSION_OWNER');

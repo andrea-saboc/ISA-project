@@ -53,9 +53,10 @@
                         {{res.mansion.name}},{{res.mansion.address.address}},{{res.mansion.address.city}}
                      </div>
                      <div class="card-body">
-                        <label>Start date: {{res.startDate}}</label><br>
-                        <label>Duration in days: {{res.durationInDays}}</label><br>
-                        <label>Number of guests : {{res.numberOfClients}}</label><br>
+                        <label>Price : {{res.totalPrice}}</label><br>
+                        <label>Start date: {{  format_date(new Date(res.startDate))}}</label><br>
+                        <label>End date: {{  format_date(new Date(res.endDate))}}</label><br>
+                        <label>Number of guests : {{res.numberOfGuests}}</label><br>
                         <blockquote class="blockquote mb-0">
                            <button v-if="res.mansionOwnerFeedback==null" class = "btn btn-light" v-on:click = "ShowOwnerFeedbackBox(res)">Give feedback about the owner</button> 
                            <button v-if="res.mansionFeedback==null" class = "btn btn-light" v-on:click = "ShowFeedbackBox(res)">Give mansion feedback</button>            
@@ -90,8 +91,8 @@
                      </div>
                      <div class="card-body">
                         <label>Start date: {{  format_date(new Date(res.startDate))}}</label><br>
-                        <label>Duration in days: {{res.durationInDays}}</label><br>
-                        <label>Number of guests : {{res.numberOfClients}}</label><br>
+                        <label>End date: {{  format_date(new Date(res.endDate))}}</label><br>
+                        <label>Number of guests : {{res.numberOfGuests}}</label><br>
                         <blockquote class="blockquote mb-0">
                            <button v-if="res.boatOwnerFeedback==null" class = "btn btn-light" v-on:click = "ShowOwnerFeedbackBox(res)">Give feedback about the owner</button> 
                            <button v-if="res.boatFeedback==null" class = "btn btn-light" v-on:click = "ShowFeedbackBox(res)">Give boat feedback</button>            
