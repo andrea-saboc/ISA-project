@@ -105,16 +105,16 @@ VALUES (8, 9, 'Bobanka', 250, 50, 'Najbolji promo',12, 5);
 
 INSERT INTO public.boat(
     id, gps, vhfradio, avg_grade, cancellation_policy, capacity, engine_power, fishfinder, length, max_speed, name, number_of_engines, price_for_seven_days, price_per_day, price_per_hour, promo_description, radar, type, address_id, owner_id)
-VALUES (3, true, true, 10.0, 'You will recieve 100% of total price!', 10, 200, true, 10, 120, 'Milicija', 6, 500, 100, 30, 'Promo description of malicija',true, 'Sail boat', 13, 100);
+VALUES (3, true, true, 0.0, 'You will recieve 100% of total price!', 10, 200, true, 10, 120, 'Milicija', 6, 500, 100, 30, 'Promo description of malicija',true, 'Sail boat', 13, 100);
 INSERT INTO public.boat(
     id, gps, vhfradio, avg_grade, cancellation_policy, capacity, engine_power, fishfinder, length, max_speed, name, number_of_engines, price_for_seven_days, price_per_day, price_per_hour, promo_description, radar, type, address_id, owner_id)
-VALUES (4, true, true, 10.0, 'You will recieve 70% of total price!', 10, 200, true, 34, 220, 'Malicija', 6, 500, 100, 30, 'Promo description of malicija',true, 'Sail boat', 14, 100);
+VALUES (4, true, true, 0.0, 'You will recieve 70% of total price!', 10, 200, true, 34, 220, 'Malicija', 6, 500, 100, 30, 'Promo description of malicija',true, 'Sail boat', 14, 100);
 INSERT INTO public.boat(
     id, gps, vhfradio, avg_grade, cancellation_policy, capacity, engine_power, fishfinder, length, max_speed, name, number_of_engines, price_for_seven_days, price_per_day, price_per_hour, promo_description, radar, type, address_id, owner_id)
-VALUES (5, true, true, 10.0, 'You will recieve 70% of total price!', 10, 200, true, 34, 220, 'Catamaran', 6, 500, 100, 30, 'This is the best boat',false, 'Yacht', 10, 100);
+VALUES (5, true, true, 0.0, 'You will recieve 70% of total price!', 10, 200, true, 34, 220, 'Catamaran', 6, 500, 100, 30, 'This is the best boat',false, 'Yacht', 10, 100);
 INSERT INTO public.boat(
     id, gps, vhfradio, avg_grade, cancellation_policy, capacity, engine_power, fishfinder, length, max_speed, name, number_of_engines, price_for_seven_days, price_per_day, price_per_hour, promo_description, radar, type, address_id, owner_id)
-VALUES (6, false, true, 10.0, 'You will recieve 85% of total price!', 15, 200, true, 34, 220, 'BENETEAU', 6, 700, 250, 70, 'This is the best boat',true, 'Sailboat', 9, 100);
+VALUES (6, false, true, 0.0, 'You will recieve 85% of total price!', 15, 200, true, 34, 220, 'BENETEAU', 6, 700, 250, 70, 'This is the best boat',true, 'Sailboat', 9, 100);
 
 INSERT INTO public.additional_service(
     id, name, price_per_day, price_per_hour, boat_id, mansion_id)

@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import com.example.isa.model.Mansion;
 import com.example.isa.model.User;
 import com.example.isa.model.reservations.MansionReservation;
 
@@ -14,4 +15,6 @@ public interface MansionReservationRepository extends JpaRepository<MansionReser
 	List<MansionReservation> findAllByUserAndCancelledFalse(User user);
 	
 	MansionReservation findById(long id);
+	
+	List<MansionReservation> findAllByMansionAndMansionFeedbackIsNotNull(Mansion mansion);
 }
