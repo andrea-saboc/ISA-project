@@ -8,10 +8,9 @@ import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import com.example.isa.dto.MakeBoatReservationForClientDto;
+import com.example.isa.dto.CustomReservationForClientDto;
 import com.example.isa.dto.ReservationDto;
 import com.example.isa.exceptions.PeriodNoLongerAvailableException;
 import com.example.isa.model.Boat;
@@ -56,6 +55,7 @@ public class BoatReservationServiceImpl implements ReservationService{
 	
 	//ANDREA 
 	
+	
     public List<BoatReservation> getLoggedUserReservations() {
 		User user = authenticationService.getLoggedUser();
 		BoatOwner boatOwner = boatOwnerRepository.findById(user.getId()).get();
@@ -66,14 +66,17 @@ public class BoatReservationServiceImpl implements ReservationService{
 		}
 		return boatReservations;
     }
+    
 
 	public List<BoatReservation> getBoatReservationsByBoat(Long boatId) {
 		Boat boat = boatRepo.findById(boatId).get();
 		List<BoatReservation> boatReservations = boatReservationRepo.findAllByBoat(boat);
 		return boatReservations;
 	}
-
-    public BoatReservation createBoatReservationForClient(MakeBoatReservationForClientDto dto) throws ParseException, PeriodNoLongerAvailableException{
+	
+	@Override
+    public BoatReservation createReservationForClient(CustomReservationForClientDto dto) throws PeriodNoLongerAvailableException, ParseException{
+    	
 		ReservationDto res = convertMakeBoatReservationForClientDTO2Reservation(dto);
 		ReservationStartEndDateFormatter formatter = new ReservationStartEndDateFormatter(res);
 		Date startDate = formatter.startDate;
@@ -87,10 +90,9 @@ public class BoatReservationServiceImpl implements ReservationService{
 		else {
 			Client client = clientRepository.findByEmail(dto.email);
 			Boat boat = boatRepo.findById(res.getEntityId()).orElse(new Boat());
-			/*
-			BoatReservation newBoatReservation = new BoatReservation(client, startDate,endDate, res.getNumberOfGuests(),
-					boatReservationSuggestionService.calculateReservationPrice(res.getNumberOfDays(), res.getNumberOfHours(), boat),
-					boat);*/
+			
+			BoatReservation newBoatReservation = new BoatReservation(client, startDate,endDate, res.getNumberOfGuests(), dto.toResSearchDto(),
+					boat);
 
 			if(!period.getStartDate().equals(startDate)) {
 				BoatAvailablePeriod periodBefore = new BoatAvailablePeriod(period.getStartDate(),startDate,period.getBoat());
@@ -100,28 +102,17 @@ public class BoatReservationServiceImpl implements ReservationService{
 				BoatAvailablePeriod periodAfter = new BoatAvailablePeriod(endDate,period.getEndDate(),period.getBoat());
 				availablePeriodsRepo.save(periodAfter);
 			}
-				
-			/*
-			Set<AdditionalService> services = new HashSet<AdditionalService>();
-			for(long id : res.getAdditionalServices()) {
-				AdditionalService service = additinalServicesRepo.findById(id).orElse(null);
-				if(service!=null){
-					services.add(service);
-					newBoatReservation.setTotalPrice( newBoatReservation.getTotalPrice()
-							+calculateAdditionalServicesPrice(newBoatReservation,res,service));
-				}
-
-			}
-			*/
+			
+		
 			availablePeriodsRepo.delete(period);
-			//newBoatReservation.setAdditionalServices(services);
+	        newBoatReservation.setAdditionalServices(addAdditionalServices(res.getAdditionalServices()));
+	        newBoatReservation.setTotalPrice( newBoatReservation.getTotalPrice() + accountAdditionalServices(newBoatReservation.getAdditionalServices(),res));;
 
-			//return boatReservationRepo.save(newBoatReservation);
-			return null;
+			return boatReservationRepo.save(newBoatReservation);
 		}
     }
 
-	private ReservationDto convertMakeBoatReservationForClientDTO2Reservation(MakeBoatReservationForClientDto dto) {
+	private ReservationDto convertMakeBoatReservationForClientDTO2Reservation(CustomReservationForClientDto dto) {
 		ReservationDto reservation = new ReservationDto();
 		reservation.setAdditionalServices(dto.additionalServiceSet);
 		reservation.setEntityId(dto.boatId);

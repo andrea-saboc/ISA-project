@@ -144,21 +144,21 @@ VALUES (4,'2022-01-28 00:00:00', '2022-01-20 00:00:00', 5);
 
 INSERT INTO public.reservation(
     reservation_type, id, cancelled, end_date, number_of_guests, start_date, total_price, type, system_user)
-VALUES ('boat', 1, false, '2022-02-07 00:00:00', 4, '2022-01-28 00:08:00', 230, 'boat', 400);
+VALUES ('BOAT', 1, false, '2022-02-07 00:00:00', 4, '2022-01-28 00:08:00', 230, 'BOAT', 400);
 INSERT INTO public.boat_reservation(
     id, boat_id, feedback_id, owner_feedback_id)
 VALUES (1, 3, null, null);
 
 INSERT INTO public.reservation(
     reservation_type, id, cancelled, end_date, number_of_guests, start_date, total_price, type, system_user)
-VALUES ('boat', 2, false, '2022-02-09 00:00:00', 4, '2022-02-07 00:00:00', 230, 'boat', 401);
+VALUES ('BOAT', 2, false, '2022-02-09 00:00:00', 4, '2022-02-07 00:00:00', 230, 'BOAT', 401);
 INSERT INTO public.boat_reservation(
     id, boat_id, feedback_id, owner_feedback_id)
 VALUES (2, 3, null, null);
 
 INSERT INTO public.reservation(
     reservation_type, id, cancelled, end_date, number_of_guests, start_date, total_price, type, system_user)
-VALUES ('boat', 3, false, '2022-02-09 00:00:00', 4, '2022-02-07 00:00:00', 230, 'boat', 400);
+VALUES ('BOAT', 3, false, '2022-02-09 00:00:00', 4, '2022-02-07 00:00:00', 230, 'BOAT', 400);
 INSERT INTO public.boat_reservation(
     id, boat_id, feedback_id, owner_feedback_id)
 VALUES (3, 4, null, null);

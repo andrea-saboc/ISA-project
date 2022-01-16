@@ -55,7 +55,7 @@ public class ReservationService {
 	
 	public List<ActiveReservationDto>getBoatReservations(){
 		List<ActiveReservationDto> ret = new ArrayList<ActiveReservationDto>();
-		for(BoatReservation r: boatResRepo.findAllByUser(getLoggedUser())) {
+		for(BoatReservation r: boatResRepo.findAllByUserAndCancelledFalse(getLoggedUser())) {
 			
 			Format formatter = new SimpleDateFormat("dd.MM.yyyy, HH:mm");
 			ret.add(new ActiveReservationDto(r.getId(), r.getType(),formatter.format(r.getStartDate()),formatter.format(r.getEndDate()),
@@ -68,7 +68,7 @@ public class ReservationService {
 	
 	public List<ActiveReservationDto>getMansionReservations(){
 		List<ActiveReservationDto> ret = new ArrayList<ActiveReservationDto>();
-		for(MansionReservation r: mansionResRepo.findAllByUser(getLoggedUser())) {
+		for(MansionReservation r: mansionResRepo.findAllByUserAndCancelledFalse(getLoggedUser())) {
 			
 			Format formatter = new SimpleDateFormat("dd.MM.yyyy, HH:mm");
 			ret.add(new ActiveReservationDto(r.getId(), r.getType(), formatter.format(r.getStartDate()) ,formatter.format(r.getEndDate()),

@@ -11,6 +11,8 @@ public class ReservationSearchDto {
 	private int numberOfHours;
 	private String location;
 	private float grade;
+	
+	
 	public String getStartDate() {
 		return startDate;
 	}

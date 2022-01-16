@@ -3,7 +3,7 @@ package com.example.isa.dto;
 import java.util.Date;
 import java.util.List;
 
-public class MakeBoatReservationForClientDto {
+public class CustomReservationForClientDto {
     public String email;
     public List<Long> additionalServiceSet;
     public Date startDate;
@@ -12,7 +12,7 @@ public class MakeBoatReservationForClientDto {
     public Long boatId;
     public int numberOfGuests;
 
-    public MakeBoatReservationForClientDto(){}
+    public CustomReservationForClientDto(){}
 
     @Override
     public String toString() {
@@ -26,4 +26,9 @@ public class MakeBoatReservationForClientDto {
                 ", numberOfGuests=" + numberOfGuests +
                 '}';
     }
+
+	public double toResSearchDto() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }

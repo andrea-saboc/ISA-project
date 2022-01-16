@@ -81,8 +81,8 @@
                               <div v-for="(s,index) in value.additionalServices"
                                  :key="index">
                                  <div class="custom-control custom-checkbox mb-3">
-                                    <input type="checkbox" class="custom-control-input" :id="value.mansionId+index" required>
-                                    <label class="custom-control-label" :for="value.mansionId+index">{{s}}</label>
+                                    <input type="checkbox" class="custom-control-input" :id="value.entityId+index" required>
+                                    <label class="custom-control-label" :for="value.entityId+index">{{s}}</label>
                                  </div>
                               </div>
                               <button class="btn btn-primary" v-on:click=MakeMansionReservation(value)>Make a reservation</button>
@@ -108,8 +108,8 @@
                               <div v-for="(s,index) in value.additionalServices"
                                  :key="index">
                                  <div class="custom-control custom-checkbox mb-3">
-                                    <input type="checkbox" class="custom-control-input" :id="value.mansionId+index" required>
-                                    <label class="custom-control-label" :for="value.mansionId+index">{{s}}</label>
+                                    <input type="checkbox" class="custom-control-input" :id="value.entityId+index" required>
+                                    <label class="custom-control-label" :for="value.entityId+index">{{s}}</label>
                                  </div>
                               </div>
                               <button class="btn btn-primary" v-on:click=MakeMansionReservation(value)>Make a reservation</button>
@@ -322,7 +322,7 @@ export default {
         MakeMansionReservation(b) {
 
             var mansionReservation = {
-                entityId: b.mansionId,
+                entityId: b.entityId,
                 additionalServices: [],
                 numberOfGuests: this.reservationForm.numberOfGuests,
                 price: 500,

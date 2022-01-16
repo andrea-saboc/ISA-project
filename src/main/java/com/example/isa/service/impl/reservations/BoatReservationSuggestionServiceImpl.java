@@ -1,9 +1,7 @@
 package com.example.isa.service.impl.reservations;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -21,7 +19,7 @@ import com.example.isa.model.reservations.ReservationStartEndDateFormatter;
 import com.example.isa.repository.AdditionalServiceRepository;
 import com.example.isa.repository.BoatAvailablePeriodRepository;
 import com.example.isa.repository.BoatRepository;
-import com.example.isa.service.ReservationSuggestionService;
+
 
 
 @Service
@@ -34,12 +32,7 @@ public class BoatReservationSuggestionServiceImpl{
 	@Autowired
 	AdditionalServiceRepository additionalServicesRepository;
 	
-/*
-	
-	public double calculateReservationPrice(int days, int hours, Boat boat) {
-		
 
-	}
 	
 	public List<Boat> FilterByLocationAndAvgGrade(String location, float avgGrade,List<Boat> boats){
 		
@@ -74,9 +67,7 @@ public class BoatReservationSuggestionServiceImpl{
 
 
 
-
-	@Override
-	public List<PotentialReservationDTO> getAvailableEntities(ReservationSearchDTO formParams) throws ParseException {
+	public List<PotentialReservationDto> getAvailableEntities(ReservationSearchDto formParams) throws ParseException {
 		String sDate = formParams.getStartDate()+" "+formParams.getStartTime();
 		System.out.println(sDate);
 				
@@ -92,12 +83,11 @@ public class BoatReservationSuggestionServiceImpl{
 
 
 
-	@Override
-	public List<PotentialReservationDTO> createPotentialReservations(List<Object> boatss,ReservationSearchDTO formParams){
+	public List<PotentialReservationDto> createPotentialReservations(List<Boat> boats,ReservationSearchDto formParams){
 			
 
 			System.out.println("USLI U PRAVLJENJE RES..");
-			List<PotentialReservationDTO> ret = new ArrayList<PotentialReservationDTO>();
+			List<PotentialReservationDto> ret = new ArrayList<PotentialReservationDto>();
 			for(Boat b : boats) {
 				
 				List<String> services = new ArrayList<String>();
@@ -111,7 +101,7 @@ public class BoatReservationSuggestionServiceImpl{
 					servicesId.add(a.getId());
 				}
 				
-				ret.add(new PotentialReservationDTO(b.getId(), b.getName(), b.getPromoDescription(), b.getAvgGrade(), b.getCapacity(),
+				ret.add(new PotentialReservationDto(b.getId(), b.getName(), b.getPromoDescription(), b.getAvgGrade(), b.getCapacity(),
 						b.getCancellationPolicy(), b.getPricePerHour(), b.getPricePerDay(),calculateReservationPrice(formParams.getNumberOfDays(), formParams.getNumberOfHours(),b),
 						services, servicesId));
 			}
@@ -121,7 +111,6 @@ public class BoatReservationSuggestionServiceImpl{
 
 
 
-	@Override
 	public double calculateReservationPrice(int days, int hours, Object object) {
 		double price = 0.00;
 		Boat boat = (Boat) object;
@@ -132,21 +121,4 @@ public class BoatReservationSuggestionServiceImpl{
 
 
 
-
-	@Override
-	public List<Object> FilterByLocationAndAvgGrade(String location, float avgGrade, List<Object> list) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-
-
-	@Override
-	public List<Boat> getAvailableEntitiesBetweenDates(Date startDate, Date endDate) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	*/
 }

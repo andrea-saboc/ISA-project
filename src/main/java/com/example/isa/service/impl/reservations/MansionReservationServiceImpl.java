@@ -14,6 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.isa.dto.CustomReservationForClientDto;
 import com.example.isa.dto.ReservationDto;
 import com.example.isa.exceptions.PeriodNoLongerAvailableException;
 import com.example.isa.model.MansionAvailablePeriod;
@@ -159,6 +160,13 @@ public class MansionReservationServiceImpl implements ReservationService{
 				res.add(m);
 		}
 		return res;
+	}
+
+
+	@Override
+	public Reservation createReservationForClient(CustomReservationForClientDto dto){
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 

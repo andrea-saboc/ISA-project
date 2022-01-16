@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.isa.dto.ActiveReservationDto;
-import com.example.isa.dto.MakeBoatReservationForClientDto;
+import com.example.isa.dto.CustomReservationForClientDto;
 import com.example.isa.dto.PotentialReservationDto;
 import com.example.isa.dto.ReservationDto;
 import com.example.isa.dto.ReservationSearchDto;
@@ -27,6 +27,7 @@ import com.example.isa.mail.MailService;
 import com.example.isa.model.reservations.BoatReservation;
 import com.example.isa.model.reservations.MansionReservation;
 import com.example.isa.model.reservations.Reservation;
+import com.example.isa.service.AuthenticationService;
 import com.example.isa.service.impl.reservations.BoatReservationServiceImpl;
 import com.example.isa.service.impl.reservations.BoatReservationSuggestionServiceImpl;
 import com.example.isa.service.impl.reservations.MansionReservationServiceImpl;
@@ -54,6 +55,8 @@ public class ClientReservationController {
 	ReservationService reservationService;
 	@Autowired
 	private MailService<String> mailService;
+	@Autowired
+	AuthenticationService authentication;
 	
 	@PreAuthorize("hasRole('ROLE_CLIENT')")
     @RequestMapping(method = RequestMethod.GET,value = "/reservations/boats", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -129,8 +132,8 @@ public class ClientReservationController {
         try {
         	Reservation newReservation = boatResService.createReservation(res);
         	try {
-        		//mailService.sendBoatReservationConfirmationMail(boatResService.getLoggedUser(), (BoatReservation) newReservation);
-        	}catch (/*Messaging*/Exception e){
+        		mailService.sendBoatReservationConfirmationMail(authentication.getLoggedUser(), (BoatReservation) newReservation);
+        	}catch (MessagingException e){
         		return  new ResponseEntity<>("There is a problem with your mail!", HttpStatus.INTERNAL_SERVER_ERROR);
         	}
             return new ResponseEntity<>("Reservation successfull!", HttpStatus.OK);
@@ -150,7 +153,7 @@ public class ClientReservationController {
         try {
         	MansionReservation newReservation = mansionResService.createReservation(res);
         	try {
-        		//mailService.sendMansionReservationConfirmationMail(boatResService.getLoggedUser(), newReservation);
+        		mailService.sendMansionReservationConfirmationMail(authentication.getLoggedUser(), newReservation);
         	}catch (/*Messaging*/Exception e){
         		return  new ResponseEntity<>("There is a problem with your mail!", HttpStatus.INTERNAL_SERVER_ERROR);
         	}
@@ -221,10 +224,10 @@ public class ClientReservationController {
 
     @PreAuthorize("hasRole('ROLE_BOAT_OWNER')")
     @RequestMapping(method = RequestMethod.POST, value = "/makeBoatReservationClient")
-    public ResponseEntity<String> makeBoatReservationClient(@RequestBody MakeBoatReservationForClientDto dto){
+    public ResponseEntity<String> makeBoatReservationClient(@RequestBody CustomReservationForClientDto dto){
         System.out.println(dto);
         try{
-            BoatReservation boatReservation = boatResService.createBoatReservationForClient(dto);
+            BoatReservation boatReservation = boatResService.createReservationForClient(dto);
             if (boatReservation!=null)
             return new ResponseEntity<>("Reservation for client is created successfully!", HttpStatus.OK);
             else return new ResponseEntity<>("Wrong params, try again!", HttpStatus.OK);
