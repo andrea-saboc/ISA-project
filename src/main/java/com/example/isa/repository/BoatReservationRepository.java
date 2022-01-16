@@ -11,11 +11,14 @@ import org.springframework.data.repository.query.Param;
 import com.example.isa.model.BoatAvailablePeriod;
 import com.example.isa.model.User;
 import com.example.isa.model.reservations.BoatReservation;
+import com.example.isa.model.reservations.Reservation;
 
 
 public interface BoatReservationRepository extends JpaRepository<BoatReservation, Long>{
 
 	List<BoatReservation> findAllByUser(User user);
+	
+	List<BoatReservation> findAllByUserAndCancelledFalse(User user);
 	BoatReservation findById(long id);
 	List<BoatReservation> findAllByBoat(Boat boat);
 	

@@ -10,5 +10,8 @@ import com.example.isa.model.reservations.MansionReservation;
 public interface MansionReservationRepository extends JpaRepository<MansionReservation, Long>{
 
 	List<MansionReservation> findAllByUser(User user);
+	
+	List<MansionReservation> findAllByUserAndCancelledFalse(User user);
+	
 	MansionReservation findById(long id);
 }

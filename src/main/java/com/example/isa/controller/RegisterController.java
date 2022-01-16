@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.isa.dto.AdvertiserRegistrationDTO;
-import com.example.isa.dto.ClientRegistrationDTO;
-import com.example.isa.service.AdvertiserRegisterService;
-import com.example.isa.service.ClientRegistrationService;
+import com.example.isa.dto.AdvertiserRegistrationDto;
+import com.example.isa.dto.ClientRegistrationDto;
+import com.example.isa.service.impl.AdvertiserRegisterService;
+import com.example.isa.service.impl.ClientRegistrationService;
 
 @RestController
 @RequestMapping(value = "/register", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -39,7 +39,7 @@ public class RegisterController {
         }*/
 
     @RequestMapping(value = "/advertiser", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> register(@RequestBody AdvertiserRegistrationDTO advertiserData){
+    public ResponseEntity<String> register(@RequestBody AdvertiserRegistrationDto advertiserData){
         System.out.println("Advertiser adding :"+advertiserData.toString());
         try {
             this.advertiserRegisterService.saveNewAdvertiser(advertiserData);
@@ -53,7 +53,7 @@ public class RegisterController {
     
 	@RequestMapping(method = RequestMethod.POST, value = "/client",consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE )
 	@CrossOrigin(origins = "*")
-    public ResponseEntity<String> registerPatient(HttpServletRequest request,@RequestBody ClientRegistrationDTO clientDto) {
+    public ResponseEntity<String> registerPatient(HttpServletRequest request,@RequestBody ClientRegistrationDto clientDto) {
     	
         
         if (this.clientRegistrationService.clientExists(clientDto.getEmail()))
