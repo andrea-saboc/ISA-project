@@ -53,11 +53,13 @@ public class Boat {
 	}
 	
 	
-	
-	public Boat(String name, String promoDescription) {
+	//testing purpose
+	public Boat(String name, String promoDescription,double pricePerHour,double pricePerDay) {
 		super();
 		this.name = name;
 		this.promoDescription = promoDescription;
+		this.pricePerHour = pricePerHour;
+		this.pricePerDay = pricePerDay;
 	}
 
 

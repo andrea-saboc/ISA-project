@@ -9,9 +9,11 @@ import com.example.isa.model.ClientFeedback;
 import com.example.isa.model.User;
 import com.example.isa.model.reservations.BoatReservation;
 import com.example.isa.model.reservations.MansionReservation;
+import com.example.isa.repository.BoatRepository;
 import com.example.isa.repository.BoatReservationRepository;
 import com.example.isa.repository.ClientFeedbackRepository;
 import com.example.isa.repository.MansionReservationRepository;
+import com.example.isa.service.AuthenticationService;
 
 @Service
 public class ClientFeedbackService {
@@ -19,14 +21,18 @@ public class ClientFeedbackService {
 	@Autowired
 	ClientFeedbackRepository feedbackRepo;
 	@Autowired
+	BoatRepository boatRepo;
+	@Autowired
 	BoatReservationRepository boatReservationRepo;
 	@Autowired
 	MansionReservationRepository mansionReservationRepo;
-
+	@Autowired
+	AuthenticationService authenticationService;
+	
 
 	public ClientFeedback addBoatOwnerFeedback(ClientFeedbackDto dto) {
 		
-		ClientFeedback feedback = new ClientFeedback(dto.getContent(), dto.getGrade(),getLoggedUser().getEmail());
+		ClientFeedback feedback = new ClientFeedback(dto.getContent(), dto.getGrade(),authenticationService.getLoggedUser().getEmail());
 		feedbackRepo.save(feedback);
 		BoatReservation boatReservation = boatReservationRepo.findById(dto.getReservation());
 		boatReservation.setBoatOwnerFeedback(feedback);
@@ -36,7 +42,7 @@ public class ClientFeedbackService {
 	
 	public ClientFeedback addBoatFeedback(ClientFeedbackDto dto) {
 		
-		ClientFeedback feedback = new ClientFeedback(dto.getContent(), dto.getGrade(),getLoggedUser().getEmail());
+		ClientFeedback feedback = new ClientFeedback(dto.getContent(), dto.getGrade(),authenticationService.getLoggedUser().getEmail());
 		feedbackRepo.save(feedback);
 		BoatReservation boatReservation = boatReservationRepo.findById(dto.getReservation());
 		boatReservation.setBoatFeedback(feedback);
@@ -65,11 +71,5 @@ public class ClientFeedbackService {
 		mansionReservationRepo.save(mansionReservation);
 		return feedback;		
 	}
-	
-	public User getLoggedUser() {		
-		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		return user;
-	}	
-	
 
 }

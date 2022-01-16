@@ -106,5 +106,9 @@ public class ReservationDto {
 		this.price= 0;
 				
 	}
+	public ReservationDto(int i, int j) {
+		this.numberOfDays = i;
+		this.numberOfHours = j;
+	}
 	
 }
