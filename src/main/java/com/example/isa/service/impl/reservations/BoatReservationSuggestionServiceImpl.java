@@ -19,11 +19,12 @@ import com.example.isa.model.reservations.ReservationStartEndDateFormatter;
 import com.example.isa.repository.AdditionalServiceRepository;
 import com.example.isa.repository.BoatAvailablePeriodRepository;
 import com.example.isa.repository.BoatRepository;
+import com.example.isa.service.ReservationSuggestionService;
 
 
 
 @Service
-public class BoatReservationSuggestionServiceImpl{
+public class BoatReservationSuggestionServiceImpl implements ReservationSuggestionService{
 	
 	@Autowired
 	BoatRepository boatRepository;
@@ -33,6 +34,20 @@ public class BoatReservationSuggestionServiceImpl{
 	AdditionalServiceRepository additionalServicesRepository;
 	
 
+	@Override
+	public List<PotentialReservationDto> getAvailableEntities(ReservationSearchDto formParams) throws ParseException {
+		String sDate = formParams.getStartDate()+" "+formParams.getStartTime();
+		System.out.println(sDate);
+				
+		ReservationStartEndDateFormatter formatter = new ReservationStartEndDateFormatter(formParams);
+		Date startDate = formatter.startDate;
+		Date endDate = formatter.endDate;
+		
+        List<Boat> boats = FilterByLocationAndAvgGrade(formParams.getLocation(),
+        		formParams.getGrade(),getAvailableBoatsBetweenDates(startDate,endDate));
+	    return createPotentialReservations(boats,formParams);
+	}
+	
 	
 	public List<Boat> FilterByLocationAndAvgGrade(String location, float avgGrade,List<Boat> boats){
 		
@@ -66,23 +81,6 @@ public class BoatReservationSuggestionServiceImpl{
 	}
 
 
-
-	public List<PotentialReservationDto> getAvailableEntities(ReservationSearchDto formParams) throws ParseException {
-		String sDate = formParams.getStartDate()+" "+formParams.getStartTime();
-		System.out.println(sDate);
-				
-		ReservationStartEndDateFormatter formatter = new ReservationStartEndDateFormatter(formParams);
-		Date startDate = formatter.startDate;
-		Date endDate = formatter.endDate;
-		
-        List<Boat> boats = FilterByLocationAndAvgGrade(formParams.getLocation(),
-        		formParams.getGrade(),getAvailableBoatsBetweenDates(startDate,endDate));
-	    return createPotentialReservations(boats,formParams);
-	}
-
-
-
-
 	public List<PotentialReservationDto> createPotentialReservations(List<Boat> boats,ReservationSearchDto formParams){
 			
 
@@ -102,21 +100,10 @@ public class BoatReservationSuggestionServiceImpl{
 				}
 				
 				ret.add(new PotentialReservationDto(b.getId(), b.getName(), b.getPromoDescription(), b.getAvgGrade(), b.getCapacity(),
-						b.getCancellationPolicy(), b.getPricePerHour(), b.getPricePerDay(),calculateReservationPrice(formParams.getNumberOfDays(), formParams.getNumberOfHours(),b),
+						b.getCancellationPolicy(), b.getPricePerHour(), b.getPricePerDay(),formParams.getPrice(b),
 						services, servicesId));
 			}
 			return ret;
-	}
-
-
-
-
-	public double calculateReservationPrice(int days, int hours, Object object) {
-		double price = 0.00;
-		Boat boat = (Boat) object;
-		price += days * boat.getPricePerDay();
-		price += hours * boat.getPricePerHour();		
-		return price;
 	}
 
 

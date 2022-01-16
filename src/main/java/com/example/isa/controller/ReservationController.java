@@ -38,7 +38,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 
 @RestController
-public class ClientReservationController {
+public class ReservationController {
 	
 	@Autowired 
 	BoatReservationServiceImpl boatResService;
@@ -101,7 +101,7 @@ public class ClientReservationController {
     	
     	System.out.println("USli u kontroler");
         try {
-            return new ResponseEntity<>(null, HttpStatus.OK);
+            return new ResponseEntity<>(boatSuggestionService.getAvailableEntities(search), HttpStatus.OK);
         } catch (Exception e){
         	System.out.println(e);
             return  new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -115,7 +115,7 @@ public class ClientReservationController {
     	
 
         try {
-            return new ResponseEntity<>(mansionSuggestionService.getAvailableMansions(search), HttpStatus.OK);
+            return new ResponseEntity<>(mansionSuggestionService.getAvailableEntities(search), HttpStatus.OK);
         } catch (Exception e){
         	System.out.println(e);
             return  new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);

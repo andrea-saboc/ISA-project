@@ -77,6 +77,7 @@
                            <div v-on:click="showboat(value)">
                               <h5 class="card-title">{{value.name}}</h5>
                               <p class="card-text">{{value.promoDescription}}</p>
+                              
                               <p v-if="!makingReservation" class="card-text"><small class="text-muted">{{value.address.address}},{{value.address.city}},{{value.address.country}}</small></p>
                            </div>
                            <div class="bg-light p-3 text-left" v-if="makingReservation">
@@ -87,8 +88,8 @@
                               <div v-for="(s,index) in value.additionalServices"
                                  :key="index">
                                  <div class="custom-control custom-checkbox mb-3">
-                                    <input type="checkbox" class="custom-control-input" :id="value.boatId+index" required>
-                                    <label class="custom-control-label" :for="value.boatId+index">{{s}}</label>
+                                    <input type="checkbox" class="custom-control-input" :id="value.entityId+index" required>
+                                    <label class="custom-control-label" :for="value.entityId+index">{{s}}</label>
                                  </div>
                               </div>
                               <button class="btn btn-primary" v-on:click=MakeBoatReservation(value)>Make a reservation</button>
@@ -116,8 +117,8 @@
                               <div v-for="(s,index) in value.additionalServices"
                                  :key="index">
                                  <div class="custom-control custom-checkbox mb-3">
-                                    <input type="checkbox" class="custom-control-input" :id="value.boatId+index" required>
-                                    <label class="custom-control-label" :for="value.boatId+index">{{s}}</label>
+                                    <input type="checkbox" class="custom-control-input" :id="value.entityId+index" required>
+                                    <label class="custom-control-label" :for="value.entityId+index">{{s}}</label>
                                  </div>
                               </div>
                               <button class="btn btn-primary" v-on:click=MakeBoatReservation(value)>Make a reservation</button>
@@ -305,7 +306,7 @@ export default {
         MakeBoatReservation(b) {
 
             var boatReservation = {
-                entityId: b.boatId,
+                entityId: b.entityId,
                 additionalServices: [],
                 numberOfGuests: this.reservationForm.numberOfGuests,
                 price: 500,
@@ -318,7 +319,7 @@ export default {
             
             for(let index of b.additinalServicesId){
                let i=index-1
-              var name = document.getElementById(b.boatId+i).checked;
+              var name = document.getElementById(b.entityId+i).checked;
               if(name == true) {boatReservation.additionalServices.push(index)}
             }
             

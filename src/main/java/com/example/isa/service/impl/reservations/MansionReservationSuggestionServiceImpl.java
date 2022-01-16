@@ -22,10 +22,11 @@ import com.example.isa.repository.AdditionalServiceRepository;
 import com.example.isa.repository.MansionAvailablePeriodRepository;
 import com.example.isa.repository.MansionRepository;
 import com.example.isa.repository.MansionReservationRepository;
+import com.example.isa.service.ReservationSuggestionService;
 
 @Service
 @Transactional(readOnly=true)
-public class MansionReservationSuggestionServiceImpl {
+public class MansionReservationSuggestionServiceImpl implements ReservationSuggestionService{
 
 	@Autowired 
 	MansionReservationRepository mansionReservationRepo;
@@ -36,17 +37,18 @@ public class MansionReservationSuggestionServiceImpl {
 	@Autowired
 	AdditionalServiceRepository additinalServicesRepo;
 	
-	public List<PotentialReservationDto> getAvailableMansions(ReservationSearchDto formParams) throws ParseException {
+	@Override
+	public List<PotentialReservationDto> getAvailableEntities(ReservationSearchDto formParams) throws ParseException {
 
 		ReservationStartEndDateFormatter formatter = new ReservationStartEndDateFormatter(formParams);
 		Date startDate = formatter.startDate;
 		Date endDate = formatter.endDate;
 		
-        List<Mansion> mansions = FilterByLocationAndAvgGrade(formParams.getLocation(),
-        		formParams.getGrade(),getAvailableMansionsBetweenDates(startDate,endDate));
+        List<Mansion> mansions = FilterByLocationAndAvgGrade(
+        		formParams.getLocation(),formParams.getGrade(), getAvailableMansionsBetweenDates(startDate,endDate));
 	    return createPotentialReservations(mansions,formParams);
-
-		}
+	}
+	
 		
 		public List<PotentialReservationDto> createPotentialReservations(List<Mansion> mansions,ReservationSearchDto formParams){
 
@@ -64,21 +66,11 @@ public class MansionReservationSuggestionServiceImpl {
 				}
 				
 				ret.add(new PotentialReservationDto(m.getId(), m.getName(), m.getPromoDescription(), m.getAvgGrade(),
-						m.getPricePerDay(), m.getPriceForSevenDays(), calculateReservationPrice(formParams,m),services,servicesId));
+						m.getPricePerDay(), m.getPriceForSevenDays(), formParams.getPrice(m),services,servicesId));
 			}
 			return ret;
 		}
 	
-		public double calculateReservationPrice(ReservationSearchDto formParams,Mansion mansion) {
-			
-			double price = 0.00;
-			int numberOfWeeks = formParams.getNumberOfDays()/7;
-			int numberOfDays = formParams.getNumberOfDays() - numberOfWeeks * 7;
-			price += numberOfWeeks * mansion.getPriceForSevenDays();
-			price += numberOfDays * mansion.getPricePerDay();
-			
-			return price;
-		}
 		
 	public List<Mansion> FilterByLocationAndAvgGrade(String location, float avgGrade,List<Mansion> boats){
 		
@@ -110,6 +102,8 @@ public class MansionReservationSuggestionServiceImpl {
 	public static boolean isDateInBetweenIncludingEndPoints(final Date min, final Date max, final Date date){
 	    return !(date.before(min) || date.after(max));
 	}
+
+
 
 
 	

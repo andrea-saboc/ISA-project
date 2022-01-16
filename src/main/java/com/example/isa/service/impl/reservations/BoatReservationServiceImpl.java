@@ -53,9 +53,7 @@ public class BoatReservationServiceImpl implements ReservationService{
 	AuthenticationService authenticationService;
 	
 	
-	//ANDREA 
-	
-	
+
     public List<BoatReservation> getLoggedUserReservations() {
 		User user = authenticationService.getLoggedUser();
 		BoatOwner boatOwner = boatOwnerRepository.findById(user.getId()).get();
@@ -77,7 +75,7 @@ public class BoatReservationServiceImpl implements ReservationService{
 	@Override
     public BoatReservation createReservationForClient(CustomReservationForClientDto dto) throws PeriodNoLongerAvailableException, ParseException{
     	
-		ReservationDto res = convertMakeBoatReservationForClientDTO2Reservation(dto);
+		ReservationDto res = new ReservationDto(dto);
 		ReservationStartEndDateFormatter formatter = new ReservationStartEndDateFormatter(res);
 		Date startDate = formatter.startDate;
 		Date endDate = formatter.endDate;
@@ -112,23 +110,7 @@ public class BoatReservationServiceImpl implements ReservationService{
 		}
     }
 
-	private ReservationDto convertMakeBoatReservationForClientDTO2Reservation(CustomReservationForClientDto dto) {
-		ReservationDto reservation = new ReservationDto();
-		reservation.setAdditionalServices(dto.additionalServiceSet);
-		reservation.setEntityId(dto.boatId);
-		reservation.startDateTime = dto.startDate;
-		reservation.setNumberOfDays(dto.days);
-		reservation.setNumberOfHours(dto.hours);
-		reservation.setNumberOfGuests(dto.numberOfGuests);
-		reservation.setPrice(0);
-		return reservation;
-	}
 
-	
-	
-	
-	//SERVICE IMPLEMENTATION
-	
 	@Override
 	public Reservation createReservation(ReservationDto res) throws ParseException, PeriodNoLongerAvailableException  {
 
@@ -158,7 +140,7 @@ public class BoatReservationServiceImpl implements ReservationService{
 	        
 	        availablePeriodsRepo.delete(period);	        
 	        newBoatReservation.setAdditionalServices(addAdditionalServices(res.getAdditionalServices()));
-	        newBoatReservation.setTotalPrice(res.getPrice() + accountAdditionalServices(newBoatReservation.getAdditionalServices(),res));	            
+	        newBoatReservation.setTotalPrice(res.getPrice(newBoatReservation.getBoat()) + accountAdditionalServices(newBoatReservation.getAdditionalServices(),res));	            
 		    return boatReservationRepo.save(newBoatReservation);
 	    }
 	}

@@ -1,6 +1,7 @@
 package com.example.isa.dto;
 
-import java.util.Date;
+import com.example.isa.model.Boat;
+import com.example.isa.model.Mansion;
 
 public class ReservationSearchDto {
 	
@@ -11,6 +12,16 @@ public class ReservationSearchDto {
 	private int numberOfHours;
 	private String location;
 	private float grade;
+	
+	public double getPrice(Mansion m) {
+		
+		int numberOfWeeks = this.numberOfDays/7;
+		return numberOfWeeks*m.getPriceForSevenDays() + (this.numberOfDays - 7*numberOfWeeks)*m.getPricePerDay();
+	}
+	public double getPrice(Boat b) {
+		
+		return this.numberOfDays * b.getPricePerDay() + this.numberOfHours * b.getPricePerHour();
+	}
 	
 	
 	public String getStartDate() {

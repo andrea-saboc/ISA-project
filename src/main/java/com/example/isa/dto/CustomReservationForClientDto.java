@@ -3,6 +3,8 @@ package com.example.isa.dto;
 import java.util.Date;
 import java.util.List;
 
+import com.example.isa.model.reservations.Reservation;
+
 public class CustomReservationForClientDto {
     public String email;
     public List<Long> additionalServiceSet;
@@ -31,4 +33,5 @@ public class CustomReservationForClientDto {
 		// TODO Auto-generated method stub
 		return 0;
 	}
+	
 }

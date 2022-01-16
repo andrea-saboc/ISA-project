@@ -3,6 +3,9 @@ package com.example.isa.dto;
 import java.util.Date;
 import java.util.List;
 
+import com.example.isa.model.Boat;
+import com.example.isa.model.Mansion;
+
 
 public class ReservationDto {
 	
@@ -35,9 +38,12 @@ public class ReservationDto {
 	public void setNumberOfGuests(int numberOfGuests) {
 		this.numberOfGuests = numberOfGuests;
 	}
+	
+	
 	public double getPrice() {
 		return price;
 	}
+
 	public void setPrice(double price) {
 		this.price = price;
 	}
@@ -81,5 +87,24 @@ public class ReservationDto {
 		this.numberOfHours = numberOfHours;
 	}
 	
+	public double getPrice(Boat b) {
+		return b.getPricePerDay() * this.numberOfDays + b.getPricePerHour() * this.numberOfHours;
+	}
+	public double getPrice(Mansion b) {
+		int numberOfWeeks = this.numberOfDays / 7;
+		return b.getPriceForSevenDays() * numberOfWeeks + b.getPricePerDay() * (this.numberOfDays - numberOfWeeks * 7);
+	}
+	
+	public ReservationDto(CustomReservationForClientDto dto) {
+		
+		this.additionalServices = dto.additionalServiceSet;
+		this.entityId = dto.boatId;
+		this.startDateTime = dto.startDate;
+		this.numberOfDays = dto.days;
+		this.numberOfHours=dto.hours;
+		this.numberOfGuests=dto.numberOfGuests;
+		this.price= 0;
+				
+	}
 	
 }
