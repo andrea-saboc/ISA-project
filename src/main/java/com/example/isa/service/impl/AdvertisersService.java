@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.isa.dto.AdvertisersDTO;
+import com.example.isa.dto.AdvertisersDto;
 import com.example.isa.model.BoatOwner;
 import com.example.isa.model.FishingInstructor;
 import com.example.isa.model.MansionOwner;
@@ -49,25 +49,25 @@ public class AdvertisersService {
        return fishingInstructorRepository.findAll();
     }
     
-    public List<AdvertisersDTO> getAllAdvertisers()
+    public List<AdvertisersDto> getAllAdvertisers()
     {
-    	List<AdvertisersDTO> advertisers=new ArrayList<AdvertisersDTO>();
+    	List<AdvertisersDto> advertisers=new ArrayList<AdvertisersDto>();
     	boats=getAllBoatOwner();
     	mansionOwners=getAllMansionOwner();
     	fishingInstructors=getAllFishingInstructor();
     	for(final BoatOwner boat : boats)
     	{
-    	  AdvertisersDTO advertiser = new AdvertisersDTO(boat.getEmail(),boat.getReason());
+    	  AdvertisersDto advertiser = new AdvertisersDto(boat.getEmail(),boat.getReason());
     	  advertisers.add(advertiser);
     	}
     	for(final MansionOwner mansionOwner : mansionOwners)
     	{
-    	  AdvertisersDTO advertiser = new AdvertisersDTO(mansionOwner.getEmail(),mansionOwner.getReason());
+    	  AdvertisersDto advertiser = new AdvertisersDto(mansionOwner.getEmail(),mansionOwner.getReason());
     	  advertisers.add(advertiser);
     	}
     	for(final FishingInstructor fishing : fishingInstructors)
     	{
-    	  AdvertisersDTO advertiser = new AdvertisersDTO(fishing.getEmail(),fishing.getReason());
+    	  AdvertisersDto advertiser = new AdvertisersDto(fishing.getEmail(),fishing.getReason());
     	  advertisers.add(advertiser);
     	}
 

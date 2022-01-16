@@ -1,8 +1,8 @@
 package com.example.isa.service.impl;
 import java.util.*;
 
-import com.example.isa.dto.AddAvailablePeriodDTO;
-import com.example.isa.dto.BoatRegistrationDTO;
+import com.example.isa.dto.AddAvailablePeriodDto;
+import com.example.isa.dto.BoatRegistrationDto;
 import com.example.isa.model.*;
 import com.example.isa.model.reservations.AdditionalService;
 import com.example.isa.model.reservations.BoatReservation;
@@ -44,7 +44,7 @@ public class BoatService {
 		return boats;
 	}
 
-    public Boat registerBoat(BoatRegistrationDTO dto) {
+    public Boat registerBoat(BoatRegistrationDto dto) {
 		System.out.println("In registering boat service!");
 		Boat newBoat = createBoat(dto);
 		newBoat = boatsRepository.save(newBoat);
@@ -63,7 +63,7 @@ public class BoatService {
 		return additionalServiceWithBoat;
 	}
 
-	private Boat createBoat(BoatRegistrationDTO dto) {
+	private Boat createBoat(BoatRegistrationDto dto) {
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		BoatOwner boatOwner = boatOwnerRepository.findById(user.getId()).get();
 		Address boatAddress = new Address();
@@ -139,7 +139,7 @@ public class BoatService {
 		return boatAvailability;
 	}
 
-	public List<BoatAvailablePeriod> addBoatAvailabilities(AddAvailablePeriodDTO dto) {
+	public List<BoatAvailablePeriod> addBoatAvailabilities(AddAvailablePeriodDto dto) {
 		Boat boat = boatsRepository.findById(dto.boatId).get();
 		BoatAvailablePeriod availablePeriod = new BoatAvailablePeriod(dto.startTime, dto.endTime, boat);
 		availablePeriodRepository.save(availablePeriod);
@@ -147,23 +147,23 @@ public class BoatService {
 		return boatNewAvailability;
 	}
 
-    public List<AddAvailablePeriodDTO> getFreeDaysForBoat(Long boatID) {
+    public List<AddAvailablePeriodDto> getFreeDaysForBoat(Long boatID) {
 		List<BoatAvailablePeriod> boatAvailablePeriods = getBoatAvailbilities(boatID);
 		List<BoatReservation> boatReservations = boatReservationService.getBoatReservationsByBoat(boatID);
-		List<AddAvailablePeriodDTO> availablePeriods = calculateAvailablePeriods(boatAvailablePeriods, boatReservations);
+		List<AddAvailablePeriodDto> availablePeriods = calculateAvailablePeriods(boatAvailablePeriods, boatReservations);
 		return availablePeriods;
     }
 
-	private List<AddAvailablePeriodDTO> calculateAvailablePeriods(List<BoatAvailablePeriod> boatAvailablePeriods, List<BoatReservation> boatReservations) {
-		List<AddAvailablePeriodDTO> availablePeriods = new ArrayList<>();
+	private List<AddAvailablePeriodDto> calculateAvailablePeriods(List<BoatAvailablePeriod> boatAvailablePeriods, List<BoatReservation> boatReservations) {
+		List<AddAvailablePeriodDto> availablePeriods = new ArrayList<>();
 		for (BoatAvailablePeriod bap: boatAvailablePeriods) {
 			availablePeriods.addAll(calculateAvailablePeriodsFromAp(bap, boatReservations));
 		}
 		return availablePeriods;
 	}
 
-	private List<AddAvailablePeriodDTO> calculateAvailablePeriodsFromAp(BoatAvailablePeriod bap, List<BoatReservation> boatReservations) {
-		List<AddAvailablePeriodDTO> availablePeriods = new ArrayList<>();
+	private List<AddAvailablePeriodDto> calculateAvailablePeriodsFromAp(BoatAvailablePeriod bap, List<BoatReservation> boatReservations) {
+		List<AddAvailablePeriodDto> availablePeriods = new ArrayList<>();
 		List<BoatReservation> overlapedReservations = new ArrayList<>();
 		for (BoatReservation br: boatReservations) {
 			if ((br.getStartDate().after(bap.getStartDate()) || br.getStartDate().equals(bap.getStartDate()))
@@ -175,12 +175,12 @@ public class BoatService {
 		return availablePeriods;
 		}
 
-	private List<AddAvailablePeriodDTO> separatedAvailablePeriods(List<BoatReservation> sortByAsc, BoatAvailablePeriod bap) {
-		List<AddAvailablePeriodDTO> availablePeriods = new ArrayList<>();
-		AddAvailablePeriodDTO right = new AddAvailablePeriodDTO(bap.getStartDate(), bap.getEndDate(), bap.getBoat().getId());
+	private List<AddAvailablePeriodDto> separatedAvailablePeriods(List<BoatReservation> sortByAsc, BoatAvailablePeriod bap) {
+		List<AddAvailablePeriodDto> availablePeriods = new ArrayList<>();
+		AddAvailablePeriodDto right = new AddAvailablePeriodDto(bap.getStartDate(), bap.getEndDate(), bap.getBoat().getId());
 		for (BoatReservation br : sortByAsc){
 			if (!br.getStartDate().equals(right.startTime)){
-				availablePeriods.add(new AddAvailablePeriodDTO(right.startTime, br.getStartDate(), right.boatId));
+				availablePeriods.add(new AddAvailablePeriodDto(right.startTime, br.getStartDate(), right.boatId));
 			}
 			right.startTime = br.getEndDate();
 		}

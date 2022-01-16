@@ -6,10 +6,10 @@ import com.example.isa.model.reservations.DiscountReservation;
 
 import java.util.List;
 
-public class AllBoatDiscountReservationsDTO {
+public class AllBoatDiscountReservationsDto {
 	
     public List<BoatDiscountReservation> reservedReservations;
     public List<BoatDiscountReservation> freeReservations;
 
-    public AllBoatDiscountReservationsDTO(){}
+    public AllBoatDiscountReservationsDto(){}
 }

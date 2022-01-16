@@ -1,6 +1,6 @@
 package com.example.isa.dto;
 
-public class ClientComplaintDTO {
+public class ClientComplaintDto {
 	
 	private String content;
 	private long entityId;
@@ -18,12 +18,12 @@ public class ClientComplaintDTO {
 	public void setEntityId(long entityId) {
 		this.entityId = entityId;
 	}
-	public ClientComplaintDTO(String content, long entityId) {
+	public ClientComplaintDto(String content, long entityId) {
 		super();
 		this.content = content;
 		this.entityId = entityId;
 	}
-	public ClientComplaintDTO() {
+	public ClientComplaintDto() {
 		super();
 	}
 	

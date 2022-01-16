@@ -2,7 +2,7 @@ package com.example.isa.dto;
 
 import java.util.Date;
 
-public class ReservationSearchDTO {
+public class ReservationSearchDto {
 	
 	private String startDate;
 	private String startTime;
@@ -55,9 +55,9 @@ public class ReservationSearchDTO {
 		this.numberOfHours = numberOfHours;
 	}
 	
-	public ReservationSearchDTO() {}
+	public ReservationSearchDto() {}
 	
-	public ReservationSearchDTO(String startDate, String startTime, int numberOfClients, int numberOfDays,
+	public ReservationSearchDto(String startDate, String startTime, int numberOfClients, int numberOfDays,
 			int numberOfHours, String location, float grade) {
 		super();
 		this.startDate = startDate;

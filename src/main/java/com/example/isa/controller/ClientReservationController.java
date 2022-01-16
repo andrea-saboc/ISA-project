@@ -17,11 +17,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.isa.dto.ActiveReservationDTO;
-import com.example.isa.dto.MakeBoatReservationForClientDTO;
-import com.example.isa.dto.PotentialReservationDTO;
-import com.example.isa.dto.ReservationDTO;
-import com.example.isa.dto.ReservationSearchDTO;
+import com.example.isa.dto.ActiveReservationDto;
+import com.example.isa.dto.MakeBoatReservationForClientDto;
+import com.example.isa.dto.PotentialReservationDto;
+import com.example.isa.dto.ReservationDto;
+import com.example.isa.dto.ReservationSearchDto;
 import com.example.isa.exceptions.PeriodNoLongerAvailableException;
 import com.example.isa.mail.MailService;
 import com.example.isa.model.reservations.BoatReservation;
@@ -80,7 +80,7 @@ public class ClientReservationController {
 	@PreAuthorize("hasRole('ROLE_CLIENT')")
     @RequestMapping(method = RequestMethod.GET,value = "/reservations", produces = MediaType.APPLICATION_JSON_VALUE)
     @CrossOrigin(origins = "*")
-    public ResponseEntity<List<ActiveReservationDTO>> getUserReservations(){
+    public ResponseEntity<List<ActiveReservationDto>> getUserReservations(){
     	
 		System.out.println("Geting all reservations for user");
         try {
@@ -94,7 +94,7 @@ public class ClientReservationController {
 	@PreAuthorize("hasRole('ROLE_CLIENT')")
     @RequestMapping(method = RequestMethod.POST,value = "/reservations/availableBoats", produces = MediaType.APPLICATION_JSON_VALUE)
     @CrossOrigin(origins = "*")
-    public ResponseEntity<List<PotentialReservationDTO>> getAvailableBoats(@RequestBody ReservationSearchDTO search){
+    public ResponseEntity<List<PotentialReservationDto>> getAvailableBoats(@RequestBody ReservationSearchDto search){
     	
     	System.out.println("USli u kontroler");
         try {
@@ -108,7 +108,7 @@ public class ClientReservationController {
 	@PreAuthorize("hasRole('ROLE_CLIENT')")
     @RequestMapping(method = RequestMethod.POST,value = "/reservations/availableMansions", produces = MediaType.APPLICATION_JSON_VALUE)
     @CrossOrigin(origins = "*")
-    public ResponseEntity<List<PotentialReservationDTO>> getAvailableMansions(@RequestBody ReservationSearchDTO search){
+    public ResponseEntity<List<PotentialReservationDto>> getAvailableMansions(@RequestBody ReservationSearchDto search){
     	
 
         try {
@@ -123,7 +123,7 @@ public class ClientReservationController {
 	@PreAuthorize("hasRole('ROLE_CLIENT')")
     @RequestMapping(method = RequestMethod.POST,value = "/reservations/createBoatReservation", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @CrossOrigin(origins = "*")
-    public ResponseEntity<String> createBoatReservation(@RequestBody ReservationDTO res){
+    public ResponseEntity<String> createBoatReservation(@RequestBody ReservationDto res){
     	
     	System.out.println("USli u kontroler");
         try {
@@ -144,7 +144,7 @@ public class ClientReservationController {
 	@PreAuthorize("hasRole('ROLE_CLIENT')")
     @RequestMapping(method = RequestMethod.POST,value = "/reservations/createMansionReservation", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @CrossOrigin(origins = "*")
-    public ResponseEntity<String> createMansionReservation(@RequestBody ReservationDTO res){
+    public ResponseEntity<String> createMansionReservation(@RequestBody ReservationDto res){
     	
     	System.out.println("USli u kontroler");
         try {
@@ -221,7 +221,7 @@ public class ClientReservationController {
 
     @PreAuthorize("hasRole('ROLE_BOAT_OWNER')")
     @RequestMapping(method = RequestMethod.POST, value = "/makeBoatReservationClient")
-    public ResponseEntity<String> makeBoatReservationClient(@RequestBody MakeBoatReservationForClientDTO dto){
+    public ResponseEntity<String> makeBoatReservationClient(@RequestBody MakeBoatReservationForClientDto dto){
         System.out.println(dto);
         try{
             BoatReservation boatReservation = boatResService.createBoatReservationForClient(dto);

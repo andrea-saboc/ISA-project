@@ -2,8 +2,8 @@ package com.example.isa.controller;
 
 import java.util.List;
 
-import com.example.isa.dto.AddNewDiscountReservationBoatDTO;
-import com.example.isa.dto.AllBoatDiscountReservationsDTO;
+import com.example.isa.dto.AddNewDiscountReservationBoatDto;
+import com.example.isa.dto.AllBoatDiscountReservationsDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -54,7 +54,7 @@ public class DiscountReservationsController {
 
 	@PreAuthorize("hasRole('ROLE_BOAT_OWNER')")
 	@RequestMapping(method = RequestMethod.POST, value = "/createDiscountBoatReservation",produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<BoatDiscountReservation> createBoatDiscountReservationAll(@RequestBody AddNewDiscountReservationBoatDTO dto){
+	public ResponseEntity<BoatDiscountReservation> createBoatDiscountReservationAll(@RequestBody AddNewDiscountReservationBoatDto dto){
 		try{
 			return new ResponseEntity<>(boatReservationService.createBoatDiscountReservation(dto), HttpStatus.OK);
 		}
@@ -66,8 +66,8 @@ public class DiscountReservationsController {
 
 	@RequestMapping(method = RequestMethod.GET, value = "/getBoatDiscountReservations",produces = MediaType.APPLICATION_JSON_VALUE )
 	@CrossOrigin(origins = "*")
-	public ResponseEntity<AllBoatDiscountReservationsDTO> getBoatDiscountReservationsAll(@RequestParam Long boatId){
-		AllBoatDiscountReservationsDTO allBoatDiscountReservationsDTO = new AllBoatDiscountReservationsDTO();
+	public ResponseEntity<AllBoatDiscountReservationsDto> getBoatDiscountReservationsAll(@RequestParam Long boatId){
+		AllBoatDiscountReservationsDto allBoatDiscountReservationsDTO = new AllBoatDiscountReservationsDto();
 		/*
 		allBoatDiscountReservationsDTO.freeReservations = boatReservationService.getDiscountReservations(boatId);
 		allBoatDiscountReservationsDTO.reservedReservations = boatReservationService.getReservedDiscountReservations(boatId);

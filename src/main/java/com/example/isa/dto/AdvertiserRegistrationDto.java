@@ -4,7 +4,7 @@ import com.example.isa.model.BoatOwner;
 import com.example.isa.model.FishingInstructor;
 import com.example.isa.model.MansionOwner;
 
-public class AdvertiserRegistrationDTO {
+public class AdvertiserRegistrationDto {
     private String name;
     private String surname;
     private String address;
@@ -16,10 +16,10 @@ public class AdvertiserRegistrationDTO {
     private String type;
     private String reason;
 
-    public AdvertiserRegistrationDTO() {
+    public AdvertiserRegistrationDto() {
     }
 
-    public AdvertiserRegistrationDTO(String name, String surname, String address, String city, String country, String phoneNumber, String email, String password, String type, String reason) {
+    public AdvertiserRegistrationDto(String name, String surname, String address, String city, String country, String phoneNumber, String email, String password, String type, String reason) {
         this.name = name;
         this.surname = surname;
         this.address = address;

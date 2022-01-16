@@ -3,7 +3,7 @@ package com.example.isa.service;
 import java.util.List;
 import java.util.Set;
 
-import com.example.isa.dto.ReservationDTO;
+import com.example.isa.dto.ReservationDto;
 import com.example.isa.exceptions.PeriodNoLongerAvailableException;
 import com.example.isa.model.reservations.AdditionalService;
 import com.example.isa.model.reservations.Reservation;
@@ -12,11 +12,11 @@ import com.sun.el.parser.ParseException;
 
 public interface ReservationService {
 	
-	public Reservation createReservation(ReservationDTO res) throws ParseException, PeriodNoLongerAvailableException, java.text.ParseException;
+	public Reservation createReservation(ReservationDto res) throws ParseException, PeriodNoLongerAvailableException, java.text.ParseException;
 	
 	public Set<AdditionalService> addAdditionalServices(List<Long> additinalServices);
 	
-	public double accountAdditionalServices(Set<AdditionalService> additinalServices,ReservationDTO res);	
+	public double accountAdditionalServices(Set<AdditionalService> additinalServices,ReservationDto res);	
 	
 	public Reservation cancelReservation(long resId);
 	

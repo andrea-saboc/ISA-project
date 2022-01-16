@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import com.example.isa.dto.ClientComplaintDTO;
+import com.example.isa.dto.ClientComplaintDto;
 import com.example.isa.model.AdvertiserComplaint;
 import com.example.isa.model.Boat;
 import com.example.isa.model.BoatComplaint;
@@ -40,16 +40,16 @@ public class ClientComplaintService {
 	@Autowired
 	MansionReservationRepository mansionReservationRepo;
 
-	public Complaint addBoatComplaint(ClientComplaintDTO dto) {
+	public Complaint addBoatComplaint(ClientComplaintDto dto) {
 		
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		return complaintRepository.save(new BoatComplaint(clientRepo.findByEmail(user.getEmail()), dto.getContent(),boatRepository.findById(dto.getEntityId()).orElse(new Boat())));
 	}
-	public Complaint addAdvertiserComplaint(ClientComplaintDTO dto) {
+	public Complaint addAdvertiserComplaint(ClientComplaintDto dto) {
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		return complaintRepository.save(new AdvertiserComplaint(clientRepo.findByEmail(user.getEmail()), dto.getContent(),user));
 	}
-	public Complaint addMansionComplaint(ClientComplaintDTO dto) {
+	public Complaint addMansionComplaint(ClientComplaintDto dto) {
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		return complaintRepository.save(new MansionComplaint(clientRepo.findByEmail(user.getEmail()), dto.getContent(),mansionRepository.findById(dto.getEntityId())));
 	

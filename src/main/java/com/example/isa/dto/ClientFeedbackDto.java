@@ -1,13 +1,13 @@
 package com.example.isa.dto;
 
-public class ClientFeedbackDTO {
+public class ClientFeedbackDto {
 
 	private String content;
 	private int grade;
 	private long reservation;
 	
 	
-	public ClientFeedbackDTO(String content, int grade, long reservation) {
+	public ClientFeedbackDto(String content, int grade, long reservation) {
 		super();
 		this.content = content;
 		this.grade = grade;
@@ -15,7 +15,7 @@ public class ClientFeedbackDTO {
 	}
 
 
-	public ClientFeedbackDTO() {
+	public ClientFeedbackDto() {
 		super();
 	}
 

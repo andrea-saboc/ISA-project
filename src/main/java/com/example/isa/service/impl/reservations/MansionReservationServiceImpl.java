@@ -14,7 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.isa.dto.ReservationDTO;
+import com.example.isa.dto.ReservationDto;
 import com.example.isa.exceptions.PeriodNoLongerAvailableException;
 import com.example.isa.model.MansionAvailablePeriod;
 import com.example.isa.model.User;
@@ -52,7 +52,7 @@ public class MansionReservationServiceImpl implements ReservationService{
 	
 	@Override
 	@Transactional(readOnly = false)
-	public MansionReservation createReservation(ReservationDTO res)  throws PeriodNoLongerAvailableException, ParseException {
+	public MansionReservation createReservation(ReservationDto res)  throws PeriodNoLongerAvailableException, ParseException {
 		
 		
 		ReservationStartEndDateFormatter formatter = new ReservationStartEndDateFormatter(res);
@@ -103,7 +103,7 @@ public class MansionReservationServiceImpl implements ReservationService{
 
 
 	@Override
-	public double accountAdditionalServices(Set<AdditionalService> additinalServices, ReservationDTO res) {
+	public double accountAdditionalServices(Set<AdditionalService> additinalServices, ReservationDto res) {
 		double additinalServicesPrice = 0;
 		
 		int numberOfWeeks = res.getNumberOfDays() / 7;

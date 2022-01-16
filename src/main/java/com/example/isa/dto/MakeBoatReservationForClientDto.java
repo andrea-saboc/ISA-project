@@ -3,7 +3,7 @@ package com.example.isa.dto;
 import java.util.Date;
 import java.util.List;
 
-public class MakeBoatReservationForClientDTO {
+public class MakeBoatReservationForClientDto {
     public String email;
     public List<Long> additionalServiceSet;
     public Date startDate;
@@ -12,7 +12,7 @@ public class MakeBoatReservationForClientDTO {
     public Long boatId;
     public int numberOfGuests;
 
-    public MakeBoatReservationForClientDTO(){}
+    public MakeBoatReservationForClientDto(){}
 
     @Override
     public String toString() {

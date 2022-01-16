@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import com.example.isa.dto.ActiveReservationDTO;
+import com.example.isa.dto.ActiveReservationDto;
 import com.example.isa.model.User;
 import com.example.isa.model.reservations.BoatDiscountReservation;
 import com.example.isa.model.reservations.BoatReservation;
@@ -43,9 +43,9 @@ public class ReservationService {
 		return user;
 	}
 	
-	public List<ActiveReservationDTO> getActiveReservations() {
+	public List<ActiveReservationDto> getActiveReservations() {
 		System.out.println("enteres dervice");
-		List<ActiveReservationDTO> ret = new ArrayList<ActiveReservationDTO>();
+		List<ActiveReservationDto> ret = new ArrayList<ActiveReservationDto>();
 		ret.addAll(getBoatReservations());
 		ret.addAll(getMansionReservations());
 		ret.addAll(getMansionDiscountReservations());
@@ -53,12 +53,12 @@ public class ReservationService {
 		return ret;
 	}
 	
-	public List<ActiveReservationDTO>getBoatReservations(){
-		List<ActiveReservationDTO> ret = new ArrayList<ActiveReservationDTO>();
+	public List<ActiveReservationDto>getBoatReservations(){
+		List<ActiveReservationDto> ret = new ArrayList<ActiveReservationDto>();
 		for(BoatReservation r: boatResRepo.findAllByUser(getLoggedUser())) {
 			
 			Format formatter = new SimpleDateFormat("dd.MM.yyyy, HH:mm");
-			ret.add(new ActiveReservationDTO(r.getId(), r.getType(),formatter.format(r.getStartDate()),formatter.format(r.getEndDate()),
+			ret.add(new ActiveReservationDto(r.getId(), r.getType(),formatter.format(r.getStartDate()),formatter.format(r.getEndDate()),
 					r.getNumberOfGuests(),null, r.getTotalPrice(),r.getBoat().getName(),
 					r.getBoat().getAddress().getCountry() + ", "+r.getBoat().getAddress().getCity()+", "+r.getBoat().getAddress().getAddress(),
 					r.getBoat().getPromoDescription(), isCancellationAllowed(r.getStartDate())));
@@ -66,12 +66,12 @@ public class ReservationService {
 		return ret;
 	}
 	
-	public List<ActiveReservationDTO>getMansionReservations(){
-		List<ActiveReservationDTO> ret = new ArrayList<ActiveReservationDTO>();
+	public List<ActiveReservationDto>getMansionReservations(){
+		List<ActiveReservationDto> ret = new ArrayList<ActiveReservationDto>();
 		for(MansionReservation r: mansionResRepo.findAllByUser(getLoggedUser())) {
 			
 			Format formatter = new SimpleDateFormat("dd.MM.yyyy, HH:mm");
-			ret.add(new ActiveReservationDTO(r.getId(), r.getType(), formatter.format(r.getStartDate()) ,formatter.format(r.getEndDate()),
+			ret.add(new ActiveReservationDto(r.getId(), r.getType(), formatter.format(r.getStartDate()) ,formatter.format(r.getEndDate()),
 					r.getNumberOfGuests(),null, r.getTotalPrice(),r.getMansion().getName(),
 					r.getMansion().getAddress().getCountry() + ", "+r.getMansion().getAddress().getCity()+", "+r.getMansion().getAddress().getAddress(),
 					r.getMansion().getPromoDescription(), isCancellationAllowed(r.getStartDate())));
@@ -79,12 +79,12 @@ public class ReservationService {
 		return ret;
 	}
 	
-	public List<ActiveReservationDTO>getMansionDiscountReservations(){
-		List<ActiveReservationDTO> ret = new ArrayList<ActiveReservationDTO>();
+	public List<ActiveReservationDto>getMansionDiscountReservations(){
+		List<ActiveReservationDto> ret = new ArrayList<ActiveReservationDto>();
 		for(MansionDiscountReservation r: mansionDiscountResRepo.findAllByUserAndCancelledFalseAndReservedTrue(getLoggedUser())) {
 			
 			Format formatter = new SimpleDateFormat("dd.MM.yyyy, HH:mm");
-			ret.add(new ActiveReservationDTO(r.getId(), r.getType(), formatter.format(r.getStartDate()) ,formatter.format(r.getEndDate()),
+			ret.add(new ActiveReservationDto(r.getId(), r.getType(), formatter.format(r.getStartDate()) ,formatter.format(r.getEndDate()),
 					r.getNumberOfGuests(),null, r.getPriceWithDiscount(),r.getMansion().getName(),
 					r.getMansion().getAddress().getCountry() + ", "+r.getMansion().getAddress().getCity()+", "+r.getMansion().getAddress().getAddress(),
 					r.getMansion().getPromoDescription(), isCancellationAllowed(r.getStartDate())));
@@ -92,16 +92,16 @@ public class ReservationService {
 		return ret;
 	}
 	
-	public List<ActiveReservationDTO>getBoatDiscountReservations(){
+	public List<ActiveReservationDto>getBoatDiscountReservations(){
 		
 		System.out.println("Trazenje brzih rezervacija broda");
-		List<ActiveReservationDTO> ret = new ArrayList<ActiveReservationDTO>();
+		List<ActiveReservationDto> ret = new ArrayList<ActiveReservationDto>();
 		
 		System.out.println("Koliko ih je nasao " + boatDiscountResRepo.findAllByUserAndCancelledFalseAndReservedTrue(getLoggedUser()).size());
 		for(BoatDiscountReservation r: boatDiscountResRepo.findAllByUserAndCancelledFalseAndReservedTrue(getLoggedUser())) {
 			
 			Format formatter = new SimpleDateFormat("dd.MM.yyyy, HH:mm");
-			ret.add(new ActiveReservationDTO(r.getId(), r.getType(), formatter.format(r.getStartDate()) ,formatter.format(r.getEndDate()),
+			ret.add(new ActiveReservationDto(r.getId(), r.getType(), formatter.format(r.getStartDate()) ,formatter.format(r.getEndDate()),
 					r.getNumberOfGuests(),null, r.getPriceWithDiscount(),r.getBoat().getName(),
 					r.getBoat().getAddress().getCountry() + ", "+r.getBoat().getAddress().getCity()+", "+r.getBoat().getAddress().getAddress(),
 					r.getBoat().getPromoDescription(), isCancellationAllowed(r.getStartDate())));

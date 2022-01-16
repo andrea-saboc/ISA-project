@@ -11,8 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import com.example.isa.dto.MakeBoatReservationForClientDTO;
-import com.example.isa.dto.ReservationDTO;
+import com.example.isa.dto.MakeBoatReservationForClientDto;
+import com.example.isa.dto.ReservationDto;
 import com.example.isa.exceptions.PeriodNoLongerAvailableException;
 import com.example.isa.model.Boat;
 import com.example.isa.model.BoatAvailablePeriod;
@@ -73,8 +73,8 @@ public class BoatReservationServiceImpl implements ReservationService{
 		return boatReservations;
 	}
 
-    public BoatReservation createBoatReservationForClient(MakeBoatReservationForClientDTO dto) throws ParseException, PeriodNoLongerAvailableException{
-		ReservationDTO res = convertMakeBoatReservationForClientDTO2Reservation(dto);
+    public BoatReservation createBoatReservationForClient(MakeBoatReservationForClientDto dto) throws ParseException, PeriodNoLongerAvailableException{
+		ReservationDto res = convertMakeBoatReservationForClientDTO2Reservation(dto);
 		ReservationStartEndDateFormatter formatter = new ReservationStartEndDateFormatter(res);
 		Date startDate = formatter.startDate;
 		Date endDate = formatter.endDate;
@@ -121,8 +121,8 @@ public class BoatReservationServiceImpl implements ReservationService{
 		}
     }
 
-	private ReservationDTO convertMakeBoatReservationForClientDTO2Reservation(MakeBoatReservationForClientDTO dto) {
-		ReservationDTO reservation = new ReservationDTO();
+	private ReservationDto convertMakeBoatReservationForClientDTO2Reservation(MakeBoatReservationForClientDto dto) {
+		ReservationDto reservation = new ReservationDto();
 		reservation.setAdditionalServices(dto.additionalServiceSet);
 		reservation.setEntityId(dto.boatId);
 		reservation.startDateTime = dto.startDate;
@@ -139,7 +139,7 @@ public class BoatReservationServiceImpl implements ReservationService{
 	//SERVICE IMPLEMENTATION
 	
 	@Override
-	public Reservation createReservation(ReservationDTO res) throws ParseException, PeriodNoLongerAvailableException  {
+	public Reservation createReservation(ReservationDto res) throws ParseException, PeriodNoLongerAvailableException  {
 
 		ReservationStartEndDateFormatter formatter = new ReservationStartEndDateFormatter(res);
 		Date startDate = formatter.startDate;
@@ -183,7 +183,7 @@ public class BoatReservationServiceImpl implements ReservationService{
 	}
 
 	@Override
-	public double accountAdditionalServices(Set<AdditionalService> additinalServices, ReservationDTO res) {
+	public double accountAdditionalServices(Set<AdditionalService> additinalServices, ReservationDto res) {
 		double additinalServicesPrice = 0;		
 		for(AdditionalService s : additinalServices) {       	       	
 			additinalServicesPrice += s.getPricePerDay() * res.getNumberOfDays();

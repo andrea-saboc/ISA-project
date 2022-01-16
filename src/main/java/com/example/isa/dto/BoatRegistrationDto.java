@@ -7,7 +7,7 @@ import com.example.isa.model.reservations.AdditionalService;
 import java.util.List;
 import java.util.Set;
 
-public class BoatRegistrationDTO {
+public class BoatRegistrationDto {
     public String name;
     public String type;
     public String cancellationPolicy;
@@ -34,9 +34,9 @@ public class BoatRegistrationDTO {
     public Set<String> rules;
     public Set<AdditionalService> additionalServices;
 
-    public BoatRegistrationDTO(){}
+    public BoatRegistrationDto(){}
 
-    public BoatRegistrationDTO(String name, String type, String cancellationPolicy, double length, int numberOfEngines, double enginePower, double maxSpeed, boolean GPS, boolean radar, boolean VHFradio, boolean fishfinder, double pricePerHour, double pricePerDay, double priceForSevenDays, String address, String city, String country, String longitude, String latitude, String promoDescription, Set<String> interiorImages, Set<String> exteriorImages, int capacity, Set<String> rules) {
+    public BoatRegistrationDto(String name, String type, String cancellationPolicy, double length, int numberOfEngines, double enginePower, double maxSpeed, boolean GPS, boolean radar, boolean VHFradio, boolean fishfinder, double pricePerHour, double pricePerDay, double priceForSevenDays, String address, String city, String country, String longitude, String latitude, String promoDescription, Set<String> interiorImages, Set<String> exteriorImages, int capacity, Set<String> rules) {
         this.name = name;
         this.type = type;
         this.cancellationPolicy = cancellationPolicy;

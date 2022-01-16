@@ -1,12 +1,11 @@
 package com.example.isa.service.impl;
 
-import com.example.isa.dto.AdvertiserRegistrationDTO;
+import com.example.isa.dto.AdvertiserRegistrationDto;
 import com.example.isa.exception.BadUserTypeException;
 import com.example.isa.model.BoatOwner;
 import com.example.isa.model.FishingInstructor;
 import com.example.isa.model.MansionOwner;
 import com.example.isa.model.User;
-import com.example.isa.repository.AdvertiserRepository;
 import com.example.isa.repository.BoatOwnerRepository;
 import com.example.isa.repository.FishingInstructorRepository;
 import com.example.isa.repository.MansionOwnerRepository;
@@ -16,8 +15,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class AdvertiserRegisterService {
-    @Autowired
-    private AdvertiserRepository advertiserRepository;
+
     @Autowired
     private BoatOwnerRepository boatOwnerRepository;
     @Autowired
@@ -33,7 +31,7 @@ public class AdvertiserRegisterService {
         this.fishnigInstructorRepository=fishnigInstructorRepository;
     }
 
-    public User saveNewAdvertiser(AdvertiserRegistrationDTO dat) throws BadUserTypeException {
+    public User saveNewAdvertiser(AdvertiserRegistrationDto dat) throws BadUserTypeException {
         String type = dat.getType();
         dat.setPassword(passwordEncoder.encode(dat.getPassword()));
         Object user = null;

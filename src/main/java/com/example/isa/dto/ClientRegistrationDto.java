@@ -2,7 +2,7 @@ package com.example.isa.dto;
 
 import com.example.isa.model.Client;
 
-public class ClientRegistrationDTO {
+public class ClientRegistrationDto {
 	
     private String name;
     private String surname;
@@ -22,7 +22,7 @@ public class ClientRegistrationDTO {
 	}
 
 
-	public ClientRegistrationDTO(String name, String surname, String address, String city, String country, String phoneNumber,
+	public ClientRegistrationDto(String name, String surname, String address, String city, String country, String phoneNumber,
 			String email, String password) {
 		super();
 		this.name = name;
@@ -36,7 +36,7 @@ public class ClientRegistrationDTO {
 	}
 
 
-	public ClientRegistrationDTO() {
+	public ClientRegistrationDto() {
 		super();
 	}
 
@@ -121,7 +121,7 @@ public class ClientRegistrationDTO {
 	}
 
 
-	public Client createClient(ClientRegistrationDTO clientDto) {
+	public Client createClient(ClientRegistrationDto clientDto) {
 		return new Client(clientDto.name,clientDto.surname,clientDto.address,clientDto.city,clientDto.country,clientDto.phoneNumber,clientDto.email,clientDto.password);
 	}
 	

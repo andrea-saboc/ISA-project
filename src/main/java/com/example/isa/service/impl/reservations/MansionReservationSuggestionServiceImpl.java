@@ -11,8 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.isa.dto.PotentialReservationDTO;
-import com.example.isa.dto.ReservationSearchDTO;
+import com.example.isa.dto.PotentialReservationDto;
+import com.example.isa.dto.ReservationSearchDto;
 import com.example.isa.model.Boat;
 import com.example.isa.model.Mansion;
 import com.example.isa.model.MansionAvailablePeriod;
@@ -36,7 +36,7 @@ public class MansionReservationSuggestionServiceImpl {
 	@Autowired
 	AdditionalServiceRepository additinalServicesRepo;
 	
-	public List<PotentialReservationDTO> getAvailableMansions(ReservationSearchDTO formParams) throws ParseException {
+	public List<PotentialReservationDto> getAvailableMansions(ReservationSearchDto formParams) throws ParseException {
 
 		ReservationStartEndDateFormatter formatter = new ReservationStartEndDateFormatter(formParams);
 		Date startDate = formatter.startDate;
@@ -48,9 +48,9 @@ public class MansionReservationSuggestionServiceImpl {
 
 		}
 		
-		public List<PotentialReservationDTO> createPotentialReservations(List<Mansion> mansions,ReservationSearchDTO formParams){
+		public List<PotentialReservationDto> createPotentialReservations(List<Mansion> mansions,ReservationSearchDto formParams){
 
-			List<PotentialReservationDTO> ret = new ArrayList<PotentialReservationDTO>();
+			List<PotentialReservationDto> ret = new ArrayList<PotentialReservationDto>();
 			for(Mansion m : mansions) {
 				
 				List<String> services = new ArrayList<String>();
@@ -63,13 +63,13 @@ public class MansionReservationSuggestionServiceImpl {
 					servicesId.add(a.getId());
 				}
 				
-				ret.add(new PotentialReservationDTO(m.getId(), m.getName(), m.getPromoDescription(), m.getAvgGrade(),
+				ret.add(new PotentialReservationDto(m.getId(), m.getName(), m.getPromoDescription(), m.getAvgGrade(),
 						m.getPricePerDay(), m.getPriceForSevenDays(), calculateReservationPrice(formParams,m),services,servicesId));
 			}
 			return ret;
 		}
 	
-		public double calculateReservationPrice(ReservationSearchDTO formParams,Mansion mansion) {
+		public double calculateReservationPrice(ReservationSearchDto formParams,Mansion mansion) {
 			
 			double price = 0.00;
 			int numberOfWeeks = formParams.getNumberOfDays()/7;

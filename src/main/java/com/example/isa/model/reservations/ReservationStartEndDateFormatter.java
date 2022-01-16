@@ -5,25 +5,25 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-import com.example.isa.dto.ReservationDTO;
-import com.example.isa.dto.ReservationSearchDTO;
+import com.example.isa.dto.ReservationDto;
+import com.example.isa.dto.ReservationSearchDto;
 
 
 public class ReservationStartEndDateFormatter  {
 	
-	private ReservationDTO reservation;
-	private ReservationSearchDTO reservationSearch;
+	private ReservationDto reservation;
+	private ReservationSearchDto reservationSearch;
 	public Date startDate;
 	public Date endDate;
 	
 	
-	public ReservationStartEndDateFormatter(ReservationDTO reservation) throws ParseException {
+	public ReservationStartEndDateFormatter(ReservationDto reservation) throws ParseException {
 		this.reservation = reservation;
 		getStartDate();
 		getEndDate();
 	}
 	
-	public ReservationStartEndDateFormatter(ReservationSearchDTO reservationSearch) throws ParseException {
+	public ReservationStartEndDateFormatter(ReservationSearchDto reservationSearch) throws ParseException {
 		this.reservationSearch = reservationSearch;
 		getSearchStartDate();
 		getSearchEndDate();

@@ -2,7 +2,7 @@ package com.example.isa.dto;
 
 import java.util.List;
 
-public class PotentialReservationDTO {
+public class PotentialReservationDto {
 
 	private long entityId;
 	private String name;
@@ -97,7 +97,7 @@ public class PotentialReservationDTO {
 		this.additinalServicesId = additinalServicesId;
 	}
 	
-	public PotentialReservationDTO(long entityId, String name, String promoDescription, float avgGrade,
+	public PotentialReservationDto(long entityId, String name, String promoDescription, float avgGrade,
 			double pricePerDay, double pricePerSevenDays, double totalPrice, List<String> additionalServices,
 			List<Long> additinalServicesId) {
 		super();
@@ -112,7 +112,7 @@ public class PotentialReservationDTO {
 		this.additinalServicesId = additinalServicesId;
 	}
 	
-	public PotentialReservationDTO(long entityId, String name, String promoDescription, float avgGrade, int capacity,
+	public PotentialReservationDto(long entityId, String name, String promoDescription, float avgGrade, int capacity,
 			String cancellationPolicy, double pricePerHour, double pricePerDay, double totalPrice,
 			List<String> additionalServices, List<Long> additinalServicesId) {
 		super();
@@ -129,5 +129,5 @@ public class PotentialReservationDTO {
 		this.additinalServicesId = additinalServicesId;
 	}
 	
-	public PotentialReservationDTO() {}
+	public PotentialReservationDto() {}
 }

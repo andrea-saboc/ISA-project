@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.isa.dto.ClientComplaintDTO;
+import com.example.isa.dto.ClientComplaintDto;
 import com.example.isa.mail.MailService;
 import com.example.isa.model.Boat;
 import com.example.isa.model.Complaint;
@@ -31,7 +31,7 @@ public class ComplaintController {
 	
 	@PreAuthorize("hasRole('ROLE_CLIENT')")
 	@RequestMapping(method = RequestMethod.POST, value = "/complaints/addBoatComplain",produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> addBoatComplaint(@RequestBody ClientComplaintDTO dto) throws JsonProcessingException{	
+	public ResponseEntity<String> addBoatComplaint(@RequestBody ClientComplaintDto dto) throws JsonProcessingException{	
 		
 		Complaint c = complaintService.addBoatComplaint(dto);
 		mailService.sendMansionComplaintEmail(c);
@@ -40,7 +40,7 @@ public class ComplaintController {
 	
 	@PreAuthorize("hasRole('ROLE_CLIENT')")
 	@RequestMapping(method = RequestMethod.POST, value = "/complaints/addBoatOwnerComplain",produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> addBoatOwnerComplaint(@RequestBody ClientComplaintDTO dto) throws JsonProcessingException{	
+	public ResponseEntity<String> addBoatOwnerComplaint(@RequestBody ClientComplaintDto dto) throws JsonProcessingException{	
 		
 		Complaint c = complaintService.addAdvertiserComplaint(dto);
 		mailService.sendBoatOwnerComplaintEmail(c);
@@ -48,7 +48,7 @@ public class ComplaintController {
 	}
 	@PreAuthorize("hasRole('ROLE_CLIENT')")
 	@RequestMapping(method = RequestMethod.POST, value = "/complaints/addMansionComplain",produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> addMansionComplaint(@RequestBody ClientComplaintDTO dto) throws JsonProcessingException{	
+	public ResponseEntity<String> addMansionComplaint(@RequestBody ClientComplaintDto dto) throws JsonProcessingException{	
 		
 		Complaint c = complaintService.addMansionComplaint(dto);
 		mailService.sendMansionComplaintEmail(c);
@@ -57,7 +57,7 @@ public class ComplaintController {
 	
 	@PreAuthorize("hasRole('ROLE_CLIENT')")
 	@RequestMapping(method = RequestMethod.POST, value = "/complaints/addMansionOwnerComplain",produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> addMansionOwnerComplaint(@RequestBody ClientComplaintDTO dto) throws JsonProcessingException{	
+	public ResponseEntity<String> addMansionOwnerComplaint(@RequestBody ClientComplaintDto dto) throws JsonProcessingException{	
 		
 		Complaint c = complaintService.addAdvertiserComplaint(dto);
 		mailService.sendMansionOwnerComplaintEmail(c);

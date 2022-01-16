@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.example.isa.dto.ClientRegistrationDTO;
+import com.example.isa.dto.ClientRegistrationDto;
 import com.example.isa.mail.MailService;
 import com.example.isa.mail.formatter.AccountActivationFormatter;
 import com.example.isa.model.Client;
@@ -26,7 +26,7 @@ public class ClientRegistrationService {
 	private MailService<String> mailService;
 	
 
-	public Client registerClient(ClientRegistrationDTO clientDto, String siteUrl) throws MessagingException {
+	public Client registerClient(ClientRegistrationDto clientDto, String siteUrl) throws MessagingException {
 		
 		Client client = clientDto.createClient(clientDto);
 		client.setLoyaltyPoints(0);

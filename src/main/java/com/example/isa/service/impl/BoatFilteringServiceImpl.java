@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.isa.dto.SearchDTO;
+import com.example.isa.dto.SearchDto;
 import com.example.isa.model.Boat;
 import com.example.isa.repository.BoatRepository;
 
@@ -22,7 +22,7 @@ public class BoatFilteringServiceImpl {
 		return boatRepo.findAll();
 	}
 	
-	public List<Boat> searchAll(SearchDTO search) {
+	public List<Boat> searchAll(SearchDto search) {
 		
 		if(search.getType().equals("Name")) return SearchByName(search.getValue());
 		else if(search.getType().equals("Location")) return SearchByLocation(search.getValue());

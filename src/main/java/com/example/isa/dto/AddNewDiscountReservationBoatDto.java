@@ -4,7 +4,7 @@ import com.example.isa.model.reservations.AdditionalService;
 
 import java.util.Date;
 
-public class AddNewDiscountReservationBoatDTO {
+public class AddNewDiscountReservationBoatDto {
     public Long boatId;
     public Date startDate;
     public int days;
@@ -12,6 +12,6 @@ public class AddNewDiscountReservationBoatDTO {
     public int numberOfGuests;
     public double priceWithDiscount;
 
-    public AddNewDiscountReservationBoatDTO(){}
+    public AddNewDiscountReservationBoatDto(){}
 
 }

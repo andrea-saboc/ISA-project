@@ -2,7 +2,7 @@ package com.example.isa.dto;
 
 import javax.persistence.Column;
 
-public class AdvertisersDTO {
+public class AdvertisersDto {
 	
 	public Long id;
 	public String name;
@@ -16,7 +16,7 @@ public class AdvertisersDTO {
 	public String reason;
 	public String advertiserType;
 	public boolean approved;
-	private AdvertisersDTO() {
+	private AdvertisersDto() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -92,7 +92,7 @@ public class AdvertisersDTO {
 	public void setApproved(boolean approved) {
 		this.approved = approved;
 	}
-	public AdvertisersDTO(Long id, String name, String surname, String address, String city, String country,
+	public AdvertisersDto(Long id, String name, String surname, String address, String city, String country,
 			String phoneNumber, String email, String password, String reason, String advertiserType, boolean approved) {
 		super();
 		this.id = id;
@@ -108,7 +108,7 @@ public class AdvertisersDTO {
 		this.advertiserType = advertiserType;
 		this.approved = approved;
 	}
-	public AdvertisersDTO(String email, String reason) {
+	public AdvertisersDto(String email, String reason) {
 		super();
 		this.email = email;
 		this.reason = reason;

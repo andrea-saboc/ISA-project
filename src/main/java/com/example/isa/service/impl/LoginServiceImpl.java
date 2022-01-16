@@ -8,7 +8,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import com.example.isa.dto.LoginDTO;
+import com.example.isa.dto.LoginDto;
 import com.example.isa.dto.UserTokenState;
 import com.example.isa.model.User;
 import com.example.isa.security.TokenUtils;
@@ -22,11 +22,11 @@ public class LoginServiceImpl implements LoginService{
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    public UserTokenState logIn(LoginDTO authenticationRequest) {
+    public UserTokenState logIn(LoginDto authenticationRequest) {
         return getUserTokenState(authenticationRequest);
     }
 
-    private UserTokenState getUserTokenState(LoginDTO authenticationRequest) throws BadCredentialsException{
+    private UserTokenState getUserTokenState(LoginDto authenticationRequest) throws BadCredentialsException{
         System.out.println("U get user token state");
         
         Authentication authentication = authenticationManager

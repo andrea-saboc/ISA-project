@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.isa.model.Client;
 import com.example.isa.model.User;
+import com.example.isa.service.AuthenticationService;
 import com.example.isa.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
@@ -24,13 +24,16 @@ public class UserController {
 
 	@Autowired
     private UserService userService;
+	@Autowired
+	private AuthenticationService authenticationService;
+	
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/userData",produces = MediaType.APPLICATION_JSON_VALUE )
 	//@PreAuthorize("hasRole('ROLE_CLIENT')")
 	@CrossOrigin(origins = "*")	
 	public ResponseEntity<User> getUserData(){
 		try{
-			return ResponseEntity.ok(userService.getLoggedUser());
+			return ResponseEntity.ok(authenticationService.getLoggedUser());
 		}catch (Exception e){
 			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
 		}

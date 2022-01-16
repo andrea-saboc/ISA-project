@@ -2,7 +2,7 @@ package com.example.isa.dto;
 
 import java.util.List;
 
-public class ActiveReservationDTO {
+public class ActiveReservationDto {
 	
 	private long reservationId;
 	private String reservationType;
@@ -107,7 +107,7 @@ public class ActiveReservationDTO {
 		this.allowedCancelation = allowedCancelation;
 	}
 
-	public ActiveReservationDTO(long reservationId, String reservationType, String startDate, String endDate,
+	public ActiveReservationDto(long reservationId, String reservationType, String startDate, String endDate,
 			int numberOfGuests, List<String> additinalServices, double totalPrice, String entityName,
 			String entityAddress, String entityPromo, boolean allowedCancelation) {
 		super();
@@ -124,7 +124,7 @@ public class ActiveReservationDTO {
 		this.allowedCancelation = allowedCancelation;
 	}
 
-	public ActiveReservationDTO() {
+	public ActiveReservationDto() {
 		super();
 	}
 	

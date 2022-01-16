@@ -1,6 +1,6 @@
 package com.example.isa.dto;
 
-public class SearchDTO {
+public class SearchDto {
 	
 	private String type;
 	private String value;
@@ -17,12 +17,12 @@ public class SearchDTO {
 	public void setValue(String value) {
 		this.value = value;
 	}
-	public SearchDTO(String type, String value) {
+	public SearchDto(String type, String value) {
 		super();
 		this.type = type;
 		this.value = value;
 	}
 	
-	public SearchDTO() {}
+	public SearchDto() {}
 
 }

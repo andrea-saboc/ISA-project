@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import com.example.isa.dto.ClientFeedbackDTO;
+import com.example.isa.dto.ClientFeedbackDto;
 import com.example.isa.model.ClientFeedback;
 import com.example.isa.model.User;
 import com.example.isa.model.reservations.BoatReservation;
@@ -24,7 +24,7 @@ public class ClientFeedbackService {
 	MansionReservationRepository mansionReservationRepo;
 
 
-	public ClientFeedback addBoatOwnerFeedback(ClientFeedbackDTO dto) {
+	public ClientFeedback addBoatOwnerFeedback(ClientFeedbackDto dto) {
 		
 		ClientFeedback feedback = new ClientFeedback(dto.getContent(), dto.getGrade(),getLoggedUser().getEmail());
 		feedbackRepo.save(feedback);
@@ -34,7 +34,7 @@ public class ClientFeedbackService {
 		return feedback;		
 	}
 	
-	public ClientFeedback addBoatFeedback(ClientFeedbackDTO dto) {
+	public ClientFeedback addBoatFeedback(ClientFeedbackDto dto) {
 		
 		ClientFeedback feedback = new ClientFeedback(dto.getContent(), dto.getGrade(),getLoggedUser().getEmail());
 		feedbackRepo.save(feedback);
@@ -44,7 +44,7 @@ public class ClientFeedbackService {
 		return feedback;		
 	}
 	
-	public ClientFeedback addMansionOwnerFeedback(ClientFeedbackDTO dto) {
+	public ClientFeedback addMansionOwnerFeedback(ClientFeedbackDto dto) {
 		
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		ClientFeedback feedback = new ClientFeedback(dto.getContent(), dto.getGrade(),user.getEmail());
@@ -55,7 +55,7 @@ public class ClientFeedbackService {
 		return feedback;		
 	}
 	
-	public ClientFeedback addMansionFeedback(ClientFeedbackDTO dto) {
+	public ClientFeedback addMansionFeedback(ClientFeedbackDto dto) {
 		
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		ClientFeedback feedback = new ClientFeedback(dto.getContent(), dto.getGrade(),user.getEmail());

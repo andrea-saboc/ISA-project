@@ -12,8 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
-import com.example.isa.dto.PotentialReservationDTO;
-import com.example.isa.dto.ReservationSearchDTO;
+import com.example.isa.dto.PotentialReservationDto;
+import com.example.isa.dto.ReservationSearchDto;
 import com.example.isa.model.Boat;
 import com.example.isa.model.BoatAvailablePeriod;
 import com.example.isa.model.reservations.AdditionalService;

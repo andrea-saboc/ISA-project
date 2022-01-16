@@ -7,7 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.isa.dto.AddNewDiscountReservationBoatDTO;
+import com.example.isa.dto.AddNewDiscountReservationBoatDto;
 import com.example.isa.exceptions.PeriodNoLongerAvailableException;
 import com.example.isa.model.Boat;
 import com.example.isa.model.reservations.BoatDiscountReservation;
@@ -55,7 +55,7 @@ public class BoatDiscountReservationService implements DiscountReservationServic
     
     
     
-	public BoatDiscountReservation createBoatDiscountReservation(AddNewDiscountReservationBoatDTO dto) {
+	public BoatDiscountReservation createBoatDiscountReservation(AddNewDiscountReservationBoatDto dto) {
 		BoatDiscountReservation boatDiscountReservation = new BoatDiscountReservation();
 		Boat boat = boatRepo.findById(dto.boatId).get();
 		boatDiscountReservation.setBoat(boat);
@@ -70,7 +70,7 @@ public class BoatDiscountReservationService implements DiscountReservationServic
 		return boatDiscountReservation;
 	}
 
-	public Date getEndDate(AddNewDiscountReservationBoatDTO reservation) {
+	public Date getEndDate(AddNewDiscountReservationBoatDto reservation) {
 		Date endDate;
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(reservation.startDate);

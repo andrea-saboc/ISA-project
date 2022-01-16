@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.isa.dto.AdvertisersDTO;
+import com.example.isa.dto.AdvertisersDto;
 import com.example.isa.service.impl.AdvertisersService;
 
 
@@ -32,7 +32,7 @@ public class AdvertisersController {
 	    
 	     @RequestMapping(value = "/getAllAdvertisers", produces = MediaType.APPLICATION_JSON_VALUE)
 	 	 @CrossOrigin(origins = "*")
-	    public ResponseEntity<List<AdvertisersDTO>> getAllUser() {
+	    public ResponseEntity<List<AdvertisersDto>> getAllUser() {
 	        try {
 	            return new ResponseEntity<>(advertisersService.getAllAdvertisers(), HttpStatus.OK);
 	        } catch (Exception e) {

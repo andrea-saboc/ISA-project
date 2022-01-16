@@ -4,8 +4,8 @@ import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
-import com.example.isa.dto.PotentialReservationDTO;
-import com.example.isa.dto.ReservationSearchDTO;
+import com.example.isa.dto.PotentialReservationDto;
+import com.example.isa.dto.ReservationSearchDto;
 import com.example.isa.model.Boat;
 
 
@@ -13,9 +13,9 @@ public interface ReservationSuggestionService {
 	
 	
 	
-	public List<PotentialReservationDTO> getAvailableEntities(ReservationSearchDTO formParams) throws ParseException;
+	public List<PotentialReservationDto> getAvailableEntities(ReservationSearchDto formParams) throws ParseException;
 	
-	public List<PotentialReservationDTO> createPotentialReservations(List<Object> list,ReservationSearchDTO formParams);
+	public List<PotentialReservationDto> createPotentialReservations(List<Object> list,ReservationSearchDto formParams);
 	
 	public double calculateReservationPrice(int days, int hours, Object object);
 	

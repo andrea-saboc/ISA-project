@@ -1,19 +1,19 @@
 package com.example.isa.dto;
 
-public class LoginDTO {
+public class LoginDto {
 	
     private String email;
     private String password;
     
     
-	public LoginDTO(String email, String password) {
+	public LoginDto(String email, String password) {
 		super();
 		this.email = email;
 		this.password = password;
 	}
 	
 	
-	public LoginDTO() {
+	public LoginDto() {
 		super();
 	}
 

@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 
-public class ReservationDTO {
+public class ReservationDto {
 	
 	private long entityId;
 	private List<Long> additionalServices;
@@ -61,14 +61,14 @@ public class ReservationDTO {
 	}
 
 	
-	public ReservationDTO() {}
+	public ReservationDto() {}
 	public int getNumberOfHours() {
 		return numberOfHours;
 	}
 	public void setNumberOfHours(int numberOfHours) {
 		this.numberOfHours = numberOfHours;
 	}
-	public ReservationDTO(long boatId, List<Long> additionalServices, int numberOfGuests, double price,
+	public ReservationDto(long boatId, List<Long> additionalServices, int numberOfGuests, double price,
 			String startDate, String startTime, int numberOfDays, int numberOfHours) {
 		super();
 		this.entityId = boatId;

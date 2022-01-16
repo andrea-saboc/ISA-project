@@ -19,10 +19,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.isa.dto.AddAvailablePeriodDTO;
-import com.example.isa.dto.BoatRegistrationDTO;
-import com.example.isa.dto.LongIdDTO;
-import com.example.isa.dto.SearchDTO;
+import com.example.isa.dto.AddAvailablePeriodDto;
+import com.example.isa.dto.BoatRegistrationDto;
+import com.example.isa.dto.LongIdDto;
+import com.example.isa.dto.SearchDto;
 import com.example.isa.model.Boat;
 import com.example.isa.model.BoatAvailablePeriod;
 import com.example.isa.model.User;
@@ -86,7 +86,7 @@ public class BoatController {
 
 	@RequestMapping(method = RequestMethod.POST, value = "/registerBoat",produces = MediaType.APPLICATION_JSON_VALUE)
 	@CrossOrigin(origins = "*")
-	public ResponseEntity<String> registerBoat(@RequestBody BoatRegistrationDTO dto){
+	public ResponseEntity<String> registerBoat(@RequestBody BoatRegistrationDto dto){
 		System.out.println("In registering boat service");
 		System.out.println(dto);
 		Boat savedBoat = service.registerBoat(dto);
@@ -102,7 +102,7 @@ public class BoatController {
 
 	@RequestMapping(method = RequestMethod.POST, value = "/getBoatAvailability", produces = MediaType.APPLICATION_JSON_VALUE)
 	@CrossOrigin(origins = "*")
-	public ResponseEntity<List<BoatAvailablePeriod>> getAvailablePeriod(@RequestBody LongIdDTO dto) throws JsonProcessingException{
+	public ResponseEntity<List<BoatAvailablePeriod>> getAvailablePeriod(@RequestBody LongIdDto dto) throws JsonProcessingException{
 		System.out.println("In getting availability for boats");
 		List<BoatAvailablePeriod> boatAvailabilities = service.getBoatAvailbilities(dto.boatId);
 		ObjectMapper mapper = new ObjectMapper();
@@ -115,7 +115,7 @@ public class BoatController {
 
 	@RequestMapping(method = RequestMethod.POST, value ="/addAvailablePeriodForBoat", produces = MediaType.APPLICATION_JSON_VALUE)
 	@CrossOrigin(origins = "*")
-	public ResponseEntity<String> addAvailablePeriodForBoat(@RequestBody AddAvailablePeriodDTO dto) throws JsonProcessingException{
+	public ResponseEntity<String> addAvailablePeriodForBoat(@RequestBody AddAvailablePeriodDto dto) throws JsonProcessingException{
 		System.out.println("Adding available period for boat!");
 		List<BoatAvailablePeriod> boatAvailabilities = service.addBoatAvailabilities(dto);
 		ObjectMapper mapper = new ObjectMapper();
@@ -128,7 +128,7 @@ public class BoatController {
 	
     @RequestMapping(method = RequestMethod.POST,value = "/boats/search",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @CrossOrigin(origins = "*")
-    public ResponseEntity<List<Boat>> getAvailableBoats(@RequestBody SearchDTO search){
+    public ResponseEntity<List<Boat>> getAvailableBoats(@RequestBody SearchDto search){
     	
     	System.out.println("USli u kontroler");
         try {
@@ -141,10 +141,10 @@ public class BoatController {
 
 	@RequestMapping(method = RequestMethod.POST, value = "/freeDaysForBoat",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@CrossOrigin(origins = "*")
-	public ResponseEntity<List<AddAvailablePeriodDTO>> getFreeDaysForBoat(@RequestBody LongIdDTO boatID){
+	public ResponseEntity<List<AddAvailablePeriodDto>> getFreeDaysForBoat(@RequestBody LongIdDto boatID){
 		System.out.println("I'm trying to get boat id:"+ boatID.boatId);
 		try{
-			List<AddAvailablePeriodDTO> av = service.getFreeDaysForBoat(boatID.boatId);
+			List<AddAvailablePeriodDto> av = service.getFreeDaysForBoat(boatID.boatId);
 			return new ResponseEntity<>(av , HttpStatus.OK);
 		} catch (Exception e){
 			System.out.println(e);
