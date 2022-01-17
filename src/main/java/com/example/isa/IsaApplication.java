@@ -100,9 +100,9 @@ public class IsaApplication extends SpringBootServletInitializer implements Comm
 
 		Boat b = boatRepo.findByName("Milicija");
 		
-		resRepo.save(new BoatDiscountReservation(new Date(), new Date(), 8,200, b));
-		resRepo.save(new BoatDiscountReservation(new Date(), new Date(), 6,120, b));			
-		resRepo.save(new BoatDiscountReservation(new Date(), new Date(), 6,189, b));	
+		resRepo.save(new BoatDiscountReservation(new Date(2022, 1, 23), new Date(2022, 1, 27), 8,200, b));
+		resRepo.save(new BoatDiscountReservation(new Date(2022, 6, 25), new Date(2022, 6, 30), 6,120, b));			
+		resRepo.save(new BoatDiscountReservation(new Date(2022, 4, 13), new Date(2022, 4, 15), 6,189, b));	
 		
 		System.out.println("Reservacije od Milicije: ");
 		

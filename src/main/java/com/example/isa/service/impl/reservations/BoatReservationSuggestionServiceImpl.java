@@ -82,10 +82,7 @@ public class BoatReservationSuggestionServiceImpl implements ReservationSuggesti
 
 
 	public List<PotentialReservationDto> createPotentialReservations(List<Boat> boats,ReservationSearchDto formParams){
-			
-
-			System.out.println("USLI U PRAVLJENJE RES..");
-			List<PotentialReservationDto> ret = new ArrayList<PotentialReservationDto>();
+						List<PotentialReservationDto> ret = new ArrayList<PotentialReservationDto>();
 			for(Boat b : boats) {
 				
 				List<String> services = new ArrayList<String>();

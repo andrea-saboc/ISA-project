@@ -18,16 +18,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.isa.dto.ActiveReservationDto;
+import com.example.isa.dto.AllBoatOwnerReservationsDTO;
 import com.example.isa.dto.CustomReservationForClientDto;
 import com.example.isa.dto.PotentialReservationDto;
 import com.example.isa.dto.ReservationDto;
 import com.example.isa.dto.ReservationSearchDto;
 import com.example.isa.exceptions.PeriodNoLongerAvailableException;
 import com.example.isa.mail.MailService;
+import com.example.isa.model.reservations.BoatDiscountReservation;
 import com.example.isa.model.reservations.BoatReservation;
 import com.example.isa.model.reservations.MansionReservation;
 import com.example.isa.model.reservations.Reservation;
 import com.example.isa.service.AuthenticationService;
+import com.example.isa.service.impl.reservations.BoatDiscountReservationService;
 import com.example.isa.service.impl.reservations.BoatReservationServiceImpl;
 import com.example.isa.service.impl.reservations.BoatReservationSuggestionServiceImpl;
 import com.example.isa.service.impl.reservations.MansionReservationServiceImpl;
@@ -50,6 +53,9 @@ public class ReservationController {
 	BoatReservationSuggestionServiceImpl boatSuggestionService;
 	@Autowired
 	MansionReservationSuggestionServiceImpl mansionSuggestionService;
+	
+	@Autowired
+	BoatDiscountReservationService boatDiscountReservationService;
 	
 	@Autowired
 	ReservationService reservationService;
@@ -198,8 +204,12 @@ public class ReservationController {
     public ResponseEntity<String> getBoatOwnerReservations() {
         try {
             List<BoatReservation> boatReservations = boatResService.getLoggedUserReservations();
+            List<BoatDiscountReservation> boatDiscountReservations = boatDiscountReservationService.getLoggedUserReservation();
+            AllBoatOwnerReservationsDTO allBoatOwnerReservationsDTO = new AllBoatOwnerReservationsDTO();
+            allBoatOwnerReservationsDTO.boatDiscountReservations = boatDiscountReservations;
+            allBoatOwnerReservationsDTO.boatReservations = boatReservations;
             ObjectMapper mapper = new ObjectMapper();
-            String jsonString = mapper.writeValueAsString(boatReservations);
+            String jsonString = mapper.writeValueAsString(allBoatOwnerReservationsDTO);
             System.out.println(jsonString);
             return new ResponseEntity<>(jsonString, HttpStatus.OK);
 

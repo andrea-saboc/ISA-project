@@ -68,10 +68,9 @@ public class DiscountReservationsController {
 	@CrossOrigin(origins = "*")
 	public ResponseEntity<AllBoatDiscountReservationsDto> getBoatDiscountReservationsAll(@RequestParam Long boatId){
 		AllBoatDiscountReservationsDto allBoatDiscountReservationsDTO = new AllBoatDiscountReservationsDto();
-		/*
 		allBoatDiscountReservationsDTO.freeReservations = boatReservationService.getDiscountReservations(boatId);
 		allBoatDiscountReservationsDTO.reservedReservations = boatReservationService.getReservedDiscountReservations(boatId);
-		*/
+		
 		return new ResponseEntity<>(allBoatDiscountReservationsDTO, HttpStatus.OK);
 	}
 }

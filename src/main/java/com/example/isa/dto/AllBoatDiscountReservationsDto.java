@@ -9,7 +9,7 @@ import java.util.List;
 public class AllBoatDiscountReservationsDto {
 	
     public List<BoatDiscountReservation> reservedReservations;
-    public List<BoatDiscountReservation> freeReservations;
+    public List<DiscountReservation> freeReservations;
 
     public AllBoatDiscountReservationsDto(){}
 }

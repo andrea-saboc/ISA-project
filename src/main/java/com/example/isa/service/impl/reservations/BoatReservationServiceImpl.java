@@ -106,8 +106,7 @@ public class BoatReservationServiceImpl implements ReservationService{
 		
 			availablePeriodsRepo.delete(period);
 	        newBoatReservation.setAdditionalServices(addAdditionalServices(res.getAdditionalServices()));
-	        newBoatReservation.setTotalPrice( newBoatReservation.getTotalPrice() + accountAdditionalServices(newBoatReservation.getAdditionalServices(),res));;
-
+	        newBoatReservation.setTotalPrice( dto.getPrice(boat) + accountAdditionalServices(newBoatReservation.getAdditionalServices(),res));
 			return boatReservationRepo.save(newBoatReservation);
 		}
     }

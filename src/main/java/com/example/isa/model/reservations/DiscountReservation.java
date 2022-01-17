@@ -8,6 +8,10 @@ import javax.persistence.*;
 
 import com.example.isa.model.User;
 
+/**
+ * @author PC
+ *
+ */
 @Entity
 @Table(name = "discount_reservation")
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -35,10 +39,31 @@ public class DiscountReservation implements Serializable{
 	private Date endDate;
 	private int numberOfGuests;
 	private double priceWithDiscount;
+	private double priceWithoutDiscount;
+	private double percentageOfDiscount;
 	private boolean reserved;
 	private boolean cancelled;
+	private Date validUntil;
 
 
+	public double getPriceWithoutDiscount() {
+		return priceWithoutDiscount;
+	}
+	public void setPriceWithoutDiscount(double priceWithoutDiscount) {
+		this.priceWithoutDiscount = priceWithoutDiscount;
+	}
+	public double getPercentageOfDiscount() {
+		return percentageOfDiscount;
+	}
+	public void setPercentageOfDiscount(double percentageOfDiscount) {
+		this.percentageOfDiscount = percentageOfDiscount;
+	}
+	public Date getValidUntil() {
+		return validUntil;
+	}
+	public void setValidUntil(Date validUntil) {
+		this.validUntil = validUntil;
+	}
 	public String getType() {
 		return type;
 	}

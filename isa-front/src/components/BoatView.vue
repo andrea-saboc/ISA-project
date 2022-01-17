@@ -1,6 +1,6 @@
 <template>
 <div class="boat-view" v-if="boatToShow!=null">
-  <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">>
+  <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
     <div v-if="(boatToShow.InteriorImages==null || boatToShow.InteriorImages.length==0) && (boatToShow.ExteriorImages==null || boatToShow.ExteriorImages.length==0)">
     <div class="carousel-indicators">
       <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
@@ -70,8 +70,8 @@
   <p style="font-size: 18px; font-weight: bold">
    {{boatToShow.capacity}} people · {{boatToShow.enginePower}} horsepower · {{boatToShow.length}} metres length
   </p>
-      <div v-if="clientSubscribed != 'true'">
-        <button  class="btn btn-primary" v-on:click="SubscribeClient" v-if="loggedUser.role!=null && loggedUser.role=='ROLE_CLIENT'"><i class="fa fa-star-o" aria-hidden="true"></i>
+      <div v-if="clientSubscribed != 'true' && user!=null && user=='Client'">
+        <button  class="btn btn-primary" v-on:click="SubscribeClient" ><i class="fa fa-star-o" aria-hidden="true"></i>
           Subscribe</button></div>
   <hr>
       <div class="additional-desc">
@@ -496,6 +496,7 @@ export default {
       clientResNumberOfHours: '',
       clientResNumberOfDays: '',
       loggedUser: null,
+      user: null,
       clientSubscribed: '',
       startDateTime: '',
       endDateTime: '',
@@ -531,6 +532,8 @@ export default {
     }
   },
   mounted() {
+    this.user = this.$store.state.userType
+    console.log("User", this.$store.state.userType)
     var path = window.location.href;
     var boatId = path.split('/boat/')[1].replaceAll('%20', ' ');
     console.log("Bpat view --> boat id: ", boatId.toString())
@@ -668,12 +671,12 @@ export default {
             highlight: {
               start: { fillMode: 'solid', color: 'teal' },
               base: { fillMode: 'solid', color: 'teal' },
-              end: { fillMode: 'solid', color: 'teal' },
-
+              end: { fillMode: 'solid', color: 'teal' }
             },
             dates: { start: startDate, end: endDate },
           })
         }
+        console.log("Free discount reservations are added")
         for(var j in this.quickReservationReserved){
           var startDate1 = new Date(this.quickReservationReserved[j].startDate)
           var endDate1 = new Date(this.quickReservationReserved[j].endDate)
@@ -687,6 +690,7 @@ export default {
             dates: { start: startDate1, end: endDate1 },
           })
         }
+        console.log("Reserved discount reservations are added")
         console.log(this.calendar_attributes)
       })
 

@@ -1,6 +1,13 @@
 <template>
   <div class="boat-reservations" v-if="loggedUser!=null && loggedUser.advertiserType!=null && loggedUser.advertiserType=='boat'">
-    <h3>All reservations</h3>
+    <h3 v-if="typeOfReservation==='regular'">All regular reservations</h3>
+    <h3 v-if="typeOfReservation==='discount'">All discount reservations</h3>
+    <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups" style="margin: 1%">
+      <div class="btn-group me-2" role="group" aria-label="First group">
+        <button type="button" class="btn btn-primary" v-on:click="ChangeTypeOfReservationToShow('discount')">Discount</button>
+        <button type="button" class="btn btn-primary" v-on:click="ChangeTypeOfReservationToShow('regular')">Regular</button>
+      </div>
+    </div>
     <nav class="navbar navbar-dark bg-dark" style=" height: 10%;">
       <!-- Navbar content -->
       <v-date-picker mode="date" is24hr v-model="startDateTime">
@@ -31,42 +38,81 @@
       </select>
       <input class="form-control me-2" type="search" placeholder="Search boat" v-model="filterBoatName" aria-label="Search" style="width: 200px">
 
-        <button class="btn btn-outline-success" v-on:click="reservationFilter()">Search</button>
+        <button class="btn btn-outline-primary" v-on:click="reservationFilter()">Search</button>
     </nav>
-    <table class="table table-striped table-hover">
-      <thead>
-      <tr>
-        <th scope="col"></th>
-        <th scope="col">Boat</th>
-        <th scope="col">From</th>
-        <th scope="col">To</th>
-        <th scope="col">Client</th>
-        <th scope="col">Number of guests</th>
-        <th scope="col">Total price</th>
-        <th scope="col">Status</th>
-        <th scope="col" v-if="filterReservationStatus=='past'"></th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr v-for="(reservation, index) in filteredReservations" :key="reservation.id" style="align-content: center"
-          v-on:click=selectReservation(reservation) data-toggle="modal" data-target="#exampleModal">
+    <div v-if="typeOfReservation=='regular'">
+      <table class="table table-striped table-hover">
+        <thead>
+        <tr>
+          <th scope="col"></th>
+          <th scope="col">Boat</th>
+          <th scope="col">From</th>
+          <th scope="col">To</th>
+          <th scope="col">Client</th>
+          <th scope="col">Number of guests</th>
+          <th scope="col">Total price</th>
+          <th scope="col">Status</th>
+          <th scope="col" v-if="filterReservationStatus=='past' && past==true">Create report</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-for="(reservation, index) in filteredReservations" :key="reservation.id" style="align-content: center"
+            v-on:click=selectReservation(reservation) data-toggle="modal" data-target="#exampleModal">
           <th scope="row" style="align-content: center" >{{index+1}}</th>
           <td>{{reservation.boat.name}}</td>
           <td v-bind:id="reservation.id+'resid'" style="align-content: center">{{formatDate(reservation.startDate)}}</td>
           <td style="align-content: center">{{formatDate(reservation.endDate)}}</td>
-          <td style="align-content: center">{{reservation.user.name}} {{reservation.user.surname}}</td>
+          <td style="align-content: center" v-if="reservation.user!=null">{{reservation.user.name}} {{reservation.user.surname}}</td>
+          <td style="align-content: center" v-else>Not reserved</td>
           <td style="align-content: center">{{reservation.numberOfGuests}}</td>
-          <td>{{reservation.totalPrice}}</td>
+          <td>{{reservation.totalPrice}} €</td>
           <td v-if="reservation.cancelled == true">Cancelled</td>
           <td v-else>Not cancelled</td>
-          <td v-if="filterReservationStatus=='past' && reservation.cancelled == false"><button></button></td>
-      </tr>
-      </tbody>
-    </table>
+          <td v-if="filterReservationStatus=='past' && reservation.cancelled == false && past==true"><button>Create report</button></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <div v-if="typeOfReservation==='discount'">
+      <table  class="table table-striped table-hover">
+        <thead>
+        <tr>
+          <th scope="col"></th>
+          <th scope="col">Boat</th>
+          <th scope="col">From</th>
+          <th scope="col">To</th>
+          <th scope="col">Client</th>
+          <th scope="col">Number of guests</th>
+          <th scope="col">Pricing</th>
+          <th scope="col">Status</th>
+          <th scope="col">Available until</th>
+          <th scope="col" v-if="filterReservationStatus=='past' && past==true">Create report</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-for="(reservation, index) in filteredDiscountReservations" :key="reservation.id" style="align-content: center"
+            v-on:click=selectReservation(reservation) data-toggle="modal" data-target="#exampleModal">
+          <th scope="row" style="align-content: center" >{{index+1}}</th>
+          <td>{{reservation.boat.name}}</td>
+          <td v-bind:id="reservation.id+'resid'" style="align-content: center">{{formatDate(reservation.startDate)}}</td>
+          <td style="align-content: center">{{formatDate(reservation.endDate)}}</td>
+          <td style="align-content: center" v-if="reservation.user!=null">{{reservation.user.name}} {{reservation.user.surname}}</td>
+          <td style="align-content: center" v-else>Not reserved</td>
+          <td style="align-content: center">{{reservation.numberOfGuests}}</td>
+          <td><span style="text-decoration-line: line-through;">{{reservation.priceWithDiscount}} €</span> {{reservation.priceWithoutDiscount}} € • <span style="font-weight: bolder">{{reservation.percentageOfDiscount}}% off</span></td>
+          <td v-if="reservation.cancelled == true">Cancelled</td>
+          <td v-else>Not cancelled</td>
+          <td style="align-content: center">{{formatDate(reservation.validUntil)}}</td>
+          <td v-if="filterReservationStatus=='past' && reservation.cancelled == false && past==true"><button>Create report</button></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
     <!-- Modal -->
     <div class="modal fade"  v-if="selectedReservation!=null" id="exampleModal" role="dialog" tabindex="-1" aria-labelledby="reservationModalLabel" aria-hidden="true" >
       <div class="modal-dialog">
-        <div class="modal-content" style="padding: 5%">
+        <div class="modal-content" style="padding: 5%" v-if="selectedReservation!=null">
           <div class="modal-header">
             <h5 class="modal-title" id="reservationModalLabel">Client profile</h5>
           </div>
@@ -113,7 +159,7 @@
 
           </center>
           <hr>
-          <h5 class="modal-title" id="reservationModalLabel">More about the reservation</h5>
+          <h5 class="modal-title" id="reservationModalLabel1">More about the reservation</h5>
           <table class = "table table-borderless">
             <tbody>
             <tr>
@@ -141,7 +187,7 @@
             </tr>
             </tbody>
           </table>
-          <table v-if="this.selectedReservation.additionalServices.length!=0" class = "table table-borderless">
+          <table v-if="this.selectedReservation.additionalServices!=null && this.selectedReservation.additionalServices.length!=0" class = "table table-borderless">
             <thead>
             <th>
               Additional services
@@ -165,6 +211,9 @@
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
           </div>
         </div>
+        <div v-else>
+          This discount reservation is not reserved yet!
+        </div>
       </div>
     </div>
   <div class="container">
@@ -185,15 +234,20 @@ export default {
   name: "BoatReservations",
   data: function (){
     return{
+      typeOfReservation: 'regular',
       loggedUser : null,
       boatReservations : [],
       startDateTime : '',
       endDateTime : '',
       filterBoatName : '',
-      filterReservationStatus: '',
+      filterReservationStatus: 'all',
+      past: false,
       filteredReservations: new Array(),
       selectedReservation: null,
       selectedUserSubscribed: new Array(),
+      discountReservations : new Array(),
+      filteredDiscountReservations : new Array()
+
     }
   },
   mounted() {
@@ -213,9 +267,13 @@ export default {
             })
                 .then(response1 => {
                   console.log("Rezervacija brodova vlasnika", response1.data)
-                  this.boatReservations = response1.data;
+                  this.boatReservations = response1.data.boatReservations;
                   this.filteredReservations = this.boatReservations
                   this.selectedReservation = this.boatReservations[0]
+                  this.discountReservations = response1.data.boatDiscountReservations;
+                  this.filteredDiscountReservations = this.discountReservations
+                  console.log("Filtered discount after mounted ", this.filteredDiscountReservations)
+                  console.log("Filtered regular after mounted ", this.filteredReservations)
                 })}
         }
         )
@@ -228,50 +286,75 @@ export default {
   methods:{
     formatDate(date){
       var date1 = new Date(date)
-      console.log("Date in form:",moment(String(date1)).format('MM.DD.YYYY. hh:mm'))
-      //var element = document.getElementById(reservation.id+'resid');
-      //element.innerHTML = date1.toString()
+      //console.log("Date in form:",moment(String(date1)).format('MM.DD.YYYY. hh:mm'))
       return moment(String(date1)).format('DD.MM.YYYY. hh:mm')
     },
     selectReservation(reservation){
       console.log("In select reservation function")
       this.selectedReservation = reservation
       console.log("Another reservation is selected", this.selectedReservation)
-      axios.get(devServer.proxy + "/subscriptions/boatsByBoatOwner", {
-        headers:{
-          'Authorization' : this.$store.getters.tokenString
-        },
-        params:{
-          id : this.selectedReservation.user.id
-        } })
-        .then(respone => {
-          console.log("Subscriptions got: ", respone.data)
-          this.selectedUserSubscribed = respone.data
-          console.log("Selected user is subscribed at boats: ", this.selectedUserSubscribed)
-        })
-        .catch(() =>{
-          console.log("Subscriber boats are unavailable")
-      })
+      if(reservation.user != null){
+        axios.get(devServer.proxy + "/subscriptions/boatsByBoatOwner", {
+          headers:{
+            'Authorization' : this.$store.getters.tokenString
+          },
+          params:{
+            id : this.selectedReservation.user.id
+          } })
+            .then(respone => {
+              console.log("Subscriptions got: ", respone.data)
+              this.selectedUserSubscribed = respone.data
+              console.log("Selected user is subscribed at boats: ", this.selectedUserSubscribed)
+            })
+            .catch(() =>{
+              console.log("Subscriber boats are unavailable")
+            })
+      } else{
+        this.selectedReservation = null
+      }
     },
     reservationFilter(){
+      if(this.startDateTime == null) this.startDateTime = ''
+      if(this.endDateTime == null) this.endDateTime = ''
       console.log("filter reservation params:", this.filterBoatName, "start", this.startDateTime,"end", this.endDateTime, "status", this.filterReservationStatus)
-      this.filteredReservations = new Array()
+
+      if(this.typeOfReservation === 'regular'){
+        this.filteredReservations = new Array()
         for (var reservation of this.boatReservations){
+          console.log("prvi uslov:", reservation.boat.name.includes(this.filterBoatName),
+          "drugi uslov", (new Date(reservation.startDate).getTime() >=(new Date(this.startDateTime).getTime())) || this.startDateTime=='',
+          "treci uslov",(new Date(reservation.endDate).getTime() <= (new Date(this.endDateTime).getTime()))  || this.endDateTime=='',
+        "cetvrti uslov", (new Date(reservation.endDate).getTime() <= (new Date(this.endDateTime).getTime()))  || this.endDateTime=='')
           if(reservation.boat.name.includes(this.filterBoatName)
-          && (new Date(reservation.startDate).getTime()>=new Date(this.startDateTime).getTime() || this.startDateTime=='')
-          && (new Date(reservation.endDate).getTime() <= new Date(this.endDateTime).getTime()  || this.endDateTime=='')
-          && this.reservationFilterStatus(reservation)){
+              && ((new Date(reservation.startDate).getTime() >=(new Date(this.startDateTime).getTime())) || this.startDateTime=='')
+              && ((new Date(reservation.endDate).getTime() <= (new Date(this.endDateTime).getTime()))  || this.endDateTime=='')
+              && this.reservationFilterStatus(reservation)){
             this.filteredReservations.push(reservation)
           }
         }
-        console.log("Filered reservations", this.filteredReservations)
+        console.log("Filered reservations", this.filteredReservations, "past is ", this.past)
+      } else{
+        this.filteredDiscountReservations = new Array()
+        for (var dreservation of this.discountReservations){
+          if(dreservation.boat.name.includes(this.filterBoatName)
+              && ((new Date(dreservation.startDate).getTime()>= (new Date(this.startDateTime).getTime() ))|| this.startDateTime=='')
+              && ((new Date(dreservation.endDate).getTime() <= (new Date(this.endDateTime).getTime())) || this.endDateTime=='')
+              && this.reservationFilterStatus(dreservation)){
+            this.filteredDiscountReservations.push(dreservation)
+          }
+        }
+        console.log("Filered reservations", this.filteredDiscountReservations, "past is ", this.past)
+      }console.log("past is ", this.past)
+
       this.endDateTime==''
       this.startDateTime==''
       return this.filteredReservations
     },
     reservationFilterStatus(reservation){
+      this.past= false;
+      console.log("past is ", this.past)
       if(this.filterReservationStatus == 'all'){
-        return true
+        return true;
       }
       if( this.filterReservationStatus == 'now'){
         if(new Date(reservation.endDate).getTime()>= new Date().getTime()
@@ -290,13 +373,25 @@ export default {
         }
       }
       if(this.filterReservationStatus == 'past'){
+        this.ChangePast(true);
         if(new Date(reservation.endDate).getTime()<= new Date().getTime()
             && new Date(reservation.startDate).getTime()<= new Date().getTime()){
+          console.log("past is ", this.past)
           return true;
         } else{
           return false
         }
+      } else{
+        return true
       }
+    },
+    ChangeTypeOfReservationToShow(type){
+      this.typeOfReservation = type;
+      console.log('Type of reservation is changed:', this.typeOfReservation)
+    },
+    ChangePast(value){
+      this.past = value;
+      console.log("past is changed to ", this.past)
     }
   }
 
@@ -310,7 +405,7 @@ export default {
   margin-bottom: 20%;
   margin-left: 15%;
   margin-right: 10%;
-  margin-top: 2vw;
+  margin-top: 10%;
 }
 
 </style>

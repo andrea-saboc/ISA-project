@@ -3,6 +3,7 @@ package com.example.isa.dto;
 import java.util.Date;
 import java.util.List;
 
+import com.example.isa.model.Boat;
 import com.example.isa.model.reservations.Reservation;
 
 public class CustomReservationForClientDto {
@@ -32,6 +33,9 @@ public class CustomReservationForClientDto {
 	public double toResSearchDto() {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+	public double getPrice(Boat b) {
+		return b.getPricePerDay() * this.days + b.getPricePerHour() * this.hours;
 	}
 	
 }
