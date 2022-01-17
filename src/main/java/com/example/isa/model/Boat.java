@@ -34,11 +34,11 @@ public class Boat {
 	private double priceForSevenDays;
 
 	@ManyToOne(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER)
-	@JoinColumn(name = "owner_id", referencedColumnName = "id", nullable = true)
+	@JoinColumn(name = "owner_id", referencedColumnName = "id")
 	public BoatOwner boatOwner;
 
 	@OneToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
-	@JoinColumn(name = "address_id", referencedColumnName = "id", nullable = true)
+	@JoinColumn(name = "address_id", referencedColumnName = "id")
 	private Address address;
 	@OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
 	public Set<Image> InteriorImages = new HashSet<Image>();

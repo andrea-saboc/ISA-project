@@ -3,7 +3,7 @@
     <h3>All reservations</h3>
     <nav class="navbar navbar-dark bg-dark" style=" height: 10%;">
       <!-- Navbar content -->
-      <v-date-picker mode="dateTime" is24hr v-model="startDateTime">
+      <v-date-picker mode="date" is24hr v-model="startDateTime">
         <template v-slot="{ inputValue, inputEvents }">
           <input
               class="px-2 py-1 border rounded focus:outline-none focus:border-blue-300"
@@ -13,7 +13,7 @@
           />
         </template>
       </v-date-picker>
-      <v-date-picker  mode="dateTime" is24hr v-model="endDateTime">
+      <v-date-picker  mode="date" is24hr v-model="endDateTime">
         <template v-slot="{ inputValue, inputEvents }">
           <input
               class="px-2 py-1 border rounded focus:outline-none focus:border-blue-300"
@@ -23,16 +23,15 @@
           />
         </template>
       </v-date-picker>
-      <select class="custom-select" style="width: 200px">
+      <select class="custom-select" style="width: 200px" v-model="filterReservationStatus">
         <option selected value="all">All reservations</option>
         <option value="past">Past reservations</option>
         <option value="now">In progress</option>
         <option value="future">Future reservations</option>
       </select>
-      <form class="d-flex">
-        <input class="form-control me-2" type="search" placeholder="Search boat" aria-label="Search">
-        <button class="btn btn-outline-success" type="submit">Search</button>
-      </form>
+      <input class="form-control me-2" type="search" placeholder="Search boat" v-model="filterBoatName" aria-label="Search" style="width: 200px">
+
+        <button class="btn btn-outline-success" v-on:click="reservationFilter()">Search</button>
     </nav>
     <table class="table table-striped table-hover">
       <thead>
@@ -45,23 +44,23 @@
         <th scope="col">Number of guests</th>
         <th scope="col">Total price</th>
         <th scope="col">Status</th>
+        <th scope="col" v-if="filterReservationStatus=='past'"></th>
       </tr>
       </thead>
       <tbody>
-      <tr v-for="(reservation, index) in boatReservations" :key="reservation.id" style="align-content: center"
+      <tr v-for="(reservation, index) in filteredReservations" :key="reservation.id" style="align-content: center"
           v-on:click=selectReservation(reservation) data-toggle="modal" data-target="#exampleModal">
-        <th scope="row" style="align-content: center" >{{index+1}}</th>
-        <td>{{reservation.boat.name}}</td>
-        <td v-bind:id="reservation.id+'resid'" style="align-content: center">{{formatDate(reservation.startDate)}}</td>
-        <td style="align-content: center">{{formatDate(reservation.endDate)}}</td>
-        <td style="align-content: center">{{reservation.user.name}} {{reservation.user.surname}}</td>
-        <td style="align-content: center">{{reservation.numberOfGuests}}</td>
-        <td>{{reservation.totalPrice}}</td>
-        <td v-if="reservation.cancelled == true">Cancelled</td>
-        <td v-else>*</td>
+          <th scope="row" style="align-content: center" >{{index+1}}</th>
+          <td>{{reservation.boat.name}}</td>
+          <td v-bind:id="reservation.id+'resid'" style="align-content: center">{{formatDate(reservation.startDate)}}</td>
+          <td style="align-content: center">{{formatDate(reservation.endDate)}}</td>
+          <td style="align-content: center">{{reservation.user.name}} {{reservation.user.surname}}</td>
+          <td style="align-content: center">{{reservation.numberOfGuests}}</td>
+          <td>{{reservation.totalPrice}}</td>
+          <td v-if="reservation.cancelled == true">Cancelled</td>
+          <td v-else>Not cancelled</td>
+          <td v-if="filterReservationStatus=='past' && reservation.cancelled == false"><button></button></td>
       </tr>
-
-
       </tbody>
     </table>
     <!-- Modal -->
@@ -109,7 +108,6 @@
               </tbody>
 
             </table >
-
 
 
 
@@ -192,6 +190,8 @@ export default {
       startDateTime : '',
       endDateTime : '',
       filterBoatName : '',
+      filterReservationStatus: '',
+      filteredReservations: new Array(),
       selectedReservation: null,
       selectedUserSubscribed: new Array(),
     }
@@ -214,6 +214,7 @@ export default {
                 .then(response1 => {
                   console.log("Rezervacija brodova vlasnika", response1.data)
                   this.boatReservations = response1.data;
+                  this.filteredReservations = this.boatReservations
                   this.selectedReservation = this.boatReservations[0]
                 })}
         }
@@ -249,11 +250,53 @@ export default {
           console.log("Selected user is subscribed at boats: ", this.selectedUserSubscribed)
         })
         .catch(() =>{
-          console.log("Subscribet boats are unavailable")
+          console.log("Subscriber boats are unavailable")
       })
     },
-    reservationFilter(reservation){
-        console.log(reservation.name)
+    reservationFilter(){
+      console.log("filter reservation params:", this.filterBoatName, "start", this.startDateTime,"end", this.endDateTime, "status", this.filterReservationStatus)
+      this.filteredReservations = new Array()
+        for (var reservation of this.boatReservations){
+          if(reservation.boat.name.includes(this.filterBoatName)
+          && (new Date(reservation.startDate).getTime()>=new Date(this.startDateTime).getTime() || this.startDateTime=='')
+          && (new Date(reservation.endDate).getTime() <= new Date(this.endDateTime).getTime()  || this.endDateTime=='')
+          && this.reservationFilterStatus(reservation)){
+            this.filteredReservations.push(reservation)
+          }
+        }
+        console.log("Filered reservations", this.filteredReservations)
+      this.endDateTime==''
+      this.startDateTime==''
+      return this.filteredReservations
+    },
+    reservationFilterStatus(reservation){
+      if(this.filterReservationStatus == 'all'){
+        return true
+      }
+      if( this.filterReservationStatus == 'now'){
+        if(new Date(reservation.endDate).getTime()>= new Date().getTime()
+        && new Date(reservation.startDate).getTime()<= new Date().getTime()) {
+          return true;
+        }else{
+          return false
+        }
+      }
+      if (this.filterReservationStatus == 'future'){
+        if(new Date(reservation.endDate).getTime()>= new Date().getTime()
+            && new Date(reservation.startDate).getTime()>= new Date().getTime()){
+          return true;
+        } else{
+          return false
+        }
+      }
+      if(this.filterReservationStatus == 'past'){
+        if(new Date(reservation.endDate).getTime()<= new Date().getTime()
+            && new Date(reservation.startDate).getTime()<= new Date().getTime()){
+          return true;
+        } else{
+          return false
+        }
+      }
     }
   }
 
@@ -267,6 +310,7 @@ export default {
   margin-bottom: 20%;
   margin-left: 15%;
   margin-right: 10%;
+  margin-top: 2vw;
 }
 
 </style>

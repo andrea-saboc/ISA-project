@@ -17,7 +17,6 @@
       <div class="carousel-item">
         <img src="../assets/yacht.jpg" class="d-block w-100" alt="...">
       </div>
-      nesto
     </div>
     <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
       <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -29,7 +28,6 @@
     </button>
   </div>
     <div v-else>
-      boljrr
       <div class="carousel-inner">
         <div class="carousel-item active">
           <img src="../assets/port.jpg" class="d-block w-100" alt="...">
@@ -58,7 +56,8 @@
     {{boatToShow.type}}
   </p>
   <p class="fw-bold" style="font-size: 30px; font-weight: bolder; text-transform: uppercase">
-    {{boatToShow.name}}
+    {{boatToShow.name}} · {{boatToShow.avgGrade}} <i class="fa fa-star" aria-hidden="true"></i>
+
 
   </p>
   <br class="sm">
@@ -72,7 +71,7 @@
    {{boatToShow.capacity}} people · {{boatToShow.enginePower}} horsepower · {{boatToShow.length}} metres length
   </p>
       <div v-if="clientSubscribed != 'true'">
-        <button  class="btn btn-primary" v-on:click="SubscribeClient"><i class="fa fa-star-o" aria-hidden="true"></i>
+        <button  class="btn btn-primary" v-on:click="SubscribeClient" v-if="loggedUser.role!=null && loggedUser.role=='ROLE_CLIENT'"><i class="fa fa-star-o" aria-hidden="true"></i>
           Subscribe</button></div>
   <hr>
       <div class="additional-desc">
@@ -345,11 +344,11 @@
 
       </div>
       </div>
+      <div v-if="(boatToShow.InteriorImages!=null && boatToShow.InteriorImages.length!=0) || (boatToShow.ExteriorImages!=null && boatToShow.ExteriorImages.length>0)">
       <hr>
       <p style="font-weight: bolder; font-size: 26px">
         Images
       </p>
-      <div v-if="(boatToShow.InteriorImages!=null && boatToShow.InteriorImages.length!=0) || (boatToShow.ExteriorImages!=null && boatToShow.ExteriorImages.length>0)">
         <div class="gallery">
           <figure v-for="inImg in boatToShow.InteriorImages" :key="inImg.id" class="gallery__item galleritem-1">
           <img v-bind:src="getImg(inImg)" class="gallery-img" alt="Image 1">

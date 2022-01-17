@@ -74,7 +74,10 @@ export default {
       boats: [],
       idBoat: null,
       loggedUser : null,
-      search_boat : ''
+      search_boat : '',
+      searchStartDate : '',
+      searchEndDate: '',
+      serchStatus: ''
     }
   },
   mounted() {
@@ -128,6 +131,9 @@ export default {
     },
     BoatSearch(boatName){
       return boatName.includes(this.search_boat)
+    },
+    ReservationFilter(reservation){
+      alert(reservation)
     }
   }
 }
