@@ -24,6 +24,11 @@ import MansionView from "../components/MansionView";
 import MapView from "../components/MapView";
 
 const routes = [
+{
+    path: '/',
+    name: 'home',
+    component: Home
+},
   {
     path: '/home',
     name: 'Home',

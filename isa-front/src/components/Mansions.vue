@@ -69,7 +69,7 @@
                   :key="index">
                   <div v-if="index % 2 == 0">
                      <div class="card mb-3">
-                        <img src="../assets/mansion.jpg" class="card-img-top img-fluid w-30" v-on:click="ShowMansion(value)">
+                        <img :src=picture(value.id) class="card-img-top img-fluid w-30" v-on:click="ShowMansion(value)">
                         <div class="card-body">
                            <div v-on:click="ShowMansion(value)">
                               <h5 class="card-title">{{value.name}}</h5>
@@ -97,7 +97,7 @@
                   :key="index">
                   <div v-if="index % 2 != 0">
                      <div class="card mb-3" v-on:click="ShowMansion(value)">
-                        <img src="../assets/mansion.jpg" class="card-img-top img-fluid w-30">
+                        <img :src=picture(value.id) class="card-img-top img-fluid w-30">
                         <div class="card-body">
                            <h5 class="card-title">{{value.name}}</h5>
                            <p class="card-text">{{value.promoDescription}}</p>
@@ -201,7 +201,12 @@ export default {
         this.LoadMansions()
 
     },
+    computed: {
+
+    },
     methods: {
+        picture(id) {
+         return devServer.proxy +'/images/12'+id+'.jpg'; },
 
         LoadMansions() {
 

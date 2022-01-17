@@ -42,66 +42,76 @@ VALUES ('code', 0, 0, 402);
 
 INSERT INTO public.address(
     id, address, city, country, latitude, longitude)
-VALUES (3, 'Jovana Jovanovica 23a', 'Novi Sade', 'Srbija', 23.67, 45.88);
+VALUES (3, 'New York Street 23a', 'Budapest', 'Hungary', 23.67, 45.88);
 INSERT INTO public.address(
     id, address, city, country, latitude, longitude)
-VALUES (4, 'Marka Markovica 23a', 'London', 'Engleska', 23.67, 45.88);
+VALUES (4, '4440 Allegan Rd', 'London', 'England', 23.67, 45.88);
 INSERT INTO public.address(
     id, address, city, country, latitude, longitude)
-VALUES (5, 'Jovana Markovica 23a', 'Beograd', 'Srbija', 23.67, 45.88);
+VALUES (5, '14 Loon Lake Ter Vermontville', 'New York', 'NY', 23.67, 45.88);
 INSERT INTO public.address(
     id, address, city, country, latitude, longitude)
-VALUES (6, 'Hercega 23a', 'Herceg Novi', 'Montenegero', 23.67, 45.88);
+VALUES (6, '11275 Kelly Hwy', 'Vermontville', ' Michigan', 23.67, 45.88);
 INSERT INTO public.address(
     id, address, city, country, latitude, longitude)
-VALUES (7, 'Hercega 23a', 'Herceg Novi', 'Montenegero', 23.67, 45.88);
+VALUES (7, '1889 Bonn Blvd', ' Bismarck', 'North Dakota', 23.67, 45.88);
 INSERT INTO public.address(
     id, address, city, country, latitude, longitude)
-VALUES (8, 'Ena 23a', 'Herceg Novi', 'Negero', 23.67, 45.88);
+VALUES (8, '1026 Sea Breeze', 'Portland', ' Texas', 23.67, 45.88);
 INSERT INTO public.address(
     id, address, city, country, latitude, longitude)
-VALUES (9, 'Mila 23a', 'Herceg Novi', 'Montenegero', 23.67, 45.88);
+VALUES (9, '328 W Abe ', 'St Plano', 'Illinois', 23.67, 45.88);
 INSERT INTO public.address(
     id, address, city, country, latitude, longitude)
 VALUES (10, 'Kila 23a', 'Herceg Novi', 'Montenegero', 23.67, 45.88);
 INSERT INTO public.address(
     id, address, city, country, latitude, longitude)
-VALUES (11, 'Marokanska 23a', 'Herceg Novi', 'Montenegero', 44.67, 45.88);
+VALUES (11, '1176 N Ventura Ave', 'Oak View', ' California', 44.67, 45.88);
 INSERT INTO public.address(
     id, address, city, country, latitude, longitude)
-VALUES (12, 'Marokanska 23a', 'Moskva', 'Russia', 44.67, 35.88);
+VALUES (12, '601 Hawaii St', 'El Segundo, ', 'California', 44.67, 35.88);
 INSERT INTO public.address(
     id, address, city, country, latitude, longitude)
-VALUES (13, 'Marka Mljanova 30', 'Novi Sad', 'Serbia', 45.25, 19.85);
+VALUES (13, '230 Gum St', 'Philadelphia', 'Mississippi', 45.25, 19.85);
 INSERT INTO public.address(
     id, address, city, country, latitude, longitude)
 VALUES (14, 'St Marcus Aurelius 23/788', 'Honolulu', 'Hawaii', 21.31, -157.9);
 
+INSERT INTO public.address(
+    id, address, city, country, latitude, longitude)
+VALUES (15, '32nd Ave SW', 'Seattle ', 'Washington', 44.67, 35.88);
+INSERT INTO public.address(
+    id, address, city, country, latitude, longitude)
+VALUES (16, '6305 Balboa Ln', 'Apollo Beach ', 'Florida', 45.25, 19.85);
+INSERT INTO public.address(
+    id, address, city, country, latitude, longitude)
+VALUES (17, '361 Hiawatha Way', 'Melbourne Beach', 'Florida', 21.31, -157.9);
 
 INSERT INTO public.mansion(
     id, avg_grade, name, price_for_seven_days, price_per_day, promo_description, address_id, owner_id)
-VALUES (1, 9, 'Vila Viktorija', 250, 50, 'Najbolji promo',5, 5);
+VALUES (1, 9, 'Clermont', 250, 50, 'These two words speak volumes. A big and welcoming backyard can be the main selling feature for some visitors, especially if they have children or pets, or those who are loving warmer climates.',5, 5);
 INSERT INTO public.mansion(
     id, avg_grade, name, price_for_seven_days, price_per_day, promo_description, address_id, owner_id)
-VALUES (2, 9, 'Vila Sofija', 250, 50, 'Promo..',6, 5);
+VALUES (2, 9, 'Mils mansion', 250, 50, 'A great floor plan can overcome many other objections, including the overall size of the house. Good flow can maximize space. Many visitors want an open floor plan.',6, 5);
 INSERT INTO public.mansion(
     id, avg_grade, name, price_for_seven_days, price_per_day, promo_description, address_id, owner_id)
-VALUES (3, 9, 'Vila Stojanka', 250, 50, 'Najbolji promo',7, 5);
+VALUES (3, 9, 'Hilda', 250, 50, ' One of the greatest fears is having to pour money into a house after closing. Homes that are well maintained require less initial upkeep, so you might want to mention that yours has been "lovingly maintained."',7, 5);
 INSERT INTO public.mansion(
     id, avg_grade, name, price_for_seven_days, price_per_day, promo_description, address_id, owner_id)
-VALUES (4, 9, 'Vila Viktorija', 250, 50, 'Najbolji promo',8, 5);
+VALUES (4, 9, 'Vile mansion', 250, 50, 'Committed To Getting The Colorful places to live and play.',8, 5);
 INSERT INTO public.mansion(
     id, avg_grade, name, price_for_seven_days, price_per_day, promo_description, address_id, owner_id)
-VALUES (6, 9, 'Nije vila', 250, 50, 'Najbolji promo',9, 5);
+VALUES (5, 9, 'Sores', 250, 50, 'Happiness in every nook and corner. Rent this mansion for price on discount, now!',9, 5);
 INSERT INTO public.mansion(
     id, avg_grade, name, price_for_seven_days, price_per_day, promo_description, address_id, owner_id)
-VALUES (5, 9, 'Bobanka', 250, 50, 'Najbolji promo',10, 5);
+VALUES (6, 9, 'Hourus mansion', 250, 50, 'Happiness in every nook and corner. Rent this mansion for price on discount, now!',10, 5);
 INSERT INTO public.mansion(
     id, avg_grade, name, price_for_seven_days, price_per_day, promo_description, address_id, owner_id)
-VALUES (7, 9, 'Nije vila', 250, 50, 'Najbolji promo',11, 5);
+VALUES (7, 9, 'Katrina', 250, 50, 'Happiness in every nook and corner. Rent this mansion for price on discount, now!',11, 5);
 INSERT INTO public.mansion(
     id, avg_grade, name, price_for_seven_days, price_per_day, promo_description, address_id, owner_id)
-VALUES (8, 9, 'Bobanka', 250, 50, 'Najbolji promo',12, 5);
+VALUES (8, 10, 'Cassity', 250, 50, 'The mansion was all concrete and tall glass windows that gave a view of the mountains, a chance to relax and take in the changing of the seasons from the comfort of an easy chair.',12, 5);
+
 
 INSERT INTO public.boat(
     id, gps, vhfradio, avg_grade, cancellation_policy, capacity, engine_power, fishfinder, length, max_speed, name, number_of_engines, price_for_seven_days, price_per_day, price_per_hour, promo_description, radar, type, address_id, owner_id)
@@ -115,6 +125,8 @@ VALUES (5, true, true, 0.0, 'You will recieve 70% of total price!', 10, 200, tru
 INSERT INTO public.boat(
     id, gps, vhfradio, avg_grade, cancellation_policy, capacity, engine_power, fishfinder, length, max_speed, name, number_of_engines, price_for_seven_days, price_per_day, price_per_hour, promo_description, radar, type, address_id, owner_id)
 VALUES (6, false, true, 0.0, 'You will recieve 85% of total price!', 15, 200, true, 34, 220, 'BENETEAU', 6, 700, 250, 70, 'This is the best boat',true, 'Sailboat', 9, 100);
+
+
 
 INSERT INTO public.additional_service(
     id, name, price_per_day, price_per_hour, boat_id, mansion_id)
