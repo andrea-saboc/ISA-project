@@ -6,7 +6,6 @@ import com.example.isa.model.*;
 import com.example.isa.repository.BoatOwnerRepository;
 import com.example.isa.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.example.isa.repository.BoatSubscriptionRepository;
@@ -23,16 +22,15 @@ public class SubscriptionService {
 	BoatOwnerRepository boatOwnerRepository;
 	@Autowired
 	ClientRepository clientRepository;
+	@Autowired
+	AuthenticationService authenticationService;
 	
-	public User getLoggedUser() {	
-		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		return user;
-	}
+	
 	public BoatSubscription newBoatSubscription(Boat boat) {
-		return boatSubsRepo.save(new BoatSubscription(getLoggedUser(),boat));
+		return boatSubsRepo.save(new BoatSubscription(authenticationService.getLoggedUser(),boat));
 	}
 	public MansionSubscription newMansionSubscription(Mansion mansion) {
-		return mansionSubRepo.save(new MansionSubscription(getLoggedUser(), mansion));
+		return mansionSubRepo.save(new MansionSubscription(authenticationService.getLoggedUser(), mansion));
 	}
 	public void cancelBoatSubscription(BoatSubscription boat) {
 		boatSubsRepo.delete(boat);
@@ -41,16 +39,16 @@ public class SubscriptionService {
 		mansionSubRepo.delete(mansion);
 	}	
 	public List<BoatSubscription> getClientBoatSubscription(){
-		return boatSubsRepo.findAllBySubscriber(getLoggedUser());
+		return boatSubsRepo.findAllBySubscriber(authenticationService.getLoggedUser());
 	}
 	
 	public List<MansionSubscription> getClientMansionSubscription(){
-		return mansionSubRepo.findAllBySubscriber(getLoggedUser());
+		return mansionSubRepo.findAllBySubscriber(authenticationService.getLoggedUser());
 	}
 	public Boolean checkBoatSubscription(Boat boat) {
 		System.out.println("U check subs");
 		//System.out.println("d ali je user subs  "+boatSubsRepo.findBySubscriberAndBoat(getLoggedUser(), boat).getSubscriber().getName());
-		return boatSubsRepo.findBySubscriberAndBoat(getLoggedUser(), boat) != null? true:false;
+		return boatSubsRepo.findBySubscriberAndBoat(authenticationService.getLoggedUser(), boat) != null? true:false;
 	}
 
 	public List<BoatSubscription> getClientBoatSubscriptionByBoatOwner(Long id) {

@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.isa.dto.SearchDTO;
+import com.example.isa.dto.SearchDto;
 import com.example.isa.model.Mansion;
-import com.example.isa.service.MansionFilteringService;
-import com.example.isa.service.MansionService;
+import com.example.isa.service.impl.MansionFilteringServiceImpl;
+import com.example.isa.service.impl.MansionService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -25,7 +25,7 @@ public class MansionController {
 	@Autowired
 	MansionService service;
 	@Autowired
-	MansionFilteringService filteringService;
+	MansionFilteringServiceImpl filteringService;
 
 	@RequestMapping(method = RequestMethod.GET, value = "/mansions",produces = MediaType.APPLICATION_JSON_VALUE)
 	@CrossOrigin(origins = "*")
@@ -42,7 +42,7 @@ public class MansionController {
 	
     @RequestMapping(method = RequestMethod.POST,value = "/mansions/search",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @CrossOrigin(origins = "*")
-    public ResponseEntity<List<Mansion>> getAvailableBoats(@RequestBody SearchDTO search){
+    public ResponseEntity<List<Mansion>> getAvailableBoats(@RequestBody SearchDto search){
     	
     	System.out.println("USli u kontroler");
         try {

@@ -12,24 +12,24 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.isa.dto.LoginDTO;
+import com.example.isa.dto.LoginDto;
 import com.example.isa.dto.UserTokenState;
-import com.example.isa.service.LoginService;
 import com.example.isa.service.UserService;
+import com.example.isa.service.impl.LoginServiceImpl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 @RestController
 public class LoginController {
 	
 	@Autowired	
-	LoginService loginService;
+	LoginServiceImpl loginService;
 	@Autowired
 	UserService userService;
 
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/login",consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE )
 	@CrossOrigin(origins = "*")
-	public ResponseEntity<UserTokenState> login(@RequestBody LoginDTO loginData,HttpServletRequest req) throws JsonProcessingException, BadCredentialsException{
+	public ResponseEntity<UserTokenState> login(@RequestBody LoginDto loginData,HttpServletRequest req) throws JsonProcessingException, BadCredentialsException{
 
 		try{
 			UserTokenState state = loginService.logIn(loginData);
