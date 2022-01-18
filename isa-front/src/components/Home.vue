@@ -60,18 +60,24 @@ import Listing from './Listing.vue'
 
 export default {
   name: 'Home',
+
+  data: function(){
+    return{
+      user: null
+    }
+  },
+
   components: { Listing
   },
+
+  mounted(){
+    this.user = this.$store.state.userType
+    if(this.user == 'Client')
+      window.location.href = "/clientHomePage";
+  },
+
+
   methods:{
-    RedirectBoats(){
-      this.$router.push({name: 'boats'});
-    },
-    RedirectMansions(){
-      this.$router.push({name: 'mansions'});
-    },
-    RedirectAdventures(){
-      this.$router.push({name: 'adventures'});
-    }
 
   }
 }

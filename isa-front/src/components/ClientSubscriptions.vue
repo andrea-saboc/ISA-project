@@ -67,7 +67,6 @@ export default{
     methods:{
 
         LoadMansions(){
-            alert('Ucitavanje broda')
             axios
             .get(devServer.proxy + '/subscriptions/mansions', {
                 headers: {
@@ -103,6 +102,7 @@ export default{
          .then(response => {
             console.log(response.data)
             this.LoadBoats()
+            this.LoadMansions()
       });
        },
        CancelMansionSubsciption(s){

@@ -17,11 +17,11 @@
          <div  v-if="display == 'mansions'">
             <div v-for="m in mansions" :key="m">
                <div class="card mb-3">
-                  <img class="card-img-top" src="../assets/yacht.jpg" alt="Mansion name">
+                  <img class="card-img-top" :src=picture(m.id) alt="Mansion name">
                   <div class="card-body">
                      <h5 class="card-title">{{m.name}}</h5>
                      <p class="card-text">{{m.promoDescription}}</p>
-                     <p class="card-text"><small class="text-muted">{{m.address}}</small></p>
+                     <p class="card-text"><small class="text-muted">{{m.address.address}},{{m.address.city}},{{m.address.country}}</small></p>
                      <button class = "btn btn-danger" v-on:click = "ShowOwnerComplaintBox(m)">Complain about the owner</button> 
                      <button class = "btn btn-danger" v-on:click = "ShowComplaintBox(m)">Complain about the mansion</button>            
                   </div>
@@ -29,7 +29,7 @@
                      <div class="input-group-prepend">
                         <span class="input-group-text">Complain content:</span>
                      </div>
-                     <textarea class="form-control" aria-label="With textarea" v-model="ownerComplainContent"></textarea>
+                     <textarea class="form-control" aria-label="With textarea" v-model="ownerComplaintContent"></textarea>
                      <button class="btn btn-secondary" v-on:click = SubmitMOwnerComplain(m)>Sumbit</button>
                   </div>
                   <div v-if="givingMansionComplain == m" class="input-group">
@@ -49,7 +49,7 @@
                   <div class="card-body">
                      <h5 class="card-title">{{m.name}}</h5>
                      <p class="card-text">{{m.promoDescription}}</p>
-                     <p class="card-text"><small class="text-muted">{{m.address}}</small></p>
+                     <p class="card-text"><small class="text-muted">{{m.address.address}},{{m.address.city}},{{m.address.country}}</small></p>
                      <button class = "btn btn-danger" v-on:click = "ShowBOwnerComplainBox(m)">Complain about the owner</button> 
                      <button class = "btn btn-danger" v-on:click = "ShowBoatComplainBox(m)">Complain about the boat</button>            
                   </div>
@@ -148,7 +148,9 @@
    
    
    },
-   methods:{
+   methods:{  
+       picture(id) {
+         return devServer.proxy +'/images/mansion'+id+'.jpg'; },
        DisplayMansions(){  
            console.log('showing mansions')    
          this.display = 'mansions'
@@ -172,10 +174,11 @@
        SubmitMOwnerComplain(m){
    
             var complaint ={
-             content:this.complainContent,
+             content:this.ownerComplaintContent,
              entityId: m.id
           }
-   
+
+         console.log(complaint)
            axios
             .post('http://localhost:8080/complaints/addMansionOwnerComplain',complaint,{
             headers: {
@@ -186,6 +189,7 @@
             .then(response => {
                console.log(response.data)
                alert('submited')
+               this.Reset()
          });
    
        },
@@ -206,6 +210,7 @@
             .then(response => {
                console.log(response.data)
                alert('submited')
+               this.Reset()
          });
        },
        ShowBOwnerComplainBox(m){
@@ -219,7 +224,7 @@
        SubmitBOwnerComplain(m){
 
             var complaint ={
-             content:this.complainContent,
+             content:this.ownerComplaintContent,
              entityId: m.id
           }
    
@@ -233,6 +238,7 @@
             .then(response => {
                console.log(response.data)
                alert('submited')
+               this.Reset()
          });
    
        },
@@ -253,6 +259,7 @@
             .then(response => {
                console.log(response.data)
                alert('submited')
+               this.Reset()
          });
    
    
@@ -268,6 +275,17 @@
          if (this.givingInstructorComplain == m){ this.givingInstructorComplain = 'None'; return}
          this.givingInstructorComplain=m
        },
+       Reset(){
+           this.complainContent =  ''
+           this.ownerComplaintContent= ''
+   
+           this.givingMOwnerComplain = 'None'
+           this.givingMansionComplain = 'None'
+           this.givingBOwnerComplain = 'None'
+           this.givingBoatComplain = 'None'
+           this.givingInstructorComplain = 'None'
+
+       }
    
    
    }

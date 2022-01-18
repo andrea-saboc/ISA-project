@@ -11,6 +11,7 @@ import com.example.isa.dto.ClientComplaintDto;
 import com.example.isa.model.AdvertiserComplaint;
 import com.example.isa.model.Boat;
 import com.example.isa.model.BoatComplaint;
+import com.example.isa.model.Client;
 import com.example.isa.model.Complaint;
 import com.example.isa.model.Mansion;
 import com.example.isa.model.MansionComplaint;
@@ -23,6 +24,7 @@ import com.example.isa.repository.ClientRepository;
 import com.example.isa.repository.ComplaintRepository;
 import com.example.isa.repository.MansionRepository;
 import com.example.isa.repository.MansionReservationRepository;
+import com.example.isa.service.AuthenticationService;
 
 @Service
 public class ClientComplaintService {
@@ -34,39 +36,43 @@ public class ClientComplaintService {
 	@Autowired
 	MansionRepository mansionRepository;
 	@Autowired
-	ClientRepository clientRepo;
-	@Autowired
 	BoatReservationRepository boatReservationRepo;
 	@Autowired
 	MansionReservationRepository mansionReservationRepo;
+	@Autowired
+	AuthenticationService authentication;
 
-	public Complaint addBoatComplaint(ClientComplaintDto dto) {
-		
-		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		return complaintRepository.save(new BoatComplaint(clientRepo.findByEmail(user.getEmail()), dto.getContent(),boatRepository.findById(dto.getEntityId()).orElse(new Boat())));
-	}
-	public Complaint addAdvertiserComplaint(ClientComplaintDto dto) {
-		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		return complaintRepository.save(new AdvertiserComplaint(clientRepo.findByEmail(user.getEmail()), dto.getContent(),user));
-	}
-	public Complaint addMansionComplaint(ClientComplaintDto dto) {
-		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		return complaintRepository.save(new MansionComplaint(clientRepo.findByEmail(user.getEmail()), dto.getContent(),mansionRepository.findById(dto.getEntityId())));
 	
+	public Complaint addBoatComplaint(ClientComplaintDto dto) {
+		return complaintRepository.save(new BoatComplaint((Client) authentication.getLoggedUser(), dto.getContent(),boatRepository.findById(dto.getEntityId()).orElse(new Boat())));
 	}
+	
+	public Complaint addBoatAdvertiserComplaint(ClientComplaintDto dto) {		
+		return complaintRepository.save(new AdvertiserComplaint((Client) authentication.getLoggedUser(), dto.getContent(),boatRepository.findById(dto.getEntityId()).orElse(new Boat()).getBoatOwner()));
+	}
+	
+	public Complaint addMansionAdvertiserComplaint(ClientComplaintDto dto) {
+		return complaintRepository.save(new AdvertiserComplaint((Client) authentication.getLoggedUser(), dto.getContent(),mansionRepository.findById(dto.getEntityId()).getMansionOwner()));
+	}
+	
+	
+	public Complaint addMansionComplaint(ClientComplaintDto dto) {
+		return complaintRepository.save(new MansionComplaint((Client) authentication.getLoggedUser(), dto.getContent(),mansionRepository.findById(dto.getEntityId())));	
+	}
+	
+	
+	
 	public List<Boat> getBoats() {
-		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		List<Boat> ret = new ArrayList<Boat>();
-		for(BoatReservation b : boatReservationRepo.findAllByUser(user)) {
+		for(BoatReservation b : boatReservationRepo.findAllByUserAndCancelledFalse(authentication.getLoggedUser())) {
 			if(!ret.contains(b.getBoat()))
 				ret.add(b.getBoat());			
 		}		
 		return ret;
 	}
 	public List<Mansion> getMansions() {
-		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		List<Mansion> ret = new ArrayList<Mansion>();
-		for(MansionReservation b : mansionReservationRepo.findAllByUser(user)) {
+		for(MansionReservation b : mansionReservationRepo.findAllByUserAndCancelledFalse(authentication.getLoggedUser())) {
 			if(!ret.contains(b.getMansion()))
 				ret.add(b.getMansion());			
 		}		

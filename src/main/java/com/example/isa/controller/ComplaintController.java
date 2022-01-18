@@ -42,7 +42,7 @@ public class ComplaintController {
 	@RequestMapping(method = RequestMethod.POST, value = "/complaints/addBoatOwnerComplain",produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> addBoatOwnerComplaint(@RequestBody ClientComplaintDto dto) throws JsonProcessingException{	
 		
-		Complaint c = complaintService.addAdvertiserComplaint(dto);
+		Complaint c = complaintService.addBoatAdvertiserComplaint(dto);
 		mailService.sendBoatOwnerComplaintEmail(c);
 		return ResponseEntity.ok("Your complaint has been submited!");
 	}
@@ -59,7 +59,7 @@ public class ComplaintController {
 	@RequestMapping(method = RequestMethod.POST, value = "/complaints/addMansionOwnerComplain",produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> addMansionOwnerComplaint(@RequestBody ClientComplaintDto dto) throws JsonProcessingException{	
 		
-		Complaint c = complaintService.addAdvertiserComplaint(dto);
+		Complaint c = complaintService.addMansionAdvertiserComplaint(dto);
 		mailService.sendMansionOwnerComplaintEmail(c);
 		return ResponseEntity.ok("Your complaint has been submited!");
 	}

@@ -36,6 +36,17 @@ public class Mansion {
 	@ManyToOne(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER)
 	@JoinColumn(name = "owner_id", referencedColumnName = "id", nullable = true)
 	private MansionOwner mansionOwner;
+	
+	
+	
+
+	public MansionOwner getMansionOwner() {
+		return mansionOwner;
+	}
+
+	public void setMansionOwner(MansionOwner mansionOwner) {
+		this.mansionOwner = mansionOwner;
+	}
 
 	public Mansion(){}
 

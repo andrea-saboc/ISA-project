@@ -113,6 +113,7 @@ public class BoatReservationServiceImpl implements ReservationService{
 
 
 	@Override
+	@Transactional(readOnly=false)
 	public Reservation createReservation(ReservationDto res) throws ParseException, PeriodNoLongerAvailableException  {
 
 		ReservationStartEndDateFormatter formatter = new ReservationStartEndDateFormatter(res);
@@ -167,6 +168,7 @@ public class BoatReservationServiceImpl implements ReservationService{
 	}
 
 	@Override
+	@Transactional(readOnly=false)
 	public Reservation cancelReservation(long resId) {
 		
 		BoatReservation res = boatReservationRepo.findById(resId);
