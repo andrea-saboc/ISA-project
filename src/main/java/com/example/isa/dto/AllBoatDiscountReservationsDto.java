@@ -8,7 +8,7 @@ import java.util.List;
 
 public class AllBoatDiscountReservationsDto {
 	
-    public List<BoatDiscountReservation> reservedReservations;
+    public List<DiscountReservation> reservedReservations;
     public List<DiscountReservation> freeReservations;
 
     public AllBoatDiscountReservationsDto(){}

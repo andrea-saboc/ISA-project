@@ -15,8 +15,10 @@ import com.example.isa.dto.ActiveReservationDto;
 import com.example.isa.model.User;
 import com.example.isa.model.reservations.BoatDiscountReservation;
 import com.example.isa.model.reservations.BoatReservation;
+import com.example.isa.model.reservations.DiscountReservation;
 import com.example.isa.model.reservations.MansionDiscountReservation;
 import com.example.isa.model.reservations.MansionReservation;
+import com.example.isa.model.reservations.ReservationStatus;
 import com.example.isa.repository.BoatDiscountReservationRepository;
 import com.example.isa.repository.BoatReservationRepository;
 import com.example.isa.repository.MansionDiscountReservationRepository;
@@ -54,7 +56,7 @@ public class ReservationService {
 	
 	public List<ActiveReservationDto>getBoatReservations(){
 		List<ActiveReservationDto> ret = new ArrayList<ActiveReservationDto>();
-		for(BoatReservation r: boatResRepo.findAllByUserAndCancelledFalse(authenticationService.getLoggedUser())) {
+		for(BoatReservation r: boatResRepo.findAllByUserAndStatus(authenticationService.getLoggedUser(),ReservationStatus.ACTIVE)) {
 			
 			Format formatter = new SimpleDateFormat("dd.MM.yyyy, HH:mm");
 			if(r.getEndDate().after(new Date()))
@@ -68,7 +70,7 @@ public class ReservationService {
 	
 	public List<ActiveReservationDto>getMansionReservations(){
 		List<ActiveReservationDto> ret = new ArrayList<ActiveReservationDto>();
-		for(MansionReservation r: mansionResRepo.findAllByUserAndCancelledFalse(authenticationService.getLoggedUser())) {
+		for(MansionReservation r: mansionResRepo.findAllByUserAndStatus(authenticationService.getLoggedUser(),ReservationStatus.ACTIVE)) {
 			
 			Format formatter = new SimpleDateFormat("dd.MM.yyyy, HH:mm");
 			if(r.getEndDate().after(new Date()))
@@ -82,7 +84,8 @@ public class ReservationService {
 	
 	public List<ActiveReservationDto>getMansionDiscountReservations(){
 		List<ActiveReservationDto> ret = new ArrayList<ActiveReservationDto>();
-		for(MansionDiscountReservation r: mansionDiscountResRepo.findAllByUserAndCancelledFalseAndReservedTrue(authenticationService.getLoggedUser())) {
+		
+		for(MansionDiscountReservation r: mansionDiscountResRepo.findAllByMansionAndStatus(authenticationService.getLoggedUser(),ReservationStatus.ACTIVE)) {
 			
 			Format formatter = new SimpleDateFormat("dd.MM.yyyy, HH:mm");
 			if(r.getEndDate().after(new Date()))
@@ -98,7 +101,7 @@ public class ReservationService {
 		
 		List<ActiveReservationDto> ret = new ArrayList<ActiveReservationDto>();
 		
-		for(BoatDiscountReservation r: boatDiscountResRepo.findAllByUserAndCancelledFalseAndReservedTrue(authenticationService.getLoggedUser())) {
+		for(BoatDiscountReservation r: boatDiscountResRepo.findAllByUserAndStatus(authenticationService.getLoggedUser(),ReservationStatus.ACTIVE)) {
 			
 			Format formatter = new SimpleDateFormat("dd.MM.yyyy, HH:mm");
 			//if(r.getEndDate().after(new Date()))

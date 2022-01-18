@@ -86,6 +86,18 @@ VALUES (16, '6305 Balboa Ln', 'Apollo Beach ', 'Florida', 45.25, 19.85);
 INSERT INTO public.address(
     id, address, city, country, latitude, longitude)
 VALUES (17, '361 Hiawatha Way', 'Melbourne Beach', 'Florida', 21.31, -157.9);
+INSERT INTO public.address(
+    id, address, city, country, latitude, longitude)
+VALUES (18, '6305 Balboa Ln', 'Apollo Beach ', 'Florida', 45.25, 19.85);
+INSERT INTO public.address(
+    id, address, city, country, latitude, longitude)
+VALUES (19, '361 Hiawatha Way', 'Melbourne Beach', 'Florida', 21.31, -157.9);
+INSERT INTO public.address(
+    id, address, city, country, latitude, longitude)
+VALUES (20, '6305 Balboa Ln', 'Apollo Beach ', 'Florida', 45.25, 19.85);
+INSERT INTO public.address(
+    id, address, city, country, latitude, longitude)
+VALUES (21, '361 Hiawatha Way', 'Melbourne Beach', 'Florida', 21.31, -157.9);
 
 INSERT INTO public.mansion(
     id, avg_grade, name, price_for_seven_days, price_per_day, promo_description, address_id, owner_id)
@@ -115,16 +127,29 @@ VALUES (8, 10, 'Cassity', 250, 50, 'The mansion was all concrete and tall glass 
 
 INSERT INTO public.boat(
     id, gps, vhfradio, avg_grade, cancellation_policy, capacity, engine_power, fishfinder, length, max_speed, name, number_of_engines, price_for_seven_days, price_per_day, price_per_hour, promo_description, radar, type, address_id, owner_id)
-VALUES (3, true, true, 0.0, 'You will recieve 100% of total price!', 10, 200, true, 10, 120, 'Milicija', 6, 500, 100, 30, 'Promo description of malicija',true, 'Sail boat', 13, 100);
+VALUES (1, true, true, 0.0, 'You will recieve 100% of total price!', 10, 200, true, 10, 120, 'Milizia', 6, 500, 100, 30, 'We’ve championed special events for years, especially events that are thoughtfully conceived, highly targeted and well executed. Absolutely nothing beats the excitement and thrill of getting prospects on the water so you can experience our products and services',true, 'Sail boat', 18, 100);
 INSERT INTO public.boat(
     id, gps, vhfradio, avg_grade, cancellation_policy, capacity, engine_power, fishfinder, length, max_speed, name, number_of_engines, price_for_seven_days, price_per_day, price_per_hour, promo_description, radar, type, address_id, owner_id)
-VALUES (4, true, true, 0.0, 'You will recieve 70% of total price!', 10, 200, true, 34, 220, 'Malicija', 6, 500, 100, 30, 'Promo description of malicija',true, 'Sail boat', 14, 100);
+VALUES (2, true, true, 0.0, 'You will recieve 70% of total price!', 10, 200, true, 34, 220, 'Malizia', 6, 500, 100, 30, 'Malizia won a Neptune in the special event category, along with bragging rights for the most coveted prize: the King Neptune Award, a best of show honor.',true, 'Sail boat', 19, 100);
+INSERT INTO public.boat(
+    id, gps, vhfradio, avg_grade, cancellation_policy, capacity, engine_power, fishfinder, length, max_speed, name, number_of_engines, price_for_seven_days, price_per_day, price_per_hour, promo_description, radar, type, address_id, owner_id)
+VALUES (3, true, true, 0.0, 'You will recieve 100% of total price!', 10, 200, true, 10, 120, 'Milizia', 6, 500, 100, 30, 'We’ve championed special events for years, especially events that are thoughtfully conceived, highly targeted and well executed. Absolutely nothing beats the excitement and thrill of getting prospects on the water so you can experience our products and services',true, 'Sail boat', 13, 100);
+INSERT INTO public.boat(
+    id, gps, vhfradio, avg_grade, cancellation_policy, capacity, engine_power, fishfinder, length, max_speed, name, number_of_engines, price_for_seven_days, price_per_day, price_per_hour, promo_description, radar, type, address_id, owner_id)
+VALUES (4, true, true, 0.0, 'You will recieve 70% of total price!', 10, 200, true, 34, 220, 'Malizia', 6, 500, 100, 30, 'Malizia won a Neptune in the special event category, along with bragging rights for the most coveted prize: the King Neptune Award, a best of show honor.',true, 'Sail boat', 14, 100);
 INSERT INTO public.boat(
     id, gps, vhfradio, avg_grade, cancellation_policy, capacity, engine_power, fishfinder, length, max_speed, name, number_of_engines, price_for_seven_days, price_per_day, price_per_hour, promo_description, radar, type, address_id, owner_id)
 VALUES (5, true, true, 0.0, 'You will recieve 70% of total price!', 10, 200, true, 34, 220, 'Catamaran', 6, 500, 100, 30, 'This is the best boat',false, 'Yacht', 10, 100);
 INSERT INTO public.boat(
     id, gps, vhfradio, avg_grade, cancellation_policy, capacity, engine_power, fishfinder, length, max_speed, name, number_of_engines, price_for_seven_days, price_per_day, price_per_hour, promo_description, radar, type, address_id, owner_id)
 VALUES (6, false, true, 0.0, 'You will recieve 85% of total price!', 15, 200, true, 34, 220, 'BENETEAU', 6, 700, 250, 70, 'This is the best boat',true, 'Sailboat', 9, 100);
+INSERT INTO public.boat(
+    id, gps, vhfradio, avg_grade, cancellation_policy, capacity, engine_power, fishfinder, length, max_speed, name, number_of_engines, price_for_seven_days, price_per_day, price_per_hour, promo_description, radar, type, address_id, owner_id)
+VALUES (7, true, true, 0.0, 'You will recieve 70% of total price!', 10, 200, true, 34, 220, 'Lady', 6, 500, 100, 30, 'This is the best boat',false, 'Yacht', 20, 100);
+INSERT INTO public.boat(
+    id, gps, vhfradio, avg_grade, cancellation_policy, capacity, engine_power, fishfinder, length, max_speed, name, number_of_engines, price_for_seven_days, price_per_day, price_per_hour, promo_description, radar, type, address_id, owner_id)
+VALUES (8, false, true, 0.0, 'You will recieve 85% of total price!', 15, 200, true, 34, 220, 'Marina', 6, 700, 250, 70, 'Seamless payments and value for money shopping is the best combination! All we do is add a little discount to it! Earn up to Rs. 75 cashback for Mobikwik payments with this Boat offer!',true, 'Sailboat', 21, 100);
+
 
 
 
@@ -155,22 +180,22 @@ INSERT INTO public.boat_available_period(
 VALUES (4,'2022-01-28 00:00:00', '2022-01-20 00:00:00', 5);
 
 INSERT INTO public.reservation(
-    reservation_type, id, cancelled, end_date, number_of_guests, start_date, total_price, type, system_user)
-VALUES ('BOAT', 1, false, '2022-02-07 00:00:00', 4, '2022-01-28 00:08:00', 230, 'BOAT', 400);
+    reservation_type, id, status, end_date, number_of_guests, start_date, total_price, type, system_user)
+VALUES ('BOAT', 1, 'ACTIVE', '2022-02-07 00:00:00', 4, '2022-01-28 00:08:00', 230, 'BOAT', 400);
 INSERT INTO public.boat_reservation(
     id, boat_id, feedback_id, owner_feedback_id)
 VALUES (1, 3, null, null);
 
 INSERT INTO public.reservation(
-    reservation_type, id, cancelled, end_date, number_of_guests, start_date, total_price, type, system_user)
-VALUES ('BOAT', 2, false, '2022-02-09 00:00:00', 4, '2022-02-07 00:00:00', 230, 'BOAT', 401);
+    reservation_type, id, status, end_date, number_of_guests, start_date, total_price, type, system_user)
+VALUES ('BOAT', 2, 'ACTIVE', '2022-02-09 00:00:00', 4, '2022-02-07 00:00:00', 230, 'BOAT', 401);
 INSERT INTO public.boat_reservation(
     id, boat_id, feedback_id, owner_feedback_id)
 VALUES (2, 3, null, null);
 
 INSERT INTO public.reservation(
-    reservation_type, id, cancelled, end_date, number_of_guests, start_date, total_price, type, system_user)
-VALUES ('BOAT', 3, false, '2022-02-09 00:00:00', 4, '2022-02-07 00:00:00', 230, 'BOAT', 400);
+    reservation_type, id, status, end_date, number_of_guests, start_date, total_price, type, system_user)
+VALUES ('BOAT', 3, 'ACTIVE', '2022-02-09 00:00:00', 4, '2022-02-07 00:00:00', 230, 'BOAT', 400);
 INSERT INTO public.boat_reservation(
     id, boat_id, feedback_id, owner_feedback_id)
 VALUES (3, 4, null, null);
@@ -178,22 +203,22 @@ VALUES (3, 4, null, null);
 
 
 INSERT INTO public.reservation(
-    reservation_type, id, cancelled, end_date, number_of_guests, start_date, total_price, type, system_user)
+    reservation_type, id, status, end_date, number_of_guests, start_date, total_price, type, system_user)
 VALUES ('MANSION', 4, false, '2021-01-05 00:00:00', 4, '2021-01-03 00:08:00', 89, 'MANSION', 400);
 INSERT INTO public.mansion_reservation(
     id, mansion_id, feedback_id, owner_feedback_id)
 VALUES (4, 3, null, null);
 
 INSERT INTO public.reservation(
-    reservation_type, id, cancelled, end_date, number_of_guests, start_date, total_price, type, system_user)
-VALUES ('MANSION', 5, false, '2021-01-11 00:00:00', 4, '2021-01-10 00:08:00', 200, 'MANSION', 400);
+    reservation_type, id, status, end_date, number_of_guests, start_date, total_price, type, system_user)
+VALUES ('MANSION', 5, 'ACTIVE', '2021-01-11 00:00:00', 4, '2021-01-10 00:08:00', 200, 'MANSION', 400);
 INSERT INTO public.mansion_reservation(
     id, mansion_id, feedback_id, owner_feedback_id)
 VALUES (5, 1, null, null);
 
 INSERT INTO public.reservation(
-    reservation_type, id, cancelled, end_date, number_of_guests, start_date, total_price, type, system_user)
-VALUES ('MANSION', 6, false, '2021-04-13 00:00:00', 4, '2021-04-10 00:08:00', 22, 'MANSION', 400);
+    reservation_type, id, status, end_date, number_of_guests, start_date, total_price, type, system_user)
+VALUES ('MANSION', 6, 'ACTIVE', '2021-04-13 00:00:00', 4, '2021-04-10 00:08:00', 22, 'MANSION', 400);
 INSERT INTO public.mansion_reservation(
     id, mansion_id, feedback_id, owner_feedback_id)
 VALUES (6, 2, null, null);
@@ -270,40 +295,44 @@ INSERT INTO public.boat_subscription(
     id, boat_id)
 VALUES (18, 6);
 
+
 INSERT INTO public.discount_reservation(
-	id, cancelled, end_date, number_of_guests, percentage_of_discount, price_with_discount, price_without_discount, reserved, start_date, type, valid_until, optlock, system_user)
-	VALUES (1, false, '2022-03-11 00:00:00', 5, 25, 300, 375, false, '2021-03-08 00:00:00', 'boat', '2021-02-28 00:00:00', 0, null);
+	id,end_date, number_of_guests, percentage_of_discount, price_with_discount, price_without_discount, start_date, type, valid_until, optlock, system_user,status)
+	VALUES (1,'2022-03-11 00:00:00', 5, 25, 300, 375, '2021-03-08 00:00:00', 'boat', '2021-02-28 00:00:00', 0, null,'ACTIVE');
 INSERT INTO public.boat_discount_reservation(
 	id, boat_id, feedback_id, owner_feedback_id)
 	VALUES (1, 6, null, null);
 
 INSERT INTO public.discount_reservation(
-	id, cancelled, end_date, number_of_guests, percentage_of_discount, price_with_discount, price_without_discount, reserved, start_date, type, valid_until, optlock, system_user)
-	VALUES (2, false, '2022-03-18 00:00:00', 5, 25, 300, 375, false, '2021-03-15 00:00:00','boat', '2021-03-11 00:00:00', 0, null);
+	id, end_date, number_of_guests, percentage_of_discount, price_with_discount, price_without_discount, start_date, type, valid_until, optlock, system_user,status)
+	VALUES (2,  '2022-03-18 00:00:00', 5, 25, 300, 375, '2021-03-15 00:00:00','boat', '2021-03-11 00:00:00', 0, null,'ACTIVE');
 INSERT INTO public.boat_discount_reservation(
 	id, boat_id, feedback_id, owner_feedback_id)
 	VALUES (2, 5, null, null);
 
 INSERT INTO public.discount_reservation(
-	id, cancelled, end_date, number_of_guests, percentage_of_discount, price_with_discount, price_without_discount, reserved, start_date, type, valid_until, optlock, system_user)
-	VALUES (3, false, '2022-03-21 00:00:00', 6, 25, 300, 375, false, '2021-03-19 00:00:00', 'boat', '2021-02-28 00:00:00', 0, null);
+	id, end_date, number_of_guests, percentage_of_discount, price_with_discount, price_without_discount, start_date, type, valid_until, optlock, system_user,status)
+	VALUES (3, '2022-03-21 00:00:00', 6, 25, 300, 375, '2021-03-19 00:00:00', 'boat', '2021-02-28 00:00:00', 0, null,'ACTIVE');
 INSERT INTO public.boat_discount_reservation(
 	id, boat_id, feedback_id, owner_feedback_id)
 	VALUES (3, 5, null, null);
 
 INSERT INTO public.discount_reservation(
-	id, cancelled, end_date, number_of_guests, percentage_of_discount, price_with_discount, price_without_discount, reserved, start_date, type, valid_until, optlock, system_user)
-	VALUES (4, false, '2021-04-05 00:00:00', 6, 25, 300, 375, false, '2021-04-01 00:00:00', 'boat', '2021-02-28 00:00:00', 0, null);
+	id, end_date, number_of_guests, percentage_of_discount, price_with_discount, price_without_discount, start_date, type, valid_until, optlock, system_user,status)
+	VALUES (4, '2021-04-05 00:00:00', 6, 25, 300, 375, '2021-04-01 00:00:00', 'boat', '2021-02-28 00:00:00', 0, null,'ACTIVE');
 INSERT INTO public.boat_discount_reservation(
 	id, boat_id, feedback_id, owner_feedback_id)
 	VALUES (4, 5, null, null);
 
 INSERT INTO public.discount_reservation(
-	id, cancelled, end_date, number_of_guests, percentage_of_discount, price_with_discount, price_without_discount, reserved, start_date, type, valid_until, optlock, system_user)
-	VALUES (5, false , '2021-04-11 00:00:00', 6, 25, 300, 375, false, '2021-04-07 00:00:00', 'boat', '2021-02-28 00:00:00', 0, 402);
+	id, end_date, number_of_guests, percentage_of_discount, price_with_discount, price_without_discount,start_date, type, valid_until, optlock, system_user,status)
+	VALUES (5,'2021-04-11 00:00:00', 6, 25, 300, 375, '2021-04-07 00:00:00', 'boat', '2021-02-28 00:00:00', 0, 402,'ACTIVE');
 INSERT INTO public.boat_discount_reservation(
 	id, boat_id, feedback_id, owner_feedback_id)
 	VALUES (5, 5, null, null);
+
+	
+
 
 
 

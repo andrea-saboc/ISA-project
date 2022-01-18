@@ -23,6 +23,7 @@ import com.example.isa.model.reservations.AdditionalService;
 import com.example.isa.model.reservations.MansionReservation;
 import com.example.isa.model.reservations.Reservation;
 import com.example.isa.model.reservations.ReservationStartEndDateFormatter;
+import com.example.isa.model.reservations.ReservationStatus;
 import com.example.isa.repository.AdditionalServiceRepository;
 import com.example.isa.repository.MansionAvailablePeriodRepository;
 import com.example.isa.repository.MansionRepository;
@@ -143,21 +144,9 @@ public class MansionReservationServiceImpl implements ReservationService{
 		
 		availablePeriodsRepo.save(periodToAdd);
 		MansionReservation m = mansionReservationRepo.findById(resId);
-		m.setCancelled(true);
+		m.setStatus(ReservationStatus.CANCELLED);
 		mansionReservationRepo.save(m);
 		return null;
-	}
-
-
-	@Override
-	public List<Reservation> GetReservationHistory() {
-		Date today = new Date();
-		List<Reservation> res = new ArrayList<Reservation>();
-		for(MansionReservation m: mansionReservationRepo.findAllByUser(authenticationService.getLoggedUser())) {
-			if(m.getEndDate().before(today) && !m.isCancelled())
-				res.add(m);
-		}
-		return res;
 	}
 
 

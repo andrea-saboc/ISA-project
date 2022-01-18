@@ -31,6 +31,7 @@ public class DiscountReservationsController {
 		
 		List<DiscountReservation> res = boatReservationService.getDiscountReservations(id);
 		
+		System.out.println("controller hit");
 		ObjectMapper mapper = new ObjectMapper();
 		String jsonString = mapper.writeValueAsString(res);
 		System.out.println(jsonString);

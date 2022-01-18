@@ -714,7 +714,7 @@ export default {
 
     },
     SubscribeClient(){
-      alert(this.boatToShow.id)
+      //alert(this.boatToShow.id)
             axios
                 .post(devServer.proxy + '/subscriptions/newBoatSubscription', this.boatToShow, {
                     headers: {

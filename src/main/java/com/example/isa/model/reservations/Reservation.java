@@ -4,12 +4,12 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -47,7 +47,10 @@ public class Reservation {
 	private Date endDate;
 	private int numberOfGuests;
 	private double totalPrice;
-	private boolean cancelled;
+	
+	@Enumerated(EnumType.STRING)
+	private ReservationStatus status;
+	
 	
 
 	@ManyToMany
@@ -74,7 +77,7 @@ public class Reservation {
 
 	public Reservation(String type, User user, Date startDate, Date endDate, int numberOfGuests,double totalPrice) {
 		super();
-		this.cancelled = false;
+		this.status = ReservationStatus.ACTIVE;
 		this.type = type;
 		this.user = user;
 		this.startDate = startDate;
@@ -165,14 +168,16 @@ public class Reservation {
 	}
 
 
-	public boolean isCancelled() {
-		return cancelled;
+	public ReservationStatus getStatus() {
+		return status;
 	}
 
 
-	public void setCancelled(boolean cancelled) {
-		this.cancelled = cancelled;
+	public void setStatus(ReservationStatus status) {
+		this.status = status;
 	}
+
+
 
 
 	

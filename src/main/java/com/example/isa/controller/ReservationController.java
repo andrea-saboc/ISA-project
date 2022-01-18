@@ -33,6 +33,8 @@ import com.example.isa.service.AuthenticationService;
 import com.example.isa.service.impl.reservations.BoatDiscountReservationService;
 import com.example.isa.service.impl.reservations.BoatReservationServiceImpl;
 import com.example.isa.service.impl.reservations.BoatReservationSuggestionServiceImpl;
+import com.example.isa.service.impl.reservations.CollectingBoatReservationsServiceImpl;
+import com.example.isa.service.impl.reservations.CollectionMansionReservationsImpl;
 import com.example.isa.service.impl.reservations.MansionReservationServiceImpl;
 import com.example.isa.service.impl.reservations.MansionReservationSuggestionServiceImpl;
 import com.example.isa.service.impl.reservations.ReservationService;
@@ -55,6 +57,11 @@ public class ReservationController {
 	MansionReservationSuggestionServiceImpl mansionSuggestionService;
 	
 	@Autowired
+	CollectingBoatReservationsServiceImpl collectingBoatResService;
+	@Autowired
+	CollectionMansionReservationsImpl collectingMansionResService;
+	
+	@Autowired
 	BoatDiscountReservationService boatDiscountReservationService;
 	
 	@Autowired
@@ -69,7 +76,7 @@ public class ReservationController {
     public ResponseEntity<List<Reservation>> getBoatReservations(){
     	
     	try {
-            return new ResponseEntity<>(boatResService.GetReservationHistory(), HttpStatus.OK);
+            return new ResponseEntity<>(collectingBoatResService.GetReservationHistory(), HttpStatus.OK);
         } catch (Exception e){
             return  new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -80,7 +87,7 @@ public class ReservationController {
     public ResponseEntity<List<Reservation>> getMansionReservations(){
 
         try {
-            return new ResponseEntity<>(mansionResService.GetReservationHistory(), HttpStatus.OK);
+            return new ResponseEntity<>(collectingMansionResService.GetReservationHistory(), HttpStatus.OK);
         } catch (Exception e){
             return  new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -203,7 +210,7 @@ public class ReservationController {
     @RequestMapping(method = RequestMethod.GET, value = "/getBoatOwnerReservations")
     public ResponseEntity<String> getBoatOwnerReservations() {
         try {
-            List<BoatReservation> boatReservations = boatResService.getLoggedUserReservations();
+            List<BoatReservation> boatReservations = collectingBoatResService.getLoggedUserReservations();
             List<BoatDiscountReservation> boatDiscountReservations = boatDiscountReservationService.getLoggedUserReservation();
             AllBoatOwnerReservationsDTO allBoatOwnerReservationsDTO = new AllBoatOwnerReservationsDTO();
             allBoatOwnerReservationsDTO.boatDiscountReservations = boatDiscountReservations;
@@ -222,7 +229,7 @@ public class ReservationController {
     @RequestMapping(method = RequestMethod.GET, value = "/getReservedDatesForBoat")
     public ResponseEntity<String> getReservedDatesForBoat(@RequestParam Long boatId){
         try {
-            List<BoatReservation> boatReservations = boatResService.getBoatReservationsByBoat(boatId);
+            List<BoatReservation> boatReservations = collectingBoatResService.getBoatReservationsByBoat(boatId);
             ObjectMapper mapper = new ObjectMapper();
             String jsonString = mapper.writeValueAsString(boatReservations);
             System.out.println(jsonString);

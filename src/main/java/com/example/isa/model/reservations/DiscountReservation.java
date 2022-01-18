@@ -2,9 +2,21 @@ package com.example.isa.model.reservations;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.Set;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.persistence.Version;
 
 import com.example.isa.model.User;
 
@@ -41,8 +53,9 @@ public class DiscountReservation implements Serializable{
 	private double priceWithDiscount;
 	private double priceWithoutDiscount;
 	private double percentageOfDiscount;
-	private boolean reserved;
-	private boolean cancelled;
+	
+	@Enumerated(EnumType.STRING)
+	private ReservationStatus status;
 	private Date validUntil;
 
 
@@ -106,19 +119,14 @@ public class DiscountReservation implements Serializable{
 	public void setPriceWithDiscount(double priceWithDiscount) {
 		this.priceWithDiscount = priceWithDiscount;
 	}
-	public boolean isReserved() {
-		return reserved;
+
+	public ReservationStatus getStatus() {
+		return status;
 	}
-	public void setReserved(boolean reserved) {
-		this.reserved = reserved;
+	public void setStatus(ReservationStatus status) {
+		this.status = status;
 	}
-	public boolean isCancelled() {
-		return cancelled;
-	}
-	public void setCancelled(boolean cancelled) {
-		this.cancelled = cancelled;
-	}
-	
+
 	public DiscountReservation() {}
 
 	public DiscountReservation(String type, Date startDate, Date endDate, int numberOfGuests,
@@ -129,8 +137,7 @@ public class DiscountReservation implements Serializable{
 		this.endDate = endDate;
 		this.numberOfGuests = numberOfGuests;
 		this.priceWithDiscount = priceWithDiscount;
-		this.cancelled = false;
-		this.reserved = false;
+		this.status = ReservationStatus.ACTIVE;
 	}
 	
 	

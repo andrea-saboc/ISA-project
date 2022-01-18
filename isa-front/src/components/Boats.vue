@@ -72,7 +72,8 @@
                   :key="index">
                   <div v-if="index % 2 == 0">
                      <div class="card mb-3">
-                        <img src="../assets/yacht.jpg" class="card-img-top img-fluid w-30" v-on:click="showboat(value)">
+                        <img v-if="!makingReservation" :src=picture(value.id) class="card-img-top img-fluid w-30">
+                        <img v-if="makingReservation" :src=picture(value.entityId) class="card-img-top img-fluid w-30">
                         <div class="card-body">
                            <div v-on:click="showboat(value)">
                               <h5 class="card-title">{{value.name}}</h5>
@@ -104,7 +105,8 @@
                   :key="index">
                   <div v-if="index % 2 != 0">
                      <div class="card mb-3" v-on:click="showboat(value)">
-                        <img src="../assets/yacht.jpg" class="card-img-top img-fluid w-30">
+                        <img v-if="!makingReservation" :src=picture(value.id) class="card-img-top img-fluid w-30">
+                        <img v-if="makingReservation" :src=picture(value.entityId) class="card-img-top img-fluid w-30">
                         <div class="card-body">
                            <h5 class="card-title">{{value.name}}</h5>
                            <p class="card-text">{{value.promoDescription}}</p>
@@ -211,6 +213,8 @@ export default {
 
     },
     methods: {
+        picture(id) {
+         return devServer.proxy +'/images/boat'+id+'.jpg'; },
 
        
         LoadBoats() {
@@ -291,7 +295,7 @@ export default {
         },
         showboat(value) {
            console.log(value)
-           // window.location.href = "/boat/" + value.id.toString();
+           if(!this.makingReservation) window.location.href = "/boat/" + value.id.toString();
         },
         SortResultByAvgGrade() {
             this.sortSearchResult = 'Average grade'

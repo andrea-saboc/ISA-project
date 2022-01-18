@@ -1,18 +1,30 @@
 package com.example.isa.service.impl;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
 
 import com.example.isa.dto.AddAvailablePeriodDto;
 import com.example.isa.dto.BoatRegistrationDto;
-import com.example.isa.model.*;
+import com.example.isa.model.Address;
+import com.example.isa.model.Boat;
+import com.example.isa.model.BoatAvailablePeriod;
+import com.example.isa.model.BoatOwner;
+import com.example.isa.model.Image;
+import com.example.isa.model.Rule;
+import com.example.isa.model.User;
 import com.example.isa.model.reservations.AdditionalService;
 import com.example.isa.model.reservations.BoatReservation;
-import com.example.isa.repository.*;
-import com.example.isa.service.impl.reservations.BoatReservationServiceImpl;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.availability.AvailabilityChangeEvent;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Service;
+import com.example.isa.repository.AdditionalServiceRepository;
+import com.example.isa.repository.BoatAvailablePeriodRepository;
+import com.example.isa.repository.BoatOwnerRepository;
+import com.example.isa.repository.BoatsRepository;
+import com.example.isa.repository.ImageRepository;
+import com.example.isa.service.impl.reservations.CollectingBoatReservationsServiceImpl;
 
 @Service
 public class BoatService {
@@ -27,7 +39,7 @@ public class BoatService {
 	@Autowired
 	private AdditionalServiceRepository additionalServiceRepository;
 	@Autowired
-	private BoatReservationServiceImpl boatReservationService;
+	private CollectingBoatReservationsServiceImpl boatReservationService;
 
 	public BoatService(BoatsRepository br, ImageRepository ir, BoatOwnerRepository bor, BoatAvailablePeriodRepository apr, AdditionalServiceRepository additionalServiceRepository){
 		this.boatsRepository = br;

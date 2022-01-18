@@ -18,6 +18,7 @@ import com.example.isa.model.MansionComplaint;
 import com.example.isa.model.User;
 import com.example.isa.model.reservations.BoatReservation;
 import com.example.isa.model.reservations.MansionReservation;
+import com.example.isa.model.reservations.ReservationStatus;
 import com.example.isa.repository.BoatRepository;
 import com.example.isa.repository.BoatReservationRepository;
 import com.example.isa.repository.ClientRepository;
@@ -64,7 +65,7 @@ public class ClientComplaintService {
 	
 	public List<Boat> getBoats() {
 		List<Boat> ret = new ArrayList<Boat>();
-		for(BoatReservation b : boatReservationRepo.findAllByUserAndCancelledFalse(authentication.getLoggedUser())) {
+		for(BoatReservation b : boatReservationRepo.findAllByUserAndStatus(authentication.getLoggedUser(),ReservationStatus.ACTIVE)) {
 			if(!ret.contains(b.getBoat()))
 				ret.add(b.getBoat());			
 		}		
@@ -72,7 +73,7 @@ public class ClientComplaintService {
 	}
 	public List<Mansion> getMansions() {
 		List<Mansion> ret = new ArrayList<Mansion>();
-		for(MansionReservation b : mansionReservationRepo.findAllByUserAndCancelledFalse(authentication.getLoggedUser())) {
+		for(MansionReservation b : mansionReservationRepo.findAllByUserAndStatus(authentication.getLoggedUser(),ReservationStatus.ACTIVE)) {
 			if(!ret.contains(b.getMansion()))
 				ret.add(b.getMansion());			
 		}		

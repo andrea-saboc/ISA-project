@@ -11,6 +11,7 @@ import com.example.isa.model.User;
 import com.example.isa.model.reservations.BoatDiscountReservation;
 import com.example.isa.model.reservations.DiscountReservation;
 import com.example.isa.model.reservations.MansionDiscountReservation;
+import com.example.isa.model.reservations.ReservationStatus;
 import com.example.isa.repository.MansionDiscountReservationRepository;
 import com.example.isa.repository.MansionRepository;
 import com.example.isa.service.AuthenticationService;
@@ -34,7 +35,7 @@ public class MansionDiscountReservationService implements DiscountReservationSer
 	}
 
 	@Override
-	public List<BoatDiscountReservation> getReservedDiscountReservations(long id) {
+	public List<DiscountReservation> getReservedDiscountReservations(long id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -45,7 +46,7 @@ public class MansionDiscountReservationService implements DiscountReservationSer
     	MansionDiscountReservation res = reservationRepo.findById(resId).orElse(new MansionDiscountReservation());
     	if(res == null) throw new PeriodNoLongerAvailableException();
     	else {
-    	res.setReserved(true);
+    	res.setStatus(ReservationStatus.RESERVED);
     	res.setUser(authenticationService.getLoggedUser());
     	return reservationRepo.save(res);
     	}

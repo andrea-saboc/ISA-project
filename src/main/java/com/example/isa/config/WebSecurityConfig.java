@@ -70,19 +70,22 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                                     .antMatchers("/register/**").permitAll()
                                     .antMatchers("/checkActivationCode").permitAll()
                                     .antMatchers("/login/**").permitAll()
-                                    .antMatchers("/mansions").permitAll()
-                                    .antMatchers("/boats").permitAll()
+
                                     .antMatchers("/home/**").permitAll()
+                                    
                                     .antMatchers("/userData/**").permitAll()
+                                    
                                     .antMatchers("/updateUser/**").permitAll()
-                                    .antMatchers("/createDeletionRequest/**").permitAll()
+
                                     .antMatchers("/reservations/**").permitAll()
                                     .antMatchers("/getAllAdvertisers/**").permitAll()
-                                    .antMatchers("/boats/**").permitAll()
+
                                     .antMatchers("/feedbacks/**").permitAll()
-                                    .antMatchers("/complaints/**").permitAll()
+
                                     .antMatchers("/boat**").permitAll()
-                                    .antMatchers("/subscriptions/boats").permitAll()
+                                    .antMatchers("/mansion**").permitAll()
+                                    
+
                                     .antMatchers("/registerBoat").permitAll()
                                     .antMatchers("/subscriptions/checkBoatSubscription").permitAll()
                                     .antMatchers("/ownersBoats").permitAll()

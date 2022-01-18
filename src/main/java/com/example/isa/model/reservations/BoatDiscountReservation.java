@@ -1,14 +1,12 @@
 package com.example.isa.model.reservations;
 
-import java.io.Serializable;
-import java.util.Date;
 
-import javax.persistence.Column;
+import java.util.Date;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
-import javax.persistence.Version;
+
 
 import com.example.isa.model.Boat;
 import com.example.isa.model.ClientFeedback;
@@ -17,7 +15,9 @@ import com.example.isa.model.ClientFeedback;
 @DiscriminatorValue("BOAT_DISCOUNT_RESERVATION")
 public class BoatDiscountReservation extends DiscountReservation{
 
-    
+
+	private static final long serialVersionUID = 1L;
+
 	@OneToOne
 	@JoinColumn(name = "boat_id")
 	private Boat boat;

@@ -10,7 +10,7 @@ public interface DiscountReservationService {
 
     public List<DiscountReservation> getDiscountReservations(long id);
     
-    public List<BoatDiscountReservation> getReservedDiscountReservations(long id);
+    public List<DiscountReservation> getReservedDiscountReservations(long id);
     
     public DiscountReservation makeReservationOnDiscount(long resId) throws PeriodNoLongerAvailableException;
     

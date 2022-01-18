@@ -23,7 +23,5 @@ public interface ReservationService {
 	
 	public Reservation cancelReservation(long resId);
 	
-	public List<Reservation> GetReservationHistory();
-	
 	
 }

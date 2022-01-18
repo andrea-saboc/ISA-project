@@ -14,8 +14,8 @@ import com.example.isa.model.Boat;
 import com.example.isa.model.BoatOwner;
 import com.example.isa.model.User;
 import com.example.isa.model.reservations.BoatDiscountReservation;
-import com.example.isa.model.reservations.BoatReservation;
 import com.example.isa.model.reservations.DiscountReservation;
+import com.example.isa.model.reservations.ReservationStatus;
 import com.example.isa.repository.BoatDiscountReservationRepository;
 import com.example.isa.repository.BoatOwnerRepository;
 import com.example.isa.repository.BoatRepository;
@@ -39,21 +39,21 @@ public class BoatDiscountReservationService implements DiscountReservationServic
 	@Override
 	public List<DiscountReservation> getDiscountReservations(long id) {
     	Boat boat = boatRepo.findById(id).orElse(new Boat());
-		return reservationRepo.findAllByBoatAndReservedFalse(boat);
+		return reservationRepo.findAllByBoatAndStatus(boat,ReservationStatus.ACTIVE);
 	}
 
 	@Override
-	public List<BoatDiscountReservation> getReservedDiscountReservations(long id) {
+	public List<DiscountReservation> getReservedDiscountReservations(long id) {
 		Boat boat = boatRepo.findById(id).orElse(new Boat());
-		return reservationRepo.findAllByBoatAndReservedTrue(boat);
+		return reservationRepo.findAllByBoatAndStatus(boat,ReservationStatus.RESERVED);
 	}
 
 	@Override
 	public DiscountReservation makeReservationOnDiscount(long resId) throws PeriodNoLongerAvailableException {
-    	BoatDiscountReservation res = reservationRepo.findByIdAndReservedFalse(resId);
+    	BoatDiscountReservation res = reservationRepo.findByIdAndStatus(resId,ReservationStatus.ACTIVE);
     	if(res == null) throw new PeriodNoLongerAvailableException();
     	else {
-	    	res.setReserved(true);
+	    	res.setStatus(ReservationStatus.RESERVED);
 	    	res.setUser(authenticationService.getLoggedUser());
 	    	return reservationRepo.save(res);
     	}
@@ -77,8 +77,7 @@ public class BoatDiscountReservationService implements DiscountReservationServic
 		BoatDiscountReservation boatDiscountReservation = new BoatDiscountReservation();
 		Boat boat = boatRepo.findById(dto.boatId).get();
 		boatDiscountReservation.setBoat(boat);
-		boatDiscountReservation.setReserved(false);
-		boatDiscountReservation.setCancelled(false);
+		boatDiscountReservation.setStatus(ReservationStatus.ACTIVE);
 		boatDiscountReservation.setPriceWithDiscount(dto.priceWithDiscount);
 		boatDiscountReservation.setNumberOfGuests(dto.numberOfGuests);
 		boatDiscountReservation.setValidUntil(dto.validUntil);

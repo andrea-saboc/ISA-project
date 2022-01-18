@@ -23,6 +23,7 @@ import com.example.isa.model.reservations.AdditionalService;
 import com.example.isa.model.reservations.BoatReservation;
 import com.example.isa.model.reservations.Reservation;
 import com.example.isa.model.reservations.ReservationStartEndDateFormatter;
+import com.example.isa.model.reservations.ReservationStatus;
 import com.example.isa.repository.AdditionalServiceRepository;
 import com.example.isa.repository.BoatAvailablePeriodRepository;
 import com.example.isa.repository.BoatOwnerRepository;
@@ -53,25 +54,6 @@ public class BoatReservationServiceImpl implements ReservationService{
 	@Autowired
 	AuthenticationService authenticationService;
 	
-	
-
-    public List<BoatReservation> getLoggedUserReservations() {
-		User user = authenticationService.getLoggedUser();
-		BoatOwner boatOwner = boatOwnerRepository.findById(user.getId()).get();
-		List<Boat> ownersBoats = boatRepo.findBoatByBoatOwner(boatOwner);
-		List<BoatReservation> boatReservations = new ArrayList<>();
-		for ( Boat boat : ownersBoats) {
-			boatReservations.addAll(boatReservationRepo.findAllByBoat(boat));
-		}
-		return boatReservations;
-    }
-    
-
-	public List<BoatReservation> getBoatReservationsByBoat(Long boatId) {
-		Boat boat = boatRepo.findById(boatId).get();
-		List<BoatReservation> boatReservations = boatReservationRepo.findAllByBoat(boat);
-		return boatReservations;
-	}
 	
 	@Override
 	@Transactional(readOnly=false)
@@ -196,21 +178,11 @@ public class BoatReservationServiceImpl implements ReservationService{
 		
 		availablePeriodsRepo.save(periodToAdd);
 		BoatReservation b = boatReservationRepo.findById(resId);
-		b.setCancelled(true);
+		b.setStatus(ReservationStatus.CANCELLED);
 		boatReservationRepo.save(b);
 		return null;
 	}
 
-	@Override
-	public List<Reservation> GetReservationHistory() {
-		Date today = new Date();
-		List<Reservation> res = new ArrayList<Reservation>();
-		for(BoatReservation m: boatReservationRepo.findAllByUser(authenticationService.getLoggedUser())) {
-			if(m.getEndDate().before(today) && !m.isCancelled())
-				res.add(m);
-		}
-		System.out.println("KOLIKO IMA BOATS "+res.size());
-		return res;
-	}
+
 
 }

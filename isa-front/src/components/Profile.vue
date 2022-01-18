@@ -4,8 +4,9 @@
 
 
 <div class="w-50">
-
-   <h1 >Number of penalties: {{penalties}}</h1>
+   <div v-if="user == 'Client'">
+      <h1 >Number of penalties: {{user.penaltyPoints}}</h1>
+   </div>
    <br>
    <br>
    <h3>Change your info :</h3>
@@ -137,7 +138,8 @@ export default{
         }
    },
    mounted(){
-
+      this.user = this.$store.state.userType
+      alert(this.user)
       console.log('hello from profile',this.$store.getters.tokenString)
          axios
          .get('http://localhost:8080/userData',{
