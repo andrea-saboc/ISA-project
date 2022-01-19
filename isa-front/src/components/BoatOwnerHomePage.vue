@@ -4,6 +4,12 @@
     <div class="sidebar-logo">
       {{loggedUser.name}} {{loggedUser.surname}}
     </div>
+    <li>
+      <a v-on:click="DisplayDashboard()">
+        <i class="fa fa-tachometer" aria-hidden="true"></i>
+        Dashboard
+      </a>
+    </li>
     <ul class="sidebar-navigation">
       <li class="header">Boats</li>
       <li>
@@ -20,6 +26,12 @@
             <i class="fa fa-ship" aria-hidden="true"></i> {{boat.name}}
           </a>
         </div>
+      </li>
+      <li>
+        <a href="#" v-on:click = "DisplayChangeBoatInformations()">
+          <i class="fa fa-cog" aria-hidden="true"></i>
+          Change boats
+      </a>
       </li>
       <li class="header">Reservations</li>
       <li>
@@ -53,6 +65,12 @@
     <div v-if="display=='reservations'">
       <BoatReservations></BoatReservations>
     </div>
+    <div v-if="display=='dashboard'">
+      <BoatOwnerDashboard></BoatOwnerDashboard>
+    </div>
+    <div v-if="display=='change'">
+      <ChangeBoatInformation></ChangeBoatInformation>
+    </div>
   </div>
 </div>
 
@@ -63,14 +81,16 @@ import BoatRegistration from "./BoatRegistration";
 import Profile from "./Profile";
 import BoatView from "./BoatView";
 import BoatReservations from "./BoatReservations";
+import BoatOwnerDashboard from "./BoatOwnerDashboard";
+import ChangeBoatInformation from "./ChangeBoatInformation";
 import axios from "axios";
 import {devServer} from "../../vue.config";
 export default {
   name: "BoatOwnerHomePage",
-  components: {BoatRegistration, Profile, BoatView, BoatReservations},
+  components: {BoatRegistration, Profile, BoatView, BoatReservations, BoatOwnerDashboard, ChangeBoatInformation},
   data: function(){
     return{
-      display: 'boatRegistration',
+      display: 'dashboard',
       boats: [],
       idBoat: null,
       loggedUser : null,
@@ -129,12 +149,17 @@ export default {
     DisplayReservations(){
       this.display = 'reservations';
     },
+    DisplayDashboard(){
+     this.display= 'dashboard'
+    },
+    DisplayChangeBoatInformations(){
+      this.display = 'change'
+    },
     BoatSearch(boatName){
       return boatName.includes(this.search_boat)
     },
-    ReservationFilter(reservation){
-      alert(reservation)
-    }
+
+
   }
 }
 </script>

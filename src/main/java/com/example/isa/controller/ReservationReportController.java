@@ -26,7 +26,10 @@ public class ReservationReportController {
 	@PreAuthorize("hasRole('ROLE_BOAT_OWNER')")
     @RequestMapping(method = RequestMethod.POST,value = "/createReport", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ReservationReport> createReport(@RequestBody ReportDTO dto){
-		return new ResponseEntity<ReservationReport>(reservationReportService.createReservationReport(dto), HttpStatus.OK);
+		System.out.println(dto);
+		ReservationReport report = reservationReportService.createReservationReport(dto);
+		System.out.println(report);
+		return new ResponseEntity<ReservationReport>(report, HttpStatus.OK);
     }
 	
 }

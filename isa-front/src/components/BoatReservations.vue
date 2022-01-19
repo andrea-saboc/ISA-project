@@ -57,7 +57,7 @@
         </thead>
         <tbody>
         <tr v-for="(reservation, index) in filteredReservations" :key="reservation.id" style="align-content: center"
-            v-on:click=selectReservation(reservation) data-toggle="modal" data-target="#exampleModal">
+            v-on:click="selectReservation(reservation, 'REGULAR_BOAT')" data-toggle="modal" data-target="#exampleModal">
           <th scope="row" style="align-content: center" >{{index+1}}</th>
           <td>{{reservation.boat.name}}</td>
           <td v-bind:id="reservation.id+'resid'" style="align-content: center">{{formatDate(reservation.startDate)}}</td>
@@ -91,7 +91,7 @@
         </thead>
         <tbody>
         <tr v-for="(reservation, index) in filteredDiscountReservations" :key="reservation.id" style="align-content: center"
-            v-on:click=selectReservation(reservation) data-toggle="modal" data-target="#exampleModal">
+            v-on:click="selectReservation(reservation, 'DISCOUNT_BOAT')" data-toggle="modal" data-target="#exampleModal">
           <th scope="row" style="align-content: center" >{{index+1}}</th>
           <td>{{reservation.boat.name}}</td>
           <td v-bind:id="reservation.id+'resid'" style="align-content: center">{{formatDate(reservation.startDate)}}</td>
@@ -103,7 +103,7 @@
           <td style="align-content: center">{{reservation.status}}</td>
           <td style="align-content: center">{{formatDate(reservation.validUntil)}}</td>
           <td v-if="filterReservationStatus=='past' && reservation.status=='RESERVED' && past==true">
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
             Create report
             </button>
           </td>
@@ -118,7 +118,6 @@
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="staticBackdropLabel">Create report for {{selectedReservation.user.name}} {{selectedReservation.user.surname}}</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
             <div class="form-floating">
@@ -144,7 +143,7 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary" v-on:click="createReport">Create report</button>
+            <button type="button" class="btn btn-primary" data-bs-dismiss="modal" v-on:click="createReport">Create report</button>
           </div>
         </div>
       </div>
@@ -284,6 +283,7 @@ export default {
       past: false,
       filteredReservations: new Array(),
       selectedReservation: null,
+      selectedReservationType: 'REGULAR_BOAT',
       selectedUserSubscribed: new Array(),
       discountReservations : new Array(),
       filteredDiscountReservations : new Array(),
@@ -332,7 +332,8 @@ export default {
       //console.log("Date in form:",moment(String(date1)).format('MM.DD.YYYY. hh:mm'))
       return moment(String(date1)).format('DD.MM.YYYY. hh:mm')
     },
-    selectReservation(reservation){
+    selectReservation(reservation, type){
+      this.selectedReservationType = type
       console.log("In select reservation function")
       this.selectedReservation = reservation
       console.log("Another reservation is selected", this.selectedReservation)
@@ -443,8 +444,8 @@ export default {
         "requestedToSanction" : this.requestSanctions,
         "approved" : false,
         "clientShowedUp" : this.clientShowedUp,
-        "discountReservationId" : this.selectedReservation.id,
-        "regularReservationId" : this.selectedReservation.id,
+        "id" : this.selectedReservation.id,
+        "reservationType" : this.selectedReservationType,
       }, {
         headers: {
           'Authorization': this.$store.getters.tokenString

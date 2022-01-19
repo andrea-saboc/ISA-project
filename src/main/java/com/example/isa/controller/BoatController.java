@@ -144,4 +144,17 @@ public class BoatController {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+	
+	@PreAuthorize("hasRole('ROLE_BOAT_OWNER')")
+	@RequestMapping(method = RequestMethod.POST, value = "/deleteBoat",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> deleteBoat(@RequestBody LongIdDto boatId){
+		System.out.println("I'm trying to delete boat id:"+ boatId.boatId);
+		try {
+			service.deleteBoat(boatId.boatId);
+			return new ResponseEntity<String>("Successfully deleted boat!", HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
 }
