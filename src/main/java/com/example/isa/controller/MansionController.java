@@ -52,6 +52,19 @@ public class MansionController {
             return  new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    
+    @RequestMapping(method = RequestMethod.POST,value = "/deleteMansion",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @CrossOrigin(origins = "*")
+    public ResponseEntity<String> getAvailableBoats(@RequestBody long id){
+    	
+    	System.out.println("USli u kontroler");
+        try {
+            return new ResponseEntity<>(service.deleteMansion(id).getName() + " has been deleted.", HttpStatus.OK);
+        } catch (Exception e){
+        	System.out.println(e);
+            return  new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 	
 	
 

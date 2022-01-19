@@ -20,6 +20,12 @@ public class MansionService {
 		
 		return mansionRepo.findAll();
 	}
+
+	public Mansion deleteMansion(long id) {
+		Mansion mansion = mansionRepo.findById(id);
+		mansion.setDeleted(true);
+		return mansionRepo.save(mansion);
+	}
 	
 
 

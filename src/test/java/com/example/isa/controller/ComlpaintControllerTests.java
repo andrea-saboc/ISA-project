@@ -48,6 +48,6 @@ public class ComlpaintControllerTests {
     public void getBoatComplainCandidates() throws Exception {
         mockMvc.perform(get(URL_PREFIX))
         .andExpect(content().contentType(contentType)).andExpect(jsonPath("$", hasSize(8)));
-}
+    }
     
 }

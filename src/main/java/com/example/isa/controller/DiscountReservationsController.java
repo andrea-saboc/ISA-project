@@ -4,12 +4,14 @@ import java.util.List;
 
 import com.example.isa.dto.AddNewDiscountReservationBoatDto;
 import com.example.isa.dto.AllBoatDiscountReservationsDto;
+import com.example.isa.exception.OfferNotAvailableException;
 import com.example.isa.exception.PeriodNoLongerAvailableException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -49,7 +51,7 @@ public class DiscountReservationsController {
 		DiscountReservation res = boatReservationService.makeReservationOnDiscount(id);
 		return new ResponseEntity<>("Reservation successfull!", HttpStatus.OK);
 		}
-		catch(PeriodNoLongerAvailableException e) {
+		catch(ObjectOptimisticLockingFailureException | OfferNotAvailableException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.OK);
 		}
 	}

@@ -28,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 public class ControllerTest {
 	
-	private static final String URL_PREFIX = "/mansiones";
+	private static final String WRONG_URL = "/mansiones";
 
 	private MediaType contentType = new MediaType(MediaType.APPLICATION_JSON.getType(),
 			MediaType.APPLICATION_JSON.getSubtype(), Charset.forName("utf8"));
@@ -47,11 +47,24 @@ public class ControllerTest {
 	
 	@Test
 	public void testGetAllStudents() throws Exception {
-		  mockMvc.perform(get(URL_PREFIX))
-          .andExpect(status().isNotFound());
-
-	
+		  mockMvc.perform(get(WRONG_URL))
+          .andExpect(status().isNotFound());	
 	}
+	
+    @Test
+    public void getBoats() throws Exception {
+        mockMvc.perform(get("boats"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(contentType)).andExpect(jsonPath("$", hasSize(4)));
+    }
+    
+    @Test
+    public void getMansions() throws Exception {
+        mockMvc.perform(get("mansions"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(contentType)).andExpect(jsonPath("$", hasSize(8)));
+    }
+
 	
 
 }

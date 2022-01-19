@@ -38,7 +38,7 @@ public class Mansion {
 	private MansionOwner mansionOwner;
 	
 	
-	
+	private boolean deleted;
 
 	public MansionOwner getMansionOwner() {
 		return mansionOwner;
@@ -48,7 +48,9 @@ public class Mansion {
 		this.mansionOwner = mansionOwner;
 	}
 
-	public Mansion(){}
+	public Mansion(){
+		this.deleted = false;
+	}
 
 	public Long getId() {
 		return id;
@@ -137,4 +139,13 @@ public class Mansion {
 	public void setAvgGrade(float avgGrade) {
 		this.avgGrade = avgGrade;
 	}
+
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
+	}
+	
 }

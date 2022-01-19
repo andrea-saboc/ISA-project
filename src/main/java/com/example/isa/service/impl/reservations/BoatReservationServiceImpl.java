@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.isa.dto.CustomReservationForClientDto;
 import com.example.isa.dto.ReservationDto;
+import com.example.isa.exception.EntityDeletedException;
 import com.example.isa.exception.PeriodNoLongerAvailableException;
 import com.example.isa.model.Boat;
 import com.example.isa.model.BoatAvailablePeriod;
@@ -56,7 +57,7 @@ public class BoatReservationServiceImpl implements ReservationService{
 	
 	@Override
 	@Transactional(readOnly=false,propagation=Propagation.REQUIRED,isolation= Isolation.SERIALIZABLE)
-    public BoatReservation createReservationForClient(CustomReservationForClientDto dto) throws PeriodNoLongerAvailableException, ParseException{
+    public BoatReservation createReservationForClient(CustomReservationForClientDto dto) throws PeriodNoLongerAvailableException, ParseException, EntityDeletedException{
     	
 		ReservationDto res = new ReservationDto(dto);
 		ReservationStartEndDateFormatter formatter = new ReservationStartEndDateFormatter(res);
@@ -64,13 +65,17 @@ public class BoatReservationServiceImpl implements ReservationService{
 		Date endDate = formatter.endDate;
 
 		BoatAvailablePeriod period = availablePeriodsRepo.getPeriodOfInterest(startDate, endDate,res.getEntityId());
-
+		Boat boat = boatRepo.findById(res.getEntityId()).orElse(new Boat());
+		
 		if(period == null) {
 			throw new PeriodNoLongerAvailableException();
 		}
-		else {
+		else if(boat.isDeleted()){
+			throw new EntityDeletedException();
+			
+		}else {
 			Client client = clientRepository.findByEmail(dto.email);
-			Boat boat = boatRepo.findById(res.getEntityId()).orElse(new Boat());
+			
 			
 			BoatReservation newBoatReservation = new BoatReservation(client, startDate,endDate, res.getNumberOfGuests(), dto.toResSearchDto(),
 					boat);

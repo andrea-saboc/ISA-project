@@ -37,12 +37,17 @@ public class ReservationServiceTests {
 	
 	@Test
 	public void CheckAdditionalServicesPrice() {
-				
-		
+						
 		double price = service.accountAdditionalServices(constants.BOAT_ADDITIONAL_SERVICES,constants.RESERVATION_PARAMS);		
 		assertTrue(price == 50.00);
 	}
 	
+	@Test
+	public void MakeDiscountReservationTest() {
+						
+		double price = service.accountAdditionalServices(constants.BOAT_ADDITIONAL_SERVICES,constants.RESERVATION_PARAMS);		
+		assertTrue(price == 50.00);
+	}
 
 
 }

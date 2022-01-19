@@ -5,6 +5,7 @@ import java.util.Set;
 
 import com.example.isa.dto.CustomReservationForClientDto;
 import com.example.isa.dto.ReservationDto;
+import com.example.isa.exception.EntityDeletedException;
 import com.example.isa.exception.PeriodNoLongerAvailableException;
 import com.example.isa.model.reservations.AdditionalService;
 import com.example.isa.model.reservations.Reservation;
@@ -15,7 +16,7 @@ public interface ReservationService {
 	
 	public Reservation createReservation(ReservationDto res) throws ParseException, PeriodNoLongerAvailableException, java.text.ParseException;
 	
-	public Reservation createReservationForClient(CustomReservationForClientDto dto)  throws PeriodNoLongerAvailableException, ParseException, java.text.ParseException;
+	public Reservation createReservationForClient(CustomReservationForClientDto dto)  throws PeriodNoLongerAvailableException, ParseException, java.text.ParseException, EntityDeletedException;
 	
 	public Set<AdditionalService> addAdditionalServices(List<Long> additinalServices);
 	

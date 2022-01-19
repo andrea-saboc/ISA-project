@@ -3,12 +3,10 @@ package com.example.isa.service.impl.reservations;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 
-import com.example.isa.exception.PeriodNoLongerAvailableException;
+import com.example.isa.exception.OfferNotAvailableException;
 import com.example.isa.model.Mansion;
-import com.example.isa.model.User;
-import com.example.isa.model.reservations.BoatDiscountReservation;
 import com.example.isa.model.reservations.DiscountReservation;
 import com.example.isa.model.reservations.MansionDiscountReservation;
 import com.example.isa.model.reservations.ReservationStatus;
@@ -41,10 +39,10 @@ public class MansionDiscountReservationService implements DiscountReservationSer
 	}
 
 	@Override
-	public DiscountReservation makeReservationOnDiscount(long resId) throws PeriodNoLongerAvailableException {
+	public DiscountReservation makeReservationOnDiscount(long resId) throws OfferNotAvailableException,ObjectOptimisticLockingFailureException {
 		
     	MansionDiscountReservation res = reservationRepo.findById(resId).orElse(new MansionDiscountReservation());
-    	if(res == null) throw new PeriodNoLongerAvailableException();
+    	if(res == null) throw new OfferNotAvailableException();
     	else {
     	res.setStatus(ReservationStatus.RESERVED);
     	res.setUser(authenticationService.getLoggedUser());

@@ -6,10 +6,11 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 
 import com.example.isa.dto.AddNewDiscountReservationBoatDto;
-import com.example.isa.exception.PeriodNoLongerAvailableException;
+import com.example.isa.exception.OfferNotAvailableException;
 import com.example.isa.model.Boat;
 import com.example.isa.model.BoatOwner;
 import com.example.isa.model.User;
@@ -49,9 +50,9 @@ public class BoatDiscountReservationService implements DiscountReservationServic
 	}
 
 	@Override
-	public DiscountReservation makeReservationOnDiscount(long resId) throws PeriodNoLongerAvailableException {
+	public DiscountReservation makeReservationOnDiscount(long resId) throws OfferNotAvailableException,ObjectOptimisticLockingFailureException{
     	BoatDiscountReservation res = reservationRepo.findByIdAndStatus(resId,ReservationStatus.ACTIVE);
-    	if(res == null) throw new PeriodNoLongerAvailableException();
+    	if(res == null) throw new OfferNotAvailableException();
     	else {
 	    	res.setStatus(ReservationStatus.RESERVED);
 	    	res.setUser(authenticationService.getLoggedUser());

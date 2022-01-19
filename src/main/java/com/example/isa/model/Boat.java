@@ -32,6 +32,8 @@ public class Boat {
 	private double pricePerHour;
 	private double pricePerDay;
 	private double priceForSevenDays;
+	
+	private boolean deleted;     
 
 	@ManyToOne(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER)
 	@JoinColumn(name = "owner_id", referencedColumnName = "id")
@@ -199,7 +201,10 @@ public class Boat {
 		this.address = address;
 		//address.setBoat(this);
 	}
-	public Boat() {}
+	public Boat() {
+		this.deleted = false;
+	}
+	
 	
 	
 
@@ -284,5 +289,15 @@ public class Boat {
 				", address=" + address +
 				", rules=" + rules +
 				'}';
+	}
+
+
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
 	}
 }
