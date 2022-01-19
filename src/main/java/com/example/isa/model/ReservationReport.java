@@ -97,6 +97,13 @@ public class ReservationReport {
 	public void setDiscountReservation(DiscountReservation discountReservation) {
 		this.discountReservation = discountReservation;
 	}
+
+	@Override
+	public String toString() {
+		return "ReservationReport [id=" + id + ", reportText=" + reportText + ", requestedToSanction="
+				+ requestedToSanction + ", approved=" + approved + ", clientShowedUp=" + clientShowedUp
+				+ ", reservation=" + reservation + ", discountReservation=" + discountReservation + "]";
+	}
 	
 	
 	
