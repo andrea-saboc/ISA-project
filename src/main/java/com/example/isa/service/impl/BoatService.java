@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.isa.dto.AddAvailablePeriodDto;
 import com.example.isa.dto.BoatRegistrationDto;
+import com.example.isa.dto.LongIdDto;
 import com.example.isa.model.Address;
 import com.example.isa.model.Boat;
 import com.example.isa.model.BoatAvailablePeriod;
@@ -141,7 +142,7 @@ public class BoatService {
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		System.out.println("Trying to cast to User:"+ user);
 		BoatOwner boatOwner = boatOwnerRepository.findById(user.getId()).get();
-		List<Boat> ownersBoats = boatsRepository.findBoatByBoatOwner(boatOwner);
+		List<Boat> ownersBoats = boatsRepository.findAllByBoatOwnerAndDeleted(boatOwner, false);
 		return ownersBoats;
 	}
 
@@ -214,6 +215,12 @@ public class BoatService {
 			}
 		}
 		return overlapedReservations;
+	}
+
+	public void deleteBoat(Long boatId) {
+		Boat boat = boatsRepository.findById(boatId).get();
+		boat.setDeleted(true);
+		boatsRepository.save(boat);
 	}
 
 

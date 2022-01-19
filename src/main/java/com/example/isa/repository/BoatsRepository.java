@@ -9,4 +9,5 @@ import java.util.List;
 public interface BoatsRepository extends JpaRepository<Boat, Long> {
     Boat findByName(String name);
     List<Boat> findBoatByBoatOwner(BoatOwner boatOwner);
+    List<Boat> findAllByBoatOwnerAndDeleted(BoatOwner boatOwner, boolean delete);
 }
