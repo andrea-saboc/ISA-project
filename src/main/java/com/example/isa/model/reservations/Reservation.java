@@ -19,9 +19,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.example.isa.model.ReservationReport;
 import com.example.isa.model.User;
 
 @Entity
@@ -51,7 +53,20 @@ public class Reservation {
 	@Enumerated(EnumType.STRING)
 	private ReservationStatus status;
 	
+	@OneToOne
+	private ReservationReport report;
 	
+	
+
+	public ReservationReport getReport() {
+		return report;
+	}
+
+
+	public void setReport(ReservationReport report) {
+		this.report = report;
+	}
+
 
 	@ManyToMany
 	@JoinTable(name="reservation_services",
