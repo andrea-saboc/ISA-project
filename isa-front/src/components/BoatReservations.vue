@@ -68,7 +68,7 @@
           <td>{{reservation.totalPrice}} €</td>
           <td v-if="reservation.cancelled == true">Cancelled</td>
           <td v-else>Not cancelled</td>
-          <td v-if="filterReservationStatus=='past' && reservation.cancelled == false && past==true"><button>Create report</button></td>
+          <td v-if="filterReservationStatus=='past' && reservation.cancelled == false && past==true"><button v-on:click="createReport(reservation)">Create report</button></td>
         </tr>
         </tbody>
       </table>
@@ -100,16 +100,57 @@
           <td style="align-content: center" v-else>Not reserved</td>
           <td style="align-content: center">{{reservation.numberOfGuests}}</td>
           <td><span style="text-decoration-line: line-through;">{{reservation.priceWithDiscount}} €</span> {{reservation.priceWithoutDiscount}} € • <span style="font-weight: bolder">{{reservation.percentageOfDiscount}}% off</span></td>
-          <td v-if="reservation.cancelled == true">Cancelled</td>
-          <td v-else>Not cancelled</td>
+          <td style="align-content: center">{{reservation.status}}</td>
           <td style="align-content: center">{{formatDate(reservation.validUntil)}}</td>
-          <td v-if="filterReservationStatus=='past' && reservation.cancelled == false && past==true"><button>Create report</button></td>
+          <td v-if="filterReservationStatus=='past' && reservation.status=='RESERVED' && past==true">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+            Create report
+            </button>
+          </td>
         </tr>
         </tbody>
       </table>
     </div>
 
-    <!-- Modal -->
+    <!-- Modal create report -->
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="staticBackdropLabel">Create report for {{selectedReservation.user.name}} {{selectedReservation.user.surname}}</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="form-floating">
+              <label for="floatingTextarea2">Comments</label>
+              <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px" v-model="reportText">
+              </textarea>
+            </div>
+            <div class="horizontal">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault1" v-model="clientShowedUp">
+                <label class="form-check-label" for="flexCheckDefault1">
+                  Client has shown up
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault2" v-model="requestSanctions">
+                <label class="form-check-label" for="flexCheckDefault2">
+                  Request sanctions
+                </label>
+              </div>
+            </div>
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" v-on:click="createReport">Create report</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal user information-->
     <div class="modal fade"  v-if="selectedReservation!=null" id="exampleModal" role="dialog" tabindex="-1" aria-labelledby="reservationModalLabel" aria-hidden="true" >
       <div class="modal-dialog">
         <div class="modal-content" style="padding: 5%" v-if="selectedReservation!=null">
@@ -178,7 +219,7 @@
             </tr>
             <tr>
               <td class="row">Cancelled</td>
-              <td v-if="this.selectedReservation.cancelled">yes</td>
+              <td v-if="this.selectedReservation.status == 'CANCELLED'">yes</td>
               <td v-else>no</td>
             </tr>
             <tr>
@@ -218,8 +259,7 @@
     </div>
   <div class="container">
 
-
-</div>
+  </div>
   </div>
 
 
@@ -246,7 +286,10 @@ export default {
       selectedReservation: null,
       selectedUserSubscribed: new Array(),
       discountReservations : new Array(),
-      filteredDiscountReservations : new Array()
+      filteredDiscountReservations : new Array(),
+      reportText:'',
+      clientShowedUp: true,
+      requestSanctions: false
 
     }
   },
@@ -392,6 +435,28 @@ export default {
     ChangePast(value){
       this.past = value;
       console.log("past is changed to ", this.past)
+    },
+    createReport(){
+      axios
+      .post(devServer.proxy + "/createReport", {
+        "reportText" : this.reportText,
+        "requestedToSanction" : this.requestSanctions,
+        "approved" : false,
+        "clientShowedUp" : this.clientShowedUp,
+        "discountReservationId" : this.selectedReservation.id,
+        "regularReservationId" : this.selectedReservation.id,
+      }, {
+        headers: {
+          'Authorization': this.$store.getters.tokenString
+        }
+      }
+      )
+      .then(response =>
+      alert("Successfully created!", response))
+      .catch(() =>
+      {
+        alert("Server error")
+      })
     }
   }
 

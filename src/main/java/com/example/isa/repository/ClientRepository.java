@@ -11,4 +11,5 @@ public interface ClientRepository extends JpaRepository<Client, Long>{
 	Client findByActivationCode(String code);
 
 	Client findByActivationCodeAndBlockedFalse(String code);
+
 }

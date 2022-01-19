@@ -14,10 +14,12 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
+import com.example.isa.model.ReservationReport;
 import com.example.isa.model.User;
 
 /**
@@ -57,8 +59,19 @@ public class DiscountReservation implements Serializable{
 	@Enumerated(EnumType.STRING)
 	private ReservationStatus status;
 	private Date validUntil;
+	
+	@OneToOne
+	private ReservationReport report;
+	
+	
 
 
+	public ReservationReport getReport() {
+		return report;
+	}
+	public void setReport(ReservationReport report) {
+		this.report = report;
+	}
 	public double getPriceWithoutDiscount() {
 		return priceWithoutDiscount;
 	}
@@ -139,10 +152,5 @@ public class DiscountReservation implements Serializable{
 		this.priceWithDiscount = priceWithDiscount;
 		this.status = ReservationStatus.ACTIVE;
 	}
-	
-	
-	
-	
-
-	
+		
 }
