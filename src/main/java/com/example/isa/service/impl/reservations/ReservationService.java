@@ -49,13 +49,14 @@ public class ReservationService {
 		List<ActiveReservationDto> ret = new ArrayList<ActiveReservationDto>();
 		ret.addAll(getBoatReservations());
 		ret.addAll(getMansionReservations());
-		ret.addAll(getMansionDiscountReservations());
+		//ret.addAll(getMansionDiscountReservations());
 		ret.addAll(getBoatDiscountReservations());
 		return ret;
 	}
 	
 	public List<ActiveReservationDto>getBoatReservations(){
 		List<ActiveReservationDto> ret = new ArrayList<ActiveReservationDto>();
+		System.out.println("USer koji trazi trans " + authenticationService.getLoggedUser().getName() );
 		for(BoatReservation r: boatResRepo.findAllByUserAndStatus(authenticationService.getLoggedUser(),ReservationStatus.ACTIVE)) {
 			
 			Format formatter = new SimpleDateFormat("dd.MM.yyyy, HH:mm");
@@ -101,7 +102,7 @@ public class ReservationService {
 		
 		List<ActiveReservationDto> ret = new ArrayList<ActiveReservationDto>();
 		
-		for(BoatDiscountReservation r: boatDiscountResRepo.findAllByUserAndStatus(authenticationService.getLoggedUser(),ReservationStatus.ACTIVE)) {
+		for(BoatDiscountReservation r: boatDiscountResRepo.findAllByUserAndStatus(authenticationService.getLoggedUser(),ReservationStatus.RESERVED)) {
 			
 			Format formatter = new SimpleDateFormat("dd.MM.yyyy, HH:mm");
 			//if(r.getEndDate().after(new Date()))

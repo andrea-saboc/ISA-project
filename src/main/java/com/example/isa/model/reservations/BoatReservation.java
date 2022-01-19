@@ -11,7 +11,7 @@ import com.example.isa.model.ClientFeedback;
 import com.example.isa.model.User;
 
 @Entity
-@DiscriminatorValue("BOAT_RESERVATION")
+@DiscriminatorValue("BOAT")
 public class BoatReservation extends Reservation{
 	
 	@OneToOne

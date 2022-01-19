@@ -101,16 +101,19 @@
                </div>
             </div>
             <div class="col-md">
-               <div v-for="(value, index) in boats"
+                              <div v-for="(value, index) in boats"
                   :key="index">
                   <div v-if="index % 2 != 0">
-                     <div class="card mb-3" v-on:click="showboat(value)">
+                     <div class="card mb-3">
                         <img v-if="!makingReservation" :src=picture(value.id) class="card-img-top img-fluid w-30">
                         <img v-if="makingReservation" :src=picture(value.entityId) class="card-img-top img-fluid w-30">
                         <div class="card-body">
-                           <h5 class="card-title">{{value.name}}</h5>
-                           <p class="card-text">{{value.promoDescription}}</p>
-                           <p v-if="!makingReservation" class="card-text"><small class="text-muted">{{value.address.address}},{{value.address.city}},{{value.address.country}}</small></p>
+                           <div v-on:click="showboat(value)">
+                              <h5 class="card-title">{{value.name}}</h5>
+                              <p class="card-text">{{value.promoDescription}}</p>
+                              
+                              <p v-if="!makingReservation" class="card-text"><small class="text-muted">{{value.address.address}},{{value.address.city}},{{value.address.country}}</small></p>
+                           </div>
                            <div class="bg-light p-3 text-left" v-if="makingReservation">
                               <p class="card-text">Price: {{value.totalPrice}}</p>
                               <p class="card-text">Average grade: {{value.avgGrade}}</p>
@@ -320,12 +323,12 @@ export default {
                 numberOfHours: this.reservationForm.numberOfHours
             }
 
-            
+            /*
             for(let index of b.additinalServicesId){
                let i=index-1
               var name = document.getElementById(b.entityId+i).checked;
               if(name == true) {boatReservation.additionalServices.push(index)}
-            }
+            }*/
             
             console.log(boatReservation)
             axios
@@ -336,9 +339,9 @@ export default {
                     }
                 })
                 .then(response => {
-                    console.log(response.data)
-                    this.LoadBoats()
+                    alert(response.data)                   
                     this.makingReservation = false
+                    this.LoadBoats()
                 });
 
 

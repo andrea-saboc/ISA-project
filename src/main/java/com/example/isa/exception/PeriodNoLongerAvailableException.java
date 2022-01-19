@@ -1,4 +1,4 @@
-package com.example.isa.exceptions;
+package com.example.isa.exception;
 
 public class PeriodNoLongerAvailableException extends Exception{
 	

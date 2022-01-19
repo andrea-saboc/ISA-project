@@ -12,11 +12,13 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.isa.dto.CustomReservationForClientDto;
 import com.example.isa.dto.ReservationDto;
-import com.example.isa.exceptions.PeriodNoLongerAvailableException;
+import com.example.isa.exception.PeriodNoLongerAvailableException;
 import com.example.isa.model.MansionAvailablePeriod;
 import com.example.isa.model.User;
 import com.example.isa.model.reservations.AdditionalService;
@@ -51,7 +53,7 @@ public class MansionReservationServiceImpl implements ReservationService{
 	
 	
 	@Override
-	@Transactional(readOnly = false)
+	@Transactional(readOnly=false,propagation=Propagation.REQUIRED,isolation= Isolation.SERIALIZABLE)
 	public MansionReservation createReservation(ReservationDto res)  throws PeriodNoLongerAvailableException, ParseException {
 		
 		
@@ -117,12 +119,14 @@ public class MansionReservationServiceImpl implements ReservationService{
 
 
 	@Override
-	@Transactional(readOnly = false)
+	@Transactional(readOnly=false)
 	public Reservation cancelReservation(long resId) {
+		
 		MansionReservation res = mansionReservationRepo.findById(resId);
 
-		MansionAvailablePeriod periodBefore = availablePeriodsRepo.checkIfPeriodHasEndDate(res.getStartDate());
-		MansionAvailablePeriod periodAfter = availablePeriodsRepo.checkIfPeriodHasStartDate(res.getEndDate());		
+		MansionAvailablePeriod periodBefore = availablePeriodsRepo.checkIfPeriodHasEndDate(res.getStartDate(),res.getMansion().getId());
+		MansionAvailablePeriod periodAfter = availablePeriodsRepo.checkIfPeriodHasStartDate(res.getEndDate(),res.getMansion().getId());	
+
 		MansionAvailablePeriod periodToAdd;
 		
 		if(periodBefore!=null && periodAfter!=null) {
@@ -141,11 +145,10 @@ public class MansionReservationServiceImpl implements ReservationService{
 		else 
 			periodToAdd = new MansionAvailablePeriod(res.getStartDate(),res.getEndDate(),res.getMansion());
 		
-		
 		availablePeriodsRepo.save(periodToAdd);
-		MansionReservation m = mansionReservationRepo.findById(resId);
-		m.setStatus(ReservationStatus.CANCELLED);
-		mansionReservationRepo.save(m);
+		//MansionReservation m = mansionReservationRepo.findById(resId);
+		res.setStatus(ReservationStatus.CANCELLED);
+		mansionReservationRepo.save(res);
 		return null;
 	}
 

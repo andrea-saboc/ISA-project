@@ -5,7 +5,7 @@ import java.util.Set;
 
 import com.example.isa.dto.CustomReservationForClientDto;
 import com.example.isa.dto.ReservationDto;
-import com.example.isa.exceptions.PeriodNoLongerAvailableException;
+import com.example.isa.exception.PeriodNoLongerAvailableException;
 import com.example.isa.model.reservations.AdditionalService;
 import com.example.isa.model.reservations.Reservation;
 import com.sun.el.parser.ParseException;

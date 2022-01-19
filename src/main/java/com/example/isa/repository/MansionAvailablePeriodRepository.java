@@ -20,11 +20,11 @@ public interface MansionAvailablePeriodRepository extends JpaRepository<MansionA
     		nativeQuery = true)
     MansionAvailablePeriod getPeriodOfInterest(@Param("startDate") Date startDate,@Param("endDate") Date endDate,@Param("id") long id);
       
-    @Query(value = "SELECT available_period_id,start_date,end_date,mansion_id FROM public.mansion_available_period u WHERE u.end_date = :endDate",
+    @Query(value = "SELECT available_period_id,start_date,end_date,mansion_id FROM public.mansion_available_period u WHERE u.end_date = :endDate AND u.mansion_id = :id",
     		nativeQuery = true)   
-    MansionAvailablePeriod checkIfPeriodHasEndDate(@Param("endDate") Date endDate);   
+    MansionAvailablePeriod checkIfPeriodHasEndDate(@Param("endDate") Date endDate,@Param("id") long id);   
     
-    @Query(value = "SELECT available_period_id,start_date,end_date,mansion_id FROM public.mansion_available_period u WHERE u.start_date = :startDate",
+    @Query(value = "SELECT available_period_id,start_date,end_date,mansion_id FROM public.mansion_available_period u WHERE u.start_date = :startDate AND u.mansion_id = :id",
     		nativeQuery = true)   
-    MansionAvailablePeriod checkIfPeriodHasStartDate(@Param("startDate") Date startDate); 
+    MansionAvailablePeriod checkIfPeriodHasStartDate(@Param("startDate") Date startDate,@Param("id") long id); 
 }

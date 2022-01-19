@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
@@ -68,7 +69,7 @@ public class Reservation {
 	}
 
 
-	@ManyToMany
+	@ManyToMany(cascade = CascadeType.PERSIST)
 	@JoinTable(name="reservation_services",
     	joinColumns=@JoinColumn(name="reservation_id"),
        inverseJoinColumns=@JoinColumn(name="service_id "))

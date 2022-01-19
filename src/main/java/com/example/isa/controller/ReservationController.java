@@ -23,7 +23,7 @@ import com.example.isa.dto.CustomReservationForClientDto;
 import com.example.isa.dto.PotentialReservationDto;
 import com.example.isa.dto.ReservationDto;
 import com.example.isa.dto.ReservationSearchDto;
-import com.example.isa.exceptions.PeriodNoLongerAvailableException;
+import com.example.isa.exception.PeriodNoLongerAvailableException;
 import com.example.isa.mail.MailService;
 import com.example.isa.model.reservations.BoatDiscountReservation;
 import com.example.isa.model.reservations.BoatReservation;

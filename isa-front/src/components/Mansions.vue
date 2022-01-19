@@ -339,11 +339,6 @@ export default {
                 numberOfHours: this.reservationForm.numberOfHours
             }
 
-            for(let index of b.additinalServicesId){
-               let i=index-1
-              var name = document.getElementById(b.boatId+i).checked;
-              if(name == true) {mansionReservation.additionalServices.push(index)}
-            }
 
             console.log(mansionReservation)
             axios
@@ -355,8 +350,9 @@ export default {
                 })
                 .then(response => {
                     console.log(response.data)
-                    this.LoadMansions()
-                    this.makingReservation = false
+                   alert(response.data)                   
+                     this.LoadMansions()
+                     this.makingReservation = false
                 });
 
 

@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.isa.dto.AddNewDiscountReservationBoatDto;
-import com.example.isa.exceptions.PeriodNoLongerAvailableException;
+import com.example.isa.exception.PeriodNoLongerAvailableException;
 import com.example.isa.model.Boat;
 import com.example.isa.model.BoatOwner;
 import com.example.isa.model.User;

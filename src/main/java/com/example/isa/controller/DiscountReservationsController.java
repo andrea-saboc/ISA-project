@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.example.isa.dto.AddNewDiscountReservationBoatDto;
 import com.example.isa.dto.AllBoatDiscountReservationsDto;
+import com.example.isa.exception.PeriodNoLongerAvailableException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -11,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import com.example.isa.exceptions.PeriodNoLongerAvailableException;
 import com.example.isa.model.reservations.BoatDiscountReservation;
 import com.example.isa.model.reservations.DiscountReservation;
 import com.example.isa.service.impl.reservations.BoatDiscountReservationService;

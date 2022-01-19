@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import com.example.isa.exceptions.PeriodNoLongerAvailableException;
+import com.example.isa.exception.PeriodNoLongerAvailableException;
 import com.example.isa.model.Mansion;
 import com.example.isa.model.User;
 import com.example.isa.model.reservations.BoatDiscountReservation;

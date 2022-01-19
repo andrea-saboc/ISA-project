@@ -58,6 +58,7 @@ public class DiscountReservation implements Serializable{
 	
 	@Enumerated(EnumType.STRING)
 	private ReservationStatus status;
+	
 	private Date validUntil;
 	
 	@OneToOne

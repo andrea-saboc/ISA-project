@@ -17,7 +17,7 @@ import com.example.isa.model.User;
 
 
 @Entity
-@DiscriminatorValue("MANSION_RESERVATION")
+@DiscriminatorValue("MANSION")
 public class MansionReservation extends Reservation{
 	
 	@OneToOne

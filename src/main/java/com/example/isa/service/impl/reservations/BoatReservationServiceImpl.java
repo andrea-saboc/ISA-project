@@ -1,7 +1,6 @@
 package com.example.isa.service.impl.reservations;
 
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -9,16 +8,16 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.isa.dto.CustomReservationForClientDto;
 import com.example.isa.dto.ReservationDto;
-import com.example.isa.exceptions.PeriodNoLongerAvailableException;
+import com.example.isa.exception.PeriodNoLongerAvailableException;
 import com.example.isa.model.Boat;
 import com.example.isa.model.BoatAvailablePeriod;
-import com.example.isa.model.BoatOwner;
 import com.example.isa.model.Client;
-import com.example.isa.model.User;
 import com.example.isa.model.reservations.AdditionalService;
 import com.example.isa.model.reservations.BoatReservation;
 import com.example.isa.model.reservations.Reservation;
@@ -56,7 +55,7 @@ public class BoatReservationServiceImpl implements ReservationService{
 	
 	
 	@Override
-	@Transactional(readOnly=false)
+	@Transactional(readOnly=false,propagation=Propagation.REQUIRED,isolation= Isolation.SERIALIZABLE)
     public BoatReservation createReservationForClient(CustomReservationForClientDto dto) throws PeriodNoLongerAvailableException, ParseException{
     	
 		ReservationDto res = new ReservationDto(dto);
@@ -155,8 +154,8 @@ public class BoatReservationServiceImpl implements ReservationService{
 		
 		BoatReservation res = boatReservationRepo.findById(resId);
 
-		BoatAvailablePeriod periodBefore = availablePeriodsRepo.checkIfPeriodHasEndDate(res.getStartDate());
-		BoatAvailablePeriod periodAfter = availablePeriodsRepo.checkIfPeriodHasStartDate(res.getEndDate());		
+		BoatAvailablePeriod periodBefore = availablePeriodsRepo.checkIfPeriodHasEndDate(res.getStartDate(),res.getBoat().getId());
+		BoatAvailablePeriod periodAfter = availablePeriodsRepo.checkIfPeriodHasStartDate(res.getEndDate(),res.getBoat().getId());		
 		BoatAvailablePeriod periodToAdd;
 		
 		if(periodBefore!=null && periodAfter!=null) {
