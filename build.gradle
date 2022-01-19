@@ -82,6 +82,7 @@ sonarqube {
 }
 
 
+gradle.startParameter.showStacktrace = org.gradle.api.logging.configuration.ShowStacktrace.ALWAYS
 
 
 
