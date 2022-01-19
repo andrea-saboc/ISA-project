@@ -12,7 +12,8 @@ import com.example.isa.model.reservations.ReservationStatus;
 
 public interface BoatDiscountReservationRepository extends JpaRepository<BoatDiscountReservation,Long>{
 
-
+	
+	BoatDiscountReservation findById(long id);
 	List<BoatDiscountReservation> findAllByBoat(Boat b);
 	List<DiscountReservation> findAllByBoatAndStatus(Boat b,ReservationStatus status);
 

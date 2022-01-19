@@ -5,17 +5,24 @@ import java.util.Set;
 
 import com.example.isa.dto.ReservationDto;
 import com.example.isa.model.Boat;
+import com.example.isa.model.User;
 import com.example.isa.model.reservations.AdditionalService;
 import com.example.isa.model.reservations.BoatDiscountReservation;
+import com.example.isa.model.reservations.MansionDiscountReservation;
+import com.example.isa.model.reservations.ReservationStatus;
 
-public class AdditionalServicesConstants {
+public class ReservationConstants {
 
 
 	public static final Boat BOAT = new Boat("Milicija", "Promo Milicije",0,0);
 	
-	public static final BoatDiscountReservation DISCOUNT_RESERVATION = new BoatDiscountReservation();
-
+	public static final User CLIENT = new User() {{this.setId(1L);}};
 	
+	public static final BoatDiscountReservation BOAT_DISCOUNT_RESERVATION = new BoatDiscountReservation() {{this.setId(1L); this.setStatus(ReservationStatus.ACTIVE);}};
+	
+	public static final MansionDiscountReservation MANSION_DISCOUNT_RESERVATION = new MansionDiscountReservation() {{this.setId(1L);}};
+
+	public static final double EXPECTED_PRICE = 50.00;
 	
 	
 	

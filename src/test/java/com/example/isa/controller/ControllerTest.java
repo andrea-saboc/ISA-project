@@ -53,14 +53,14 @@ public class ControllerTest {
 	
     @Test
     public void getBoats() throws Exception {
-        mockMvc.perform(get("boats"))
+        mockMvc.perform(get("/boats"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(contentType)).andExpect(jsonPath("$", hasSize(4)));
     }
     
     @Test
     public void getMansions() throws Exception {
-        mockMvc.perform(get("mansions"))
+        mockMvc.perform(get("/mansions"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(contentType)).andExpect(jsonPath("$", hasSize(8)));
     }
