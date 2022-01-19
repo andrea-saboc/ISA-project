@@ -3,6 +3,7 @@ package com.example.isa.controller;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -36,13 +37,11 @@ public class LoginController {
 	        return ResponseEntity.ok(state);
 		}
 		catch(BadCredentialsException e) {
-			return ResponseEntity.ok(null);
+			return new ResponseEntity<>(null,HttpStatus.UNAUTHORIZED); 
 		}		
 	}
 	
-
 	
-
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/checkActivationCode",consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
 	@CrossOrigin(origins = "*")
