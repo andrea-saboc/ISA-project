@@ -26,6 +26,10 @@ public class MansionService {
 		mansion.setDeleted(true);
 		return mansionRepo.save(mansion);
 	}
+
+	public Mansion getById(Long id) {
+		return mansionRepo.findById(id).get();
+	}
 	
 
 

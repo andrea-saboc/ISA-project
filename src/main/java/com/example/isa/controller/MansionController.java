@@ -10,9 +10,11 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.isa.dto.SearchDto;
+import com.example.isa.model.Boat;
 import com.example.isa.model.Mansion;
 import com.example.isa.service.impl.MansionFilteringServiceImpl;
 import com.example.isa.service.impl.MansionService;
@@ -42,7 +44,7 @@ public class MansionController {
 	
     @RequestMapping(method = RequestMethod.POST,value = "/mansions/search",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @CrossOrigin(origins = "*")
-    public ResponseEntity<List<Mansion>> getAvailableBoats(@RequestBody SearchDto search){
+    public ResponseEntity<List<Mansion>> searchMasnion(@RequestBody SearchDto search){
     	
     	System.out.println("USli u kontroler");
         try {
@@ -55,7 +57,7 @@ public class MansionController {
     
     @RequestMapping(method = RequestMethod.POST,value = "/deleteMansion",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @CrossOrigin(origins = "*")
-    public ResponseEntity<String> getAvailableBoats(@RequestBody long id){
+    public ResponseEntity<String> deleteMansion(@RequestBody long id){
     	
     	System.out.println("USli u kontroler");
         try {
@@ -64,7 +66,20 @@ public class MansionController {
         	System.out.println(e);
             return  new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
+       
     }
+    
+    @RequestMapping(method = RequestMethod.GET,value = "/mansion")
+    @CrossOrigin(origins = "*")
+    public ResponseEntity<String> getMansionById(@RequestParam Long id) throws JsonProcessingException{
+		System.out.println("We are searchinng for mansion" +id);
+		Mansion mansion = service.getById(id);
+		ObjectMapper mapper = new ObjectMapper();
+		String jsonString = mapper.writeValueAsString(mansion);
+		System.out.println(jsonString);
+		return new ResponseEntity<>(jsonString, HttpStatus.OK);
+
+	}
 	
 	
 

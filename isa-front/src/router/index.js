@@ -126,7 +126,7 @@ const routes = [
         component: AccountActivation
     },
     {
-        path: '/mansion',
+        path: '/mansion/:id',
         name: 'MansionView',
         component: MansionView
     },
