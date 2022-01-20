@@ -99,6 +99,10 @@ gradle.taskGraph.whenReady {
         }
 }
 
+test {
+    useJUnitPlatform()
+}
+
 
 
 
