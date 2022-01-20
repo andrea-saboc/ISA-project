@@ -83,4 +83,20 @@ public class BoatControllerTests {
     		    .andExpect(jsonPath("$", hasSize(1)));
     }
     
+    @Test
+    public void getReservationSearchResults() throws Exception {
+    	
+    	SearchDto search = new SearchDto("Name", "BENETEAU");
+    	
+    	ObjectMapper mapper = new ObjectMapper();
+		String jsonString = mapper.writeValueAsString(search);
+        
+    	mockMvc.perform(post("/boats/search")
+    		    .contentType(MediaType.APPLICATION_JSON)
+    		    .content(jsonString)
+    		    .characterEncoding("utf-8"))
+    		    .andExpect(status().isOk())
+    		    .andExpect(jsonPath("$", hasSize(1)));
+    }
+    
 }
