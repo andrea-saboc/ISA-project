@@ -82,6 +82,9 @@ sonarqube {
         property 'sonar.coverage.exclusions', "**/main/**,**/main"
 	}
 }
+test {
+    useJUnitPlatform()
+}
 
 
 gradle.startParameter.showStacktrace = org.gradle.api.logging.configuration.ShowStacktrace.ALWAYS
