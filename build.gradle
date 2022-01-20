@@ -83,6 +83,7 @@ sonarqube {
 	}
 }
 
+
 task stage(dependsOn: [clean, build])
 build.mustRunAfter(clean)
 task copyToLib(type: Copy) {
@@ -99,8 +100,6 @@ gradle.taskGraph.whenReady {
 }
 
 
-
-gradle.startParameter.showStacktrace = org.gradle.api.logging.configuration.ShowStacktrace.ALWAYS
 
 
 
