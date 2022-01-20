@@ -7,8 +7,6 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
-    "@bit/nexxtway.react-rainbow.select": "^1.10.0",
-    "@bit/yi-love.vue-test.ui-button": "0.0.3",
     "@coreui/chartjs": "^3.0.0",
     "@coreui/coreui": "^4.1.0",
     "@coreui/vue": "^4.1.1",

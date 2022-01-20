@@ -57,10 +57,10 @@ public class ReservationService {
 	public List<ActiveReservationDto>getBoatReservations(){
 		List<ActiveReservationDto> ret = new ArrayList<ActiveReservationDto>();
 		System.out.println("USer koji trazi trans " + authenticationService.getLoggedUser().getName() );
-		for(BoatReservation r: boatResRepo.findAllByUserAndStatus(authenticationService.getLoggedUser(),ReservationStatus.ACTIVE)) {
+		for(BoatReservation r: boatResRepo.findAllByUserAndStatus(authenticationService.getLoggedUser(),ReservationStatus.CLOSED)) {
 			
 			Format formatter = new SimpleDateFormat("dd.MM.yyyy, HH:mm");
-			if(r.getEndDate().after(new Date()))
+
 			ret.add(new ActiveReservationDto(r.getId(), r.getType(),formatter.format(r.getStartDate()),formatter.format(r.getEndDate()),
 					r.getNumberOfGuests(),null, r.getTotalPrice(),r.getBoat().getName(),
 					r.getBoat().getAddress().getCountry() + ", "+r.getBoat().getAddress().getCity()+", "+r.getBoat().getAddress().getAddress(),

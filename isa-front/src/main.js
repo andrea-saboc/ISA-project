@@ -10,7 +10,6 @@ import store from './store'
 import App from './App.vue'
 import 'bootstrap';
 import VCalendar from 'v-calendar';
-import VueGoogleMaps from '@fawmi/vue-google-maps'
 import OpenLayersMap from '.'
 
 
@@ -19,11 +18,7 @@ window.$ = window.jQuery = require('jquery');
 
 
 
-createApp(App).use(router).use(store).use(VCalendar, {}).use(OpenLayersMap).use(VueGoogleMaps, {
-    load: {
-        key: 'AIzaSyAd9zBEy1OT75PhlflBVGM0NsXds6PagY8',
-    },
-}).mount('#app')
+createApp(App).use(router).use(store).use(VCalendar, {}).use(OpenLayersMap).mount('#app')
 //rs.common['Authorization'] = this.$store.getters.tokenString
 
 

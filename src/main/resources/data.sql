@@ -173,7 +173,7 @@ VALUES (1, 3, null, null);
 
 INSERT INTO public.reservation(
     reservation_type, id, end_date, number_of_guests, start_date, total_price, type, system_user)
-VALUES ('BOAT', 2, '2022-02-09 00:00:00', 4, '2022-02-07 00:00:00', 230, 'BOAT', 401);
+VALUES ('BOAT', 2, '2022-02-09 00:00:00', 4, '2022-02-07 00:00:00', 230, 'BOAT', 400);
 INSERT INTO public.boat_reservation(
     id, boat_id, feedback_id, owner_feedback_id)
 VALUES (2, 3, null, null);
@@ -314,6 +314,9 @@ INSERT INTO public.discount_reservation(
 INSERT INTO public.boat_discount_reservation(
 	id, boat_id, feedback_id, owner_feedback_id)
 	VALUES (5, 5, null, null);
+	
+
+   UPDATE reservation SET status = 'CLOSED' WHERE end_date >= NOW();
 
 
 
