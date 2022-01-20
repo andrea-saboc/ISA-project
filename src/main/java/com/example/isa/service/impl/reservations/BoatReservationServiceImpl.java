@@ -57,7 +57,7 @@ public class BoatReservationServiceImpl implements ReservationService{
 	
 	@Override
 	@Transactional(readOnly=false,propagation=Propagation.REQUIRED,isolation= Isolation.SERIALIZABLE)
-    public BoatReservation createReservationForClient(CustomReservationForClientDto dto) throws PeriodNoLongerAvailableException, ParseException, EntityDeletedException{
+    public BoatReservation createReservationForClient(CustomReservationForClientDto dto) throws PeriodNoLongerAvailableException, ParseException{
     	
 		ReservationDto res = new ReservationDto(dto);
 		ReservationStartEndDateFormatter formatter = new ReservationStartEndDateFormatter(res);
@@ -70,13 +70,9 @@ public class BoatReservationServiceImpl implements ReservationService{
 		if(period == null) {
 			throw new PeriodNoLongerAvailableException();
 		}
-		else if(boat.isDeleted()){
-			throw new EntityDeletedException();
+		else {
 			
-		}else {
-			Client client = clientRepository.findByEmail(dto.email);
-			
-			
+			Client client = clientRepository.findByEmail(dto.email);			
 			BoatReservation newBoatReservation = new BoatReservation(client, startDate,endDate, res.getNumberOfGuests(), dto.toResSearchDto(),
 					boat);
 
@@ -99,8 +95,8 @@ public class BoatReservationServiceImpl implements ReservationService{
 
 
 	@Override
-	@Transactional(readOnly=false)
-	public Reservation createReservation(ReservationDto res) throws ParseException, PeriodNoLongerAvailableException  {
+	@Transactional(readOnly=false,propagation=Propagation.REQUIRED,isolation= Isolation.SERIALIZABLE)
+	public BoatReservation createReservation(ReservationDto res) throws ParseException, PeriodNoLongerAvailableException  {
 
 		ReservationStartEndDateFormatter formatter = new ReservationStartEndDateFormatter(res);
 		Date startDate = formatter.startDate;
@@ -108,6 +104,7 @@ public class BoatReservationServiceImpl implements ReservationService{
 	
 	    
 	    BoatAvailablePeriod period = availablePeriodsRepo.getPeriodOfInterest(startDate, endDate,res.getEntityId());
+	    
 	    
 	    if(period == null) {
 	    	throw new PeriodNoLongerAvailableException();

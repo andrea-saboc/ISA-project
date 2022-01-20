@@ -4,7 +4,9 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
+import org.springframework.stereotype.Service;
 
+import com.example.isa.dto.NewDiscountReservationDto;
 import com.example.isa.exception.OfferNotAvailableException;
 import com.example.isa.model.Mansion;
 import com.example.isa.model.reservations.DiscountReservation;
@@ -15,6 +17,7 @@ import com.example.isa.repository.MansionRepository;
 import com.example.isa.service.AuthenticationService;
 import com.example.isa.service.DiscountReservationService;
 
+@Service
 public class MansionDiscountReservationService implements DiscountReservationService{
 	
 	@Autowired
@@ -26,22 +29,21 @@ public class MansionDiscountReservationService implements DiscountReservationSer
 	
 
 	@Override
-	public List<DiscountReservation> getDiscountReservations(long id) {
-
+	public List<DiscountReservation> getAvailableDiscountReservations(long id) {
     	Mansion mansion = mansionRepo.findById(id);
-		return reservationRepo.findAllByMansion(mansion);
+		return reservationRepo.findAllByMansionAndStatus(mansion,ReservationStatus.ACTIVE);
 	}
 
 	@Override
 	public List<DiscountReservation> getReservedDiscountReservations(long id) {
-		// TODO Auto-generated method stub
-		return null;
+    	Mansion mansion = mansionRepo.findById(id);
+		return reservationRepo.findAllByMansionAndStatus(mansion,ReservationStatus.RESERVED);
 	}
 
 	@Override
 	public DiscountReservation makeReservationOnDiscount(long resId) throws OfferNotAvailableException,ObjectOptimisticLockingFailureException {
 		
-    	MansionDiscountReservation res = reservationRepo.findById(resId).orElse(new MansionDiscountReservation());
+    	MansionDiscountReservation res = reservationRepo.findByIdAndStatus(resId,ReservationStatus.ACTIVE);
     	if(res == null) throw new OfferNotAvailableException();
     	else {
     	res.setStatus(ReservationStatus.RESERVED);
@@ -49,4 +51,12 @@ public class MansionDiscountReservationService implements DiscountReservationSer
     	return reservationRepo.save(res);
     	}
 	}
+
+	@Override
+	public DiscountReservation createDiscountReservation(NewDiscountReservationDto dto) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
 }

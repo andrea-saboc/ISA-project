@@ -350,7 +350,7 @@ export default {
                 })
                 .then(response => {
                     console.log(response.data)
-                   alert(response.data)                   
+                     alert(response.data)                   
                      this.LoadMansions()
                      this.makingReservation = false
                 });

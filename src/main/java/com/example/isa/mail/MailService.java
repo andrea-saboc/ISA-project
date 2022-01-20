@@ -41,8 +41,9 @@ public class MailService<T> {
 	    }
 	    
 	    @Async
-	    public void sendBoatReservationConfirmationMail(User user, BoatReservation reservation) throws MessagingException {
-	    	
+	    public void sendBoatReservationConfirmationMail(BoatReservation reservation) throws MessagingException {
+	    	 
+	    	User user = reservation.getUser();
 	    	BoatReservationConfirmationMailFormatter formater = new BoatReservationConfirmationMailFormatter();
 	    	SimpleMailMessage message = new SimpleMailMessage();
 	    	message.setFrom("adventurelandisa@gmail.com");
@@ -53,8 +54,9 @@ public class MailService<T> {
 	    	mailSender.send(message);
 	    }
 	    @Async
-	    public void sendMansionReservationConfirmationMail(User user, MansionReservation reservation) throws MessagingException {
+	    public void sendMansionReservationConfirmationMail(MansionReservation reservation) throws MessagingException {
 	    	
+	    	User user = reservation.getUser();
 	    	MansionReservationConfirmationMailFormatter formater = new MansionReservationConfirmationMailFormatter();
 	    	SimpleMailMessage message = new SimpleMailMessage();
 	    	message.setFrom("adventurelandisa@gmail.com");

@@ -1,16 +1,12 @@
 package com.example.isa.service.impl.reservations;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -18,9 +14,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.isa.dto.CustomReservationForClientDto;
 import com.example.isa.dto.ReservationDto;
+import com.example.isa.exception.EntityDeletedException;
 import com.example.isa.exception.PeriodNoLongerAvailableException;
+import com.example.isa.model.Mansion;
 import com.example.isa.model.MansionAvailablePeriod;
-import com.example.isa.model.User;
 import com.example.isa.model.reservations.AdditionalService;
 import com.example.isa.model.reservations.MansionReservation;
 import com.example.isa.model.reservations.Reservation;
@@ -54,22 +51,26 @@ public class MansionReservationServiceImpl implements ReservationService{
 	
 	@Override
 	@Transactional(readOnly=false,propagation=Propagation.REQUIRED,isolation= Isolation.SERIALIZABLE)
-	public MansionReservation createReservation(ReservationDto res)  throws PeriodNoLongerAvailableException, ParseException {
-		
-		
+	public MansionReservation createReservation(ReservationDto res)  throws PeriodNoLongerAvailableException, ParseException, EntityDeletedException {
+				
 		ReservationStartEndDateFormatter formatter = new ReservationStartEndDateFormatter(res);
 		Date startDate = formatter.startDate;
 		Date endDate = formatter.endDate;
 		
 		MansionAvailablePeriod period = availablePeriodsRepo.getPeriodOfInterest(startDate, endDate,res.getEntityId());
+		Mansion mansion = mansionRepo.findByIdAndDeletedFalse(res.getEntityId());
 		
 		if(period == null) {
-			throw new PeriodNoLongerAvailableException();}
-		
+			throw new PeriodNoLongerAvailableException();
+		}
+		else if(mansion == null) {
+			
+			throw new EntityDeletedException();
+		}
 		else {
 			
-			 MansionReservation newMansionReservation = new MansionReservation(authenticationService.getLoggedUser(),startDate, endDate, res.getNumberOfGuests(),
-		    			res.getPrice(), mansionRepo.findById(res.getEntityId()));
+			 MansionReservation newMansionReservation = new MansionReservation(authenticationService.getLoggedUser(),
+					 startDate, endDate, res.getNumberOfGuests(),res.getPrice(), mansion);
 		        
 
 		        if(!period.getStartDate().equals(startDate)) {

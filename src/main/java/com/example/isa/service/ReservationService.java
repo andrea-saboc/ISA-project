@@ -14,9 +14,9 @@ import com.sun.el.parser.ParseException;
 
 public interface ReservationService {
 	
-	public Reservation createReservation(ReservationDto res) throws ParseException, PeriodNoLongerAvailableException, java.text.ParseException;
+	public Reservation createReservation(ReservationDto res) throws ParseException, PeriodNoLongerAvailableException, java.text.ParseException, EntityDeletedException;
 	
-	public Reservation createReservationForClient(CustomReservationForClientDto dto)  throws PeriodNoLongerAvailableException, ParseException, java.text.ParseException, EntityDeletedException;
+	public Reservation createReservationForClient(CustomReservationForClientDto dto)  throws PeriodNoLongerAvailableException, ParseException, java.text.ParseException;
 	
 	public Set<AdditionalService> addAdditionalServices(List<Long> additinalServices);
 	

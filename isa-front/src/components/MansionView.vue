@@ -117,7 +117,7 @@
         </div>
         <hr>
         <div class="info">
-          <h2><button class="btn btn-lg-link" v-on:click="ShowReservationOffer">Show reservationOffers</button></h2>
+          <h2><button class="btn btn-lg-link" v-on:click="ShowReservationOffers">Show reservationOffers</button></h2>
         </div>
 
         <hr>
@@ -477,6 +477,9 @@ export default {
         })
   },
   methods:{
+    ShowReservationOffers(){
+      window.location.href = "/mansionReservationOffers/" + this.mansionToShow.id.toString();       
+    }
 
   }
 }

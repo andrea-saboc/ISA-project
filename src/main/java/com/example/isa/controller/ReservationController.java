@@ -23,6 +23,7 @@ import com.example.isa.dto.CustomReservationForClientDto;
 import com.example.isa.dto.PotentialReservationDto;
 import com.example.isa.dto.ReservationDto;
 import com.example.isa.dto.ReservationSearchDto;
+import com.example.isa.exception.EntityDeletedException;
 import com.example.isa.exception.PeriodNoLongerAvailableException;
 import com.example.isa.mail.MailService;
 import com.example.isa.model.reservations.BoatDiscountReservation;
@@ -143,9 +144,9 @@ public class ReservationController {
     	
     	System.out.println("USli u kontroler");
         try {
-        	Reservation newReservation = boatResService.createReservation(res);
+        	BoatReservation newReservation = boatResService.createReservation(res);
         	try {
-        		mailService.sendBoatReservationConfirmationMail(authentication.getLoggedUser(), (BoatReservation) newReservation);
+        		mailService.sendBoatReservationConfirmationMail(newReservation);
         	}catch (MessagingException e){
         		return  new ResponseEntity<>("There is a problem with your mail!", HttpStatus.INTERNAL_SERVER_ERROR);
         	}
@@ -158,16 +159,16 @@ public class ReservationController {
     }
     
 	@PreAuthorize("hasRole('ROLE_CLIENT')")
-    @RequestMapping(method = RequestMethod.POST,value = "/reservations/createMansionReservation", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(method = RequestMethod.POST,value = "/reservations/createMansionReservation",
+    consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @CrossOrigin(origins = "*")
     public ResponseEntity<String> createMansionReservation(@RequestBody ReservationDto res){
     	
-    	System.out.println("USli u kontroler");
         try {
         	MansionReservation newReservation = mansionResService.createReservation(res);
         	try {
-        		mailService.sendMansionReservationConfirmationMail(authentication.getLoggedUser(), newReservation);
-        	}catch (/*Messaging*/Exception e){
+        		mailService.sendMansionReservationConfirmationMail(newReservation);
+        	}catch (MessagingException e){
         		return  new ResponseEntity<>("There is a problem with your mail!", HttpStatus.INTERNAL_SERVER_ERROR);
         	}
             return new ResponseEntity<>("Reservation successfull!", HttpStatus.OK);
@@ -175,7 +176,9 @@ public class ReservationController {
             return  new ResponseEntity<>("Check your date again!", HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (PeriodNoLongerAvailableException e) {
         	return  new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        } catch (EntityDeletedException e) {
+	    	return  new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+	    }
     }
     
 	@PreAuthorize("hasRole('ROLE_CLIENT')")
