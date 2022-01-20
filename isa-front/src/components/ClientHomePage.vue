@@ -83,6 +83,14 @@ export default {
       this.user = null 
       console.log(this.user)   
     }
+  },
+  watch: {
+      dataToBeWatched: function(val) {
+          //do something when the data changes.
+          if (val) {
+              //this.makeSmthWhenDataChanged();
+          }
+      }
   }
 }
 

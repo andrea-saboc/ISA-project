@@ -97,7 +97,7 @@ name: "AccountActivation",
                 })
                 .then(response => {
                   this.valid = response.data
-                  alert(response.data)
+                  console.log(response.data)
                 });          
  
             

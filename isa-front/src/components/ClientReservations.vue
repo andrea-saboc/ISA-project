@@ -1,11 +1,14 @@
 <template>
    <section class="bg-dark text-light p-5 text-center text-sm-start">
+
       <div class = "container pt-100">
          <div class="btn-group">
             <button class="btn btn-primary" v-on:click=DisplayPastReservations>Reservation history</button>
             <button class="btn btn-primary" v-on:click=DisplayCurrentReservations>Active reservations</button>
          </div>
          <div v-if="display == 'current'">
+         <div v-if="pastMansionReservations.length == 0" class="text-light"><br><br><br><br><h2 class="card-title text-center">No reservations</h2><br><br><br><br></div>
+
             <div  v-for="res in currentReservations"  :key="res">
                <div class="card text-dark bg-light mt-3">
                   <div class="card-header h4">
@@ -22,6 +25,7 @@
             </div>
          </div>
          <div v-if="display == 'past'">
+
             <div class="input-group justify-content-end mr-30">
                <ul class="nav">
                   <li class="nav-item">
@@ -47,7 +51,10 @@
                <button class = "btn btn-primary" v-on:click=SortReservations>Sort</button>
             </div>
             <div v-if="displayPastReservations == 'mansions'">
+            <div v-if="pastMansionReservations.length == 0" class="text-light"><br><br><br><h2 class="card-title text-center">No mansion reservations</h2><br><br><br></div>
+
                <div v-for="res in pastMansionReservations" :key="res">
+
                   <div class="text-dark bg-light mt-3">
                      <div class="card-header h4">
                         {{res.mansion.name}},{{res.mansion.address.address}},{{res.mansion.address.city}}
@@ -84,7 +91,10 @@
                </div>
             </div>
             <div v-if="displayPastReservations == 'boats'">
+               <div v-if="pastBoatReservations.length == 0" class="text-light"><br><br><br><h2 class="card-title text-center">No boat reservations</h2><br><br><br></div>
+
                <div v-for="res in pastBoatReservations" :key="res">
+
                   <div class="text-dark bg-light mt-3">
                      <div class="card-header h4">
                         {{res.boat.name}},{{res.boat.address.address}},{{res.boat.address.city}}

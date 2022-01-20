@@ -70,7 +70,15 @@ export default{
                 this.dispatch(response.data.userType);
                 console.log('User type is:')
                 console.log(this.$store.state.userType)
-              });
+              })
+              .catch(error=>{
+                alert('Wrong email or password')
+                console.log(error)
+              })
+
+
+
+
         }else alert('error in filling form');
 
       },

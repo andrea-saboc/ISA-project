@@ -29,7 +29,6 @@ public class UserController {
 	
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/userData",produces = MediaType.APPLICATION_JSON_VALUE )
-	//@PreAuthorize("hasRole('ROLE_CLIENT')")
 	@CrossOrigin(origins = "*")	
 	public ResponseEntity<User> getUserData(){
 		try{
@@ -41,7 +40,6 @@ public class UserController {
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/updateUser",produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
-	//@PreAuthorize("hasRole('ROLE_CLIENT')")
 	@CrossOrigin(origins = "*")	
 	public ResponseEntity<User> updateUser(@RequestBody User user) throws JsonProcessingException{	
 		return ResponseEntity.ok(userService.updateUserInfo(user));
