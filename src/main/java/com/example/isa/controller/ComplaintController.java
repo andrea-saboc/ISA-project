@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -14,9 +13,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.isa.dto.ClientComplaintDto;
 import com.example.isa.mail.MailService;
+import com.example.isa.model.AdvertiserComplaint;
 import com.example.isa.model.Boat;
+import com.example.isa.model.BoatComplaint;
 import com.example.isa.model.Complaint;
 import com.example.isa.model.Mansion;
+import com.example.isa.model.MansionComplaint;
 import com.example.isa.service.impl.ClientComplaintService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
@@ -33,8 +35,8 @@ public class ComplaintController {
 	@RequestMapping(method = RequestMethod.POST, value = "/complaints/addBoatComplain",produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> addBoatComplaint(@RequestBody ClientComplaintDto dto) throws JsonProcessingException{	
 		
-		Complaint c = complaintService.addBoatComplaint(dto);
-		mailService.sendMansionComplaintEmail(c);
+		BoatComplaint c = complaintService.addBoatComplaint(dto);
+		mailService.sendBoatComplaintEmail(c);
 		return ResponseEntity.ok("Your complaint has been submited!");
 	}
 	
@@ -42,15 +44,15 @@ public class ComplaintController {
 	@RequestMapping(method = RequestMethod.POST, value = "/complaints/addBoatOwnerComplain",produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> addBoatOwnerComplaint(@RequestBody ClientComplaintDto dto) throws JsonProcessingException{	
 		
-		Complaint c = complaintService.addBoatAdvertiserComplaint(dto);
-		mailService.sendBoatOwnerComplaintEmail(c);
+		AdvertiserComplaint c = complaintService.addBoatAdvertiserComplaint(dto);
+		mailService.sendAdvertiserComplaintEmail(c);
 		return ResponseEntity.ok("Your complaint has been submited!");
 	}
 	@PreAuthorize("hasRole('ROLE_CLIENT')")
 	@RequestMapping(method = RequestMethod.POST, value = "/complaints/addMansionComplain",produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> addMansionComplaint(@RequestBody ClientComplaintDto dto) throws JsonProcessingException{	
 		
-		Complaint c = complaintService.addMansionComplaint(dto);
+		MansionComplaint c = complaintService.addMansionComplaint(dto);
 		mailService.sendMansionComplaintEmail(c);
 		return ResponseEntity.ok("Your complaint has been submited!");
 	}
@@ -59,8 +61,8 @@ public class ComplaintController {
 	@RequestMapping(method = RequestMethod.POST, value = "/complaints/addMansionOwnerComplain",produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> addMansionOwnerComplaint(@RequestBody ClientComplaintDto dto) throws JsonProcessingException{	
 		
-		Complaint c = complaintService.addMansionAdvertiserComplaint(dto);
-		mailService.sendMansionOwnerComplaintEmail(c);
+		AdvertiserComplaint c = complaintService.addMansionAdvertiserComplaint(dto);
+		mailService.sendAdvertiserComplaintEmail(c);
 		return ResponseEntity.ok("Your complaint has been submited!");
 	}
 	

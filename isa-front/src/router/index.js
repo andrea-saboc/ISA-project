@@ -5,6 +5,7 @@ import ClientRegistration from '../components/ClientRegistration.vue'
 import Login from '../components/Login.vue'
 import Profile from '../components/Profile.vue'
 import BoatReservationOffers from '../components/BoatReservationOffers.vue'
+import MansionReservationOffers from '../components/MansionReservationOffers.vue'
 import Boats from '../components/Boats.vue'
 import Mansions from '../components/Mansions.vue'
 import Adventures from '../components/Adventures.vue'
@@ -121,12 +122,17 @@ const routes = [
         component: BoatReservationOffers
     },
     {
+        path: '/mansionReservationOffers/:id',
+        name: 'MansionReservationOffers',
+        component: MansionReservationOffers
+    },
+    {
         path: '/activation/:code',
         name: 'AccountActivation',
         component: AccountActivation
     },
     {
-        path: '/mansion',
+        path: '/mansion/:id',
         name: 'MansionView',
         component: MansionView
     },

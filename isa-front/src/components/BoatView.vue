@@ -1,5 +1,5 @@
 <template>
-<div class="boat-view" v-if="boatToShow!=null">
+<div class="mansion-view" v-if="boatToShow!=null">
   <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
     <div v-if="(boatToShow.InteriorImages==null || boatToShow.InteriorImages.length==0) && (boatToShow.ExteriorImages==null || boatToShow.ExteriorImages.length==0)">
     <div class="carousel-indicators">
@@ -832,7 +832,7 @@ export default {
 </script>
 
 <style scoped>
-.boat-view{
+.mansion-view{
   horiz-align: center;
   width: 80%;
   margin-left: 15%;
@@ -840,7 +840,7 @@ export default {
   padding-bottom: 5%;
 }
 
-.boat-view .top-slider{
+.mansion-view .top-slider{
   height: 550px;
 }
 
@@ -850,12 +850,12 @@ export default {
   margin-bottom: 2%;
 }
 
-.boat-view .icons{
+.mansion-view .icons{
   width: 10%;
   margin: 2%;
 }
 
-.boat-view .navigation-equipments-list, .boat-view .engine-information-list{
+.mansion-view .navigation-equipments-list, .mansion-view .engine-information-list{
   display: flex;
   flex-direction: row;
 }
@@ -900,7 +900,7 @@ export default {
 
 }
 
-.boat-view .row .colinfo {
+.mansion-view .row .colinfo {
   width: 60%;
 }
 

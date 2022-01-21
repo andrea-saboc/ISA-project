@@ -49,22 +49,19 @@ public class ReservationService {
 		List<ActiveReservationDto> ret = new ArrayList<ActiveReservationDto>();
 		ret.addAll(getBoatReservations());
 		ret.addAll(getMansionReservations());
-		//ret.addAll(getMansionDiscountReservations());
-		ret.addAll(getBoatDiscountReservations());
+		ret.addAll(getMansionDiscountReservations());
+		//ret.addAll(getBoatDiscountReservations());
 		return ret;
 	}
 	
 	public List<ActiveReservationDto>getBoatReservations(){
 		List<ActiveReservationDto> ret = new ArrayList<ActiveReservationDto>();
 		System.out.println("USer koji trazi trans " + authenticationService.getLoggedUser().getName() );
+		
 		for(BoatReservation r: boatResRepo.findAllByUserAndStatus(authenticationService.getLoggedUser(),ReservationStatus.ACTIVE)) {
-			
-			Format formatter = new SimpleDateFormat("dd.MM.yyyy, HH:mm");
-			if(r.getEndDate().after(new Date()))
-			ret.add(new ActiveReservationDto(r.getId(), r.getType(),formatter.format(r.getStartDate()),formatter.format(r.getEndDate()),
-					r.getNumberOfGuests(),null, r.getTotalPrice(),r.getBoat().getName(),
-					r.getBoat().getAddress().getCountry() + ", "+r.getBoat().getAddress().getCity()+", "+r.getBoat().getAddress().getAddress(),
-					r.getBoat().getPromoDescription(), isCancellationAllowed(r.getStartDate())));
+			ActiveReservationDto res = new ActiveReservationDto(r);
+			res.setAllowedCancelation(isCancellationAllowed(r.getStartDate()));
+			ret.add(res); 
 		}
 		return ret;
 	}
@@ -72,28 +69,20 @@ public class ReservationService {
 	public List<ActiveReservationDto>getMansionReservations(){
 		List<ActiveReservationDto> ret = new ArrayList<ActiveReservationDto>();
 		for(MansionReservation r: mansionResRepo.findAllByUserAndStatus(authenticationService.getLoggedUser(),ReservationStatus.ACTIVE)) {
-			
-			Format formatter = new SimpleDateFormat("dd.MM.yyyy, HH:mm");
-			if(r.getEndDate().after(new Date()))
-			ret.add(new ActiveReservationDto(r.getId(), r.getType(), formatter.format(r.getStartDate()) ,formatter.format(r.getEndDate()),
-					r.getNumberOfGuests(),null, r.getTotalPrice(),r.getMansion().getName(),
-					r.getMansion().getAddress().getCountry() + ", "+r.getMansion().getAddress().getCity()+", "+r.getMansion().getAddress().getAddress(),
-					r.getMansion().getPromoDescription(), isCancellationAllowed(r.getStartDate())));
+			ActiveReservationDto res = new ActiveReservationDto(r);
+			res.setAllowedCancelation(isCancellationAllowed(r.getStartDate()));
+			ret.add(res); 
 		}
 		return ret;
 	}
 	
 	public List<ActiveReservationDto>getMansionDiscountReservations(){
 		List<ActiveReservationDto> ret = new ArrayList<ActiveReservationDto>();
-		
-		for(MansionDiscountReservation r: mansionDiscountResRepo.findAllByMansionAndStatus(authenticationService.getLoggedUser(),ReservationStatus.ACTIVE)) {
-			
-			Format formatter = new SimpleDateFormat("dd.MM.yyyy, HH:mm");
-			if(r.getEndDate().after(new Date()))
-			ret.add(new ActiveReservationDto(r.getId(), r.getType(), formatter.format(r.getStartDate()) ,formatter.format(r.getEndDate()),
-					r.getNumberOfGuests(),null, r.getPriceWithDiscount(),r.getMansion().getName(),
-					r.getMansion().getAddress().getCountry() + ", "+r.getMansion().getAddress().getCity()+", "+r.getMansion().getAddress().getAddress(),
-					r.getMansion().getPromoDescription(), isCancellationAllowed(r.getStartDate())));
+		System.out.println("prob");
+		for(MansionDiscountReservation r: mansionDiscountResRepo.findAllByUserAndStatus(authenticationService.getLoggedUser(),ReservationStatus.RESERVED)) {			
+			ActiveReservationDto res = new ActiveReservationDto(r);
+			res.setAllowedCancelation(isCancellationAllowed(r.getStartDate()));
+			ret.add(res); 
 		}
 		return ret;
 	}
@@ -103,13 +92,9 @@ public class ReservationService {
 		List<ActiveReservationDto> ret = new ArrayList<ActiveReservationDto>();
 		
 		for(BoatDiscountReservation r: boatDiscountResRepo.findAllByUserAndStatus(authenticationService.getLoggedUser(),ReservationStatus.RESERVED)) {
-			
-			Format formatter = new SimpleDateFormat("dd.MM.yyyy, HH:mm");
-			//if(r.getEndDate().after(new Date()))
-			ret.add(new ActiveReservationDto(r.getId(), r.getType(), formatter.format(r.getStartDate()) ,formatter.format(r.getEndDate()),
-					r.getNumberOfGuests(),null, r.getPriceWithDiscount(),r.getBoat().getName(),
-					r.getBoat().getAddress().getCountry() + ", "+r.getBoat().getAddress().getCity()+", "+r.getBoat().getAddress().getAddress(),
-					r.getBoat().getPromoDescription(), isCancellationAllowed(r.getStartDate())));
+			ActiveReservationDto res = new ActiveReservationDto(r);
+			res.setAllowedCancelation(isCancellationAllowed(r.getStartDate()));
+			ret.add(res); 
 		}
 		return ret;
 	}

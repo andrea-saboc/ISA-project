@@ -2,15 +2,11 @@
   <nav class = "navbar navbar-expand-lg bg-dark navbar-dark mainavbar" style="height: 8%">
     <div class="container">
       <a v-if="user === null" href="/home" class="navbar-brand">Adventureland</a>
-      <a v-if="user === 'Client'" href="/clientHomePage" class="navbar-brand">Adventureland</a>
       <div class="collapse navbar-collapse">
         <ul class ="navbar-nav ms-auto">
-        <li v-if="user === 'MansionOwner'" class ="nav-item" >
-          <a href="/mansionOwnerHomePage" class="nav-link">Home</a>
-        </li>
-        <li v-if="user === null" class="nav-item">
-          <a href="/clientRegistration" class="nav-link">Register</a>
-        </li>
+
+
+
          <li v-if="user === 'Administrator'" class="nav-item">
           <a href="/profile" class="nav-link">Profile Admina</a>
         </li>
@@ -19,12 +15,6 @@
         </li>
           <li v-if="user === 'BoatOwner'" class="nav-item">
             <a href="/boatOwnerHomePage" class="nav-link">Home page</a>
-          </li>
-        <li v-if="user === null" class="nav-item">
-          <a href="/login" class="nav-link">Login</a>
-        </li>
-          <li v-if="user!=null" class="nav-item">
-            <a v-on:click="Logout">Logout</a>
           </li>
         </ul>
       </div>
@@ -36,8 +26,8 @@
 <script>
 //import {useStore} from "vuex"
 //import axios from 'axios'
-import axios from "axios";
-import {devServer} from "../vue.config";
+//import axios from "axios";
+//import {devServer} from "../vue.config";
 
 export default{
   data(){
@@ -48,18 +38,8 @@ export default{
   },
   
   mounted(){
-    this.$store.dispatch('startSession', null);   
-    this.user = this.$store.state.userType;
-    axios.get(devServer.proxy + "/userData", {
-      headers: {
-        'Authorization': this.$store.getters.tokenString
-      }
-    })
-        .then(response => {
-          this.loggedUser = response.data
-          console.log("Ovaj user je ulogovan:", this.loggedUser)
-        })
-},
+
+  },
   methods:{
     Logout(){
       this.$store.commit('logOut');

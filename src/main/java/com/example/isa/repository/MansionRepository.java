@@ -8,4 +8,5 @@ import com.example.isa.model.Mansion;
 public interface MansionRepository extends JpaRepository<Mansion, Long> {
 
 	Mansion findById(long id);
+	Mansion findByIdAndDeletedFalse(long id);
 }

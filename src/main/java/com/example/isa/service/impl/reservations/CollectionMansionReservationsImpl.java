@@ -23,16 +23,8 @@ public class CollectionMansionReservationsImpl {
 	@Autowired
 	MansionReservationRepository mansionReservationRepo;
 
-	public List<Reservation> GetReservationHistory() {
-		Date today = new Date();
-		List<Reservation> res = new ArrayList<Reservation>();
-		
-		for(MansionReservation m: mansionReservationRepo.findAllByUserAndStatus(authenticationService.getLoggedUser(),ReservationStatus.ACTIVE)) {
-			if(m.getEndDate().before(today))
-				res.add(m);
-		}
-		
-		return res;
+	public List<MansionReservation> GetReservationHistory() {	
+		return mansionReservationRepo.findAllByUserAndStatus(authenticationService.getLoggedUser(),ReservationStatus.CLOSED);
 	}
 
 

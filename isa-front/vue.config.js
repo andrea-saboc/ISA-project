@@ -1,6 +1,6 @@
 module.exports = {
     devServer: {
-        proxy: 'http://localhost:8080'
+        proxy: 'https://adventureland-isa.herokuapp.com'
     },
     chainWebpack: (config) => {
         config

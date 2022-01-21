@@ -46,14 +46,14 @@ public class SubscriptionService {
 		return mansionSubRepo.findAllBySubscriber(authenticationService.getLoggedUser());
 	}
 	public Boolean checkBoatSubscription(Boat boat) {
-		System.out.println("U check subs");
-		//System.out.println("d ali je user subs  "+boatSubsRepo.findBySubscriberAndBoat(getLoggedUser(), boat).getSubscriber().getName());
 		return boatSubsRepo.findBySubscriberAndBoat(authenticationService.getLoggedUser(), boat) != null? true:false;
+	}
+	public Boolean checkMansionSubscription(Mansion mansion) {
+		return mansionSubRepo.findBySubscriberAndMansion(authenticationService.getLoggedUser(), mansion) != null? true:false;
 	}
 
 	public List<BoatSubscription> getClientBoatSubscriptionByBoatOwner(Long id) {
 		Client client = clientRepository.findById(id).get();
-		System.out.print("Klijent za koga trazimo pretplate" + client.toString());
 		List<BoatSubscription> boatSubscriptions = boatSubsRepo.findAllBySubscriber(client);
 		return boatSubscriptions;
 	}

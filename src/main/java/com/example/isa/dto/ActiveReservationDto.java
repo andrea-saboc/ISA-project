@@ -1,6 +1,13 @@
 package com.example.isa.dto;
 
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.List;
+
+import com.example.isa.model.reservations.BoatDiscountReservation;
+import com.example.isa.model.reservations.BoatReservation;
+import com.example.isa.model.reservations.MansionDiscountReservation;
+import com.example.isa.model.reservations.MansionReservation;
 
 public class ActiveReservationDto {
 	
@@ -126,6 +133,70 @@ public class ActiveReservationDto {
 
 	public ActiveReservationDto() {
 		super();
+	}
+	
+	public ActiveReservationDto(MansionDiscountReservation r) {
+
+		Format formatter = new SimpleDateFormat("dd.MM.yyyy, HH:mm");
+		
+		this.reservationId = r.getId();
+		this.reservationType = r.getType();
+		this.startDate = formatter.format(r.getStartDate());
+		this.endDate = formatter.format(r.getEndDate());
+		this.numberOfGuests = r.getNumberOfGuests();
+		this.additinalServices = null;
+		this.totalPrice = r.getPriceWithDiscount();
+		this.entityName = r.getMansion().getName();
+		this.entityPromo = r.getMansion().getPromoDescription();
+		this.entityAddress = r.getMansion().getAddress().getCountry() + ", "+r.getMansion().getAddress().getCity()+", "+r.getMansion().getAddress().getAddress();		
+	}
+	
+	public ActiveReservationDto(BoatDiscountReservation r) {
+
+		Format formatter = new SimpleDateFormat("dd.MM.yyyy, HH:mm");
+		
+		this.reservationId = r.getId();
+		this.reservationType = r.getType();
+		this.startDate = formatter.format(r.getStartDate());
+		this.endDate = formatter.format(r.getEndDate());
+		this.numberOfGuests = r.getNumberOfGuests();
+		this.additinalServices = null;
+		this.totalPrice = r.getPriceWithDiscount();
+		this.entityName = r.getBoat().getName();
+		this.entityPromo = r.getBoat().getPromoDescription();
+		this.entityAddress = r.getBoat().getAddress().getCountry() + ", "+r.getBoat().getAddress().getCity()+", "+r.getBoat().getAddress().getAddress();		
+	}
+	
+	public ActiveReservationDto(BoatReservation r) {
+
+		Format formatter = new SimpleDateFormat("dd.MM.yyyy, HH:mm");
+		
+		this.reservationId = r.getId();
+		this.reservationType = r.getType();
+		this.startDate = formatter.format(r.getStartDate());
+		this.endDate = formatter.format(r.getEndDate());
+		this.numberOfGuests = r.getNumberOfGuests();
+		this.additinalServices = null;
+		this.totalPrice = r.getTotalPrice();
+		this.entityName = r.getBoat().getName();
+		this.entityPromo = r.getBoat().getPromoDescription();
+		this.entityAddress = r.getBoat().getAddress().getCountry() + ", "+r.getBoat().getAddress().getCity()+", "+r.getBoat().getAddress().getAddress();		
+	}
+	
+	public ActiveReservationDto(MansionReservation r) {
+
+		Format formatter = new SimpleDateFormat("dd.MM.yyyy, HH:mm");
+		
+		this.reservationId = r.getId();
+		this.reservationType = r.getType();
+		this.startDate = formatter.format(r.getStartDate());
+		this.endDate = formatter.format(r.getEndDate());
+		this.numberOfGuests = r.getNumberOfGuests();
+		this.additinalServices = null;
+		this.totalPrice = r.getTotalPrice();
+		this.entityName = r.getMansion().getName();
+		this.entityPromo = r.getMansion().getPromoDescription();
+		this.entityAddress = r.getMansion().getAddress().getCountry() + ", "+r.getMansion().getAddress().getCity()+", "+r.getMansion().getAddress().getAddress();		
 	}
 	
 	

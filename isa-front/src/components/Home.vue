@@ -9,9 +9,7 @@
     <div class = "d-sm-flex align-items-center justify-content-between">
       <div>
       <h1>Log in to your account</h1>
-      <p class="lead my-4">
-        This is some kind of description or whatever.. Ovdje bi mozda mogla i slika?
-      </p>
+      <p class="lead my-4"> </p>
       <a type="button" class = "btn btn-primary btn-lg"  href="/login">Login
       </a>
 <div class="modal fade" id="login" tabindex="-1" role="dialog" aria-labelledby="login" aria-hidden="true">
@@ -35,9 +33,7 @@
       </div>
       <div>
       <h1>Dont have an account?</h1>
-      <p class="lead my-4">
-        This is some kind of description or whatever.. Ovdje bi mozda mogla i slika?
-      </p>
+      <p class="lead my-4"></p>
       <a type="button" class = "btn btn-primary btn-lg"  href="/clientRegistration">Register
       </a>
       </div>
