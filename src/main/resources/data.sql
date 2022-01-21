@@ -341,6 +341,10 @@ INSERT INTO public.mansion_discount_reservation(
 UPDATE reservation SET status = 'CLOSED' WHERE end_date <= NOW();
 UPDATE discount_reservation SET status = 'CLOSED' WHERE end_date <= NOW();
 
+UPDATE client
+SET client_penalty_points = 0, penalty_points_reset_date = NOW()
+WHERE (SELECT EXTRACT(YEAR FROM penalty_points_reset_date)) < (SELECT EXTRACT(YEAR FROM current_date)) OR 
+(SELECT EXTRACT(MONTH FROM penalty_points_reset_date)) < (SELECT EXTRACT(MONTH FROM current_date))
 
 
 	
