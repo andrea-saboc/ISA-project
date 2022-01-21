@@ -15,7 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.isa.dto.CustomReservationForClientDto;
 import com.example.isa.dto.ReservationDto;
 import com.example.isa.exception.EntityDeletedException;
+import com.example.isa.exception.ImpossibleDueToPenaltyPoints;
 import com.example.isa.exception.PeriodNoLongerAvailableException;
+import com.example.isa.model.Client;
 import com.example.isa.model.Mansion;
 import com.example.isa.model.MansionAvailablePeriod;
 import com.example.isa.model.reservations.AdditionalService;
@@ -24,6 +26,7 @@ import com.example.isa.model.reservations.Reservation;
 import com.example.isa.model.reservations.ReservationStartEndDateFormatter;
 import com.example.isa.model.reservations.ReservationStatus;
 import com.example.isa.repository.AdditionalServiceRepository;
+import com.example.isa.repository.ClientRepository;
 import com.example.isa.repository.MansionAvailablePeriodRepository;
 import com.example.isa.repository.MansionRepository;
 import com.example.isa.repository.MansionReservationRepository;
@@ -46,12 +49,14 @@ public class MansionReservationServiceImpl implements ReservationService{
 	AdditionalServiceRepository additinalServicesRepo;
 	@Autowired
 	AuthenticationService authenticationService;
+	@Autowired
+	ClientRepository clientRepository;
 	
 	
 	
 	@Override
 	@Transactional(readOnly=false,propagation=Propagation.REQUIRED,isolation= Isolation.SERIALIZABLE)
-	public MansionReservation createReservation(ReservationDto res)  throws PeriodNoLongerAvailableException, ParseException, EntityDeletedException {
+	public MansionReservation createReservation(ReservationDto res)  throws PeriodNoLongerAvailableException, ParseException, EntityDeletedException, ImpossibleDueToPenaltyPoints {
 				
 		ReservationStartEndDateFormatter formatter = new ReservationStartEndDateFormatter(res);
 		Date startDate = formatter.startDate;
@@ -59,13 +64,16 @@ public class MansionReservationServiceImpl implements ReservationService{
 		
 		MansionAvailablePeriod period = availablePeriodsRepo.getPeriodOfInterest(startDate, endDate,res.getEntityId());
 		Mansion mansion = mansionRepo.findByIdAndDeletedFalse(res.getEntityId());
+		Client client = clientRepository.findByEmail(authenticationService.getLoggedUser().getEmail());
 		
 		if(period == null) {
 			throw new PeriodNoLongerAvailableException();
 		}
-		else if(mansion == null) {
-			
+		else if(mansion == null) {			
 			throw new EntityDeletedException();
+		}
+		else if(client.getPenaltyPoints() > 3) {
+			throw new ImpossibleDueToPenaltyPoints();
 		}
 		else {
 			

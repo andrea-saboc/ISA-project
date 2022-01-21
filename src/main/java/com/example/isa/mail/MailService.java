@@ -10,9 +10,14 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import com.example.isa.mail.formatter.AccountActivationFormatter;
+import com.example.isa.mail.formatter.BoatComplaintFormatter;
 import com.example.isa.mail.formatter.BoatReservationConfirmationMailFormatter;
+import com.example.isa.mail.formatter.MansionComplaintFormatter;
 import com.example.isa.mail.formatter.MansionReservationConfirmationMailFormatter;
-import com.example.isa.model.Complaint;
+import com.example.isa.mail.formatter.OwnerComplaintMailFormatter;
+import com.example.isa.model.AdvertiserComplaint;
+import com.example.isa.model.BoatComplaint;
+import com.example.isa.model.MansionComplaint;
 import com.example.isa.model.User;
 import com.example.isa.model.reservations.BoatReservation;
 import com.example.isa.model.reservations.MansionReservation;
@@ -67,23 +72,42 @@ public class MailService<T> {
 	    	mailSender.send(message);
 	    }
 
-		public void sendMansionComplaintEmail(Complaint c) {
-			// TODO Auto-generated method stub
+		public void sendMansionComplaintEmail(MansionComplaint c) {
+			
+	    	MansionComplaintFormatter formater = new MansionComplaintFormatter(c);
+	    	SimpleMailMessage message = new SimpleMailMessage();
+	    	message.setFrom("adventurelandisa@gmail.com");
+	    	message.setTo(formater.getOwnerEmail());
+	    	message.setText(formater.getText());
+	    	message.setSubject(formater.getSubject());
+	    	
+	    	mailSender.send(message);
+		}
+		
+		
+		public void sendBoatComplaintEmail(BoatComplaint c) {
+			
+	    	BoatComplaintFormatter formater = new BoatComplaintFormatter(c);
+	    	SimpleMailMessage message = new SimpleMailMessage();
+	    	message.setFrom("adventurelandisa@gmail.com");
+	    	message.setTo(formater.getOwnerEmail());
+	    	message.setText(formater.getText());
+	    	message.setSubject(formater.getSubject());
+	    	
+	    	mailSender.send(message);
 			
 		}
 		
-		public void sendMansionOwnerComplaintEmail(Complaint c) {
-			// TODO Auto-generated method stub
+		public void sendAdvertiserComplaintEmail(AdvertiserComplaint c) {
 			
-		}
-		
-		public void sendBoatComplaintEmail(Complaint c) {
-			// TODO Auto-generated method stub
-			
-		}
-		
-		public void sendBoatOwnerComplaintEmail(Complaint c) {
-			// TODO Auto-generated method stub
+	    	OwnerComplaintMailFormatter formater = new OwnerComplaintMailFormatter(c);
+	    	SimpleMailMessage message = new SimpleMailMessage();
+	    	message.setFrom("adventurelandisa@gmail.com");
+	    	message.setTo(formater.getOwnerEmail());
+	    	message.setText(formater.getText());
+	    	message.setSubject(formater.getSubject());
+	    	
+	    	mailSender.send(message);
 			
 		}
 }

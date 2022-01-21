@@ -438,7 +438,6 @@ export default {
     }
   },
   mounted() {
-    alert("in mansion view")
     this.user = this.$store.state.userType
     console.log("User", this.$store.state.userType)
     var path = window.location.href;

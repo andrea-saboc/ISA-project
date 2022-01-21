@@ -74,7 +74,7 @@ public class ReservationController {
 	
 	@PreAuthorize("hasRole('ROLE_CLIENT')")
     @RequestMapping(method = RequestMethod.GET,value = "/reservations/boats", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Reservation>> getBoatReservations(){
+    public ResponseEntity<List<BoatReservation>> getBoatReservations(){
     	
     	try {
             return new ResponseEntity<>(collectingBoatResService.GetReservationHistory(), HttpStatus.OK);
@@ -85,7 +85,7 @@ public class ReservationController {
     }
 	@PreAuthorize("hasRole('ROLE_CLIENT')")
     @RequestMapping(method = RequestMethod.GET,value = "/reservations/mansions", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Reservation>> getMansionReservations(){
+    public ResponseEntity<List<MansionReservation>> getMansionReservations(){
 
         try {
             return new ResponseEntity<>(collectingMansionResService.GetReservationHistory(), HttpStatus.OK);
@@ -113,7 +113,6 @@ public class ReservationController {
     @CrossOrigin(origins = "*")
     public ResponseEntity<List<PotentialReservationDto>> getAvailableBoats(@RequestBody ReservationSearchDto search){
     	
-    	System.out.println("USli u kontroler");
         try {
             return new ResponseEntity<>(boatSuggestionService.getAvailableEntities(search), HttpStatus.OK);
         } catch (Exception e){
@@ -153,7 +152,7 @@ public class ReservationController {
             return new ResponseEntity<>("Reservation successfull!", HttpStatus.OK);
         } catch (ParseException e){
             return  new ResponseEntity<>("Check your date again!", HttpStatus.OK);
-        } catch (PeriodNoLongerAvailableException e) {
+        } catch (Exception e) {
         	return  new ResponseEntity<>(e.getMessage(), HttpStatus.OK);
         }
     }
@@ -176,7 +175,7 @@ public class ReservationController {
             return  new ResponseEntity<>("Check your date again!", HttpStatus.OK);
         } catch (PeriodNoLongerAvailableException e) {
         	return  new ResponseEntity<>(e.getMessage(),HttpStatus.OK);
-        } catch (EntityDeletedException e) {
+        } catch (Exception e) {
 	    	return  new ResponseEntity<>(e.getMessage(),HttpStatus.OK);
 	    }
     }
@@ -186,7 +185,6 @@ public class ReservationController {
     @CrossOrigin(origins = "*")
     public ResponseEntity<Reservation> cancelBoatReservation(@RequestBody long  resId){
     	
-    	System.out.println("USli u kontroler");
         try {
             return new ResponseEntity<>(boatResService.cancelReservation(resId), HttpStatus.OK);
         } catch (Exception e){
@@ -200,7 +198,6 @@ public class ReservationController {
     @CrossOrigin(origins = "*")
     public ResponseEntity<Reservation> cancelMansionReservation(@RequestBody long  resId){
     	
-		System.out.println("res id ..");
         try {
             return new ResponseEntity<>(mansionResService.cancelReservation(resId), HttpStatus.OK);
         } catch (Exception e){

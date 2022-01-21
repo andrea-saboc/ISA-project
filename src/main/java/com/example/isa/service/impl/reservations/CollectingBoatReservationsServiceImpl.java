@@ -30,16 +30,8 @@ public class CollectingBoatReservationsServiceImpl {
 	@Autowired
 	BoatOwnerRepository boatOwnerRepo;
 
-	public List<Reservation> GetReservationHistory() {
-		Date today = new Date();
-		List<Reservation> res = new ArrayList<Reservation>();
-		
-		for(BoatReservation m: boatReservationRepo.findAllByUserAndStatus(authenticationService.getLoggedUser(),ReservationStatus.ACTIVE)) {
-			if(m.getEndDate().before(today))
-				res.add(m);
-		}
-		
-		return res;
+	public List<BoatReservation> GetReservationHistory() {
+		return boatReservationRepo.findAllByUserAndStatus(authenticationService.getLoggedUser(),ReservationStatus.CLOSED);
 	}
 	
 	

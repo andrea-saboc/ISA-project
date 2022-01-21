@@ -7,7 +7,7 @@
             <button class="btn btn-primary" v-on:click=DisplayCurrentReservations>Active reservations</button>
          </div>
          <div v-if="display == 'current'">
-         <div v-if="pastMansionReservations.length == 0" class="text-light"><br><br><br><br><h2 class="card-title text-center">No reservations</h2><br><br><br><br></div>
+         <div v-if="currentReservations.length == 0" class="text-light"><br><br><br><br><h2 class="card-title text-center">No reservations</h2><br><br><br><br></div>
 
             <div  v-for="res in currentReservations"  :key="res">
                <div class="card text-dark bg-light mt-3">

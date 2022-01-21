@@ -49,7 +49,7 @@ public class ReservationService {
 		List<ActiveReservationDto> ret = new ArrayList<ActiveReservationDto>();
 		ret.addAll(getBoatReservations());
 		ret.addAll(getMansionReservations());
-		//ret.addAll(getMansionDiscountReservations());
+		ret.addAll(getMansionDiscountReservations());
 		//ret.addAll(getBoatDiscountReservations());
 		return ret;
 	}
@@ -78,8 +78,8 @@ public class ReservationService {
 	
 	public List<ActiveReservationDto>getMansionDiscountReservations(){
 		List<ActiveReservationDto> ret = new ArrayList<ActiveReservationDto>();
-		
-		for(MansionDiscountReservation r: mansionDiscountResRepo.findAllByMansionAndStatus(authenticationService.getLoggedUser(),ReservationStatus.RESERVED)) {			
+		System.out.println("prob");
+		for(MansionDiscountReservation r: mansionDiscountResRepo.findAllByUserAndStatus(authenticationService.getLoggedUser(),ReservationStatus.RESERVED)) {			
 			ActiveReservationDto res = new ActiveReservationDto(r);
 			res.setAllowedCancelation(isCancellationAllowed(r.getStartDate()));
 			ret.add(res); 

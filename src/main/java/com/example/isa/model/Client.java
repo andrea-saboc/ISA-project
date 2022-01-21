@@ -1,9 +1,10 @@
 package com.example.isa.model;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.Table;
 
 
 @Entity
@@ -22,6 +23,9 @@ public class Client extends User{
 
     @Column(name = "client_loyalty_points")
     private int loyaltyPoints;
+    
+    @Column(name = "penalty_points_reset_date")
+    private Date penaltyPointsResetDate;
     
     public Client() {
         super();

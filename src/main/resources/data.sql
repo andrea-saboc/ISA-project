@@ -318,28 +318,28 @@ INSERT INTO public.boat_discount_reservation(
 
 INSERT INTO public.discount_reservation(
 	id, end_date, number_of_guests, percentage_of_discount, price_with_discount, price_without_discount, start_date, type, valid_until, optlock, system_user, status)
-	VALUES (6, '2022-03-21 00:00:00', 6, 25, 300, 375, '2021-03-19 00:00:00', 'MANSION', '2021-02-28 00:00:00', 0, null, 'ACTIVE');
+	VALUES (6, '2022-03-21 00:00:00', 6, 25, 300, 375, '2022-03-10 00:00:00', 'MANSION', '2022-02-28 00:00:00', 0, null, 'ACTIVE');
 INSERT INTO public.mansion_discount_reservation(
 	id, mansion_id, feedback_id, owner_feedback_id)
 	VALUES (6, 5, null, null);
 
 INSERT INTO public.discount_reservation(
 	id, end_date, number_of_guests, percentage_of_discount, price_with_discount, price_without_discount, start_date, type, valid_until, optlock, system_user, status)
-	VALUES (7, '2021-04-05 00:00:00', 6, 25, 300, 375, '2021-04-01 00:00:00', 'MANSION', '2021-02-28 00:00:00', 0, null, 'ACTIVE');
+	VALUES (7, '2022-04-05 00:00:00', 6, 25, 300, 375, '2022-04-01 00:00:00', 'MANSION', '2022-02-28 00:00:00', 0, null, 'ACTIVE');
 INSERT INTO public.mansion_discount_reservation(
 	id, mansion_id, feedback_id, owner_feedback_id)
 	VALUES (7, 5, null, null);
 
 INSERT INTO public.discount_reservation(
 	id, end_date, number_of_guests, percentage_of_discount, price_with_discount, price_without_discount, start_date, type, valid_until, optlock, system_user, status)
-	VALUES (8, '2021-04-11 00:00:00', 6, 25, 300, 375, '2021-04-07 00:00:00', 'MANSION', '2021-02-28 00:00:00', 0, 400, 'RESERVED');
+	VALUES (8, '2021-04-11 00:00:00', 6, 25, 300, 375, '2021-04-07 00:00:00', 'MANSION', '2022-02-28 00:00:00', 0, 400, 'RESERVED');
 INSERT INTO public.mansion_discount_reservation(
 	id, mansion_id, feedback_id, owner_feedback_id)
 	VALUES (8, 5, null, null);
 	
 
-   UPDATE reservation SET status = 'CLOSED' WHERE end_date >= NOW();
-
+UPDATE reservation SET status = 'CLOSED' WHERE end_date <= NOW();
+UPDATE discount_reservation SET status = 'CLOSED' WHERE end_date <= NOW();
 
 
 
