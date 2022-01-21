@@ -100,13 +100,23 @@ public class SubscriptionsController {
         }
 	}
 	
-	//@PreAuthorize("hasAnyRole('ROLE_CLIENT','ROLE_BOAT_OWNER,'ROLE_MANSION_OWNER'')")
+	@PreAuthorize("hasRole('ROLE_CLIENT')")
 	@RequestMapping(method = RequestMethod.POST, value = "/subscriptions/checkBoatSubscription",produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Boolean> checkBoatSubscriptions(@RequestBody Boat boat) throws JsonProcessingException{
-		System.out.println("usli u koneojer");
 
     	try {
             return new ResponseEntity<>(service.checkBoatSubscription(boat),HttpStatus.OK);
+        } catch (Exception e){
+            return  new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+	}
+	
+	@PreAuthorize("hasRole('ROLE_CLIENT')")
+	@RequestMapping(method = RequestMethod.POST, value = "/subscriptions/checkMansionSubscription",produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Boolean> checkMansionSubscriptions(@RequestBody Mansion mansion) throws JsonProcessingException{
+    	
+		try {
+            return new ResponseEntity<>(service.checkMansionSubscription(mansion),HttpStatus.OK);
         } catch (Exception e){
             return  new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }

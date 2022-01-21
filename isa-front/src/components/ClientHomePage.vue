@@ -57,9 +57,17 @@ export default {
   },
   data: function() {
     return{
-
+      user: null,
       display:'Listing'
     }
+  },
+  computed: {
+  now: function () {
+    return this.user
+    }
+  },
+  mounted(){
+    this.user = this.$store.state.userType;
   },
   methods:{
     ShowListing(){
@@ -85,11 +93,8 @@ export default {
     }
   },
   watch: {
-      dataToBeWatched: function(val) {
-          //do something when the data changes.
-          if (val) {
-              //this.makeSmthWhenDataChanged();
-          }
+      user: function () {
+      window.location.href = "/home"
       }
   }
 }

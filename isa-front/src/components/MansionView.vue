@@ -404,7 +404,7 @@ export default {
       clientResNumberOfDays: '',
       loggedUser: null,
       user: null,
-      clientSubscribed: '',
+      clientSubscribed: true,
       startDateTime: '',
       endDateTime: '',
       mansionToShow: [],
@@ -466,8 +466,9 @@ export default {
           }
         })
         .then(response => {
-          this.mansionToShow = response.data
-          //this.CheckClientSubscription(this.mansionToShow)
+          if (this.user == 'Client')
+            this.mansionToShow = response.data
+          this.CheckClientSubscription()
           console.log("Mansion to show:", this.mansionToShow)
           console.log(this.mansionToShow.address)
           this.address = this.mansionToShow.address
@@ -478,6 +479,35 @@ export default {
   methods:{
     ShowReservationOffers(){
       window.location.href = "/mansionReservationOffers/" + this.mansionToShow.id.toString();       
+    },
+    CheckClientSubscription(){
+      alert(this.user)
+        axios
+            .post(devServer.proxy + '/subscriptions/checkMansionSubscription', this.mansionToShow, {
+                headers: {
+                    'Authorization': this.$store.getters.tokenString,
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {                   
+                alert(response.data)
+                this.clientSubscribed = response.data
+            });
+    },
+    SubscribeClient(){
+      //alert(this.boatToShow.id)
+            axios
+                .post(devServer.proxy + '/subscriptions/newMansionSubscription', this.mansionToShow, {
+                    headers: {
+                        'Authorization': this.$store.getters.tokenString,
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => {
+                    alert('submited')
+                    console.log(response.data)
+                });
+
     }
 
   }
