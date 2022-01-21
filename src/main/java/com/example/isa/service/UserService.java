@@ -24,7 +24,8 @@ public class UserService {
 	private ClientRepository clientRepository;
 	@Autowired
     private DeletionRequestRepository deletionRequestRepository;
-
+	@Autowired
+	AuthenticationService authenticationService;
 	
 	public Iterable<User> findAll()  throws AccessDeniedException{
 		return userRepository.findAll();
@@ -39,18 +40,22 @@ public class UserService {
         c.setSurname(user.getSurname());
 
         clientRepository.save(c);
-        return user;
-   
+        return user;   
     }
     
 	public User createDeletionRequest(String reason) {
-		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		System.out.println(user.getName());
-		deletionRequestRepository.save(new AccountDeletionRequest(user.getId(),reason));
-		
-		return user;
+		deletionRequestRepository.save(new AccountDeletionRequest(authenticationService.getLoggedUser().getId(),reason));
+		deleteAllUserReservations();
+		return authenticationService.getLoggedUser();
 	}
-
+	
+	public void deleteAllUserReservations() {
+		
+		//List<Reservation>
+		
+	}
+	
+	
     public boolean checkIfClientEmailExists(String email) {
 		boolean exsists = false;
 		try {

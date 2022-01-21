@@ -23,6 +23,7 @@ import com.example.isa.dto.CustomReservationForClientDto;
 import com.example.isa.dto.PotentialReservationDto;
 import com.example.isa.dto.ReservationDto;
 import com.example.isa.dto.ReservationSearchDto;
+import com.example.isa.exception.EntityDeletedException;
 import com.example.isa.exception.PeriodNoLongerAvailableException;
 import com.example.isa.mail.MailService;
 import com.example.isa.model.reservations.BoatDiscountReservation;
@@ -73,7 +74,7 @@ public class ReservationController {
 	
 	@PreAuthorize("hasRole('ROLE_CLIENT')")
     @RequestMapping(method = RequestMethod.GET,value = "/reservations/boats", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Reservation>> getBoatReservations(){
+    public ResponseEntity<List<BoatReservation>> getBoatReservations(){
     	
     	try {
             return new ResponseEntity<>(collectingBoatResService.GetReservationHistory(), HttpStatus.OK);
@@ -84,7 +85,7 @@ public class ReservationController {
     }
 	@PreAuthorize("hasRole('ROLE_CLIENT')")
     @RequestMapping(method = RequestMethod.GET,value = "/reservations/mansions", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Reservation>> getMansionReservations(){
+    public ResponseEntity<List<MansionReservation>> getMansionReservations(){
 
         try {
             return new ResponseEntity<>(collectingMansionResService.GetReservationHistory(), HttpStatus.OK);
@@ -112,7 +113,6 @@ public class ReservationController {
     @CrossOrigin(origins = "*")
     public ResponseEntity<List<PotentialReservationDto>> getAvailableBoats(@RequestBody ReservationSearchDto search){
     	
-    	System.out.println("USli u kontroler");
         try {
             return new ResponseEntity<>(boatSuggestionService.getAvailableEntities(search), HttpStatus.OK);
         } catch (Exception e){
@@ -143,39 +143,41 @@ public class ReservationController {
     	
     	System.out.println("USli u kontroler");
         try {
-        	Reservation newReservation = boatResService.createReservation(res);
+        	BoatReservation newReservation = boatResService.createReservation(res);
         	try {
-        		mailService.sendBoatReservationConfirmationMail(authentication.getLoggedUser(), (BoatReservation) newReservation);
+        		mailService.sendBoatReservationConfirmationMail(newReservation);
         	}catch (MessagingException e){
-        		return  new ResponseEntity<>("There is a problem with your mail!", HttpStatus.INTERNAL_SERVER_ERROR);
+        		return  new ResponseEntity<>("There is a problem with your mail!",HttpStatus.OK);
         	}
             return new ResponseEntity<>("Reservation successfull!", HttpStatus.OK);
         } catch (ParseException e){
-            return  new ResponseEntity<>("Check your date again!", HttpStatus.INTERNAL_SERVER_ERROR);
-        } catch (PeriodNoLongerAvailableException e) {
-        	return  new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return  new ResponseEntity<>("Check your date again!", HttpStatus.OK);
+        } catch (Exception e) {
+        	return  new ResponseEntity<>(e.getMessage(), HttpStatus.OK);
         }
     }
     
 	@PreAuthorize("hasRole('ROLE_CLIENT')")
-    @RequestMapping(method = RequestMethod.POST,value = "/reservations/createMansionReservation", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(method = RequestMethod.POST,value = "/reservations/createMansionReservation",
+    consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @CrossOrigin(origins = "*")
     public ResponseEntity<String> createMansionReservation(@RequestBody ReservationDto res){
     	
-    	System.out.println("USli u kontroler");
         try {
         	MansionReservation newReservation = mansionResService.createReservation(res);
         	try {
-        		mailService.sendMansionReservationConfirmationMail(authentication.getLoggedUser(), newReservation);
-        	}catch (/*Messaging*/Exception e){
-        		return  new ResponseEntity<>("There is a problem with your mail!", HttpStatus.INTERNAL_SERVER_ERROR);
+        		mailService.sendMansionReservationConfirmationMail(newReservation);
+        	}catch (MessagingException e){
+        		return  new ResponseEntity<>("There is a problem with your mail!",HttpStatus.OK);
         	}
             return new ResponseEntity<>("Reservation successfull!", HttpStatus.OK);
         } catch (ParseException e){
-            return  new ResponseEntity<>("Check your date again!", HttpStatus.INTERNAL_SERVER_ERROR);
+            return  new ResponseEntity<>("Check your date again!", HttpStatus.OK);
         } catch (PeriodNoLongerAvailableException e) {
-        	return  new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        	return  new ResponseEntity<>(e.getMessage(),HttpStatus.OK);
+        } catch (Exception e) {
+	    	return  new ResponseEntity<>(e.getMessage(),HttpStatus.OK);
+	    }
     }
     
 	@PreAuthorize("hasRole('ROLE_CLIENT')")
@@ -183,7 +185,6 @@ public class ReservationController {
     @CrossOrigin(origins = "*")
     public ResponseEntity<Reservation> cancelBoatReservation(@RequestBody long  resId){
     	
-    	System.out.println("USli u kontroler");
         try {
             return new ResponseEntity<>(boatResService.cancelReservation(resId), HttpStatus.OK);
         } catch (Exception e){
@@ -197,7 +198,6 @@ public class ReservationController {
     @CrossOrigin(origins = "*")
     public ResponseEntity<Reservation> cancelMansionReservation(@RequestBody long  resId){
     	
-		System.out.println("res id ..");
         try {
             return new ResponseEntity<>(mansionResService.cancelReservation(resId), HttpStatus.OK);
         } catch (Exception e){

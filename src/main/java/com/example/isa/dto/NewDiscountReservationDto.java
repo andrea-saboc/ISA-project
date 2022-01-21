@@ -5,7 +5,7 @@ import com.example.isa.model.reservations.AdditionalService;
 
 import java.util.Date;
 
-public class AddNewDiscountReservationBoatDto {
+public class NewDiscountReservationDto {
     public Long boatId;
     public Date startDate;
     public Date validUntil;
@@ -14,7 +14,7 @@ public class AddNewDiscountReservationBoatDto {
     public int numberOfGuests;
     public double priceWithDiscount;
 
-    public AddNewDiscountReservationBoatDto(){}
+    public NewDiscountReservationDto(){}
     
     public double getPrice(Boat b) {
 		return b.getPricePerDay() * this.days + b.getPricePerHour() * this.hours;

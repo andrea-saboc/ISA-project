@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 
-import com.example.isa.dto.AddNewDiscountReservationBoatDto;
+import com.example.isa.dto.NewDiscountReservationDto;
 import com.example.isa.exception.OfferNotAvailableException;
 import com.example.isa.model.Boat;
 import com.example.isa.model.BoatOwner;
@@ -38,7 +38,7 @@ public class BoatDiscountReservationService implements DiscountReservationServic
 
 	
 	@Override
-	public List<DiscountReservation> getDiscountReservations(long id) {
+	public List<DiscountReservation> getAvailableDiscountReservations(long id) {
     	Boat boat = boatRepo.findById(id).orElse(new Boat());
 		return reservationRepo.findAllByBoatAndStatus(boat,ReservationStatus.ACTIVE);
 	}
@@ -71,10 +71,18 @@ public class BoatDiscountReservationService implements DiscountReservationServic
 		return boatReservations;
 	}
 	
-    
-    
-    
-	public BoatDiscountReservation createBoatDiscountReservation(AddNewDiscountReservationBoatDto dto) {
+	public Date getEndDate(NewDiscountReservationDto reservation) {
+		Date endDate;
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(reservation.startDate);
+		cal.add(Calendar.DAY_OF_MONTH, reservation.days);
+		cal.add(Calendar.HOUR, reservation.hours);
+		endDate = cal.getTime();
+		return endDate;
+	}
+
+	@Override
+	public DiscountReservation createDiscountReservation(NewDiscountReservationDto dto) {
 		BoatDiscountReservation boatDiscountReservation = new BoatDiscountReservation();
 		Boat boat = boatRepo.findById(dto.boatId).get();
 		boatDiscountReservation.setBoat(boat);
@@ -89,16 +97,6 @@ public class BoatDiscountReservationService implements DiscountReservationServic
 		boatDiscountReservation.calculatePercentageOfDiscount();
 		reservationRepo.save(boatDiscountReservation);
 		return boatDiscountReservation;
-	}
-
-	public Date getEndDate(AddNewDiscountReservationBoatDto reservation) {
-		Date endDate;
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(reservation.startDate);
-		cal.add(Calendar.DAY_OF_MONTH, reservation.days);
-		cal.add(Calendar.HOUR, reservation.hours);
-		endDate = cal.getTime();
-		return endDate;
 	}
 
 }

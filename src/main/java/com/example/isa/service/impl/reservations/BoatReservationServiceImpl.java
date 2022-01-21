@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.isa.dto.CustomReservationForClientDto;
 import com.example.isa.dto.ReservationDto;
 import com.example.isa.exception.EntityDeletedException;
+import com.example.isa.exception.ImpossibleDueToPenaltyPoints;
 import com.example.isa.exception.PeriodNoLongerAvailableException;
 import com.example.isa.model.Boat;
 import com.example.isa.model.BoatAvailablePeriod;
@@ -57,7 +58,7 @@ public class BoatReservationServiceImpl implements ReservationService{
 	
 	@Override
 	@Transactional(readOnly=false,propagation=Propagation.REQUIRED,isolation= Isolation.SERIALIZABLE)
-    public BoatReservation createReservationForClient(CustomReservationForClientDto dto) throws PeriodNoLongerAvailableException, ParseException, EntityDeletedException{
+    public BoatReservation createReservationForClient(CustomReservationForClientDto dto) throws PeriodNoLongerAvailableException, ParseException{
     	
 		ReservationDto res = new ReservationDto(dto);
 		ReservationStartEndDateFormatter formatter = new ReservationStartEndDateFormatter(res);
@@ -70,13 +71,9 @@ public class BoatReservationServiceImpl implements ReservationService{
 		if(period == null) {
 			throw new PeriodNoLongerAvailableException();
 		}
-		else if(boat.isDeleted()){
-			throw new EntityDeletedException();
+		else {
 			
-		}else {
-			Client client = clientRepository.findByEmail(dto.email);
-			
-			
+			Client client = clientRepository.findByEmail(dto.email);			
 			BoatReservation newBoatReservation = new BoatReservation(client, startDate,endDate, res.getNumberOfGuests(), dto.toResSearchDto(),
 					boat);
 
@@ -99,22 +96,27 @@ public class BoatReservationServiceImpl implements ReservationService{
 
 
 	@Override
-	@Transactional(readOnly=false)
-	public Reservation createReservation(ReservationDto res) throws ParseException, PeriodNoLongerAvailableException  {
+	@Transactional(readOnly=false,propagation=Propagation.REQUIRED,isolation= Isolation.SERIALIZABLE)
+	public BoatReservation createReservation(ReservationDto res) throws ParseException, PeriodNoLongerAvailableException, EntityDeletedException, ImpossibleDueToPenaltyPoints  {
 
 		ReservationStartEndDateFormatter formatter = new ReservationStartEndDateFormatter(res);
 		Date startDate = formatter.startDate;
 		Date endDate = formatter.endDate;
-	
-	    
+		    
 	    BoatAvailablePeriod period = availablePeriodsRepo.getPeriodOfInterest(startDate, endDate,res.getEntityId());
+	    Boat boat = boatRepo.findByIdAndDeletedFalse(res.getEntityId());
+	    Client client = clientRepository.findByEmail(authenticationService.getLoggedUser().getEmail());
 	    
 	    if(period == null) {
 	    	throw new PeriodNoLongerAvailableException();
+	    }else if (boat == null) {
+	    	throw new EntityDeletedException();	    	
+	    }else if(client.getPenaltyPoints() > 3) {
+	    	throw new ImpossibleDueToPenaltyPoints();
 	    }
 	    else {
-	        BoatReservation newBoatReservation = new BoatReservation(authenticationService.getLoggedUser(), startDate,endDate, res.getNumberOfGuests(), res.getPrice(),
-					boatRepo.findById(res.getEntityId()).orElse(new Boat()));
+	        BoatReservation newBoatReservation = new BoatReservation(authenticationService.getLoggedUser(), 
+	        		startDate,endDate, res.getNumberOfGuests(), res.getPrice(),boat);
 	        
 	        if(!period.getStartDate().equals(startDate)) {
 	        	BoatAvailablePeriod periodBefore = new BoatAvailablePeriod(period.getStartDate(),startDate,period.getBoat());

@@ -15,6 +15,8 @@
             </ul>
          </div>
          <div  v-if="display == 'mansions'">
+         <div v-if="mansions.length == 0" class="text-light"><br><br><br><h2 class="card-title text-center">No mansion complain candidates</h2><br><br><br></div>
+
             <div v-for="m in mansions" :key="m">
                <div class="card mb-3">
                   <img class="card-img-top" :src=picture(m.id) alt="Mansion name">
@@ -43,6 +45,8 @@
             </div>
          </div>
          <div v-if="display == 'boats'">
+         <div v-if="boats.length == 0" class="text-light"><br><br><br><h2 class="card-title text-center">No boat complain candidates</h2><br><br><br></div>
+
             <div v-for="m in boats" :key="m">
                <div class="card mb-3">
                   <img class="card-img-top" src="../assets/yacht.jpg" alt="Mansion name">
@@ -71,6 +75,8 @@
             </div>
          </div>
          <div v-if="display == 'adventures'">
+         <div v-if="adventures.length == 0" class="text-light"><br><br><br><h2 class="card-title text-center">No complain candidates</h2><br><br><br></div>
+
             <div v-for="m in adventures" :key="m">
                <div class="card mb-3">
                   <img class="card-img-top" src="../assets/yacht.jpg" alt="Mansion name">
@@ -94,10 +100,7 @@
          <br>
       </section>
    </section>
-   <section class=" bg-light container">
-      <br>
-      <h2>Your complains so far:</h2>
-   </section>
+
 </template>
 <script>
    import axios from 'axios'

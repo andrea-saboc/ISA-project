@@ -101,10 +101,8 @@ export default{
               "password": this.password,
             })
             .then(response => {
-              if(response.data == 'userExists')
               alert(response.data)
               this.message = response.data;
-              return;
             });
         this.ClearAllFields();
       } else if (this.fieldsFilled && this.passwordValid && this.picked=='Owner'){

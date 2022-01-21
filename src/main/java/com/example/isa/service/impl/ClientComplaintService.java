@@ -44,20 +44,20 @@ public class ClientComplaintService {
 	AuthenticationService authentication;
 
 	
-	public Complaint addBoatComplaint(ClientComplaintDto dto) {
+	public BoatComplaint addBoatComplaint(ClientComplaintDto dto) {
 		return complaintRepository.save(new BoatComplaint((Client) authentication.getLoggedUser(), dto.getContent(),boatRepository.findById(dto.getEntityId()).orElse(new Boat())));
 	}
 	
-	public Complaint addBoatAdvertiserComplaint(ClientComplaintDto dto) {		
+	public AdvertiserComplaint addBoatAdvertiserComplaint(ClientComplaintDto dto) {		
 		return complaintRepository.save(new AdvertiserComplaint((Client) authentication.getLoggedUser(), dto.getContent(),boatRepository.findById(dto.getEntityId()).orElse(new Boat()).getBoatOwner()));
 	}
 	
-	public Complaint addMansionAdvertiserComplaint(ClientComplaintDto dto) {
+	public AdvertiserComplaint addMansionAdvertiserComplaint(ClientComplaintDto dto) {
 		return complaintRepository.save(new AdvertiserComplaint((Client) authentication.getLoggedUser(), dto.getContent(),mansionRepository.findById(dto.getEntityId()).getMansionOwner()));
 	}
 	
 	
-	public Complaint addMansionComplaint(ClientComplaintDto dto) {
+	public MansionComplaint addMansionComplaint(ClientComplaintDto dto) {
 		return complaintRepository.save(new MansionComplaint((Client) authentication.getLoggedUser(), dto.getContent(),mansionRepository.findById(dto.getEntityId())));	
 	}
 	
@@ -65,7 +65,7 @@ public class ClientComplaintService {
 	
 	public List<Boat> getBoats() {
 		List<Boat> ret = new ArrayList<Boat>();
-		for(BoatReservation b : boatReservationRepo.findAllByUserAndStatus(authentication.getLoggedUser(),ReservationStatus.ACTIVE)) {
+		for(BoatReservation b : boatReservationRepo.findAllByUserAndStatus(authentication.getLoggedUser(),ReservationStatus.CLOSED)) {
 			if(!ret.contains(b.getBoat()))
 				ret.add(b.getBoat());			
 		}		
@@ -73,7 +73,7 @@ public class ClientComplaintService {
 	}
 	public List<Mansion> getMansions() {
 		List<Mansion> ret = new ArrayList<Mansion>();
-		for(MansionReservation b : mansionReservationRepo.findAllByUserAndStatus(authentication.getLoggedUser(),ReservationStatus.ACTIVE)) {
+		for(MansionReservation b : mansionReservationRepo.findAllByUserAndStatus(authentication.getLoggedUser(),ReservationStatus.CLOSED)) {
 			if(!ret.contains(b.getMansion()))
 				ret.add(b.getMansion());			
 		}		

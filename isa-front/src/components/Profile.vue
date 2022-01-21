@@ -4,7 +4,7 @@
 
 
 <div class="w-50">
-   <div v-if="user == 'Client'">
+   <div v-if="userType == 'Client'">
       <h1 >Number of penalties: {{user.penaltyPoints}}</h1>
    </div>
    <br>
@@ -123,6 +123,7 @@ import axios from 'axios'
 export default{
     data(){
         return{
+         userType: null,
          user : {},
          name : '',
          surname: '',
@@ -138,7 +139,7 @@ export default{
         }
    },
    mounted(){
-      this.user = this.$store.state.userType
+      this.userType = this.$store.state.userType
       alert(this.user)
       console.log('hello from profile',this.$store.getters.tokenString)
          axios
@@ -148,6 +149,7 @@ export default{
             }
          })
          .then(response => {
+
             this.user = response.data;
             this.name = response.data.name;
             this.surname = response.data.surname;
@@ -189,6 +191,7 @@ export default{
          .post('http://localhost:8080/updateUser',this.user)
          .then(response => {
             console.log(response.data)
+            alert('Your info is updated.')
          });
       },
       ChangePassword(){

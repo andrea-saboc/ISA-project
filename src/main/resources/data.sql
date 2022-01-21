@@ -173,7 +173,7 @@ VALUES (1, 3, null, null);
 
 INSERT INTO public.reservation(
     reservation_type, id, end_date, number_of_guests, start_date, total_price, type, system_user)
-VALUES ('BOAT', 2, '2022-02-09 00:00:00', 4, '2022-02-07 00:00:00', 230, 'BOAT', 401);
+VALUES ('BOAT', 2, '2022-02-09 00:00:00', 4, '2022-02-07 00:00:00', 230, 'BOAT', 400);
 INSERT INTO public.boat_reservation(
     id, boat_id, feedback_id, owner_feedback_id)
 VALUES (2, 3, null, null);
@@ -314,8 +314,37 @@ INSERT INTO public.discount_reservation(
 INSERT INTO public.boat_discount_reservation(
 	id, boat_id, feedback_id, owner_feedback_id)
 	VALUES (5, 5, null, null);
+	
 
+INSERT INTO public.discount_reservation(
+	id, end_date, number_of_guests, percentage_of_discount, price_with_discount, price_without_discount, start_date, type, valid_until, optlock, system_user, status)
+	VALUES (6, '2022-03-21 00:00:00', 6, 25, 300, 375, '2022-03-10 00:00:00', 'MANSION', '2022-02-28 00:00:00', 0, null, 'ACTIVE');
+INSERT INTO public.mansion_discount_reservation(
+	id, mansion_id, feedback_id, owner_feedback_id)
+	VALUES (6, 5, null, null);
 
+INSERT INTO public.discount_reservation(
+	id, end_date, number_of_guests, percentage_of_discount, price_with_discount, price_without_discount, start_date, type, valid_until, optlock, system_user, status)
+	VALUES (7, '2022-04-05 00:00:00', 6, 25, 300, 375, '2022-04-01 00:00:00', 'MANSION', '2022-02-28 00:00:00', 0, null, 'ACTIVE');
+INSERT INTO public.mansion_discount_reservation(
+	id, mansion_id, feedback_id, owner_feedback_id)
+	VALUES (7, 5, null, null);
+
+INSERT INTO public.discount_reservation(
+	id, end_date, number_of_guests, percentage_of_discount, price_with_discount, price_without_discount, start_date, type, valid_until, optlock, system_user, status)
+	VALUES (8, '2021-04-11 00:00:00', 6, 25, 300, 375, '2021-04-07 00:00:00', 'MANSION', '2022-02-28 00:00:00', 0, 400, 'RESERVED');
+INSERT INTO public.mansion_discount_reservation(
+	id, mansion_id, feedback_id, owner_feedback_id)
+	VALUES (8, 5, null, null);
+	
+
+UPDATE reservation SET status = 'CLOSED' WHERE end_date <= NOW();
+UPDATE discount_reservation SET status = 'CLOSED' WHERE end_date <= NOW();
+
+UPDATE client
+SET client_penalty_points = 0, penalty_points_reset_date = NOW()
+WHERE (SELECT EXTRACT(YEAR FROM penalty_points_reset_date)) < (SELECT EXTRACT(YEAR FROM current_date)) OR 
+(SELECT EXTRACT(MONTH FROM penalty_points_reset_date)) < (SELECT EXTRACT(MONTH FROM current_date))
 
 
 	

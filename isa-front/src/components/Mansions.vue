@@ -39,14 +39,27 @@
          </div>
       </div>
    </section>
+
+
    <div v-if="makingReservation" class="card text-white bg-dark ml-100 mb-100" style="max-width: 20rem; position: fixed;bottom: 10px; right: 10px">
       <div class="card-header">Sort search results</div>
       <div class="card-body">
-         <div class="input-group justify-content-end mr-30">
+         <div class="input-group  mr-30">
+            <div>
+            <h4>Search results for:</h4><br>
+            <p2>Start date: {{reservationForm.startDate}}</p2><br>
+            <p1>Start time: {{reservationForm.startTime}}</p1><br>
+            <p1>Number of days: {{reservationForm.numberOfDays}}</p1><br>
+            <p1>Number of guests: {{reservationForm.numberOfGuests}}</p1><br>
+            <p1>Avg grade: {{reservationForm.avgGrade}}</p1><br>
+            <p1>Location: {{reservationForm.location}}</p1><br>
+            <br>
+            <br>
+            </div>
             <h5>Chose sort category:</h5>
             <br><br>
             <div class="dropdown">
-               <button class="btn-lg btn-secondary dropdown-toggle" type="button" id="dropdown2" data-bs-toggle="dropdown" aria-expanded="true">
+               <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdown2" data-bs-toggle="dropdown" aria-expanded="true">
                {{sortSearchResult}}
                </button>
                <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdown2">
@@ -54,11 +67,11 @@
                   <li><button class="dropdown-item" v-on:click=SortResultByAvgGrade>Average grade</button></li>
                </ul>
             </div>
-            <button class = "btn-lg btn-primary" v-on:click=SortResults>Sort</button><br><br>
+            <button class = "btn btn-primary" v-on:click=SortResults>Sort</button><br><br>
          </div>
          <br>
          <br>
-         <button class = "btn-lg btn-outline-secondary" v-on:click=CancelMakingReservation>Go back </button>
+         <button class = "btn btn-outline-secondary" v-on:click=CancelMakingReservation>Go back </button>
       </div>
    </div>
    <section>
@@ -235,12 +248,10 @@ export default {
         Sort() {
 
             if (this.sort == 'Name') {
-               alert('sorting by name')
                 this.mansions.sort((b, a) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0));
             } else if (this.sort == 'Grade') {
                 this.mansions.sort((a, b) => (a.avgGrade > b.avgGrade) ? 1 : ((b.avgGrade > a.avgGrade) ? -1 : 0));
             } else if (this.sort == 'Location') {
-               alert('sorting by name')
                 this.mansions.sort((b, a) => (a.address.address > b.address.address) ? 1 : ((b.address.address > a.address.address) ? -1 : 0));
             }
 
@@ -350,7 +361,7 @@ export default {
                 })
                 .then(response => {
                     console.log(response.data)
-                   alert(response.data)                   
+                     alert(response.data)                   
                      this.LoadMansions()
                      this.makingReservation = false
                 });

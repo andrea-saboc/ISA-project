@@ -29,14 +29,6 @@ public class RegisterController {
         this.advertiserRegisterService = advertiserRegisterService;
         this.clientRegistrationService = clientRegistrationService;
     }
-    /* try {
-            this.registerPatientService.register(patientDTO, getSiteURL(request));
-            return new ResponseEntity<>("/emailSent", HttpStatus.OK);
-        } catch (BadUserInformationException e) {
-            return new ResponseEntity<>(userExistsAlert, HttpStatus.BAD_REQUEST);
-        } catch (Exception e) {
-            return new ResponseEntity<>(registrationFailedAlert, HttpStatus.INTERNAL_SERVER_ERROR);
-        }*/
 
     @RequestMapping(value = "/advertiser", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> register(@RequestBody AdvertiserRegistrationDto advertiserData){
@@ -57,17 +49,16 @@ public class RegisterController {
     	
         
         if (this.clientRegistrationService.clientExists(clientDto.getEmail()))
-            return new ResponseEntity<>("userExists",HttpStatus.OK);
+            return new ResponseEntity<>("User already exists",HttpStatus.OK);
         
         try {
             this.clientRegistrationService.registerClient(clientDto,getSiteURL(request));
-            return new ResponseEntity<>("emailSent", HttpStatus.OK);
-        	}
+            return new ResponseEntity<>("Verification code has been sent to your mail.", HttpStatus.OK);
+        }
         catch(Exception e) {        	
         		System.out.println(e);
-        	}
-        
-    return new ResponseEntity<>("okei",HttpStatus.OK);
+        		return new ResponseEntity<>(e.getMessage(), HttpStatus.OK);
+        }
     }
 	
 	
