@@ -25,6 +25,16 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 
+jar {
+	archiveBaseName.set('isa')
+	archiveVersion.set('0.1.0')
+	manifest {
+    attributes(
+      'Class-Path': configurations.compile.collect { it.getName() }.join(' '),
+      'Main-Class': 'com.example.isa.IsaApplication'
+    }
+}
+
 repositories {
 	mavenCentral()
 }
@@ -100,18 +110,3 @@ gradle.taskGraph.whenReady {
 test {
     useJUnitPlatform()
 }
-
-jar {
-    doFirst {
-        manifest {
-            if (!configurations.compile.isEmpty()) {
-                attributes(
-                        'Class-Path': configurations.compile.collect{it.toURI().toString()}.join(' '),
-                        'Main-Class': 'com.example.isa.IsaApplication')
-            }
-        }
-    }
-}
-
-
-

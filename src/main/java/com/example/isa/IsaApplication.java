@@ -75,14 +75,14 @@ public class IsaApplication extends SpringBootServletInitializer implements Comm
 		Mansion m = mrepo.findById(1);
 		Mansion m1 = mrepo.findById(2);
 		
-		MansionAvailablePeriod a11 = new MansionAvailablePeriod(new GregorianCalendar(2022, Calendar.JANUARY, 1).getTime(),new GregorianCalendar(2022, Calendar.JANUARY, 10).getTime(),m);
-		MansionAvailablePeriod a22 = new MansionAvailablePeriod(new GregorianCalendar(2022, Calendar.JANUARY, 20).getTime(),new GregorianCalendar(2022, Calendar.JANUARY, 28).getTime(),m);
+		MansionAvailablePeriod a11 = new MansionAvailablePeriod(new GregorianCalendar(2022, Calendar.FEBRUARY, 1).getTime(),new GregorianCalendar(2022, Calendar.FEBRUARY, 10).getTime(),m);
+		MansionAvailablePeriod a22 = new MansionAvailablePeriod(new GregorianCalendar(2022, Calendar.FEBRUARY, 20).getTime(),new GregorianCalendar(2022, Calendar.FEBRUARY, 28).getTime(),m);
 		MansionAvailablePeriod a33 = new MansionAvailablePeriod(new GregorianCalendar(2022, Calendar.MARCH, 1).getTime(),new GregorianCalendar(2022, Calendar.MARCH, 16).getTime(),m);
 		MansionAvailablePeriod a44 = new MansionAvailablePeriod(new GregorianCalendar(2022, Calendar.JUNE, 1).getTime(),new GregorianCalendar(2022, Calendar.JUNE, 21).getTime(),m);
 		
 		
-		MansionAvailablePeriod a111 = new MansionAvailablePeriod(new GregorianCalendar(2022, Calendar.JANUARY, 1).getTime(),new GregorianCalendar(2022, Calendar.JANUARY, 10).getTime(),m1);
-		MansionAvailablePeriod a221 = new MansionAvailablePeriod(new GregorianCalendar(2022, Calendar.JANUARY, 20).getTime(),new GregorianCalendar(2022, Calendar.JANUARY, 28).getTime(),m1);
+		MansionAvailablePeriod a111 = new MansionAvailablePeriod(new GregorianCalendar(2022, Calendar.FEBRUARY, 1).getTime(),new GregorianCalendar(2022, Calendar.FEBRUARY, 10).getTime(),m1);
+		MansionAvailablePeriod a221 = new MansionAvailablePeriod(new GregorianCalendar(2022, Calendar.FEBRUARY, 20).getTime(),new GregorianCalendar(2022, Calendar.FEBRUARY, 28).getTime(),m1);
 		MansionAvailablePeriod a331 = new MansionAvailablePeriod(new GregorianCalendar(2022, Calendar.MARCH, 1).getTime(),new GregorianCalendar(2022, Calendar.MARCH, 16).getTime(),m1);
 		MansionAvailablePeriod a441 = new MansionAvailablePeriod(new GregorianCalendar(2022, Calendar.JUNE, 1).getTime(),new GregorianCalendar(2022, Calendar.JUNE, 21).getTime(),m1);
 				
@@ -98,47 +98,8 @@ public class IsaApplication extends SpringBootServletInitializer implements Comm
 		mperiodRepo.save(a33);		
 		mperiodRepo.save(a44);
 
-		Boat b = boatRepo.findByName("Milicija");
-		
-		resRepo.save(new BoatDiscountReservation(new Date(2022, 1, 23), new Date(2022, 1, 27), 8,200, b));
-		resRepo.save(new BoatDiscountReservation(new Date(2022, 6, 25), new Date(2022, 6, 30), 6,120, b));			
-		resRepo.save(new BoatDiscountReservation(new Date(2022, 4, 13), new Date(2022, 4, 15), 6,189, b));	
-		
-		System.out.println("Reservacije od Milicije: ");
-		
-		List<BoatDiscountReservation> re = resRepo.findAllByBoat(b);
-		for(BoatDiscountReservation r: re ) {
-			System.out.println(r.getPriceWithDiscount());
-		}
-		
 
-		/*
-		Boat b = boatRepo.findByName("Milicija");
-		
 
-		Client c = new Client("Igor","Stojanovic", "Address", "City", "Serbiania", "468438",
-				"littlevamp999@gmail.com", "igi", 0,0);
-		c.setPassword(passwordEncoder.encode("igi"));
-		userRepo.save(c);
-		
-		//repo.save(new BoatReservation(c, new Date(), 66, 77, b1));
-		//repo.save(new BoatReservation(c, new Date(), 4444, 77, b2));
-
-		
-    	Iterable<BoatReservation> res = repo.findAllByUser(c);
-    	
-    	for(BoatReservation r: res){
-    		System.out.println(r.getBoat().getName());
-    	}
-    	*/
-		
-		Client c = new Client();
-		c.setActivationCode("123");
-		clientRepo.save(c);
-		
-		Client cl = clientRepo.findByActivationCode("123");
-		System.out.println("dal je client null ...");
-		System.out.println(cl == null);
 
 	}
 	

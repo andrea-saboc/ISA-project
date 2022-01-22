@@ -61,11 +61,6 @@ export default {
       display:'Listing'
     }
   },
-  computed: {
-  now: function () {
-    return this.user
-    }
-  },
   mounted(){
     this.user = this.$store.state.userType;
   },
@@ -91,11 +86,6 @@ export default {
       this.user = null 
       console.log(this.user)   
     }
-  },
-  watch: {
-      user: function () {
-      window.location.href = "/home"
-      }
   }
 }
 

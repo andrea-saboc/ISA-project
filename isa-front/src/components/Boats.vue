@@ -11,7 +11,7 @@
                </div>
                <div class="modal-body">
                   <div class="input-group input-group-lg">
-                     <label class="form-control">Select start date:</label><input v-model="reservationForm.startDate" class="form-control" placeholder="Select date" type="date" id="example"><br>
+                     <label class="form-control">Select start date:</label><input v-model="reservationForm.startDate" class="form-control" placeholder="Select date" type="date" name="dt" id="dt"><br>
                   </div>
                   <div class="input-group input-group-lg">
                      <label class="form-control">Select start time:</label><input v-model="reservationForm.startTime" class="form-control" placeholder="Select time" type="time" id="example"><br>
@@ -97,6 +97,8 @@
                               <p class="card-text">Price: {{value.totalPrice}}</p>
                               <p class="card-text">Average grade: {{value.avgGrade}}</p>
                               <p class="card-text">Cancellation policy: {{value.cancellationPolicy}}</p>
+                              
+                              <div v-if="value.additionalServices.length != 0">
                               <p>Add additional services to your reservation: </p>
                               <div v-for="(s,index) in value.additionalServices"
                                  :key="index">
@@ -104,6 +106,7 @@
                                     <input type="checkbox" class="custom-control-input" :id="value.entityId+index" required>
                                     <label class="custom-control-label" :for="value.entityId+index">{{s}}</label>
                                  </div>
+                              </div>
                               </div>
                               <button class="btn btn-primary" v-on:click=MakeBoatReservation(value)>Make a reservation</button>
                            </div>
@@ -130,6 +133,10 @@
                               <p class="card-text">Price: {{value.totalPrice}}</p>
                               <p class="card-text">Average grade: {{value.avgGrade}}</p>
                               <p class="card-text">Cancellation policy: {{value.cancellationPolicy}}</p>
+
+                              <div v-if="value.additionalServices.length == 0" class="text-light"><br><br><br><br><p class="text-center">No additional services</p><br><br><br><br></div>
+
+                              <div v-if="value.additionalServices.length != 0">
                               <p>Add additional services to your reservation: </p>
                               <div v-for="(s,index) in value.additionalServices"
                                  :key="index">
@@ -137,6 +144,7 @@
                                     <input type="checkbox" class="custom-control-input" :id="value.entityId+index" required>
                                     <label class="custom-control-label" :for="value.entityId+index">{{s}}</label>
                                  </div>
+                              </div>
                               </div>
                               <button class="btn btn-primary" v-on:click=MakeBoatReservation(value)>Make a reservation</button>
                            </div>
@@ -196,6 +204,7 @@
 
 <script>
 import axios from 'axios'
+import moment from 'moment';
 import {
     devServer
 } from "../../vue.config";
@@ -223,7 +232,7 @@ export default {
         }
     },
     mounted() {
-        this.user = this.$store.state.userType;
+       this.user = this.$store.state.userType;
         this.LoadBoats()
 
     },
@@ -295,6 +304,10 @@ export default {
         },
         SearchForReservations() {
 
+           if (!this.ReservationFormValid()){
+              alert('You need to fill the form properly')
+              return 
+           }else{
             this.makingReservation = true;
             axios
                 .post(devServer.proxy + '/reservations/availableBoats', this.reservationForm, {
@@ -307,6 +320,25 @@ export default {
                     console.log(response.data)
                     this.boats = response.data
                 });
+           }
+        },
+        ReservationFormValid(){
+
+           if(this.reservationForm.startDate == ''
+           || this.reservationForm.startTime == ''
+           || this.numberOfGuests == ''
+            || this.numberOfDays == '' 
+            || this.numberOfHours == '') { return false }
+           
+
+          var date = moment(this.reservationForm.startDate).format("YYYY-MM-DD")
+          var now = new Date()
+
+          if (moment(now).isAfter(date)){
+          alert('You cannot chose date from the past')
+          return false;
+          }
+          return true
         },
         showboat(value) {
            console.log(value)

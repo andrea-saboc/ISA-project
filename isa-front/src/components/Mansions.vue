@@ -91,6 +91,10 @@
                               <p v-if="!makingReservation" class="card-text"><small class="text-muted">{{value.address.address}},{{value.address.city}},{{value.address.country}}</small></p>
                            </div>
                            <div class="bg-light p-3 text-left" v-if="makingReservation">
+                              <p class="card-text">Price: {{value.totalPrice}}</p>
+                              <p class="card-text">Average grade: {{value.avgGrade}}</p>
+                              
+                              <div v-if="value.additionalServices.length != 0">
                               <p>Add additional services to your reservation: </p>
                               <div v-for="(s,index) in value.additionalServices"
                                  :key="index">
@@ -99,7 +103,8 @@
                                     <label class="custom-control-label" :for="value.entityId+index">{{s}}</label>
                                  </div>
                               </div>
-                              <button class="btn btn-primary" v-on:click=MakeMansionReservation(value)>Make a reservation</button>
+                              </div>
+                              <button class="btn btn-primary" v-on:click=MakeBoatReservation(value)>Make a reservation</button>
                            </div>
                         </div>
                      </div>
@@ -119,6 +124,10 @@
                            <p v-if="!makingReservation" class="card-text"><small class="text-muted">{{value.address.address}},{{value.address.city}},{{value.address.country}}</small></p>
                         </div>
                         <div class="bg-light p-3 text-left" v-if="makingReservation">
+                              <p class="card-text">Price: {{value.totalPrice}}</p>
+                              <p class="card-text">Average grade: {{value.avgGrade}}</p>
+
+                              <div v-if="value.additionalServices.length != 0">
                               <p>Add additional services to your reservation: </p>
                               <div v-for="(s,index) in value.additionalServices"
                                  :key="index">
@@ -127,7 +136,8 @@
                                     <label class="custom-control-label" :for="value.entityId+index">{{s}}</label>
                                  </div>
                               </div>
-                              <button class="btn btn-primary" v-on:click=MakeMansionReservation(value)>Make a reservation</button>
+                              </div>
+                              <button class="btn btn-primary" v-on:click=MakeBoatReservation(value)>Make a reservation</button>
                            </div>
                      </div>
                   </div>
@@ -184,6 +194,7 @@
 
 <script>
 import axios from 'axios'
+import moment from 'moment';
 import {
     devServer
 } from "../../vue.config";
@@ -300,6 +311,11 @@ export default {
         },
         SearchForReservations() {
 
+           if(!this.ReservationFormValid){
+              alert('You need the fill the form properly')
+              return
+           }
+           else{
             this.makingReservation = true;
             axios
                 .post(devServer.proxy + '/reservations/availableMansions', this.reservationForm, {
@@ -313,6 +329,24 @@ export default {
                     console.log(response.data)
                     this.mansions = response.data
                 });
+           }
+        },
+         ReservationFormValid(){
+
+           if(this.reservationForm.startDate == ''
+           || this.reservationForm.startTime == ''
+           || this.numberOfGuests == ''
+            || this.numberOfDays == '') { return false }
+           
+
+          var date = moment(this.reservationForm.startDate).format("YYYY-MM-DD")
+          var now = new Date()
+
+          if (moment(now).isAfter(date)){
+          alert('You cannot chose date from the past')
+          return false;
+          }
+          return true
         },
         ShowMansion(value) {
             window.location.href = "/mansion/" + value.id.toString();

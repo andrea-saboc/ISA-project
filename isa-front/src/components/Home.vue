@@ -68,7 +68,6 @@ export default {
 
   mounted(){
     this.user = this.$store.state.userType
-    alert(this.user)
     if(this.user == 'Client')
       window.location.href = "/clientHomePage";
   },
