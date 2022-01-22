@@ -1,6 +1,5 @@
 package com.example.isa.service.impl.reservations;
 
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +7,7 @@ import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 
 import com.example.isa.dto.NewDiscountReservationDto;
+import com.example.isa.exception.CancelledReservationException;
 import com.example.isa.exception.OfferNotAvailableException;
 import com.example.isa.model.Mansion;
 import com.example.isa.model.reservations.DiscountReservation;
@@ -45,15 +45,25 @@ public class MansionDiscountReservationService implements DiscountReservationSer
 	public DiscountReservation cancelDiscountReservation(long resId) {
 		
 		MansionDiscountReservation res = reservationRepo.findByIdAndStatus(resId,ReservationStatus.RESERVED);
+		recordCanceledReservation(res);
 		res.setStatus(ReservationStatus.ACTIVE);
 		return reservationRepo.save(res);
 	}
 
 	@Override
-	public DiscountReservation makeReservationOnDiscount(long resId) throws OfferNotAvailableException,ObjectOptimisticLockingFailureException {
+	public DiscountReservation makeReservationOnDiscount(long resId) throws OfferNotAvailableException,ObjectOptimisticLockingFailureException, CancelledReservationException {
 		
     	MansionDiscountReservation res = reservationRepo.findByIdAndStatus(resId,ReservationStatus.ACTIVE);
-    	if(res == null) throw new OfferNotAvailableException();
+    	MansionDiscountReservation repeatedRes = reservationRepo.findByUserAndStartDateAndEndDateAndStatusAndMansion(
+    			authenticationService.getLoggedUser(),res.getStartDate(),res.getEndDate(), ReservationStatus.CANCELLED,res.getMansion());
+    			
+    	if(res == null) {
+    		throw new OfferNotAvailableException();
+    	}
+    	else if( repeatedRes != null)
+    	{ 
+    		throw new CancelledReservationException();
+    	}
     	else {
     	res.setStatus(ReservationStatus.RESERVED);
     	res.setUser(authenticationService.getLoggedUser());
@@ -65,6 +75,13 @@ public class MansionDiscountReservationService implements DiscountReservationSer
 	public DiscountReservation createDiscountReservation(NewDiscountReservationDto dto) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	public void recordCanceledReservation(MansionDiscountReservation res) {
+		
+		MansionDiscountReservation canceled = new MansionDiscountReservation(res);
+		canceled.setStatus(ReservationStatus.CANCELLED);
+		reservationRepo.save(canceled);
 	}
 
 

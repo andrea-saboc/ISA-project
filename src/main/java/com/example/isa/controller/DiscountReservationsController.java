@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.isa.dto.AllBoatDiscountReservationsDto;
 import com.example.isa.dto.NewDiscountReservationDto;
+import com.example.isa.exception.CancelledReservationException;
 import com.example.isa.exception.OfferNotAvailableException;
 import com.example.isa.model.reservations.BoatDiscountReservation;
 import com.example.isa.model.reservations.DiscountReservation;
@@ -60,6 +61,8 @@ public class DiscountReservationsController {
 		return new ResponseEntity<>("Reservation successfull!", HttpStatus.OK);
 		}
 		catch(ObjectOptimisticLockingFailureException | OfferNotAvailableException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.OK);
+		} catch (Exception e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.OK);
 		}
 	}
@@ -137,6 +140,8 @@ public class DiscountReservationsController {
 		return new ResponseEntity<>("Reservation successfull!", HttpStatus.OK);
 		}
 		catch(ObjectOptimisticLockingFailureException | OfferNotAvailableException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.OK);
+		} catch (Exception e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.OK);
 		}
 	}

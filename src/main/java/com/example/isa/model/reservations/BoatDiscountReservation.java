@@ -71,7 +71,18 @@ public class BoatDiscountReservation extends DiscountReservation{
 		return 100.00 - getPriceWithDiscount()/getPriceWithDiscount();
 		
 	}
-
-
+	
+	public BoatDiscountReservation(BoatDiscountReservation res) {
+		
+		this.setStartDate(res.getStartDate());
+		this.setEndDate(res.getEndDate());
+		this.boat = res.getBoat();
+		this.setNumberOfGuests(res.getNumberOfGuests());
+		this.setPercentageOfDiscount(res.getPercentageOfDiscount());
+		this.setPriceWithoutDiscount(res.getPriceWithoutDiscount());
+		this.setPriceWithDiscount(res.getPriceWithDiscount());
+		this.setValidUntil(res.getValidUntil());
+		this.setUser(res.getUser());
+	}
 
 }

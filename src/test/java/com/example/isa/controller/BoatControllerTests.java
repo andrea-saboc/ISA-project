@@ -46,12 +46,6 @@ public class BoatControllerTests {
 
     
     @Test
-    public void getBoatComplainCandidates() throws Exception {
-        mockMvc.perform(get(URL_PREFIX))
-        .andExpect(content().contentType(contentType)).andExpect(jsonPath("$", hasSize(4)));
-    }
-    
-    @Test
     public void getBoatSearchResultsNone() throws Exception {
     	
     	SearchDto search = new SearchDto("Name", "Nonexistantname");

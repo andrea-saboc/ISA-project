@@ -83,6 +83,18 @@ public class MansionDiscountReservation extends DiscountReservation{
 		this.mansion = mansion;
 	}
 	
+	public MansionDiscountReservation(MansionDiscountReservation res) {
+		this.setStartDate(res.getStartDate());
+		this.setEndDate(res.getEndDate());
+		this.mansion = res.getMansion();
+		this.setNumberOfGuests(res.getNumberOfGuests());
+		this.setPercentageOfDiscount(res.getPercentageOfDiscount());
+		this.setPriceWithoutDiscount(res.getPriceWithoutDiscount());
+		this.setPriceWithDiscount(res.getPriceWithDiscount());
+		this.setValidUntil(res.getValidUntil());
+		this.setUser(res.getUser());
+	}
+	
 	
 
 

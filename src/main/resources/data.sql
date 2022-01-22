@@ -14,10 +14,10 @@ VALUES ('6');
 
 INSERT INTO public.system_user(
     user_type, id, address, blocked, city, country, email, name, password, phone_number, surname)
-VALUES ('BoatOwner', 100, 'St Marc 45', false, 'Genova', 'Italy', 'markijan@gmail.com', 'Mark', '$2a$10$KBYOmrL4g3ce5.wfagQnveII0Ubylu0s/1pP/zl2pagffN7uDfAKS', '09787', 'Markijani');
+VALUES ('BoatOwner', 90, 'St Marc 45', false, 'Genova', 'Italy', 'markijan@gmail.com', 'Mark', '$2a$10$KBYOmrL4g3ce5.wfagQnveII0Ubylu0s/1pP/zl2pagffN7uDfAKS', '09787', 'Markijani');
 INSERT INTO public.boat_owner(
     type, advertiser_registration_approved, advertiser_reason, id)
-VALUES ('boat', true, 'I want to advertise', 100);
+VALUES ('boat', true, 'I want to advertise', 90);
 
 INSERT INTO public.system_user(
     user_type, id, address, blocked, city, country, email, name, password, phone_number, surname)
@@ -126,28 +126,28 @@ VALUES (8,false, 10, 'Cassity', 250, 50, 'The mansion was all concrete and tall 
 
 INSERT INTO public.boat(
     id,deleted, gps, vhfradio, avg_grade, cancellation_policy, capacity, engine_power, fishfinder, length, max_speed, name, number_of_engines, price_for_seven_days, price_per_day, price_per_hour, promo_description, radar, type, address_id, owner_id)
-VALUES (3,false, true, true, 0.0, 'You will recieve 100% of total price!', 10, 200, true, 10, 120, 'Milizia', 6, 600, 80, 20, 'Promo description of malicija',true, 'Sail boat', 13, 100);
+VALUES (3,false, true, true, 0.0, 'You will recieve 100% of total price!', 10, 200, true, 10, 120, 'Milizia', 6, 600, 80, 20, 'Promo description of malicija',true, 'Sail boat', 13, 90);
 INSERT INTO public.boat(
     id,deleted, gps, vhfradio, avg_grade, cancellation_policy, capacity, engine_power, fishfinder, length, max_speed, name, number_of_engines, price_for_seven_days, price_per_day, price_per_hour, promo_description, radar, type, address_id, owner_id)
-VALUES (4,false, true, true, 0.0, 'You will recieve 70% of total price!', 10, 200, true, 34, 220, 'Malizia', 6, 660, 90, 30, 'Promo description of malicija',true, 'Sail boat', 14, 100);
+VALUES (4,false, true, true, 0.0, 'You will recieve 70% of total price!', 10, 200, true, 34, 220, 'Malizia', 6, 660, 90, 30, 'Promo description of malicija',true, 'Sail boat', 14, 90);
 INSERT INTO public.boat(
     id,deleted, gps, vhfradio, avg_grade, cancellation_policy, capacity, engine_power, fishfinder, length, max_speed, name, number_of_engines, price_for_seven_days, price_per_day, price_per_hour, promo_description, radar, type, address_id, owner_id)
-VALUES (5, false,true, true, 0.0, 'You will recieve 70% of total price!', 10, 200, true, 34, 220, 'Catamaran', 6, 500, 100, 15, 'This is the best boat',false, 'Yacht', 10, 100);
+VALUES (5, false,true, true, 0.0, 'You will recieve 70% of total price!', 10, 200, true, 34, 220, 'Catamaran', 6, 500, 100, 15, 'This is the best boat',false, 'Yacht', 10, 90);
 INSERT INTO public.boat(
     id,deleted, gps, vhfradio, avg_grade, cancellation_policy, capacity, engine_power, fishfinder, length, max_speed, name, number_of_engines, price_for_seven_days, price_per_day, price_per_hour, promo_description, radar, type, address_id, owner_id)
-VALUES (6, false,false, true, 0.0, 'You will recieve 85% of total price!', 15, 200, true, 34, 220, 'BENETEAU', 6, 700, 250, 70, 'This is the best boat',true, 'Sailboat', 9, 100);
+VALUES (6, false,false, true, 0.0, 'You will recieve 85% of total price!', 15, 200, true, 34, 220, 'BENETEAU', 6, 700, 250, 70, 'This is the best boat',true, 'Sailboat', 9, 90);
 INSERT INTO public.boat(
     id,deleted, gps, vhfradio, avg_grade, cancellation_policy, capacity, engine_power, fishfinder, length, max_speed, name, number_of_engines, price_for_seven_days, price_per_day, price_per_hour, promo_description, radar, type, address_id, owner_id)
-VALUES (7, false,true, true, 0.0, 'You will recieve 70% of total price!', 10, 200, true, 34, 220, 'Osmana', 6, 500, 100, 30, 'This is the best boat',false, 'Yacht', 20, 100);
+VALUES (7, false,true, true, 0.0, 'You will recieve 70% of total price!', 10, 200, true, 34, 220, 'Osmana', 6, 500, 100, 30, 'This is the best boat',false, 'Yacht', 20, 90);
 INSERT INTO public.boat(
     id,deleted, gps, vhfradio, avg_grade, cancellation_policy, capacity, engine_power, fishfinder, length, max_speed, name, number_of_engines, price_for_seven_days, price_per_day, price_per_hour, promo_description, radar, type, address_id, owner_id)
-VALUES (8, false,false, true, 0.0, 'You will recieve 85% of total price!', 15, 200, true, 34, 220, 'Lady', 6, 700, 250, 70, 'This is the best boat',true, 'Sailboat', 21, 100);
+VALUES (8, false,false, true, 0.0, 'You will recieve 85% of total price!', 15, 200, true, 34, 220, 'Lady', 6, 700, 250, 70, 'This is the best boat',true, 'Sailboat', 21, 90);
 INSERT INTO public.boat(
     id,deleted, gps, vhfradio, avg_grade, cancellation_policy, capacity, engine_power, fishfinder, length, max_speed, name, number_of_engines, price_for_seven_days, price_per_day, price_per_hour, promo_description, radar, type, address_id, owner_id)
-VALUES (1, false,true, true, 0.0, 'You will recieve 70% of total price!', 10, 200, true, 34, 220, 'Yacht Numb', 6, 500, 100, 30, 'This is the best boat',false, 'Yacht', 18, 100);
+VALUES (1, false,true, true, 0.0, 'You will recieve 70% of total price!', 10, 200, true, 34, 220, 'Yacht Numb', 6, 500, 100, 30, 'This is the best boat',false, 'Yacht', 18, 90);
 INSERT INTO public.boat(
     id,deleted, gps, vhfradio, avg_grade, cancellation_policy, capacity, engine_power, fishfinder, length, max_speed, name, number_of_engines, price_for_seven_days, price_per_day, price_per_hour, promo_description, radar, type, address_id, owner_id)
-VALUES (2, false,false, true, 0.0, 'You will recieve 85% of total price!', 15, 200, true, 34, 220, 'Peace', 6, 700, 250, 70, 'This is the best boat',true, 'Sailboat', 17, 100);
+VALUES (2, false,false, true, 0.0, 'You will recieve 85% of total price!', 15, 200, true, 34, 220, 'Peace', 6, 700, 250, 70, 'This is the best boat',true, 'Sailboat', 17, 90);
 
 
 INSERT INTO public.additional_service(
@@ -246,7 +246,7 @@ INSERT INTO USER_AUTHORITY (user_id, authority_id) VALUES (402, 1);
 
 INSERT INTO USER_AUTHORITY (user_id, authority_id) VALUES (5, 3);
 INSERT INTO USER_AUTHORITY (user_id, authority_id) VALUES (6, 5);
-INSERT INTO USER_AUTHORITY (user_id, authority_id) VALUES (100, 2);
+INSERT INTO USER_AUTHORITY (user_id, authority_id) VALUES (90, 2);
 
 
 INSERT INTO public.subscription(

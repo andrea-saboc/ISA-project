@@ -1,5 +1,6 @@
 package com.example.isa.repository;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,5 +19,7 @@ public interface MansionDiscountReservationRepository extends JpaRepository<Mans
 	
 	MansionDiscountReservation findByIdAndStatus(long id,ReservationStatus status);
 	List<DiscountReservation> findAllByMansionAndStatus(Mansion mansion,ReservationStatus status);
+	
+	MansionDiscountReservation findByUserAndStartDateAndEndDateAndStatusAndMansion(User user,Date startDate, Date endDate, ReservationStatus status,Mansion mansion);
 
 }

@@ -1,5 +1,6 @@
 package com.example.isa.constants;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,7 +19,8 @@ public class ReservationConstants {
 	
 	public static final User CLIENT = new User() {{this.setId(1L);}};
 	
-	public static final BoatDiscountReservation BOAT_DISCOUNT_RESERVATION = new BoatDiscountReservation() {{this.setId(1L); this.setStatus(ReservationStatus.ACTIVE);}};
+	public static final BoatDiscountReservation BOAT_DISCOUNT_RESERVATION = new BoatDiscountReservation() {{this.setId(1L); this.setStatus(ReservationStatus.ACTIVE);
+	this.setStartDate(new Date());this.setEndDate(new Date());}};
 	
 	public static final MansionDiscountReservation MANSION_DISCOUNT_RESERVATION = new MansionDiscountReservation() {{this.setId(1L);}};
 

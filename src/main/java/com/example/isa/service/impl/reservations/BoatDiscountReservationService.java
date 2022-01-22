@@ -10,6 +10,7 @@ import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 
 import com.example.isa.dto.NewDiscountReservationDto;
+import com.example.isa.exception.CancelledReservationException;
 import com.example.isa.exception.OfferNotAvailableException;
 import com.example.isa.model.Boat;
 import com.example.isa.model.BoatOwner;
@@ -52,14 +53,29 @@ public class BoatDiscountReservationService implements DiscountReservationServic
 	@Override
 	public DiscountReservation cancelDiscountReservation(long resId) {		
 		BoatDiscountReservation res = reservationRepo.findByIdAndStatus(resId,ReservationStatus.RESERVED);
+		recordCanceledReservation(res);
 		res.setStatus(ReservationStatus.ACTIVE);
 		return reservationRepo.save(res);
 	}
+	
+	public void recordCanceledReservation(BoatDiscountReservation res) {		
+		BoatDiscountReservation canceled = new BoatDiscountReservation(res);
+		canceled.setStatus(ReservationStatus.CANCELLED);
+		reservationRepo.save(canceled);
+	}
 
 	@Override
-	public DiscountReservation makeReservationOnDiscount(long resId) throws OfferNotAvailableException,ObjectOptimisticLockingFailureException{
-    	BoatDiscountReservation res = reservationRepo.findByIdAndStatus(resId,ReservationStatus.ACTIVE);
-    	if(res == null) throw new OfferNotAvailableException();
+	public DiscountReservation makeReservationOnDiscount(long resId) throws OfferNotAvailableException,ObjectOptimisticLockingFailureException, CancelledReservationException{
+		
+    	BoatDiscountReservation res = reservationRepo.findByIdAndStatus(resId,ReservationStatus.ACTIVE);    	
+    	BoatDiscountReservation repeatedRes = reservationRepo.findByUserAndStartDateAndEndDateAndStatusAndBoat(
+    			authenticationService.getLoggedUser(), res.getStartDate(), res.getEndDate(), ReservationStatus.CANCELLED,res.getBoat());
+    	
+    	if(res == null)
+			throw new OfferNotAvailableException();
+		else if (repeatedRes != null) {
+			throw new CancelledReservationException();
+		}
     	else {
 	    	res.setStatus(ReservationStatus.RESERVED);
 	    	res.setUser(authenticationService.getLoggedUser());

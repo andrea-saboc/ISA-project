@@ -13,6 +13,7 @@ import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.example.isa.constants.ReservationConstants;
+import com.example.isa.exception.CancelledReservationException;
 import com.example.isa.exception.OfferNotAvailableException;
 import com.example.isa.model.reservations.DiscountReservation;
 import com.example.isa.model.reservations.ReservationStatus;
@@ -54,11 +55,14 @@ public class ReservationServiceTests {
 	}
 	
 	@Test
-	public void MakingBoatDiscountReservationSuccessfullTest() throws ObjectOptimisticLockingFailureException, OfferNotAvailableException {
+	public void MakingBoatDiscountReservationSuccessfullTest() throws ObjectOptimisticLockingFailureException, OfferNotAvailableException, CancelledReservationException {
 		
 
         when(authenticationService.getLoggedUser()).thenReturn(ReservationConstants.CLIENT);		
-		when(disReservationRepo.findByIdAndStatus(1L,ReservationStatus.ACTIVE)).thenReturn(ReservationConstants.BOAT_DISCOUNT_RESERVATION);
+		when(disReservationRepo.findByIdAndStatus(1L,ReservationStatus.ACTIVE)).thenReturn(null);
+		when(disReservationRepo.findByUserAndStartDateAndEndDateAndStatusAndBoat(ReservationConstants.CLIENT,ReservationConstants.BOAT_DISCOUNT_RESERVATION.getStartDate(), 
+				ReservationConstants.BOAT_DISCOUNT_RESERVATION.getEndDate(), ReservationStatus.CANCELLED,ReservationConstants.BOAT)).thenReturn(null);
+		
 		
 		DiscountReservation res = disResService.makeReservationOnDiscount(ReservationConstants.BOAT_DISCOUNT_RESERVATION.getId());
 		
@@ -67,12 +71,32 @@ public class ReservationServiceTests {
 	}
 	
 	@Test(expected = OfferNotAvailableException.class)
-	public void MakingBoatDiscountReservationExceptionTest() throws ObjectOptimisticLockingFailureException, OfferNotAvailableException {
+	public void MakingBoatDiscountReservationExceptionTest() throws ObjectOptimisticLockingFailureException, OfferNotAvailableException, CancelledReservationException {
 		
 
         when(authenticationService.getLoggedUser()).thenReturn(ReservationConstants.CLIENT);
 		when(disReservationRepo.findByIdAndStatus(1L,ReservationStatus.ACTIVE)).thenReturn(ReservationConstants.BOAT_DISCOUNT_RESERVATION);
 		
+		when(disReservationRepo.findByUserAndStartDateAndEndDateAndStatusAndBoat(ReservationConstants.CLIENT,ReservationConstants.BOAT_DISCOUNT_RESERVATION.getStartDate(), 
+				ReservationConstants.BOAT_DISCOUNT_RESERVATION.getEndDate(), ReservationStatus.CANCELLED,ReservationConstants.BOAT)).thenReturn(null);
+		
+				
+		disResService.makeReservationOnDiscount(ReservationConstants.BOAT_DISCOUNT_RESERVATION.getId());
+		
+		
+	}
+	
+	@Test(expected = CancelledReservationException.class)
+	public void MakingBoatDiscountReservationCancelledExceptionTest() throws ObjectOptimisticLockingFailureException, OfferNotAvailableException, CancelledReservationException {
+		
+
+        when(authenticationService.getLoggedUser()).thenReturn(ReservationConstants.CLIENT);
+		when(disReservationRepo.findByIdAndStatus(1L,ReservationStatus.ACTIVE)).thenReturn(ReservationConstants.BOAT_DISCOUNT_RESERVATION);
+		
+		when(disReservationRepo.findByUserAndStartDateAndEndDateAndStatusAndBoat(ReservationConstants.CLIENT,ReservationConstants.BOAT_DISCOUNT_RESERVATION.getStartDate(), 
+				ReservationConstants.BOAT_DISCOUNT_RESERVATION.getEndDate(), ReservationStatus.CANCELLED,ReservationConstants.BOAT)).thenReturn(ReservationConstants.BOAT_DISCOUNT_RESERVATION);
+		
+				
 		disResService.makeReservationOnDiscount(ReservationConstants.BOAT_DISCOUNT_RESERVATION.getId());
 		
 		

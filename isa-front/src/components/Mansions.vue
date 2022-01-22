@@ -356,6 +356,7 @@ export default {
                     }
                 })
                 .then(response => {
+                  alert(response.data)
                     this.ShowOffers(mansion.id)
                     console.log(response.data)
                 })

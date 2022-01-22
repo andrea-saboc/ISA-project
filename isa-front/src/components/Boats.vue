@@ -345,6 +345,7 @@ export default {
                     }
                 })
                 .then(response => {
+                   alert(response.data)
                     this.ShowOffers(boat.id)
                     console.log(response.data)
                 })

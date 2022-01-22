@@ -1,7 +1,9 @@
 package com.example.isa.service.impl;
 
-import javax.mail.MessagingException;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.mail.MessagingException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -10,7 +12,9 @@ import org.springframework.stereotype.Service;
 import com.example.isa.dto.ClientRegistrationDto;
 import com.example.isa.mail.MailService;
 import com.example.isa.mail.formatter.AccountActivationFormatter;
+import com.example.isa.model.Authority;
 import com.example.isa.model.Client;
+import com.example.isa.repository.RoleRepository;
 import com.example.isa.repository.UserRepository;
 
 import net.bytebuddy.utility.RandomString;
@@ -24,7 +28,8 @@ public class ClientRegistrationService {
 	private PasswordEncoder passwordEncoder;
 	@Autowired
 	private MailService<String> mailService;
-	
+	@Autowired
+	RoleRepository roleRepo;
 
 	public Client registerClient(ClientRegistrationDto clientDto, String siteUrl) throws MessagingException {
 		
@@ -35,6 +40,10 @@ public class ClientRegistrationService {
 		String activationCode = RandomString.make(64);
 	    client.setActivationCode(activationCode);
 	    client.setBlocked(true);
+	    List<Authority> authorities = new ArrayList<Authority>();
+	    Authority auth = roleRepo.findByName("ROLE_CLIENT");
+	    authorities.add(auth);
+	    client.setAuthorities(authorities);
 	    sendActivationLink(client,siteUrl);
 		return userRepository.save(client);
 	}

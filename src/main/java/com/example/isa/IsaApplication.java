@@ -71,7 +71,7 @@ public class IsaApplication extends SpringBootServletInitializer implements Comm
 	@Override
 	public void run(String... args) throws Exception {
 
-		
+		/*
 		Mansion m = mrepo.findById(1);
 		Mansion m1 = mrepo.findById(2);
 		
@@ -97,7 +97,7 @@ public class IsaApplication extends SpringBootServletInitializer implements Comm
 		mperiodRepo.save(a22);		
 		mperiodRepo.save(a33);		
 		mperiodRepo.save(a44);
-
+		 */
 
 
 
