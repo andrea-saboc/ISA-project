@@ -38,7 +38,7 @@ import com.example.isa.service.impl.reservations.CollectingBoatReservationsServi
 import com.example.isa.service.impl.reservations.CollectionMansionReservationsImpl;
 import com.example.isa.service.impl.reservations.MansionReservationServiceImpl;
 import com.example.isa.service.impl.reservations.MansionReservationSuggestionServiceImpl;
-import com.example.isa.service.impl.reservations.ReservationService;
+import com.example.isa.service.impl.reservations.CollectingActiveReservationsService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 
@@ -66,7 +66,7 @@ public class ReservationController {
 	BoatDiscountReservationService boatDiscountReservationService;
 	
 	@Autowired
-	ReservationService reservationService;
+	CollectingActiveReservationsService reservationService;
 	@Autowired
 	private MailService<String> mailService;
 	@Autowired

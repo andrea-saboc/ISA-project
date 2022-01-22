@@ -26,7 +26,7 @@ import com.example.isa.repository.MansionReservationRepository;
 import com.example.isa.service.AuthenticationService;
 
 @Service
-public class ReservationService {
+public class CollectingActiveReservationsService {
 
 	@Autowired
 	BoatReservationRepository boatResRepo;
@@ -78,7 +78,6 @@ public class ReservationService {
 	
 	public List<ActiveReservationDto>getMansionDiscountReservations(){
 		List<ActiveReservationDto> ret = new ArrayList<ActiveReservationDto>();
-		System.out.println("prob");
 		for(MansionDiscountReservation r: mansionDiscountResRepo.findAllByUserAndStatus(authenticationService.getLoggedUser(),ReservationStatus.RESERVED)) {			
 			ActiveReservationDto res = new ActiveReservationDto(r);
 			res.setAllowedCancelation(isCancellationAllowed(r.getStartDate()));

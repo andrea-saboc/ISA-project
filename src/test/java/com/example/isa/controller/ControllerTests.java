@@ -32,7 +32,7 @@ public class ControllerTests {
 	private static final String WRONG_URL = "/mansiones";
 
 	private MediaType contentType = new MediaType(MediaType.APPLICATION_JSON.getType(),
-			MediaType.APPLICATION_JSON.getSubtype(), Charset.forName("utf8"));
+			MediaType.APPLICATION_JSON.getSubtype());
 
 	
 	@Autowired
