@@ -53,12 +53,15 @@ public class ClientService {
     }
     
     public boolean ChangePassword(ChangingPasswordDto passwords) {
+    	
+    	
  
 
     	boolean changed = false;
     	Client client = clientRepository.findByEmail(authenticationService.getLoggedUser().getEmail());
     	
-    	System.out.println("salje se"+passwords.getOldPassword());
+    	System.out.println("salje se old password "+passwords.getOldPassword());
+    	
 		System.out.println("OLD "+ passwordEncoder.encode(passwords.getOldPassword()));
 		System.out.println("OLD "+ client.getPassword());
 		

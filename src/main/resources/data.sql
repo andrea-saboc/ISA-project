@@ -35,7 +35,7 @@ VALUES ('code', 0, 0, 401);
 
 INSERT INTO public.system_user(
     user_type, id, address, blocked, city, country, email, name, password, phone_number, surname)
-VALUES ('CLIENT', 402, 'Trg 34', false, 'Nis', 'Serbia', 'anya@gmail.com','Anica', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '78555', 'Obrenovic');
+VALUES ('CLIENT', 402, 'Trg 34', false, 'Belgrade', 'Serbia', 'anya@gmail.com','Anica', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '78555', 'Obrenovic');
 INSERT INTO public.client(
     activation_code, client_loyalty_points,client_penalty_points, id)
 VALUES ('code', 0, 0, 402);
@@ -175,6 +175,19 @@ VALUES (3, '2022-02-20 00:00:00', '2022-01-20 00:00:00', 4);
 INSERT INTO public.boat_available_period(
     available_period_id, end_date, start_date, boat_id)
 VALUES (4,'2022-01-28 00:00:00', '2022-01-20 00:00:00', 5);
+
+INSERT INTO public.boat_available_period(
+    available_period_id, end_date, start_date, boat_id)
+VALUES (5, '2022-03-10 00:00:00', '2022-02-02 00:00:00', 3);
+INSERT INTO public.boat_available_period(
+    available_period_id, end_date, start_date, boat_id)
+VALUES (6, '2022-05-28 00:00:00', '2022-05-20 00:00:00', 3);
+INSERT INTO public.boat_available_period(
+    available_period_id, end_date, start_date, boat_id)
+VALUES (7, '2022-02-20 00:00:00', '2022-01-20 00:00:00', 1);
+INSERT INTO public.boat_available_period(
+    available_period_id, end_date, start_date, boat_id)
+VALUES (8,'2022-01-28 00:00:00', '2022-01-20 00:00:00', 2);
 
 INSERT INTO public.reservation(
     reservation_type, id, end_date, number_of_guests, start_date, total_price, type, system_user)

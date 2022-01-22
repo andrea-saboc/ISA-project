@@ -99,7 +99,7 @@
                               <h5 class="card-title">{{value.name}}</h5>
                               <p class="card-text">{{value.promoDescription}}</p>
                               <p v-if="!makingReservation" class="card-text"><small class="text-muted">{{value.address.address}},{{value.address.city}},{{value.address.country}}</small></p>
-                              <div v-if=checkSubscription(value)> <button class="btn btn-sm" v-on:click=SubscribeClient(value)>Subscribe</button></div>
+                              <div v-if="user == 'Client'"> <button class="btn btn-sm" v-on:click=SubscribeClient(value)>Subscribe</button></div>
                               <div v-if="user == 'Client' && !makingReservation">
                                  <button class="btn btn-sm" v-on:click="ShowOffers(value.id)">Show reservation offers</button>
                                  <div v-if="showingOffers==value.id">
@@ -159,7 +159,7 @@
                               <h5 class="card-title">{{value.name}}</h5>
                               <p class="card-text">{{value.promoDescription}}</p>
                               <p v-if="!makingReservation" class="card-text"><small class="text-muted">{{value.address.address}},{{value.address.city}},{{value.address.country}}</small></p>
-                              <div v-if=checkSubscription(value)> <button class="btn btn-sm" v-on:click=SubscribeClient(value)>Subscribe</button></div>
+                              <div v-if="user == 'Client'"> <button class="btn btn-sm" v-on:click=SubscribeClient(value)>Subscribe</button></div>
                            </div>
                            <div v-if="user == 'Client' && !makingReservation">
                               <button class="btn btn-sm" v-on:click="ShowOffers(value.id)">Show reservation offers</button>
@@ -358,6 +358,8 @@ export default {
 
         checkSubscription(mansion) {
 
+           if(this.user != 'Client') return true;
+            else{
             axios
                 .post(devServer.proxy + '/subscriptions/checkBoatSubscription', mansion, {
                     headers: {
@@ -366,26 +368,42 @@ export default {
                     }
                 })
                 .then(response => {
+                   alert(response.data)
                     return response.data
                 });
-            return true;
+            }
         },
 
 
         SubscribeClient(mansion) {
+
             axios
-                .post(devServer.proxy + '/subscriptions/newBoatSubscription', mansion, {
+                .post(devServer.proxy + '/subscriptions/checkBoatSubscription', mansion, {
                     headers: {
                         'Authorization': this.$store.getters.tokenString,
                         'Content-Type': 'application/json'
                     }
                 })
                 .then(response => {
-                    alert('submited')
-                    console.log(response.data)
-                    this.LoadMansions()
+                   if (response.data === true){
+                      alert('You are already subscribed to this boat')
+                   }else{
+                     
+                     axios
+                        .post(devServer.proxy + '/subscriptions/newBoatSubscription', mansion, {
+                           headers: {
+                                 'Authorization': this.$store.getters.tokenString,
+                                 'Content-Type': 'application/json'
+                           }
+                        })
+                        .then(response => {
+                           alert('submited')
+                           console.log(response.data)
+                           this.LoadMansions()
+                        });
+                   }
                 });
-
+            
         },
 
 

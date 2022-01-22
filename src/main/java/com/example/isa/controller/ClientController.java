@@ -35,7 +35,6 @@ public class ClientController {
 		}catch (Exception e){
 			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
 		}
-
 	}
 	
 	@PreAuthorize("hasRole('ROLE_CLIENT')")

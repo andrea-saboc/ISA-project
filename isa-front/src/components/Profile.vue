@@ -91,14 +91,13 @@
 <br>
 <br>
 <br>
-
 <button class = "btn btn-danger btn-lg" data-bs-toggle="modal" data-bs-target="#del">Request deleting account
       </button>
       <div class="modal fade" id="del" tabindex="-1" role="dialog" aria-labelledby="del" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="del">What is the reason for deleting your account?</h5>
+              <h5 class="modal-title text-dark" id="del">What is the reason for deleting your account?</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -120,6 +119,7 @@
 
 <script>
 import axios from 'axios'
+import {devServer} from "../../vue.config";
 export default{
     data(){
         return{
@@ -147,7 +147,7 @@ export default{
 
       LoadUser(){
          axios
-         .get('http://localhost:8080/userData',{
+         .get(devServer.proxy +'/userData',{
             headers: {
                'Authorization' : this.$store.getters.tokenString
             }
@@ -191,7 +191,7 @@ export default{
       UpdateUser(){
          console.log(this.user)
          axios
-         .post('http://localhost:8080/updateUser',this.user,{
+         .post(devServer.proxy + '/updateUser',this.user,{
          headers: {
          'Authorization' : this.$store.getters.tokenString,
          'Content-Type': 'application/json'
@@ -212,7 +212,7 @@ export default{
             }  
             console.log(passwords)
             axios
-            .post('http://localhost:8080/changePassword',passwords,{
+            .post(devServer.proxy + '/changePassword',passwords,{
             headers: {
             'Authorization' : this.$store.getters.tokenString,
             'Content-Type': 'application/json'
@@ -224,18 +224,19 @@ export default{
                this.LoadUser();
             });        
          }else{
-            alert('repeated password not right')
+            alert('Repeated password not right')
          }
       },
       SubmitDeletionRequest(){
          axios
-         .post('http://localhost:8080/createDeletionRequest',this.deletionReason,{
+         .post(devServer.proxy + '/createDeletionRequest',this.deletionReason,{
          headers: {
          'Authorization' : this.$store.getters.tokenString,
          'Content-Type': 'application/json'
          }
       })
          .then(response => {
+            alert('submited')
             console.log(response.data)
       });
 

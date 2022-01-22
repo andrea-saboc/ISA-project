@@ -89,7 +89,7 @@
                               <h5 class="card-title">{{value.name}}</h5>
                               <p class="card-text">{{value.promoDescription}}</p>
                               <p v-if="!makingReservation" class="card-text"><small class="text-muted">{{value.address.address}},{{value.address.city}},{{value.address.country}}</small></p>
-                              <div v-if=checkSubscription(value)> <button class="btn btn-sm" v-on:click=SubscribeClient(value)>Subscribe</button></div>
+                              <div v-if="user == 'Client'"> <button class="btn btn-sm" v-on:click=SubscribeClient(value)>Subscribe</button></div>
                               <div v-if="user == 'Client' && !makingReservation">
                                  <button class="btn btn-sm" v-on:click="ShowOffers(value.id)">Show reservation offers</button>
                                  <div v-if="showingOffers==value.id">
@@ -156,7 +156,7 @@
                            <h5 class="card-title">{{value.name}}</h5>
                            <p class="card-text">{{value.promoDescription}}</p>
                            <p v-if="!makingReservation" class="card-text"><small class="text-muted">{{value.address.address}},{{value.address.city}},{{value.address.country}}</small></p>
-                           <div v-if=!checkSubscription(value)> <button class="btn btn-sm" v-on:click=SubscribeClient(value)>Subscribe</button></div>
+                           <div v-if="user == 'Client'"> <button class="btn btn-sm" v-on:click=SubscribeClient(value)>Subscribe</button></div>
                            
                            <div v-if="user == 'Client' && !makingReservation">
                                  <button class="btn btn-sm" v-on:click="ShowOffers(value.id)">Show reservation offers</button>
@@ -368,43 +368,39 @@ export default {
         },
 
 
+        SubscribeClient(mansion) {
 
-
-
-
-       checkSubscription(mansion){
-
-            if(this.user != 'Client'){ return true}
-            else{
             axios
-            .post(devServer.proxy + '/subscriptions/checkMansionSubscription', mansion, {
-                headers: {
-                    'Authorization': this.$store.getters.tokenString,
-                    'Content-Type': 'application/json'
-                }
-            })
-            .then(response => {                   
-                return response.data
-            });
-            }
-       },
-
-
-           SubscribeClient(mansion){
-            axios
-                .post(devServer.proxy + '/subscriptions/newMansionSubscription', mansion, {
+                .post(devServer.proxy + '/subscriptions/checkMansionSubscription', mansion, {
                     headers: {
                         'Authorization': this.$store.getters.tokenString,
                         'Content-Type': 'application/json'
                     }
                 })
                 .then(response => {
-                    alert('submited')
-                    console.log(response.data)
-                    this.LoadMansions()
+                   if (response.data === true){
+                      alert('You are already subscribed to this mansion')
+                   }else{
+                     
+                     axios
+                        .post(devServer.proxy + '/subscriptions/newMansionSubscription', mansion, {
+                           headers: {
+                                 'Authorization': this.$store.getters.tokenString,
+                                 'Content-Type': 'application/json'
+                           }
+                        })
+                        .then(response => {
+                           alert('submited')
+                           console.log(response.data)
+                           this.LoadMansions()
+                        });
+                   }
                 });
+            
+        },
 
-            },
+
+
 
         LoadMansions() {
 
@@ -483,7 +479,7 @@ export default {
         },
         SearchForReservations() {
 
-           if(!this.ReservationFormValid){
+           if(!this.ReservationFormValid()){
               alert('You need the fill the form properly')
               return
            }
@@ -508,7 +504,8 @@ export default {
            if(this.reservationForm.startDate == ''
            || this.reservationForm.startTime == ''
            || this.numberOfGuests == ''
-            || this.numberOfDays == '') { return false }
+            || this.numberOfDays == '')
+             { return false }
            
 
           var date = moment(this.reservationForm.startDate).format("YYYY-MM-DD")
