@@ -294,35 +294,35 @@ VALUES (18, 6);
 
 INSERT INTO public.discount_reservation(
 	id, end_date, number_of_guests, percentage_of_discount, price_with_discount, price_without_discount, start_date, type, valid_until, optlock, system_user, status)
-	VALUES (1, '2022-03-11 00:00:00', 5, 25, 300, 375, '2021-03-08 00:00:00', 'boat', '2021-02-28 00:00:00', 0, 402, 'RESERVED');
+	VALUES (1, '2022-03-11 00:00:00', 5, 25, 300, 375, '2022-03-08 00:00:00', 'boat', '2022-02-28 00:00:00', 0, 402, 'RESERVED');
 INSERT INTO public.boat_discount_reservation(
 	id, boat_id, feedback_id, owner_feedback_id)
 	VALUES (1, 6, null, null);
 
 INSERT INTO public.discount_reservation(
 	id, end_date, number_of_guests, percentage_of_discount, price_with_discount, price_without_discount, start_date, type, valid_until, optlock, system_user, status)
-	VALUES (2, '2022-03-18 00:00:00', 5, 25, 300, 375, '2021-03-15 00:00:00','boat', '2021-03-11 00:00:00', 0, null, 'ACTIVE');
+	VALUES (2, '2022-03-18 00:00:00', 5, 25, 300, 375, '2022-03-15 00:00:00','boat', '2022-03-11 00:00:00', 0, null, 'ACTIVE');
 INSERT INTO public.boat_discount_reservation(
 	id, boat_id, feedback_id, owner_feedback_id)
 	VALUES (2, 5, null, null);
 
 INSERT INTO public.discount_reservation(
 	id, end_date, number_of_guests, percentage_of_discount, price_with_discount, price_without_discount, start_date, type, valid_until, optlock, system_user, status)
-	VALUES (3, '2022-03-21 00:00:00', 6, 25, 300, 375, '2021-03-19 00:00:00', 'boat', '2021-02-28 00:00:00', 0, null, 'ACTIVE');
+	VALUES (3, '2022-03-21 00:00:00', 6, 25, 300, 375, '2022-03-19 00:00:00', 'boat', '2022-02-28 00:00:00', 0, null, 'ACTIVE');
 INSERT INTO public.boat_discount_reservation(
 	id, boat_id, feedback_id, owner_feedback_id)
 	VALUES (3, 5, null, null);
 
 INSERT INTO public.discount_reservation(
 	id, end_date, number_of_guests, percentage_of_discount, price_with_discount, price_without_discount, start_date, type, valid_until, optlock, system_user, status)
-	VALUES (4, '2021-04-05 00:00:00', 6, 25, 300, 375, '2021-04-01 00:00:00', 'boat', '2021-02-28 00:00:00', 0, null, 'ACTIVE');
+	VALUES (4, '2022-04-05 00:00:00', 6, 25, 300, 375, '2022-04-01 00:00:00', 'boat', '2022-02-28 00:00:00', 0, null, 'ACTIVE');
 INSERT INTO public.boat_discount_reservation(
 	id, boat_id, feedback_id, owner_feedback_id)
 	VALUES (4, 5, null, null);
 
 INSERT INTO public.discount_reservation(
 	id, end_date, number_of_guests, percentage_of_discount, price_with_discount, price_without_discount, start_date, type, valid_until, optlock, system_user, status)
-	VALUES (5, '2021-04-11 00:00:00', 6, 25, 300, 375, '2021-04-07 00:00:00', 'boat', '2021-02-28 00:00:00', 0, 402, 'RESERVED');
+	VALUES (5, '2022-04-11 00:00:00', 6, 25, 300, 375, '2022-04-07 00:00:00', 'boat', '2022-02-28 00:00:00', 0, 402, 'RESERVED');
 INSERT INTO public.boat_discount_reservation(
 	id, boat_id, feedback_id, owner_feedback_id)
 	VALUES (5, 5, null, null);

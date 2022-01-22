@@ -50,7 +50,7 @@ public class ReservationService {
 		ret.addAll(getBoatReservations());
 		ret.addAll(getMansionReservations());
 		ret.addAll(getMansionDiscountReservations());
-		//ret.addAll(getBoatDiscountReservations());
+		ret.addAll(getBoatDiscountReservations());
 		return ret;
 	}
 	
