@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.isa.dto.LoginDto;
 import com.example.isa.dto.UserTokenState;
-import com.example.isa.service.UserService;
+import com.example.isa.service.impl.ClientService;
 import com.example.isa.service.impl.LoginServiceImpl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
@@ -25,7 +25,7 @@ public class LoginController {
 	@Autowired	
 	LoginServiceImpl loginService;
 	@Autowired
-	UserService userService;
+	ClientService userService;
 
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/login",consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE )

@@ -8,6 +8,6 @@ public class AccountActivationFormatter {
     }
 
     public String getSubject() {
-        return "Welcome to Fishing Fish!";
+        return "Welcome Adventureland!";
     }
 }

@@ -1,54 +1,9 @@
 <template>
 <div class="mansion-view" v-if="boatToShow!=null">
-  <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
-    <div v-if="(boatToShow.InteriorImages==null || boatToShow.InteriorImages.length==0) && (boatToShow.ExteriorImages==null || boatToShow.ExteriorImages.length==0)">
-    <div class="carousel-indicators">
-      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
-      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
-    </div>
-    <div class="carousel-inner">
-      <div class="carousel-item active">
-        <img src="../assets/yacht.jpg" class="d-block w-100" alt="...">
-      </div>
-      <div class="carousel-item">
-        <img src="../assets/yacht.jpg" class="d-block w-100" alt="...">
-      </div>
-      <div class="carousel-item">
-        <img src="../assets/yacht.jpg" class="d-block w-100" alt="...">
-      </div>
-    </div>
-    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
-      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">Previous</span>
-    </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
-      <span class="carousel-control-next-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">Next</span>
-    </button>
-  </div>
-    <div v-else>
-      <div class="carousel-inner">
-        <div class="carousel-item active">
-          <img src="../assets/port.jpg" class="d-block w-100" alt="...">
-        </div>
-        <div v-for="(inImg, index) in boatToShow.InteriorImages" :key="index"  class="carousel-item">
-          <img v-bind:src="getImg(inImg)" class="d-block w-100">
-        </div>
-        <div v-for="(inImg, index) in boatToShow.ExteriorImages" :key="index"  class="carousel-item">
-          <img v-bind:src="getImg(inImg)" class="d-block w-100" style="max-height: 400px">
-        </div>
-      </div>
-      <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Previous</span>
-      </button>
-      <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Next</span>
-      </button>
-    </div>
-    </div>
+<br>
+<br>
+<br>
+<br>
   <div class="row">
     <div class="colinfo">
   <br class="sm">
@@ -532,7 +487,10 @@ export default {
     }
   },
   mounted() {
-    this.user = this.$store.state.userType
+    this.user = this.$store.state.userType;
+
+    alert(this.user)
+    
     console.log("User", this.$store.state.userType)
     var path = window.location.href;
     var boatId = path.split('/boat/')[1].replaceAll('%20', ' ');

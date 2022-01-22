@@ -101,19 +101,19 @@ VALUES (21, '361 Hiawatha Way', 'Melbourne Beach', 'Florida', 21.31, -157.9);
 
 INSERT INTO public.mansion(
     id, deleted,avg_grade, name, price_for_seven_days, price_per_day, promo_description, address_id, owner_id)
-VALUES (1, false, 9, 'Clermont', 250, 50, 'These two words speak volumes. A big and welcoming backyard can be the main selling feature for some visitors, especially if they have children or pets, or those who are loving warmer climates.',5, 5);
+VALUES (1, false, 4, 'Clermont', 250, 50, 'These two words speak volumes. A big and welcoming backyard can be the main selling feature for some visitors, especially if they have children or pets, or those who are loving warmer climates.',5, 5);
 INSERT INTO public.mansion(
     id,deleted, avg_grade, name, price_for_seven_days, price_per_day, promo_description, address_id, owner_id)
-VALUES (2,false, 9, 'Mils mansion', 250, 50, 'A great floor plan can overcome many other objections, including the overall size of the house. Good flow can maximize space. Many visitors want an open floor plan.',6, 5);
+VALUES (2,false, 10, 'Mils mansion', 250, 50, 'A great floor plan can overcome many other objections, including the overall size of the house. Good flow can maximize space. Many visitors want an open floor plan.',6, 5);
 INSERT INTO public.mansion(
     id,deleted, avg_grade, name, price_for_seven_days, price_per_day, promo_description, address_id, owner_id)
-VALUES (3,false, 9, 'Hilda', 250, 50, ' One of the greatest fears is having to pour money into a house after closing. Homes that are well maintained require less initial upkeep, so you might want to mention that yours has been "lovingly maintained."',7, 5);
+VALUES (3,false, 5, 'Hilda', 250, 50, ' One of the greatest fears is having to pour money into a house after closing. Homes that are well maintained require less initial upkeep, so you might want to mention that yours has been "lovingly maintained."',7, 5);
 INSERT INTO public.mansion(
     id, deleted,avg_grade, name, price_for_seven_days, price_per_day, promo_description, address_id, owner_id)
 VALUES (4,false, 9, 'Vile mansion', 250, 50, 'Committed To Getting The Colorful places to live and play.',8, 5);
 INSERT INTO public.mansion(
     id,deleted, avg_grade, name, price_for_seven_days, price_per_day, promo_description, address_id, owner_id)
-VALUES (5,false, 9, 'Sores', 250, 50, 'Happiness in every nook and corner. Rent this mansion for price on discount, now!',9, 5);
+VALUES (5,false, 8, 'Sores', 250, 50, 'Happiness in every nook and corner. Rent this mansion for price on discount, now!',9, 5);
 INSERT INTO public.mansion(
     id,deleted, avg_grade, name, price_for_seven_days, price_per_day, promo_description, address_id, owner_id)
 VALUES (6,false, 9, 'Hourus mansion', 250, 50, 'Happiness in every nook and corner. Rent this mansion for price on discount, now!',10, 5);

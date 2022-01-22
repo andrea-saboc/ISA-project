@@ -11,10 +11,14 @@ export default {
   name: "About",
   data() {
     return {
-      messege: ''
+      messege: '',
+      user: null
     }
   },
   mounted() {
+        this.user = this.$store.state.userType;
+
+    alert(this.user)
     axios
         .get('http://localhost:8080/proba',{
       headers: {

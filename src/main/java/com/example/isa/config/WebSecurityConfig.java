@@ -71,12 +71,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                                     .antMatchers("/checkActivationCode").permitAll()
                                     .antMatchers("/login/**").permitAll()
 
-                                    .antMatchers("/home/**").permitAll()
-                                    
-                                    .antMatchers("/userData/**").permitAll()
-                                    
-                                    .antMatchers("/updateUser/**").permitAll()
-
                                     .antMatchers("/reservations/**").permitAll()
                                     .antMatchers("/getAllAdvertisers/**").permitAll()
 

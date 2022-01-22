@@ -140,8 +140,12 @@ export default{
    },
    mounted(){
       this.userType = this.$store.state.userType
-      alert(this.user)
       console.log('hello from profile',this.$store.getters.tokenString)
+      this.LoadUser();
+   },
+    methods:{
+
+      LoadUser(){
          axios
          .get('http://localhost:8080/userData',{
             headers: {
@@ -156,11 +160,10 @@ export default{
             this.address = response.data.address;
             this.city = response.data.city;
             this.country = response.data.country;
-            this.phoneNumber = response.data.phoneNumber;        
+            this.phoneNumber = response.data.phoneNumber;     
       });
-   },
-    methods:{
 
+      },
       ChangeName(){
          this.user.name = this.name;
          this.UpdateUser();
@@ -188,17 +191,40 @@ export default{
       UpdateUser(){
          console.log(this.user)
          axios
-         .post('http://localhost:8080/updateUser',this.user)
+         .post('http://localhost:8080/updateUser',this.user,{
+         headers: {
+         'Authorization' : this.$store.getters.tokenString,
+         'Content-Type': 'application/json'
+         }
+         })
          .then(response => {
             console.log(response.data)
             alert('Your info is updated.')
          });
       },
       ChangePassword(){
-         
-         if(this.oldPassword === this.user.password && this.newPassword === this.newPasswordRepeated){
-            this.user.password = this.newPassword;
-            this.UpdateUser();
+
+         if(this.newPassword === this.newPasswordRepeated){
+
+            var passwords={
+               newPassword: this.newPassword,
+               oldPassword: this.oldPassword
+            }  
+            console.log(passwords)
+            axios
+            .post('http://localhost:8080/changePassword',passwords,{
+            headers: {
+            'Authorization' : this.$store.getters.tokenString,
+            'Content-Type': 'application/json'
+            }
+            })
+            .then(response => {
+               console.log(response.data)
+               alert('Your password is updated.')
+               this.LoadUser();
+            });        
+         }else{
+            alert('repeated password not right')
          }
       },
       SubmitDeletionRequest(){

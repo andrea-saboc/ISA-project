@@ -1,22 +1,23 @@
-package com.example.isa.service;
+package com.example.isa.service.impl;
 
 
 import java.nio.file.AccessDeniedException;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.example.isa.dto.ChangingPasswordDto;
 import com.example.isa.model.AccountDeletionRequest;
 import com.example.isa.model.Client;
 import com.example.isa.model.User;
 import com.example.isa.repository.ClientRepository;
 import com.example.isa.repository.DeletionRequestRepository;
 import com.example.isa.repository.UserRepository;
+import com.example.isa.service.AuthenticationService;
 
 @Service
-public class UserService {
+public class ClientService {
 
 	@Autowired
     private UserRepository userRepository;
@@ -26,33 +27,56 @@ public class UserService {
     private DeletionRequestRepository deletionRequestRepository;
 	@Autowired
 	AuthenticationService authenticationService;
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+	
 	
 	public Iterable<User> findAll()  throws AccessDeniedException{
 		return userRepository.findAll();
 	}
 
-    public User updateUserInfo(User user) {
+    public Client updateClientInfo(Client user) {
     	
-    	//moze samo swith za user type i svi koriste funkciju 
-    	//moze da se ovo setovanje stavi u odvojenu funkciju
         Client c = clientRepository.findByEmail(user.getEmail());
         c.setName(user.getName());
         c.setSurname(user.getSurname());
+        c.setCity(user.getCity());
+        c.setCountry(user.getCountry());
+        c.setAddress(user.getAddress()); 
+        c.setPhoneNumber(user.getPhoneNumber());
+        return clientRepository.save(c);  
+    }
+    
+    public Client getLoggedClient() {
+    	return clientRepository.findByEmail(authenticationService.getLoggedUser().getEmail());
+   			
+    }
+    
+    public boolean ChangePassword(ChangingPasswordDto passwords) {
+ 
 
-        clientRepository.save(c);
-        return user;   
+    	boolean changed = false;
+    	Client client = clientRepository.findByEmail(authenticationService.getLoggedUser().getEmail());
+    	
+    	System.out.println("salje se"+passwords.getOldPassword());
+		System.out.println("OLD "+ passwordEncoder.encode(passwords.getOldPassword()));
+		System.out.println("OLD "+ client.getPassword());
+		
+    	if(client.getPassword().equals(passwordEncoder.encode(passwords.getOldPassword()))) {
+    		
+
+    		client.setPassword(passwordEncoder.encode(passwords.getNewPassword()));
+    		
+    		System.out.println("Pasword okej");
+    		clientRepository.save(client);
+    		changed = true;
+    	}
+    	return changed;
     }
     
 	public User createDeletionRequest(String reason) {
 		deletionRequestRepository.save(new AccountDeletionRequest(authenticationService.getLoggedUser().getId(),reason));
-		deleteAllUserReservations();
 		return authenticationService.getLoggedUser();
-	}
-	
-	public void deleteAllUserReservations() {
-		
-		//List<Reservation>
-		
 	}
 	
 	
