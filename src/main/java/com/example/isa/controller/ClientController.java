@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -47,8 +48,13 @@ public class ClientController {
 	@PreAuthorize("hasRole('ROLE_CLIENT')")
 	@RequestMapping(method = RequestMethod.POST, value = "/changePassword",produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
 	@CrossOrigin(origins = "*")	
-	public ResponseEntity<Boolean> updatePassword(@RequestBody ChangingPasswordDto dto) throws JsonProcessingException{	
-		return ResponseEntity.ok(userService.ChangePassword(dto));
+	public ResponseEntity<String> updatePassword(@RequestBody ChangingPasswordDto dto) throws JsonProcessingException{	
+		try{
+			userService.ChangePassword(dto);
+			return ResponseEntity.ok("Password changed");
+		}catch(BadCredentialsException e) {
+			return ResponseEntity.ok("Wrong old password ");
+		}
 	}
 
 	@PreAuthorize("hasRole('ROLE_CLIENT')")

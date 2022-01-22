@@ -27,18 +27,14 @@ public class LoginServiceImpl implements LoginService{
     }
 
     private UserTokenState getUserTokenState(LoginDto authenticationRequest) throws BadCredentialsException{
-        System.out.println("U get user token state");
-        
+
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getEmail(),
                         authenticationRequest.getPassword()));
         
-        System.out.println("izasli iz auth");
+
         SecurityContextHolder.getContext().setAuthentication(authentication);
         User user = (User) authentication.getPrincipal();
-        
-        System.out.println("Ulogovani user");
-        System.out.println(user.getEmail());
         
         
         String username = user.getUsername();

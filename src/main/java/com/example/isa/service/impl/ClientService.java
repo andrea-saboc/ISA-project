@@ -4,6 +4,10 @@ package com.example.isa.service.impl;
 import java.nio.file.AccessDeniedException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +33,8 @@ public class ClientService {
 	AuthenticationService authenticationService;
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+    @Autowired
+    private AuthenticationManager authenticationManager;
 	
 	
 	public Iterable<User> findAll()  throws AccessDeniedException{
@@ -52,29 +58,14 @@ public class ClientService {
    			
     }
     
-    public boolean ChangePassword(ChangingPasswordDto passwords) {
+    public void ChangePassword(ChangingPasswordDto passwords)  throws BadCredentialsException{
     	
-    	
- 
-
-    	boolean changed = false;
     	Client client = clientRepository.findByEmail(authenticationService.getLoggedUser().getEmail());
-    	
-    	System.out.println("salje se old password "+passwords.getOldPassword());
-    	
-		System.out.println("OLD "+ passwordEncoder.encode(passwords.getOldPassword()));
-		System.out.println("OLD "+ client.getPassword());
-		
-    	if(client.getPassword().equals(passwordEncoder.encode(passwords.getOldPassword()))) {
-    		
-
-    		client.setPassword(passwordEncoder.encode(passwords.getNewPassword()));
-    		
-    		System.out.println("Pasword okej");
-    		clientRepository.save(client);
-    		changed = true;
-    	}
-    	return changed;
+       authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(client.getEmail(),
+                        passwords.getOldPassword()));
+        
+		client.setPassword(passwordEncoder.encode(passwords.getNewPassword()));
+		clientRepository.save(client);
     }
     
 	public User createDeletionRequest(String reason) {

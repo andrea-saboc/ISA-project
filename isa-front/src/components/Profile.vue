@@ -220,7 +220,7 @@ export default{
             })
             .then(response => {
                console.log(response.data)
-               alert('Your password is updated.')
+               alert(response.data)
                this.LoadUser();
             });        
          }else{
