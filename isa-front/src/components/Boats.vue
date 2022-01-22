@@ -87,10 +87,10 @@
                         <img v-if="!makingReservation" :src=picture(value.id) class="card-img-top img-fluid w-30">
                         <img v-if="makingReservation" :src=picture(value.entityId) class="card-img-top img-fluid w-30">
                         <div class="card-body">
-                           <div v-on:click="showboat(value)">
+                           <div>
                               <h5 class="card-title">{{value.name}}</h5>
                               <p class="card-text">{{value.promoDescription}}</p>
-                              
+                              <div v-if=checkSubscription(value)> <button class="btn btn-sm" v-on:click=SubscribeClient(value)>Subscribe</button></div>
                               <p v-if="!makingReservation" class="card-text"><small class="text-muted">{{value.address.address}},{{value.address.city}},{{value.address.country}}</small></p>
                            </div>
                            <div class="bg-light p-3 text-left" v-if="makingReservation">
@@ -123,10 +123,10 @@
                         <img v-if="!makingReservation" :src=picture(value.id) class="card-img-top img-fluid w-30">
                         <img v-if="makingReservation" :src=picture(value.entityId) class="card-img-top img-fluid w-30">
                         <div class="card-body">
-                           <div v-on:click="showboat(value)">
+                           <div>
                               <h5 class="card-title">{{value.name}}</h5>
                               <p class="card-text">{{value.promoDescription}}</p>
-                              
+                              <div v-if=checkSubscription(value)> <button class="btn btn-sm" v-on:click=SubscribeClient(value)>Subscribe</button></div>
                               <p v-if="!makingReservation" class="card-text"><small class="text-muted">{{value.address.address}},{{value.address.city}},{{value.address.country}}</small></p>
                            </div>
                            <div class="bg-light p-3 text-left" v-if="makingReservation">
@@ -240,6 +240,39 @@ export default {
         picture(id) {
          return devServer.proxy +'/images/boat'+id+'.jpg'; },
 
+
+           checkSubscription(mansion){
+
+            axios
+            .post(devServer.proxy + '/subscriptions/checkBoatSubscription', mansion, {
+                headers: {
+                    'Authorization': this.$store.getters.tokenString,
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {                   
+                return response.data
+            });
+         return true;
+       },
+
+
+           SubscribeClient(mansion){
+            axios
+                .post(devServer.proxy + '/subscriptions/newBoatSubscription', mansion, {
+                    headers: {
+                        'Authorization': this.$store.getters.tokenString,
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => {
+                    alert('submited')
+                    console.log(response.data)
+                    this.LoadMansions()
+                });
+
+            },
+
        
         LoadBoats() {
             axios
@@ -339,10 +372,6 @@ export default {
           return false;
           }
           return true
-        },
-        showboat(value) {
-           console.log(value)
-           if(!this.makingReservation) window.location.href = "/boat/" + value.id.toString();
         },
         SortResultByAvgGrade() {
             this.sortSearchResult = 'Average grade'

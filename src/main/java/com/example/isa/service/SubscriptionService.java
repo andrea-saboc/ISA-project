@@ -30,6 +30,9 @@ public class SubscriptionService {
 		return boatSubsRepo.save(new BoatSubscription(authenticationService.getLoggedUser(),boat));
 	}
 	public MansionSubscription newMansionSubscription(Mansion mansion) {
+		
+		
+		System.out.println("new mansion subs");
 		return mansionSubRepo.save(new MansionSubscription(authenticationService.getLoggedUser(), mansion));
 	}
 	public void cancelBoatSubscription(BoatSubscription boat) {
@@ -49,7 +52,9 @@ public class SubscriptionService {
 		return boatSubsRepo.findBySubscriberAndBoat(authenticationService.getLoggedUser(), boat) != null? true:false;
 	}
 	public Boolean checkMansionSubscription(Mansion mansion) {
-		return mansionSubRepo.findBySubscriberAndMansion(authenticationService.getLoggedUser(), mansion) != null? true:false;
+		
+		if(mansionSubRepo.findBySubscriberAndMansion(authenticationService.getLoggedUser(), mansion) == null) return false;
+		else return true;
 	}
 
 	public List<BoatSubscription> getClientBoatSubscriptionByBoatOwner(Long id) {

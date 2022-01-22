@@ -1,6 +1,8 @@
 <template>
   <div class="mansion-view" v-if="mansionToShow!=null">
-
+  <br>
+  <br>
+  <br>
     <div class="row">
       <div class="colinfo">
         <br class="sm">
@@ -411,7 +413,7 @@ export default {
           
           this.mansionToShow = response.data
 
-          alert(this.user)
+          //alert(this.user)
           if (this.user == 'Client'){
           this.CheckClientSubscription()}
           

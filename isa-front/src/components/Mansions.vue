@@ -82,12 +82,13 @@
                   :key="index">
                   <div v-if="index % 2 == 0">
                      <div class="card mb-3">
-                        <img v-if="!makingReservation" :src=picture(value.id) class="card-img-top img-fluid w-30" v-on:click="ShowMansion(value)">
-                        <img v-if="makingReservation" :src=picture(value.entityId) class="card-img-top img-fluid w-30" v-on:click="ShowMansion(value)">
+                        <img v-if="!makingReservation" :src=picture(value.id) class="card-img-top img-fluid w-30">
+                        <img v-if="makingReservation" :src=picture(value.entityId) class="card-img-top img-fluid w-30">
                         <div class="card-body">
-                           <div v-on:click="ShowMansion(value)">
+                           <div>
                               <h5 class="card-title">{{value.name}}</h5>
                               <p class="card-text">{{value.promoDescription}}</p>
+                              <div v-if=!checkSubscription(value)> <button class="btn btn-sm" v-on:click=SubscribeClient(value)>Subscribe</button></div>
                               <p v-if="!makingReservation" class="card-text"><small class="text-muted">{{value.address.address}},{{value.address.city}},{{value.address.country}}</small></p>
                            </div>
                            <div class="bg-light p-3 text-left" v-if="makingReservation">
@@ -115,12 +116,13 @@
                <div v-for="(value, index) in mansions"
                   :key="index">
                   <div v-if="index % 2 != 0">
-                     <div class="card mb-3" v-on:click="ShowMansion(value)">
+                     <div class="card mb-3">
                         <img v-if="!makingReservation" :src=picture(value.id) class="card-img-top img-fluid w-30">
                         <img v-if="makingReservation" :src=picture(value.entityId) class="card-img-top img-fluid w-30">
                         <div class="card-body">
                            <h5 class="card-title">{{value.name}}</h5>
                            <p class="card-text">{{value.promoDescription}}</p>
+                           <div v-if=!checkSubscription(value)> <button class="btn btn-sm" v-on:click=SubscribeClient(value)>Subscribe</button></div>
                            <p v-if="!makingReservation" class="card-text"><small class="text-muted">{{value.address.address}},{{value.address.city}},{{value.address.country}}</small></p>
                         </div>
                         <div class="bg-light p-3 text-left" v-if="makingReservation">
@@ -233,6 +235,39 @@ export default {
     methods: {
         picture(id) {
          return devServer.proxy +'/images/mansion'+id+'.jpg'; },
+       checkSubscription(mansion){
+
+            if(this.user != 'Client'){ return true}
+            else{
+            axios
+            .post(devServer.proxy + '/subscriptions/checkMansionSubscription', mansion, {
+                headers: {
+                    'Authorization': this.$store.getters.tokenString,
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {                   
+                return response.data
+            });
+            }
+       },
+
+
+           SubscribeClient(mansion){
+            axios
+                .post(devServer.proxy + '/subscriptions/newMansionSubscription', mansion, {
+                    headers: {
+                        'Authorization': this.$store.getters.tokenString,
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => {
+                    alert('submited')
+                    console.log(response.data)
+                    this.LoadMansions()
+                });
+
+            },
 
         LoadMansions() {
 
@@ -347,9 +382,6 @@ export default {
           return false;
           }
           return true
-        },
-        ShowMansion(value) {
-            window.location.href = "/mansion/" + value.id.toString();
         },
         SortResultByAvgGrade() {
             this.sortSearchResult = 'Average grade'

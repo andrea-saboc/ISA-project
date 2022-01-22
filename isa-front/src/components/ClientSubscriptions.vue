@@ -9,7 +9,8 @@
         <div class="card-body">
             <h5 class="card-title">{{m.mansion.name}}</h5>
             <p class="card-text">{{m.mansion.promoDescription}}</p>
-            <p class="card-text"><small class="text-muted">{{m.mansion.address.address}},{{m.mansion.address.city}},{{m.boat.address.country}}</small></p>
+            <p class="card-text"><small class="text-muted">{{m.mansion.address.address}},{{m.mansion.address.city}},{{m.mansion.address.country}}</small></p>
+            
             <button class = "btn btn-danger" v-on:click = "CancelMansionSubsciption(m)">Unsubscribe</button> 
         </div>
     </div>
@@ -37,7 +38,7 @@
         <div class="card-body">
             <h5 class="card-title">{{m.name}}</h5>
             <p class="card-text">{{m.promoDescription}}</p>
-            <p class="card-text"><small class="text-muted">{{m.address}}</small></p>
+            <p class="card-text"><small class="text-muted">{{m.address.address}}</small></p>
             <button class = "btn btn-danger" v-on:click = "CancelSubsciption(m)">Unsubscribe</button> 
         </div>
     </div>
@@ -59,6 +60,10 @@ export default{
             }
         },
     mounted(){
+
+            this.user = this.$store.state.userType
+
+    console.log("User", this.$store.state.userType)
 
         this.LoadMansions()
         this.LoadBoats()

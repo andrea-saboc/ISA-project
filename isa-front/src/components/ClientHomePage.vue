@@ -61,6 +61,11 @@ export default {
       display:'Listing'
     }
   },
+  computed: {
+  now: function () {
+    return this.user
+    }
+  },
   mounted(){
     this.user = this.$store.state.userType;
   },
@@ -88,8 +93,6 @@ export default {
     }
   }
 }
-
-
 </script>
 <style>
 </style>

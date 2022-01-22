@@ -28,7 +28,6 @@
 //import axios from 'axios'
 //import axios from "axios";
 //import {devServer} from "../vue.config";
-
 export default{
   data(){
     return{
@@ -38,7 +37,6 @@ export default{
   },
   
   mounted(){
-
   },
   methods:{
     Logout(){
@@ -48,8 +46,6 @@ export default{
       console.log(this.user)   
     }
   }
-
-
 }
 </script>
 
@@ -60,13 +56,10 @@ export default{
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
 }
-
 .mainavbar{
   position: fixed;
   z-index: 10;
   width: 100%;
   margin-bottom: 1%;
 }
-
-
 </style>
