@@ -1,5 +1,6 @@
 package com.example.isa.service.impl.reservations;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,14 @@ public class MansionDiscountReservationService implements DiscountReservationSer
     	Mansion mansion = mansionRepo.findById(id);
 		return reservationRepo.findAllByMansionAndStatus(mansion,ReservationStatus.RESERVED);
 	}
+	
+	@Override
+	public DiscountReservation cancelDiscountReservation(long resId) {
+		
+		MansionDiscountReservation res = reservationRepo.findByIdAndStatus(resId,ReservationStatus.RESERVED);
+		res.setStatus(ReservationStatus.ACTIVE);
+		return reservationRepo.save(res);
+	}
 
 	@Override
 	public DiscountReservation makeReservationOnDiscount(long resId) throws OfferNotAvailableException,ObjectOptimisticLockingFailureException {
@@ -57,6 +66,8 @@ public class MansionDiscountReservationService implements DiscountReservationSer
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+
 
 
 }

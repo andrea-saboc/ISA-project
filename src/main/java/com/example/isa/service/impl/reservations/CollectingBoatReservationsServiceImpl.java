@@ -1,6 +1,7 @@
 package com.example.isa.service.impl.reservations;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,8 @@ import org.springframework.stereotype.Service;
 
 import com.example.isa.model.Boat;
 import com.example.isa.model.BoatOwner;
+import com.example.isa.model.User;
+import com.example.isa.model.reservations.BoatDiscountReservation;
 import com.example.isa.model.reservations.BoatReservation;
 import com.example.isa.model.reservations.ReservationStatus;
 import com.example.isa.repository.BoatDiscountReservationRepository;
@@ -32,12 +35,26 @@ public class CollectingBoatReservationsServiceImpl {
 	BoatDiscountReservationRepository boatDiscountReservationRepo;
 
 	public List<BoatReservation> GetReservationHistory() {
-		return boatReservationRepo.findAllByUserAndStatus(authenticationService.getLoggedUser(),ReservationStatus.CLOSED);
+		
+		List<BoatReservation> ret = new ArrayList<BoatReservation>();
+		ret.addAll(GetDiscountReservationHistory());
+		ret.addAll(boatReservationRepo.findAllByUserAndStatus(authenticationService.getLoggedUser(),ReservationStatus.CLOSED));
+		return ret;
 	}
 	
-	
+	public List<BoatReservation> GetDiscountReservationHistory(){
+		
+		List<BoatReservation> ret = new ArrayList<BoatReservation>();
+		for(BoatDiscountReservation r: 
+			boatDiscountReservationRepo.findAllByUserAndStatus(authenticationService.getLoggedUser(), ReservationStatus.CLOSED)) {
+			
+			ret.add(new BoatReservation(r.getUser(), r.getStartDate(),r.getEndDate(),r.getNumberOfGuests(), r.getPriceWithDiscount(),
+			r.getBoat()));
+		}
+		return ret;
+	}
 
-    public List<BoatReservation> getLoggedUserReservations() {
+    public List<BoatReservation> getOwnerReservations() {
 
 		BoatOwner boatOwner = boatOwnerRepo.findById(authenticationService.getLoggedUser().getId()).get();		
 		List<Boat> ownersBoats = boatRepo.findBoatByBoatOwner(boatOwner);

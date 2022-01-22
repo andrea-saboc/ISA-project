@@ -210,7 +210,7 @@ public class ReservationController {
     @RequestMapping(method = RequestMethod.GET, value = "/getBoatOwnerReservations")
     public ResponseEntity<String> getBoatOwnerReservations() {
         try {
-            List<BoatReservation> boatReservations = collectingBoatResService.getLoggedUserReservations();
+            List<BoatReservation> boatReservations = collectingBoatResService.getOwnerReservations();
             List<BoatDiscountReservation> boatDiscountReservations = boatDiscountReservationService.getLoggedUserReservation();
             AllBoatOwnerReservationsDTO allBoatOwnerReservationsDTO = new AllBoatOwnerReservationsDTO();
             allBoatOwnerReservationsDTO.boatDiscountReservations = boatDiscountReservations;

@@ -47,11 +47,9 @@ public class MansionDiscountReservation extends DiscountReservation{
 
 	public MansionDiscountReservation(String type, Date startDate, Date endDate, int numberOfGuests,
 			double priceWithDiscount, Mansion mansion) {
-		super(type, startDate, endDate, numberOfGuests, priceWithDiscount);
+		super("MANSION DISCOUNT", startDate, endDate, numberOfGuests, priceWithDiscount);
 		this.mansion = mansion;
 	}
-
-
 
 	public MansionDiscountReservation() {
 		super();

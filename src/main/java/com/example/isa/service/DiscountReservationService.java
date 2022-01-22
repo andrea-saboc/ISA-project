@@ -18,5 +18,7 @@ public interface DiscountReservationService {
     
     public DiscountReservation makeReservationOnDiscount(long resId) throws OfferNotAvailableException,ObjectOptimisticLockingFailureException;
     
+    public DiscountReservation cancelDiscountReservation(long resId);
+    
     
 }

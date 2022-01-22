@@ -48,6 +48,13 @@ public class BoatDiscountReservationService implements DiscountReservationServic
 		Boat boat = boatRepo.findById(id).orElse(new Boat());
 		return reservationRepo.findAllByBoatAndStatus(boat,ReservationStatus.RESERVED);
 	}
+	
+	@Override
+	public DiscountReservation cancelDiscountReservation(long resId) {		
+		BoatDiscountReservation res = reservationRepo.findByIdAndStatus(resId,ReservationStatus.RESERVED);
+		res.setStatus(ReservationStatus.ACTIVE);
+		return reservationRepo.save(res);
+	}
 
 	@Override
 	public DiscountReservation makeReservationOnDiscount(long resId) throws OfferNotAvailableException,ObjectOptimisticLockingFailureException{
@@ -98,5 +105,7 @@ public class BoatDiscountReservationService implements DiscountReservationServic
 		reservationRepo.save(boatDiscountReservation);
 		return boatDiscountReservation;
 	}
+
+
 
 }

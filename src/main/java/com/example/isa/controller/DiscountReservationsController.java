@@ -75,6 +75,30 @@ public class DiscountReservationsController {
 			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
 		}
 	}
+	
+	@PreAuthorize("hasRole('ROLE_CLIENT')")
+	@RequestMapping(method = RequestMethod.POST, value = "/cancelDiscountBoatReservation",produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<DiscountReservation> cancelBoatDiscountReservationAll(@RequestBody long id){
+		try{
+			return new ResponseEntity<>(boatReservationService.cancelDiscountReservation(id), HttpStatus.OK);
+		}
+		catch (Exception e){
+			System.out.println(e);
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@PreAuthorize("hasRole('ROLE_CLIENT')")
+	@RequestMapping(method = RequestMethod.POST, value = "/cancelDiscountMansionReservation",produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<DiscountReservation> cancelMansionDiscountReservationAll(@RequestBody long id){
+		try{
+			return new ResponseEntity<>(mansionReservationService.cancelDiscountReservation(id), HttpStatus.OK);
+		}
+		catch (Exception e){
+			System.out.println(e);
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		}
+	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/getBoatDiscountReservations",produces = MediaType.APPLICATION_JSON_VALUE )
 	@CrossOrigin(origins = "*")

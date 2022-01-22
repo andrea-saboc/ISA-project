@@ -88,8 +88,41 @@
                            <div>
                               <h5 class="card-title">{{value.name}}</h5>
                               <p class="card-text">{{value.promoDescription}}</p>
-                              <div v-if=!checkSubscription(value)> <button class="btn btn-sm" v-on:click=SubscribeClient(value)>Subscribe</button></div>
                               <p v-if="!makingReservation" class="card-text"><small class="text-muted">{{value.address.address}},{{value.address.city}},{{value.address.country}}</small></p>
+                              <div v-if=checkSubscription(value)> <button class="btn btn-sm" v-on:click=SubscribeClient(value)>Subscribe</button></div>
+                              <div v-if="user == 'Client' && !makingReservation">
+                                 <button class="btn btn-sm" v-on:click="ShowOffers(value.id)">Show reservation offers</button>
+                                 <div v-if="showingOffers==value.id">
+                                    <br>
+                                    <h4>Reservation offers: </h4>
+                                    <div v-if="reservations.length == 0">
+                                       <br><br><br>
+                                       <h2 class="card-title text-center">No offers at the moment</h2>
+                                       <br><br><br>
+                                    </div>
+                                    <div v-for="m in reservations" :key="m">
+                                       <div class="card mb-3">
+                                          <div class="card-body">
+                                             <h4 class="card-title">Discount: {{m.percentageOfDiscount}}% !</h4>
+                                             <h4 class="card-title">Price with discount: {{m.priceWithDiscount}}</h4>
+                                             <p class="card-text"> Before discount: {{m.priceWithoutDiscount }}</p>
+                                             <p class="card-text"> Start date: {{format_date(new Date(m.startDate))}}</p>
+                                             <p class="card-text"> End date: {{  format_date(new Date(m.endDate)) }}</p>
+                                             <p class="card-text"> Number of guests: {{  m.numberOfGuests}}</p>
+                                             <button class = "btn btn" v-on:click = "MakeReservation(m,value)">Make a reservation</button>              
+                                          </div>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>                             
+
+
+
+
+
+
+
+
                            </div>
                            <div class="bg-light p-3 text-left" v-if="makingReservation">
                               <p class="card-text">Price: {{value.totalPrice}}</p>
@@ -122,8 +155,50 @@
                         <div class="card-body">
                            <h5 class="card-title">{{value.name}}</h5>
                            <p class="card-text">{{value.promoDescription}}</p>
-                           <div v-if=!checkSubscription(value)> <button class="btn btn-sm" v-on:click=SubscribeClient(value)>Subscribe</button></div>
                            <p v-if="!makingReservation" class="card-text"><small class="text-muted">{{value.address.address}},{{value.address.city}},{{value.address.country}}</small></p>
+                           <div v-if=!checkSubscription(value)> <button class="btn btn-sm" v-on:click=SubscribeClient(value)>Subscribe</button></div>
+                           
+                           <div v-if="user == 'Client' && !makingReservation">
+                                 <button class="btn btn-sm" v-on:click="ShowOffers(value.id)">Show reservation offers</button>
+                                 <div v-if="showingOffers==value.id">
+                                    <br>
+                                    <h4>Reservation offers: </h4>
+                                    <div v-if="reservations.length == 0">
+                                       <br><br><br>
+                                       <h2 class="card-title text-center">No offers at the moment</h2>
+                                       <br><br><br>
+                                    </div>
+                                    <div v-for="m in reservations" :key="m">
+                                       <div class="card mb-3">
+                                          <div class="card-body">
+                                             <h4 class="card-title">Discount: {{m.percentageOfDiscount}}% !</h4>
+                                             <h4 class="card-title">Price with discount: {{m.priceWithDiscount}}</h4>
+                                             <p class="card-text"> Before discount: {{m.priceWithoutDiscount }}</p>
+                                             <p class="card-text"> Start date: {{format_date(new Date(m.startDate))}}</p>
+                                             <p class="card-text"> End date: {{  format_date(new Date(m.endDate)) }}</p>
+                                             <p class="card-text"> Number of guests: {{  m.numberOfGuests}}</p>
+                                             <button class = "btn btn" v-on:click = "MakeReservation(m,value)">Make a reservation</button>              
+                                          </div>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>                             
+                       
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
                         </div>
                         <div class="bg-light p-3 text-left" v-if="makingReservation">
                               <p class="card-text">Price: {{value.totalPrice}}</p>
@@ -204,6 +279,8 @@ export default {
     name: 'mansions',
     data() {
         return {
+            showingOffers: 'None',
+            reservations: [],
             user: null,
             makingReservation: false,
             sortSearchResult: 'Price',
@@ -235,6 +312,66 @@ export default {
     methods: {
         picture(id) {
          return devServer.proxy +'/images/mansion'+id+'.jpg'; },
+
+
+        ShowOffers(value) {
+            if (this.showingOffers == value) {
+                this.showingOffers = 'None'
+
+            } else {
+
+                axios
+                    .get(devServer.proxy + '/mansionDiscountReservations', {
+                        params: {
+                            id: value
+                        },
+                        headers: {
+                            'Authorization': this.$store.getters.tokenString
+                        }
+                    })
+                    .then(response => {
+                        this.reservations = response.data
+
+                        console.log('Discount reservations' + this.reservations)
+                    })
+
+
+
+
+                this.showingOffers = value
+            }
+
+        },
+
+
+        MakeReservation(res, mansion) {
+
+            axios
+                .get(devServer.proxy + '/makeDiscountMansionReservation', {
+                    params: {
+                        id: res.id
+                    },
+                    headers: {
+                        'Authorization': this.$store.getters.tokenString
+                    }
+                })
+                .then(response => {
+                    this.ShowOffers(mansion.id)
+                    console.log(response.data)
+                })
+
+        },
+        format_date(value) {
+            if (value) {
+                return moment(String(value)).format('DD.MM.YYYY HH:mm')
+            }
+        },
+
+
+
+
+
+
        checkSubscription(mansion){
 
             if(this.user != 'Client'){ return true}

@@ -371,9 +371,16 @@ export default {
             if (res.reservationType == 'BOAT') {
                 url = '/reservations/cancelBoatReservation'
             }
-            if (res.reservationType == 'MANSION') {
+            else if (res.reservationType == 'MANSION') {
                 url = '/reservations/cancelMansionReservation'
             }
+            else if (res.reservationType == 'MANSION DISCOUNT'){
+                url = '/cancelDiscountMansionReservation'
+            }
+            else{
+                url = '/cancelDiscountBoatReservation'
+            }
+
             axios
                 .post(devServer.proxy + url, res.reservationId, {
                     headers: {
