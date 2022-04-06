@@ -88,7 +88,7 @@ export default{
       },
 
       dispatch(type) {
-      console.log(type)
+      console.log('User type after login:', type)
       let router = this.$router;
       if (type === 'Client') {
         //window.location.reload()
@@ -96,7 +96,7 @@ export default{
         return
         }
       else if(type === 'MansionOwner'){
-        router.push("/home")
+        router.push("/mansionOwnerHomePage")
         return;
       }
 

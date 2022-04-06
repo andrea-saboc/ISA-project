@@ -62,7 +62,7 @@ export default {
   },
   mounted(){
     this.user = this.$store.state.userType;
-    this.computed.defaultData().datasets.label = 'Incomings'
+   /* this.computed.defaultData().datasets.label = 'Incomings'
     this.computed.defaultData().datasets.data().push(12)
     this.computed.defaultData().datasets.data().push(12)
     this.computed.defaultData().datasets.data().push(12)
@@ -74,7 +74,7 @@ export default {
     this.computed.defaultData().datasets.data().push(12)
     this.computed.defaultData().datasets.data().push(12)
     this.computed.defaultData().datasets.data().push(12)
-    this.computed.defaultData().datasets.data().push(12)
+    this.computed.defaultData().datasets.data().push(12)*/
   }
 }
 

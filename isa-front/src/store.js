@@ -12,9 +12,16 @@ const store = createStore({
     },
     getters: {
         tokenString: state => {
-            if (store.state.accessToken == null) {
+            loadFromSessionStorage();
+            console.log("In store.js state access Tokken", state.accessToken)
+            console.log("are equal", state.accessToken == window.sessionStorage.getItem('accessToken') != null)
+            if (store.state.accessToken == null && window.sessionStorage.getItem('accessToken') == null) {
                 return '';
-            } else {
+            }
+            else if (window.sessionStorage.getItem('accessToken') != null){
+                return "Bearer "+window.sessionStorage.getItem('accessToken')
+            }
+            else{
                 return "Bearer " + state.accessToken;
             }
         },

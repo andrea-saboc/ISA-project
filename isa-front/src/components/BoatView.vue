@@ -489,8 +489,7 @@ export default {
   mounted() {
     this.user = this.$store.state.userType;
 
-    alert(this.user)
-    
+
     console.log("User", this.$store.state.userType)
     var path = window.location.href;
     var boatId = path.split('/boat/')[1].replaceAll('%20', ' ');

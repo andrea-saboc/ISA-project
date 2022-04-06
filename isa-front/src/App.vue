@@ -35,8 +35,12 @@ export default{
       loggedUser: null
     }
   },
+  watch: {
+
+},
   
   mounted(){
+
   },
   methods:{
     Logout(){

@@ -16,13 +16,13 @@ import ViewRegistration from '../components/ViewRegistration.vue'
 import ClientHomePage from '../components/ClientHomePage.vue'
 import ClientComplains from '../components/ClientComplains.vue'
 import AccountActivation from '../components/AccountActivation.vue'
-import MansionOwnerHomePage from "../components/MansionOwnerHomePage";
 import BoatOwnerHomePage from "../components/BoatOwnerHomePage";
 import BoatView from "../components/BoatView";
 import BoatRegistration from "../components/BoatRegistration";
 import MansionRegistration from "../components/MansionRegistration";
 import MansionView from "../components/MansionView";
 import MapView from "../components/MapView";
+import MansionOwnerHomePage from "../components/Mansion/MansionOwnerHomePage"
 
 const routes = [
 {
@@ -110,6 +110,12 @@ const routes = [
         alias: '/boatOwnerHomePage/boat/:id',
         name: 'BoatOwnerHomePage',
         component: BoatOwnerHomePage
+    },
+    {
+      path: '/mansionOwnerHomePage',
+      alias: '/mansionOwnerHomePage/mansion/:id',
+      name: 'MansionOwnerHomePage',
+        component: MansionOwnerHomePage
     },
     {
         path: '/boat/:id',

@@ -30,6 +30,8 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     	
     	System.out.println("Usao u filter internal");
         String username;
+        System.out.println("request"+request.toString());
+        System.out.println("token utils get token"+tokenUtils.getToken(request));
         String authToken = tokenUtils.getToken(request);
 
         if (authToken != null) {

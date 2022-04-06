@@ -2,6 +2,7 @@ package com.example.isa.controller;
 
 
 
+import com.example.isa.service.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -26,13 +27,17 @@ public class ClientController {
 
 	@Autowired
     private ClientService userService;
+	@Autowired
+	private AuthenticationService authenticationService;
 
-	@PreAuthorize("hasRole('ROLE_CLIENT')")
+
+	@PreAuthorize("hasAnyRole('ROLE_CLIENT','ROLE_BOAT_OWNER')")
 	@RequestMapping(method = RequestMethod.GET, value = "/userData",produces = MediaType.APPLICATION_JSON_VALUE )
 	@CrossOrigin(origins = "*")	
-	public ResponseEntity<Client> getUserData(){
+	public ResponseEntity<User> getUserData(){
+		System.out.println("-----------------get user data-----------");
 		try{
-			return ResponseEntity.ok(userService.getLoggedClient());
+			return ResponseEntity.ok(authenticationService.getLoggedUser());
 		}catch (Exception e){
 			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
 		}
