@@ -19,7 +19,7 @@ import AccountActivation from '../components/AccountActivation.vue'
 import BoatOwnerHomePage from "../components/BoatOwnerHomePage";
 import BoatView from "../components/BoatView";
 import BoatRegistration from "../components/BoatRegistration";
-import MansionRegistration from "../components/MansionRegistration";
+import MansionRegistration from "../components/Mansion/MansionRegistration";
 import MansionView from "../components/MansionView";
 import MapView from "../components/MapView";
 import MansionOwnerHomePage from "../components/Mansion/MansionOwnerHomePage"
@@ -96,11 +96,6 @@ const routes = [
     component: ClientComplains
    },
     {
-        path: '/mansionOwnerHomePage',
-        name: 'mansionOwnerHomePage',
-        component: MansionOwnerHomePage
-    },
-    {
         path: '/clientHomePage',
         name: 'clientHomePage',
         component: ClientHomePage
@@ -121,6 +116,11 @@ const routes = [
         path: '/boat/:id',
         name: 'BoatView',
         component: BoatView
+    },
+    {
+        path: '/mansion/:id',
+        name: 'MansionView',
+        component: MansionView
     },
     {
         path: '/boatReservationOffers/:id',

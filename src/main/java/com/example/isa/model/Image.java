@@ -43,11 +43,12 @@ public class Image {
         String imagePathName= "images"+File.separator+ imgId + ".png";
 
         try {
-            File outputfile = new File(new File("."+File.separator+"src").getCanonicalPath()+File.separator+imagePathName);
+            File outputfile = new File(new File("."+File.separator+"src"+File.separator+"main"+File.separator+"resources"+File.separator+"public").getCanonicalPath()+File.separator+imagePathName);
             ImageIO.write(imageDone, "png", outputfile);
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         imgPath = imagePathName;
         img = imagePathName;
         }

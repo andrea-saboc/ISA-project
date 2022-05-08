@@ -16,6 +16,11 @@ public class Room {
 
     public Room(){}
 
+    public Room(Mansion mansion, int numberOfBeds){
+        this.mansion = mansion;
+        this.numberOfBeds = numberOfBeds;
+    }
+
     public Long getId() {
         return id;
     }
@@ -38,5 +43,14 @@ public class Room {
 
     public void setMansion(Mansion mansion) {
         this.mansion = mansion;
+    }
+
+    @Override
+    public String toString() {
+        return "Room{" +
+                "id=" + id +
+                ", numberOfBeds=" + numberOfBeds +
+                ", mansion=" + mansion +
+                '}';
     }
 }

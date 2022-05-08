@@ -98,4 +98,12 @@ public class AdditionalService {
     public void setBoat(Boat boat) {
         this.boat = boat;
     }
+
+    public Mansion getMansion() {
+        return mansion;
+    }
+
+    public void setMansion(Mansion mansion) {
+        this.mansion = mansion;
+    }
 }

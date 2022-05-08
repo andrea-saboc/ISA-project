@@ -66,6 +66,7 @@ public class BoatController {
 				
 		return new ResponseEntity<>(jsonString, HttpStatus.OK);
 	}
+
 	@RequestMapping(method = RequestMethod.GET, value = "/ownersBoats",produces = MediaType.APPLICATION_JSON_VALUE)
 	@CrossOrigin(origins = "*")
 	public ResponseEntity<String> getOwnersBoats() throws JsonProcessingException{

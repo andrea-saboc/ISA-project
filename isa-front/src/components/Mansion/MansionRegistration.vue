@@ -1,79 +1,27 @@
 <template>
-  <div class="boat-registration">
+  <div class="mansion-registration">
     <form>
       <h3 class="mb-3">Mansion registration</h3>
       <div class="col-11">
-        <label for="boat-name" class="form-label">Mansion name</label>
-        <input type="text" class="form-control" id="boat-name" placeholder="E.g. San Victoria Motel" v-model = "name" required>
+        <label for="mansion-name" class="form-label">Mansion name</label>
+        <input type="text" class="form-control" id="mansion-name" placeholder="E.g. San Victoria Motel" v-model = "name" required>
       </div>
-
       <div class="double-field">
-        <div class="col-5">
-          <label for="boat-type" class="form-label">Boat type</label>
-          <div class="input-group mb-3">
-            <div class="input-group-prepend">
-              <label class="input-group-text" for="inputGroupSelect01">Type</label>
-            </div>
-            <select class="custom-select" id="inputGroupSelect01" v-model="type">
-              <option selected value="">Choose...</option>
-              <option value="Motorboat">Motorboat</option>
-              <option value="Sailboat">Sailboat</option>
-              <option value="RIB">RIB</option>
-              <option value="Catamaran">Catamaran</option>
-              <option value="Houseboat">Houseboat</option>
-              <option value="Jet ski">Jet ski</option>
-              <option value="Yacht">Yacht</option>
-            </select>
-          </div>
+        <div class="col-4">
+          <label for="number_rooms" class="form-label">Number of rooms</label>
+          <input type="number" class="form-control" id="number_rooms"  v-model = "numberOfRooms" required>
+        </div>
+        <div class="col-4">
+          <label for="bed_per_room" class="form-label">Beds per room</label>
+          <input type="number" class="form-control" id="bed_per_room" v-model = "numberOfBeds" required>
+
         </div>
         <div class="col-3">
-          <label for="capacity" class="form-label" >Capacity</label>
-          <input type="number" class="form-control" id="capacity" min="1" v-model="capacity" required>
-        </div>
-        <div class="col-3">
-          <label for="lenght" class="form-label" >Lenght</label>
-          <input type="number" class="form-control" id="lenght" min="1" v-model="length" required>
+          <button type="button" class="btn btn-secondary btn-sm" id="room-adding-button" v-on:click="addRoom ">Add room</button>
         </div>
       </div>
-      <hr class="my-3">
-      <h5>Engine information</h5>
-      <hr class="my-3">
-      <div class="double-field">
-        <div class="col-3">
-          <label for="engine-number" class="form-label">Number of engines</label>
-          <input type="number" class="form-control" id="engine-number" min="1" v-model="engineNum" required>
-        </div>
-        <div class="col-3">
-          <label for="engine-power" class="form-label">Engine power</label>
-          <input type="number" class="form-control" id="engine-power" min="1" v-model="enginePower" required>
-        </div>
-        <div class="col-3">
-          <label for="max-speed" class="form-label">Max speed</label>
-          <input type="number" class="form-control" id="max-speed" min="1" v-model="maxSpeed" required>
-        </div>
-
-
-      </div>
-      <hr class="my-3">
-      <h5>Navigation equipment</h5>
-      <hr class="my-3">
-      <div class="double-field">
-        <div class="form-check">
-          <input type="checkbox" class="form-check-input" id="GPS"  v-model="GPS">
-          <label class="form-check-label" for="GPS">GPS</label>
-        </div>
-        <div class="form-check">
-          <input type="checkbox" class="form-check-input" id="radar"  v-model="radar">
-          <label class="form-check-label" for="radar">radar</label>
-        </div>
-        <div class="form-check">
-          <input type="checkbox" class="form-check-input" id="VHF"  v-model="VHF">
-          <label class="form-check-label" for="VHF">VHF radio</label>
-        </div>
-        <div class="form-check">
-          <input type="checkbox" class="form-check-input" id="fishfinder"  v-model="fishfinder">
-          <label class="form-check-label" for="fishfinder">fishfinder</label>
-        </div>
+      <div v-for="(key, value) in rooms" :key="value">
+        {{ key[0]}} bed - {{ key[1] }} rooms
       </div>
       <hr class="my-3">
       <h5>Location</h5>
@@ -168,10 +116,6 @@
       <hr class="my-4">
       <div class="double-field">
         <div class="col-3">
-          <label for="boat-price-per-hour" class="form-label">Price per hour</label>
-          <input type="number" class="form-control" id="boat-price-per-hour" v-model="pricePerHour">
-        </div>
-        <div class="col-3">
           <label for="boat-price-per-day" class="form-label">Price per day</label>
           <input type="number" class="form-control" id="boat-price-per-day" v-model="pricePerDay">
         </div>
@@ -181,18 +125,189 @@
         </div>
       </div>
       <hr>
-      <button class="w-100 btn btn-primary btn-lg" type="submit" @click="registerBoat">Register a boat</button>
+      <button class="w-100 btn btn-primary btn-lg" type="submit" @click="registerMansion">Register a mansion</button>
     </form>
 
   </div>
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
-  name: "MansionRegistration"
+  name: "MansionRegistration",
+  data(){
+    return {
+      name: '',
+      address : '',
+      numberOfBeds: 0,
+      numberOfRooms: 0,
+      rooms: new Map(),
+      roomsRequest: new Array(),
+      city : '',
+      country : '',
+      longitude : '',
+      latitude : '',
+      promoDescription : '',
+      cancellationPolicy : '',
+      rules : new Array(),
+      selectedExteriorImages : new Array(),
+      selectedInteriorImages : new Array(),
+      additionalServices : new Array(),
+      additionalServiceName : '',
+      additionalServicePricePerDay : '',
+      pricePerDay: '',
+      priceForSevenDays: ''
+    }
+  },
+  methods:{
+    addRoom(){
+      if(this.rooms.has(this.numberOfBeds))
+        this.rooms.set(this.numberOfBeds, this.rooms.get(this.numberOfBeds)+this.numberOfBeds)
+
+      else
+        this.rooms.set(this.numberOfBeds, this.numberOfRooms)
+
+    },
+    addRule(){
+      var rule = document.getElementById('new-rule').value;
+      this.rules.push(rule)
+      document.getElementById('new-rule').value='';
+    },
+    addAdditionalService(){
+      var name = document.getElementById('new-additional-service-name').value;
+      var day = document.getElementById('new-additional-service-day').value;
+      this.additionalServices.push({name: name, pricePerDay: day });
+      document.getElementById('new-additional-service-name').value='';
+      document.getElementById('new-additional-service-day').value='';
+    },
+    onExteriorImagesSelected(event){
+      this.imgExter = new Array()
+      console.log(typeof(this.imgExter))
+      console.log(event)
+      this.selectedExteriorImages = event.target.files
+      console.log(this.selectedExteriorImages)
+      //const reader = new FileReader()
+      console.log("selected exterior image length is", this.selectedExteriorImages)
+      for (var img in this.selectedExteriorImages){
+        console.log(isNaN(img))
+        if (isNaN(img)) {
+          return;
+        }
+
+        console.log("before pushig file index:", img)
+        this.onUpload(this.selectedExteriorImages[img])
+      }
+
+    },
+    onUpload: function(file){
+      console.log(this.imgExter)
+      console.log("In onUpload, file:", file)
+      console.log("Type of the file is", file.type)
+      const reader= new FileReader();
+      reader.onload = (e) =>{
+        console.log("e:",e.target.result)
+        this.imgExter.push(e.target.result)
+      }
+      reader.readAsDataURL(file);
+    },
+    onInteriorImagesSelected(event){
+      this.imgExter = new Array()
+      console.log(typeof(this.imgInter))
+      console.log(event)
+      this.selectedInteriorImages = event.target.files
+      console.log(this.selectedInteriorImages)
+      //const reader = new FileReader()
+      console.log("selected exterior image length is", this.selectedInteriorImages)
+      for (var img in this.selectedInteriorImages){
+        console.log(isNaN(img))
+        if (isNaN(img)) {
+          return;
+        }
+
+        console.log("before pushig file index:", img)
+        this.onUploadI(this.selectedInteriorImages[img])
+      }
+
+    },
+    onUploadI: function(file){
+      console.log(this.imgInter)
+      console.log("In onUpload, file:", file)
+      console.log("Type of the file is", file.type)
+      const reader= new FileReader();
+      reader.onload = (e) =>{
+        console.log("e:",e.target.result)
+        this.imgInter.push(e.target.result)
+      }
+      reader.readAsDataURL(file);
+    },
+    registerMansion(){
+      console.log("Registering a mansion "+this.name)
+      var roomArray = new Array();
+      for ( const [key, value] of this.rooms){
+        for (let i = 0; i<value; i++){
+          roomArray.push(key)
+        }
+      }
+      alert(roomArray.length)
+      axios
+          .post('http://localhost:8080/registerMansion',
+              {
+                "name": this.name,
+                "cancellationPolicy" : this.cancellationPolicy,
+                "address": this.address,
+                "city": this.city,
+                "country": this.country,
+                "longitude": this.longitude,
+                "latitude": this.latitude,
+                "promoDescription": this.promoDescription,
+                "InteriorImages": this.imgInter,
+                "ExteriorImages": this.imgExter,
+                "pricePerDay": this.pricePerDay,
+                "priceForSevenDays": this.priceForSevenDays,
+                "additionalServices": this.additionalServices,
+                "rooms": roomArray,
+                "rules": this.rules
+
+              }, {
+                headers: {
+                  'Authorization' : this.$store.getters.tokenString
+                }
+              })
+          .then(response => {
+            alert(response.data)
+            this.messege = response.data
+          })
+      .catch((error) => alert(error));
+
+    }
+  }
 }
 </script>
 
+
 <style scoped>
+
+.mansion-registration{
+
+  width: 60%;
+  horiz-align: center;
+  margin-left: 20%;
+  margin-top: 2%;
+  border-radius: 3%;
+  padding: 3%;
+  background-blend-mode: lighten;
+}
+.double-field{
+  display: flex;
+  flex-direction: row;
+}
+
+.double-field .form-check{
+  margin-left: 0.5%;
+}
+
+.mansion-registration .form-label{
+}
 
 </style>

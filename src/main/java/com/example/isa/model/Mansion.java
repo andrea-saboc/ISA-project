@@ -19,6 +19,7 @@ public class Mansion {
 	private String name;
 	private double pricePerDay;
 	private double priceForSevenDays;
+	private  String cancellationPolicy;
 
 	@OneToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
 	@JoinColumn(name = "address_id", referencedColumnName = "id", nullable = true)
@@ -147,5 +148,12 @@ public class Mansion {
 	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;
 	}
-	
+
+	public void setCancellationPolicy(String cancellationPolicy) {
+		this.cancellationPolicy = cancellationPolicy;
+	}
+
+	public String getCancellationPolicy() {
+		return cancellationPolicy;
+	}
 }

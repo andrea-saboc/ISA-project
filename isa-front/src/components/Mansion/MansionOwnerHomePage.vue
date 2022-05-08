@@ -1,114 +1,106 @@
 <template>
-  <div class="homeb-view" v-if="loggedUser != null &&  loggedUser.advertiserType=='mansion'">
-    <div class="sidebar-container side-bov">
-      <div class="sidebar-logo">
-        {{loggedUser.name}} {{loggedUser.surname}}
-      </div>
+<div class="homeb-view" v-if="loggedUser != null &&  loggedUser.advertiserType=='mansion'">
+  <div class="sidebar-container side-bov">
+    <div class="sidebar-logo">
+      {{loggedUser.name}} {{loggedUser.surname}}
+    </div>
+    <li>
+      <a v-on:click="DisplayDashboard()">
+        <i class="fa fa-tachometer" aria-hidden="true"></i>
+        Dashboard
+      </a>
+    </li>
+    <ul class="sidebar-navigation">
+      <li class="header">Mansions</li>
       <li>
-        <a v-on:click="DisplayDashboard()">
-          <i class="fa fa-tachometer" aria-hidden="true"></i>
-          Dashboard
+        <input type="search" class="form-control form-control-dark" placeholder="Search..." v-model="search_mansion" aria-label="Search">
+      </li>
+      <li>
+        <a v-on:click="DisplayMansionRegistration()">
+          <i class="fa fa-plus" aria-hidden="true"></i> Add new
         </a>
       </li>
-      <ul class="sidebar-navigation">
-        <li class="header">Mansions</li>
-        <li>
-          <input type="search" class="form-control form-control-dark" placeholder="Search..." v-model="
-          " aria-label="Search">
-        </li>
-        <li>
-          <a v-on:click="DisplayMansionRegistration()">
-            <i class="fa fa-plus" aria-hidden="true"></i> Add new
+      <li v-for="mansion in mansions" :key="mansion.id" >
+        <div  v-if="MansionSearch(mansion.name)">
+          <a v-on:click="DisplayMansion(mansion.id)">
+            <i class="fa fa-home" aria-hidden="true"></i> {{mansion.name}}
           </a>
-        </li>
-        <li v-for="boat in boats" :key="boat.id" >
-          <div  v-if="BoatSearch(boat.name)">
-            <a v-on:click="DisplayBoat(boat.id)">
-              <i class="fa fa-ship" aria-hidden="true"></i> {{boat.name}}
-            </a>
-          </div>
-        </li>
-        <li>
-          <a href="#" v-on:click = "DisplayChangeBoatInformations()">
-            <i class="fa fa-cog" aria-hidden="true"></i>
-            Change boats
-          </a>
-        </li>
-        <li class="header">Reservations</li>
-        <li>
-          <a href="#" v-on:click = "DisplayReservations()">
-            <i class="fa fa-calendar-check-o" aria-hidden="true"></i>  Reservations
-          </a>
-        </li>
-        <li class="header">Profile</li>
-        <li>
-          <a href="#" v-on:click="DisplayProfile()">
-            <i class="fa fa-cog" aria-hidden="true"></i> Settings
-          </a>
-        </li>
-        <li>
-          <a href="#">
-            <i class="fa fa-info-circle" aria-hidden="true"></i> Information
-          </a>
-        </li>
-      </ul>
+        </div>
+      </li>
+      <li>
+        <a href="#" v-on:click = "DisplayChangeMansionInformations()">
+          <i class="fa fa-cog" aria-hidden="true"></i>
+          Change boats
+        </a>
+      </li>
+      <li class="header">Reservations</li>
+      <li>
+        <a href="#" v-on:click = "DisplayReservations()">
+          <i class="fa fa-calendar-check-o" aria-hidden="true"></i>  Reservations
+        </a>
+      </li>
+      <li class="header">Profile</li>
+      <li>
+        <a href="#" v-on:click="DisplayProfile()">
+          <i class="fa fa-cog" aria-hidden="true"></i> Settings
+        </a>
+      </li>
+      <li>
+        <a href="#">
+          <i class="fa fa-info-circle" aria-hidden="true"></i> Information
+        </a>
+      </li>
+    </ul>
+  </div>
+  <div class="router-elem">
+    <div v-if="display == 'mansionRegistration'">
+      <MansionRegistration></MansionRegistration>
     </div>
-    <div class="router-elem">
-      <div v-if="display == 'boatRegistration'">
-        <BoatRegistration></BoatRegistration>
-      </div>
-      <div v-if="display=='profile'">
-        <Profile></Profile>
-      </div>
-      <div v-if="display=='boat'">
-        <BoatView></BoatView>
-      </div>
-      <div v-if="display=='reservations'">
-        <BoatReservations></BoatReservations>
-      </div>
-      <div v-if="display=='dashboard'">
-        <BoatOwnerDashboard></BoatOwnerDashboard>
-      </div>
-      <div v-if="display=='change'">
-        <ChangeBoatInformation></ChangeBoatInformation>
-      </div>
+    <div v-if="display=='profile'">
+      <Profile></Profile>
+    </div>
+    <div v-if="display=='mansion'">
+      <MansionView></MansionView>
+    </div>
+    <div v-if="display=='reservations'">
+      <MansionReservations></MansionReservations>
+    </div>
+    <div v-if="display=='dashboard'">
+      <MansionOwnerDashboard></MansionOwnerDashboard>
+    </div>
+    <div v-if="display=='change'">
+      <ChangeMansionInformation></ChangeMansionInformation>
     </div>
   </div>
+</div>
 </template>
 
 <script>
-import BoatRegistration from "./BoatRegistration";
-import Profile from "./Profile";
-import BoatView from "./BoatView";
-import BoatReservations from "./BoatReservations";
-import BoatOwnerDashboard from "./BoatOwnerDashboard";
-import ChangeBoatInformation from "./ChangeBoatInformation";
+import MansionRegistration from "./MansionRegistration";
+import Profile from "../Profile"
+import MansionView from "./MansionView";
+import MansionReservations from "./MansionReservations";
+import MansionOwnerDashboard from "./MansionOwnerDashboard";
+import ChangeMansionInformation from "./ChangeMansionInformation";
 import axios from "axios";
-import {devServer} from "../../vue.config";
-export default {
-  name: "MansionOwnerHomePage",
-  components: {BoatRegistration, Profile, BoatView, BoatReservations, BoatOwnerDashboard, ChangeBoatInformation},
-  data: function(){
-    return{
-      display: 'dashboard',
-      boats: [],
-      idBoat: null,
-      loggedUser : null,
-      search_boat : '',
-      searchStartDate : '',
-      searchEndDate: '',
-      serchStatus: ''
-    }
-  },
-  mounted() {
-    if(window.location.href.includes('/boat/')){
-      this.display = 'boat'
-    }
-    //this.$store.mutations.setData();
-    console.log('Pre prikazivanja store tokena')
-    console.log('Window access token: ',window.sessionStorage.getItem('accessToken'))
-    console.log('Token string',this.$store.getters.tokenString)
+import {devServer} from "../../../vue.config";
 
+export default {
+name: "MansionOwnerHomePage",
+  components: {MansionRegistration, Profile, MansionView, MansionReservations, MansionOwnerDashboard, ChangeMansionInformation},
+data: function(){
+  return{
+    display: 'dashboard',
+    mansions: [],
+    idMansion: null,
+    loggedUser : null,
+    search_mansion : '',
+    searchStartDate : '',
+    searchEndDate: '',
+    serchStatus: ''
+  }
+},
+  mounted(){
     axios.get(devServer.proxy + "/userData", {
       headers: {
         'Authorization' : this.$store.getters.tokenString
@@ -117,26 +109,30 @@ export default {
         .then(response => {
           this.loggedUser =response.data
           console.log("Ovaj user je ulogovan:", this.loggedUser)
-          if(this.loggedUser.advertiserType == 'boat'){
-            axios.get(devServer.proxy+"/ownersBoats", {
+          if(this.loggedUser.advertiserType == 'mansion'){
+            console.log("Trying to find mansions!")
+            axios.get(devServer.proxy+"/ownersMansions", {
               headers: {
                 'Authorization' : this.$store.getters.tokenString
               }
             })
                 .then(response1 => {
-                  console.log("brodovi vlasnika", response1.data)
-                  this.boats = response1.data;
+                  console.log("Mansions of the owner: ", response1.data)
+                  this.mansions = response1.data;
                 })
+                .catch(() => {
+                  console.log('mansions are unavaliable')
+                  return;
+                });
           }
         })
         .catch(() => {
           console.log('Login user is unavailable')
           return;
         });
-
   },
   methods: {
-    DisplayBoat(id){
+    DisplayMansion(id){
       var path = window.location.href
       if (path.includes('/boat/')){
         path = path.split('/boat/')[0]
@@ -146,7 +142,7 @@ export default {
     },
     DisplayMansionRegistration() {
 
-      this.display = 'boatRegistration'
+      this.display = 'mansionRegistration'
     },
     DisplayProfile(){
       this.display = 'profile';
@@ -157,14 +153,12 @@ export default {
     DisplayDashboard(){
       this.display= 'dashboard'
     },
-    DisplayChangeBoatInformations(){
+    DisplayChangeMansionInformations(){
       this.display = 'change'
     },
-    BoatSearch(boatName){
-      return boatName.includes(this.search_boat)
+    MansionSearch(boatName){
+      return boatName.includes(this.search_mansion)
     },
-
-
   }
 }
 </script>
@@ -177,6 +171,7 @@ export default {
   overflow-x: auto;
   overflow-y: hidden;
   margin-left: 5%;
+  background-color: #EFB0A1;
 }
 
 b-example-divider {
@@ -333,4 +328,5 @@ b-example-divider {
   position: fixed;
   margin-top: 3%;
 }
+
 </style>

@@ -2,6 +2,8 @@ package com.example.isa.controller;
 
 import java.util.List;
 
+import com.example.isa.dto.BoatRegistrationDto;
+import com.example.isa.dto.MansionRegistrationDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -28,6 +30,22 @@ public class MansionController {
 	MansionService service;
 	@Autowired
 	MansionFilteringServiceImpl filteringService;
+
+	@RequestMapping(method = RequestMethod.POST, value = "/registerMansion",produces = MediaType.APPLICATION_JSON_VALUE)
+	@CrossOrigin(origins = "*")
+	public ResponseEntity<String> registerMansion(@RequestBody MansionRegistrationDto dto){
+		System.out.println("In registering mansion service");
+		System.out.println(dto);
+		Mansion savedMansion = service.registerMansion(dto);
+
+		String responseMessege;
+		if (savedMansion != null){
+			responseMessege = "Mansion successfully registered!";
+		} else{
+			responseMessege = "Error ocured while saving mansion!";
+		}
+		return new ResponseEntity<>(responseMessege, HttpStatus.OK);
+	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/mansions",produces = MediaType.APPLICATION_JSON_VALUE)
 	@CrossOrigin(origins = "*")
@@ -78,7 +96,17 @@ public class MansionController {
 		String jsonString = mapper.writeValueAsString(mansion);
 		System.out.println(jsonString);
 		return new ResponseEntity<>(jsonString, HttpStatus.OK);
+	}
 
+	@RequestMapping(method = RequestMethod.GET, value = "/ownersMansions",produces = MediaType.APPLICATION_JSON_VALUE)
+	@CrossOrigin(origins = "*")
+	public ResponseEntity<String> getOwnersMansions() throws JsonProcessingException{
+		List<Mansion> mansions = service.getByOwnerId();
+		ObjectMapper mapper = new ObjectMapper();
+		String jsonString = mapper.writeValueAsString(mansions);
+		System.out.println(jsonString);
+		System.out.println("In contoler");
+		return new ResponseEntity<>(jsonString, HttpStatus.OK);
 	}
 	
 	
