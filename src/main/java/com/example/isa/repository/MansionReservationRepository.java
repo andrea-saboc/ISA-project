@@ -18,4 +18,5 @@ public interface MansionReservationRepository extends JpaRepository<MansionReser
 	MansionReservation findById(long id);
 	
 	List<MansionReservation> findAllByMansionAndMansionFeedbackIsNotNull(Mansion mansion);
+	List<MansionReservation> findAllByMansion(Mansion mansion);
 }

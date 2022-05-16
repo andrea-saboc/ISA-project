@@ -20,7 +20,7 @@ import BoatOwnerHomePage from "../components/BoatOwnerHomePage";
 import BoatView from "../components/BoatView";
 import BoatRegistration from "../components/BoatRegistration";
 import MansionRegistration from "../components/Mansion/MansionRegistration";
-import MansionView from "../components/MansionView";
+import MansionView from "../components/Mansion/MansionView";
 import MapView from "../components/MapView";
 import MansionOwnerHomePage from "../components/Mansion/MansionOwnerHomePage"
 

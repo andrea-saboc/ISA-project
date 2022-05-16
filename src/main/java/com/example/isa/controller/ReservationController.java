@@ -1,10 +1,14 @@
 package com.example.isa.controller;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.mail.MessagingException;
 
+import com.example.isa.dto.*;
+import com.example.isa.model.reservations.*;
+import com.example.isa.service.impl.reservations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -17,28 +21,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.isa.dto.ActiveReservationDto;
-import com.example.isa.dto.AllBoatOwnerReservationsDTO;
-import com.example.isa.dto.CustomReservationForClientDto;
-import com.example.isa.dto.PotentialReservationDto;
-import com.example.isa.dto.ReservationDto;
-import com.example.isa.dto.ReservationSearchDto;
 import com.example.isa.exception.EntityDeletedException;
 import com.example.isa.exception.PeriodNoLongerAvailableException;
 import com.example.isa.mail.MailService;
-import com.example.isa.model.reservations.BoatDiscountReservation;
-import com.example.isa.model.reservations.BoatReservation;
-import com.example.isa.model.reservations.MansionReservation;
-import com.example.isa.model.reservations.Reservation;
 import com.example.isa.service.AuthenticationService;
-import com.example.isa.service.impl.reservations.BoatDiscountReservationService;
-import com.example.isa.service.impl.reservations.BoatReservationServiceImpl;
-import com.example.isa.service.impl.reservations.BoatReservationSuggestionServiceImpl;
-import com.example.isa.service.impl.reservations.CollectingBoatReservationsServiceImpl;
-import com.example.isa.service.impl.reservations.CollectionMansionReservationsImpl;
-import com.example.isa.service.impl.reservations.MansionReservationServiceImpl;
-import com.example.isa.service.impl.reservations.MansionReservationSuggestionServiceImpl;
-import com.example.isa.service.impl.reservations.CollectingActiveReservationsService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 
@@ -64,6 +50,8 @@ public class ReservationController {
 	
 	@Autowired
 	BoatDiscountReservationService boatDiscountReservationService;
+    @Autowired
+    MansionDiscountReservationService mansionDiscountReservationService;
 	
 	@Autowired
 	CollectingActiveReservationsService reservationService;
@@ -251,6 +239,25 @@ public class ReservationController {
         } catch (Exception e){
             System.out.println(e);
             return new ResponseEntity<>("Error when making a reservation!", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PreAuthorize("hasRole('ROLE_MANSION_OWNER')")
+    @RequestMapping(method = RequestMethod.GET, value = "/getMansionOwnerReservations")
+    public ResponseEntity<String> getMansionOwnerReservations() {
+        try {
+            List<MansionReservation> mansionReservations = collectingMansionResService.getOwnerReservation();
+            List<MansionDiscountReservation> mansionDiscountReservations = new ArrayList<>();
+            AllMansionOwnerReservationsDTO allMansionOwnerReservationsDTO = new AllMansionOwnerReservationsDTO();
+            allMansionOwnerReservationsDTO.mansionReservations = mansionReservations;
+            allMansionOwnerReservationsDTO.mansionDiscountReservations = mansionDiscountReservations;
+            ObjectMapper mapper = new ObjectMapper();
+            String jsonString = mapper.writeValueAsString(allMansionOwnerReservationsDTO);
+            System.out.println(jsonString);
+            return new ResponseEntity<>(jsonString, HttpStatus.OK);
+
+        } catch (Exception e) {
+            return new ResponseEntity<>("Bad request", HttpStatus.BAD_REQUEST);
         }
     }
 

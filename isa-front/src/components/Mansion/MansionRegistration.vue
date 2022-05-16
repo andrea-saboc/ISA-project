@@ -269,6 +269,7 @@ export default {
                 "rooms": roomArray,
                 "rules": this.rules
 
+
               }, {
                 headers: {
                   'Authorization' : this.$store.getters.tokenString

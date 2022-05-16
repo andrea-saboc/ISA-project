@@ -22,8 +22,8 @@ public class ReservationReportController {
 
 	@Autowired
 	private ReservationReportService reservationReportService;
-	
-	@PreAuthorize("hasRole('ROLE_BOAT_OWNER')")
+
+	@PreAuthorize("hasAnyRole('ROLE_CLIENT','ROLE_BOAT_OWNER', 'ROLE_MANSION_OWNER')")
     @RequestMapping(method = RequestMethod.POST,value = "/createReport", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ReservationReport> createReport(@RequestBody ReportDTO dto){
 		System.out.println(dto);

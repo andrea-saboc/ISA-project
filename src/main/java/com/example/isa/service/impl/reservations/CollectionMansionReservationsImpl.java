@@ -3,6 +3,13 @@ package com.example.isa.service.impl.reservations;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.isa.model.Boat;
+import com.example.isa.model.BoatOwner;
+import com.example.isa.model.Mansion;
+import com.example.isa.model.MansionOwner;
+import com.example.isa.model.reservations.BoatReservation;
+import com.example.isa.repository.MansionOwnerRepository;
+import com.example.isa.repository.MansionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +31,10 @@ public class CollectionMansionReservationsImpl {
 	MansionReservationRepository mansionReservationRepo;
 	@Autowired
 	MansionDiscountReservationRepository discountReservationRepo;
+	@Autowired
+	MansionOwnerRepository mansionOwnerRepository;
+	@Autowired
+	MansionRepository mansionRepository;
 
 	public List<MansionReservation> GetReservationHistory() {
 		
@@ -46,4 +57,14 @@ public class CollectionMansionReservationsImpl {
 	}
 
 
+    public List<MansionReservation> getOwnerReservation() {
+		MansionOwner mansionOwner = mansionOwnerRepository.findById(authenticationService.getLoggedUser().getId()).get();
+		List<Mansion> ownersMansions = mansionRepository.findAllByMansionOwnerAndDeletedFalse(mansionOwner);
+
+		List<MansionReservation> mansionReservations= new ArrayList<>();
+		for ( Mansion mansion: ownersMansions) {
+			mansionReservations.addAll(mansionReservationRepo.findAllByMansion(mansion));
+		}
+		return mansionReservations;
+    }
 }

@@ -50,7 +50,7 @@ public class Image {
         }
 
         imgPath = imagePathName;
-        img = imagePathName;
+        img = imgId + ".png";
         }
 
 

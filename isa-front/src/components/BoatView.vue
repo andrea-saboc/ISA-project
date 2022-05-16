@@ -700,7 +700,7 @@ export default {
 
     },
     getImg(image) {
-      return devServer.proxy + "\\" + image.img;
+      return devServer.proxy+"/api/entityImage/images/" + image.img;
     },
     ShowReservationOffer(){
       window.location.href = "/boatReservationOffers/" + this.boatToShow.id.toString();

@@ -30,7 +30,7 @@
       <li>
         <a href="#" v-on:click = "DisplayChangeMansionInformations()">
           <i class="fa fa-cog" aria-hidden="true"></i>
-          Change boats
+          Change mansions
         </a>
       </li>
       <li class="header">Reservations</li>
@@ -101,6 +101,9 @@ data: function(){
   }
 },
   mounted(){
+    if(window.location.href.includes('/mansion/')){
+      this.display = 'mansion'
+    }
     axios.get(devServer.proxy + "/userData", {
       headers: {
         'Authorization' : this.$store.getters.tokenString
@@ -134,10 +137,10 @@ data: function(){
   methods: {
     DisplayMansion(id){
       var path = window.location.href
-      if (path.includes('/boat/')){
-        path = path.split('/boat/')[0]
+      if (path.includes('/mansion/')){
+        path = path.split('/mansion/')[0]
       }
-      window.location.href =path+ "/boat/"+id.toString();
+      window.location.href =path+ "/mansion/"+id.toString();
 
     },
     DisplayMansionRegistration() {

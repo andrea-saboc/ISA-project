@@ -46,6 +46,9 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.security:spring-security-test'
 
+	//bouncy castle
+	implementation group: 'org.bouncycastle', name: 'bcprov-jdk15on', version: '1.64'
+
 	// token
 	implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.6.0'
 

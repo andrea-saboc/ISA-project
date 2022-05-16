@@ -1,21 +1,12 @@
 package com.example.isa.service.impl;
 
+import com.example.isa.model.reservations.*;
+import com.example.isa.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.isa.dto.ReportDTO;
 import com.example.isa.model.ReservationReport;
-import com.example.isa.model.reservations.BoatDiscountReservation;
-import com.example.isa.model.reservations.BoatReservation;
-import com.example.isa.model.reservations.DiscountReservation;
-import com.example.isa.model.reservations.Reservation;
-import com.example.isa.model.reservations.ReservationStatus;
-import com.example.isa.repository.BoatDiscountReservationRepository;
-import com.example.isa.repository.BoatReservationRepository;
-import com.example.isa.repository.ClientRepository;
-import com.example.isa.repository.DiscountReservationRepository;
-import com.example.isa.repository.RegularReservationRepository;
-import com.example.isa.repository.ReservationReportRepository;
 
 @Service
 public class ReservationReportService {
@@ -30,6 +21,10 @@ public class ReservationReportService {
 	private BoatDiscountReservationRepository boatDiscountReservationRepository;
 	@Autowired
 	private BoatReservationRepository boatRegularReservationRepository;
+	@Autowired
+	private MansionReservationRepository mansionRegularReservationRepository;
+	@Autowired
+	private  MansionDiscountReservationRepository mansionDiscountReservationRepository;
 	
 	@Autowired
 	private PenaltyManagementService penaltyManagementService;
@@ -42,6 +37,15 @@ public class ReservationReportService {
 			break;
 		case DISCOUNT_BOAT:
 			reservationReport=createReportForDiscountBoatReservation(dto);
+			break;
+			case REGULAR_MANSION:
+				reservationReport=createReportForRegularMansionReservation(dto);
+				break;
+			case DISCOUNT_MANSION:
+				reservationReport=createReportForDiscountMansionReservation(dto);
+				break;
+
+
 		default:
 			break;
 		}
@@ -51,6 +55,38 @@ public class ReservationReportService {
 			reservationReport = createReportForDiscountReservation(dto, discountReservation);
 		}*/
 		reservationReportRepository.save(reservationReport);
+		return reservationReport;
+	}
+
+	private ReservationReport createReportForDiscountMansionReservation(ReportDTO dto) {
+		MansionDiscountReservation boatDiscountReservation = mansionDiscountReservationRepository.findById(dto.id).get();
+		ReservationReport reservationReport = new ReservationReport();
+		reservationReport.setClientShowedUp(dto.clientShowedUp);
+		reservationReport.setApproved(false);
+		reservationReport.setDiscountReservation(boatDiscountReservation);
+		reservationReport.setReportText(dto.reportText);
+		reservationReport.setRequestedToSanction(dto.requestedToSanction);
+		if(!dto.clientShowedUp) {
+			penaltyManagementService.addPenaltyToClient(boatDiscountReservation.getUser());
+		}
+		boatDiscountReservation.setStatus(ReservationStatus.REPORT_CREATED);
+		mansionDiscountReservationRepository.save(boatDiscountReservation);
+		return reservationReport;
+	}
+
+	private ReservationReport createReportForRegularMansionReservation(ReportDTO dto) {
+		MansionReservation mansionReservation = mansionRegularReservationRepository.findById(dto.id).get();
+		ReservationReport reservationReport = new ReservationReport();
+		reservationReport.setClientShowedUp(dto.clientShowedUp);
+		reservationReport.setApproved(false);
+		reservationReport.setReservation(mansionReservation);
+		reservationReport.setReportText(dto.reportText);
+		reservationReport.setRequestedToSanction(dto.requestedToSanction);
+		if(!dto.clientShowedUp) {
+			penaltyManagementService.addPenaltyToClient(mansionReservation.getUser());
+		}
+		mansionReservation.setStatus(ReservationStatus.REPORT_CREATED);
+		mansionRegularReservationRepository.save(mansionReservation);
 		return reservationReport;
 	}
 

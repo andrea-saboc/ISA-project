@@ -68,7 +68,11 @@
           <td>{{reservation.totalPrice}} €</td>
           <td v-if="reservation.cancelled == true">Cancelled</td>
           <td v-else>Not cancelled</td>
-          <td v-if="filterReservationStatus=='past' && reservation.cancelled == false && past==true"><button v-on:click="createReport(reservation)">Create report</button></td>
+          <td v-if="filterReservationStatus=='past' && (reservation.status=='RESERVED' || reservation.status == 'CLOSED') && past==true">
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+              Create report
+            </button>
+          </td>
         </tr>
         </tbody>
       </table>
@@ -102,7 +106,7 @@
           <td><span style="text-decoration-line: line-through;">{{reservation.priceWithDiscount}} €</span> {{reservation.priceWithoutDiscount}} € • <span style="font-weight: bolder">{{reservation.percentageOfDiscount}}% off</span></td>
           <td style="align-content: center">{{reservation.status}}</td>
           <td style="align-content: center">{{formatDate(reservation.validUntil)}}</td>
-          <td v-if="filterReservationStatus=='past' && reservation.status=='RESERVED' && past==true">
+          <td v-if="filterReservationStatus=='past' && (reservation.status=='RESERVED' || reservation.status == 'CLOSED') && past==true">
             <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
             Create report
             </button>
