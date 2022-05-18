@@ -7,11 +7,17 @@ VALUES ('mansion', true, 'I am a mansion owner', 5);
 
 INSERT INTO public.system_user(
     user_type, id, address, blocked, city, country, email, name, password, phone_number, surname)
-VALUES ('Administrator', '6', 'Tolstojeva 10', false, 'Novi Sad', 'Srbija', 'admin@gmail.com','Adminka', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra','069652256','mirkovic');
+VALUES ('Administrator', 6, 'Tolstojeva 10', false, 'Novi Sad', 'Srbija', 'admin@gmail.com','Adminka', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra','069652256','mirkovic');
 INSERT INTO administrator(
     id)
 VALUES ('6');
 
+INSERT INTO public.system_user(
+    user_type, id, address, blocked, city, country, email, name, password, phone_number, surname)
+VALUES ('FishingInstructor', 507, 'Vojvode Supljikca', false, 'Novi Sad', 'Srbija', 'alexmirkovic1719@gmail.com','Alex', '$2a$10$KBYOmrL4g3ce5.wfagQnveII0Ubylu0s/1pP/zl2pagffN7uDfAKS','069652256','Mirkovic');
+INSERT INTO public.fishing_instructor(
+    type, advertiser_registration_approved, advertiser_reason, id)
+VALUES ('fishing', true, 'I want to advertise', 507);
 INSERT INTO public.system_user(
     user_type, id, address, blocked, city, country, email, name, password, phone_number, surname)
 VALUES ('BoatOwner', 90, 'St Marc 45', false, 'Genova', 'Italy', 'markijan@gmail.com', 'Mark', '$2a$10$KBYOmrL4g3ce5.wfagQnveII0Ubylu0s/1pP/zl2pagffN7uDfAKS', '09787', 'Markijani');
@@ -99,6 +105,8 @@ INSERT INTO public.address(
     id, address, city, country, latitude, longitude)
 VALUES (21, '361 Hiawatha Way', 'Melbourne Beach', 'Florida', 21.31, -157.9);
 
+
+
 INSERT INTO public.mansion(
     id, deleted,avg_grade, name, price_for_seven_days, price_per_day, promo_description, address_id, owner_id)
 VALUES (1, false, 4, 'Clermont', 250, 50, 'These two words speak volumes. A big and welcoming backyard can be the main selling feature for some visitors, especially if they have children or pets, or those who are loving warmer climates.',5, 5);
@@ -149,19 +157,25 @@ INSERT INTO public.boat(
     id,deleted, gps, vhfradio, avg_grade, cancellation_policy, capacity, engine_power, fishfinder, length, max_speed, name, number_of_engines, price_for_seven_days, price_per_day, price_per_hour, promo_description, radar, type, address_id, owner_id)
 VALUES (2, false,false, true, 0.0, 'You will recieve 85% of total price!', 15, 200, true, 34, 220, 'Peace', 6, 700, 250, 70, 'This is the best boat',true, 'Sailboat', 17, 90);
 
+INSERT INTO public.adventure( id ,name,biography, cancellation_policy , capacity, deleted ,equipment ,price_for_seven_days, price_per_day ,price_per_hour , promo_description , address_id , owner_id)
+VALUES(1,'Plovidba','nesto','nesto',15,false,'nesto3',4,5,6,'promo',8,507);
+INSERT INTO public.adventure( id ,name,biography, cancellation_policy , capacity, deleted ,equipment ,price_for_seven_days, price_per_day ,price_per_hour , promo_description , address_id , owner_id)
+VALUES(2,'Pecanje','nesto','nesto',15,false,'nesto3',4,5,6,'promo',8,507);
+INSERT INTO public.adventure( id ,name,biography, cancellation_policy , capacity, deleted ,equipment ,price_for_seven_days, price_per_day ,price_per_hour , promo_description , address_id , owner_id)
+VALUES(3,'Kvadovi','nesto','nesto',15,false,'nesto3',4,5,6,'promo',8,507);
 
 INSERT INTO public.additional_service(
-    id, name, price_per_day, price_per_hour, boat_id, mansion_id)
-VALUES (1, 'wifi', 30, 12, 3, null );
+    id, name, price_per_day, price_per_hour,adventure_id, boat_id, mansion_id)
+VALUES (1, 'wifi', 30, 12, null,3, null );
 INSERT INTO public.additional_service(
-    id, name, price_per_day, price_per_hour, boat_id, mansion_id)
-VALUES (2, 'captain', 50, 100, 3, null );
+  id, name, price_per_day, price_per_hour,adventure_id, boat_id, mansion_id)
+VALUES (2, 'captain', 50, 100, null,3, null);
 INSERT INTO public.additional_service(
-    id, name, price_per_day, price_per_hour, boat_id, mansion_id)
-VALUES (3, 'champagne', 12, 36, 4, null );
+  id, name, price_per_day, price_per_hour,adventure_id, boat_id, mansion_id)
+VALUES (3, 'champagne', 12, 36, null,4, null);
 INSERT INTO public.additional_service(
-    id, name, price_per_day, price_per_hour, boat_id, mansion_id)
-VALUES (4, 'bathroom', 12, 36, 4, null );
+  id, name, price_per_day, price_per_hour,adventure_id, boat_id, mansion_id)
+VALUES (4, 'bathroom', 12, 36, null,4, null);
 
 INSERT INTO public.boat_available_period(
     available_period_id, end_date, start_date, boat_id)
@@ -239,6 +253,7 @@ INSERT INTO ROLE (id ,name) VALUES (2, 'ROLE_BOAT_OWNER');
 INSERT INTO ROLE (id ,name) VALUES (3, 'ROLE_MANSION_OWNER');
 INSERT INTO ROLE (id ,name) VALUES (4, 'ROLE_UNAUTHORISED');
 INSERT INTO ROLE (id ,name) VALUES (5, 'ROLE_ADMIN');
+INSERT INTO ROLE (id ,name) VALUES (6, 'ROLE_FISHING_INSTRUCTOR');
 
 INSERT INTO USER_AUTHORITY (user_id, authority_id) VALUES (400, 1);
 INSERT INTO USER_AUTHORITY (user_id, authority_id) VALUES (401, 1);
@@ -247,6 +262,7 @@ INSERT INTO USER_AUTHORITY (user_id, authority_id) VALUES (402, 1);
 INSERT INTO USER_AUTHORITY (user_id, authority_id) VALUES (5, 3);
 INSERT INTO USER_AUTHORITY (user_id, authority_id) VALUES (6, 5);
 INSERT INTO USER_AUTHORITY (user_id, authority_id) VALUES (90, 2);
+INSERT INTO USER_AUTHORITY (user_id, authority_id) VALUES (507, 6);
 
 
 INSERT INTO public.subscription(

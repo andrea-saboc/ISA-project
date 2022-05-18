@@ -23,6 +23,9 @@ import MansionRegistration from "../components/MansionRegistration";
 import MansionView from "../components/MansionView";
 import MapView from "../components/MapView";
 import MansionOwnerHomePage from "../components/Mansion/MansionOwnerHomePage"
+import FishingInstrucotrHomePage from "../components/FishingInstructor/fishingInstructorHomePage"
+import AdventureRegistration from "../components/FishingInstructor/AdventureRegistration"
+import AdventureView from "../components/FishingInstructor/AdventureView"
 
 const routes = [
 {
@@ -156,6 +159,22 @@ const routes = [
         path: '/maptest',
         name: "MapView",
         component: MapView
+    },
+    {
+        path: '/fishingInstructorHomePage',
+        alias: '/fishingInstructorHomePage/adventure/:id',
+        name: 'fishingInstrucotorHomePage',
+        component: FishingInstrucotrHomePage
+    },
+    {
+        path: '/adventureRegistration',
+        name: 'AdventureRegistration',
+        component: AdventureRegistration
+    },
+    {
+        path: '/adventure/:id',
+        name: 'AdventureView',
+        component: AdventureView
     }
 
 ]

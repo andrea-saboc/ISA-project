@@ -51,7 +51,9 @@ export default{
     },
     methods:{
       Login(){
+          localStorage.removeItem('token');
         let store = this.$store;
+        this.CheckIfEmpty()
         if(!this.fieldEmpty){
           axios
               .post(devServer.proxy +'/login',
@@ -65,6 +67,10 @@ export default{
                   return
                 }
 
+                    localStorage.setItem('token', JSON.stringify(response.data.accessToken));
+                    let token = localStorage.getItem('token').substring(1, localStorage.getItem('token').length-1);
+                    console.log('TU SAM',token);
+
                 store.dispatch('startSession', response.data);
                 console.log('User got the token:',this.$store.getters.tokenString)
                 this.dispatch(response.data.userType);
@@ -75,10 +81,6 @@ export default{
                 alert('Wrong email or password')
                 console.log(error)
               })
-
-
-
-
         }else alert('error in filling form');
 
       },
@@ -93,7 +95,7 @@ export default{
       if (type === 'Client') {
         //window.location.reload()
         router.push("/clientHomePage");
-        return
+        return;
         }
       else if(type === 'MansionOwner'){
         router.push("/mansionOwnerHomePage")
@@ -106,6 +108,10 @@ export default{
       }
       else if(type === "BoatOwner"){
         router.push("/boatOwnerHomePage")
+        return;
+      }
+      else if(type === 'FishingInstructor'){
+        router.push("/fishingInstructorHomePage")
         return;
       }
 

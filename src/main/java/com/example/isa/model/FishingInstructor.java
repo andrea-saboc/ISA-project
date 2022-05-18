@@ -8,6 +8,9 @@ import javax.persistence.Entity;
 @DiscriminatorValue("FishingInstructor")
 public class FishingInstructor extends User {
 
+	private transient final String role = "ROLE_FISHING_INSTRUCTOR";
+	private static final long serialVersionUID = 1L;
+
 	@Column(name = "advertiser_reason")
     private String reason;
     @Column(name = "type")
