@@ -2,8 +2,11 @@ package com.example.isa.controller;
 
 import java.util.List;
 
+import com.example.isa.dto.AddAvailablePeriodDto;
 import com.example.isa.dto.BoatRegistrationDto;
 import com.example.isa.dto.MansionRegistrationDto;
+import com.example.isa.model.BoatAvailablePeriod;
+import com.example.isa.model.MansionAvailablePeriod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -106,6 +109,19 @@ public class MansionController {
 		String jsonString = mapper.writeValueAsString(mansions);
 		System.out.println(jsonString);
 		System.out.println("In contoler");
+		return new ResponseEntity<>(jsonString, HttpStatus.OK);
+	}
+
+	@RequestMapping(method = RequestMethod.POST, value ="/addAvailablePeriodForMansion", produces = MediaType.APPLICATION_JSON_VALUE)
+	@CrossOrigin(origins = "*")
+	public ResponseEntity<String> addAvailablePeriodForBoat(@RequestBody AddAvailablePeriodDto dto) throws JsonProcessingException{
+		System.out.println("Adding available period for mansion!");
+		List<MansionAvailablePeriod> mansionAvailabilities = service.addBoatAvailabilities(dto);
+		ObjectMapper mapper = new ObjectMapper();
+		System.out.print("Before coverting" + mansionAvailabilities.toString());
+		String jsonString = mapper.writeValueAsString(mansionAvailabilities);
+		System.out.println(jsonString);
+		System.out.println("Finished");
 		return new ResponseEntity<>(jsonString, HttpStatus.OK);
 	}
 	

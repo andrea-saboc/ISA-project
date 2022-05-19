@@ -402,7 +402,7 @@
             </div>
 
             <div class="input-group mb-3">
-              <span class="input-group-text" id="basic-addon7">Days</span>
+              <span class="input-group-text" id="basic-addon7">Hours</span>
               <input type="number" class="form-control" placeholder="Hours" aria-label="Username" v-model="numberOfHoursQuick" aria-describedby="basic-addon1">
             </div>
 
@@ -415,6 +415,17 @@
             <span class="input-group-text" id="basic-addon11">Final price</span>
             <input type="number" class="form-control" placeholder="Price" aria-label="Username" v-model="priceQuick" aria-describedby="basic-addon1">
           </div>
+          <v-date-picker mode="dateTime" is24hr v-model="availableUntil" style="width: 100%">
+            <template v-slot="{ inputValue, inputEvents }">
+              <input
+                  class="px-2 py-1 border rounded focus:outline-none focus:border-blue-300"
+                  :value="inputValue"
+                  v-on="inputEvents"
+                  style="overflow: visible"
+                  placeholder="From time"
+              />
+            </template>
+          </v-date-picker>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-primary" v-on:click="addQuickReservation">Add</button>
@@ -464,6 +475,7 @@ export default {
       additionalServices : [],
       boatReservations : [],
       reservedDates : [],
+      availableUntil: '',
       quickReservationsFree: new Array(),
       quickReservationReserved: new Array(),
       calendar_attributes: [
@@ -771,7 +783,8 @@ export default {
         "days" : this.numberOfDaysQuick,
         "hours" : this.numberOfHoursQuick,
         "numberOfGuests" : this.numberOfGuestsQuick,
-        "priceWithDiscount": this.priceQuick
+        "priceWithDiscount": this.priceQuick,
+        "validUntil" : this.availableUntil
       }, {
         headers: {
           'Authorization': this.$store.getters.tokenString,

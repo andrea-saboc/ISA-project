@@ -153,5 +153,9 @@ public class DiscountReservation implements Serializable{
 		this.priceWithDiscount = priceWithDiscount;
 		this.status = ReservationStatus.ACTIVE;
 	}
-		
+
+	public double calculatePercentageOfDiscount() {
+		return 100.00 - getPriceWithDiscount()/getPriceWithDiscount();
+
+	}
 }

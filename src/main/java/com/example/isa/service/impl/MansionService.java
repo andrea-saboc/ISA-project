@@ -2,10 +2,12 @@ package com.example.isa.service.impl;
 
 import java.util.*;
 
+import com.example.isa.dto.AddAvailablePeriodDto;
 import com.example.isa.dto.MansionRegistrationDto;
 import com.example.isa.model.*;
 import com.example.isa.model.reservations.AdditionalService;
 import com.example.isa.repository.AdditionalServiceRepository;
+import com.example.isa.repository.MansionAvailablePeriodRepository;
 import com.example.isa.repository.MansionOwnerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -27,6 +29,9 @@ public class MansionService {
 
 	@Autowired
 	AdditionalServiceRepository additionalServiceRepository;
+
+	@Autowired
+	MansionAvailablePeriodRepository mansionAvailablePeriodRepository;
 	
 	public List<Mansion> getAll() {
 		
@@ -112,4 +117,12 @@ public class MansionService {
 		}
 		return convertedRules;
 	}
+
+    public List<MansionAvailablePeriod> addBoatAvailabilities(AddAvailablePeriodDto dto) {
+		Mansion mansion = mansionRepo.findById(dto.boatId).get();
+		MansionAvailablePeriod availablePeriod = new MansionAvailablePeriod(dto.startTime, dto.endTime, mansion);
+		mansionAvailablePeriodRepository.save(availablePeriod);
+		List<MansionAvailablePeriod> mansionNewAvailability = mansionAvailablePeriodRepository.findByMansion(mansion);
+		return  mansionNewAvailability;
+    }
 }
