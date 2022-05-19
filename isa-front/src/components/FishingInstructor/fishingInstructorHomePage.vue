@@ -1,43 +1,26 @@
 <template>
-<div class="homeb-view" v-if="loggedUser != null &&  loggedUser.advertiserType=='boat'">
+<div class="homeb-view" v-if="loggedUser != null &&  loggedUser.advertiserType=='fishing'">
   <div class="sidebar-container side-bov">
     <div class="sidebar-logo">
       {{loggedUser.name}} {{loggedUser.surname}}
     </div>
-    <li>
-      <a v-on:click="DisplayDashboard()">
-        <i class="fa fa-tachometer" aria-hidden="true"></i>
-        Dashboard
-      </a>
-    </li>
+
     <ul class="sidebar-navigation">
-      <li class="header">Boats</li>
+      <li class="header">Adventures</li>
       <li>
-        <input type="search" class="form-control form-control-dark" placeholder="Search..." v-model="search_boat" aria-label="Search">
+        <input type="search" class="form-control form-control-dark" placeholder="Search..."  aria-label="Search" v-model="search_adventure">
       </li>
       <li>
-        <a v-on:click="DisplayBoatRegistration()">
+        <a v-on:click="DisplayAdventureRegistration()">
           <i class="fa fa-plus" aria-hidden="true"></i> Add new
         </a>
       </li>
-      <li v-for="boat in boats" :key="boat.id" >
-        <div  v-if="BoatSearch(boat.name)">
-          <a v-on:click="DisplayBoat(boat.id)">
-            <i class="fa fa-ship" aria-hidden="true"></i> {{boat.name}}
+      <li v-for="adventure in adventures" :key="adventure.id" >
+        <div  v-if="AdventureSearch(adventure.name)">
+          <a v-on:click="DisplayAdventure(adventure.id)">
+            <i class="fa fa-ship" aria-hidden="true"></i> {{adventure.name}}
           </a>
         </div>
-      </li>
-      <li>
-        <a href="#" v-on:click = "DisplayChangeBoatInformations()">
-          <i class="fa fa-cog" aria-hidden="true"></i>
-          Change boats
-      </a>
-      </li>
-      <li class="header">Reservations</li>
-      <li>
-        <a href="#" v-on:click = "DisplayReservations()">
-          <i class="fa fa-calendar-check-o" aria-hidden="true"></i>  Reservations
-        </a>
       </li>
       <li class="header">Profile</li>
       <li>
@@ -45,87 +28,65 @@
           <i class="fa fa-cog" aria-hidden="true"></i> Settings
         </a>
       </li>
-      <li>
-        <a href="#">
-          <i class="fa fa-info-circle" aria-hidden="true"></i> Information
-        </a>
-      </li>
-    </ul>
-  </div>
-  <div class="router-elem">
-    <div v-if="display == 'boatRegistration'">
-      <BoatRegistration></BoatRegistration>
+      </ul>
+ </div>
+ <div class="router-elem">
+    <div v-if="display == 'adventureRegistration'">
+      <AdventureRegistration></AdventureRegistration>
     </div>
-    <div v-if="display=='profile'">
+     <div v-if="display == 'adventure'">
+      <AdventureView></AdventureView>
+    </div>
+    <div v-if="display == 'profile'">
       <Profile></Profile>
-    </div>
-    <div v-if="display=='boat'">
-      <BoatView></BoatView>
-    </div>
-    <div v-if="display=='reservations'">
-      <BoatReservations></BoatReservations>
-    </div>
-    <div v-if="display=='dashboard'">
-      <BoatOwnerDashboard></BoatOwnerDashboard>
-    </div>
-    <div v-if="display=='change'">
-      <ChangeBoatInformation></ChangeBoatInformation>
     </div>
   </div>
 </div>
 
 </template>
-
 <script>
-import BoatRegistration from "./BoatRegistration";
-import Profile from "./Profile";
-import BoatView from "./BoatView";
-import BoatReservations from "./BoatReservations";
-import BoatOwnerDashboard from "./BoatOwnerDashboard";
-import ChangeBoatInformation from "./ChangeBoatInformation";
+import Profile from "../Profile";
+import AdventureRegistration from "../FishingInstructor/AdventureRegistration";
+import AdventureView from "../FishingInstructor/AdventureView";
 import axios from "axios";
-import {devServer} from "../../vue.config";
-export default {
-  name: "BoatOwnerHomePage",
-  components: {BoatRegistration, Profile, BoatView, BoatReservations, BoatOwnerDashboard, ChangeBoatInformation},
-  data: function(){
-    return{
-      display: 'dashboard',
-      boats: [],
-      idBoat: null,
-      loggedUser : null,
-      search_boat : '',
-      searchStartDate : '',
-      searchEndDate: '',
-      serchStatus: ''
-    }
-  },
-  mounted(){
-    if(window.location.href.includes('/boat/')){
-      this.display = 'boat'
-    }
-    //this.$store.mutations.setData();
-    console.log('Pre prikazivanja store tokena')
-    console.log('Window access token: ',window.sessionStorage.getItem('accessToken'))
-    console.log('Token string',this.$store.getters.tokenString)
+import {devServer} from "../../../vue.config";
 
+export default{
+  name: "fishingInstructorHomePage",
+  components:{AdventureRegistration,AdventureView,Profile},
+    data: function(){
+        return{
+          display: 'dashboard',
+            loggedUser:null,
+            adventures:[],
+            search_adventure:'',
+            user: null
+        }
+    },
+    mounted(){
+    
+      if(window.location.href.includes('/adventure/')){
+      this.display = 'adventure'
+    }
+   let token = localStorage.getItem('token').substring(1, localStorage.getItem('token').length-1);
+   console.log('toke je',token)
     axios.get(devServer.proxy + "/userData", {
       headers: {
-        'Authorization' : this.$store.getters.tokenString
+        'Authorization' : 'Bearer ' + token,
       }
     })
     .then(response => {
       this.loggedUser =response.data
       console.log("Ovaj user je ulogovan:", this.loggedUser)
-      if(this.loggedUser.advertiserType == 'boat'){
-        axios.get(devServer.proxy+"/ownersBoats", {
+      if(this.loggedUser.advertiserType == 'fishing'){
+        axios.get(devServer.proxy+"/ownersAdventures", {
           headers: {
-            'Authorization' : this.$store.getters.tokenString
+            'Authorization' :'Bearer ' + token,
           }
         })
             .then(response1 => {
-              console.log("brodovi vlasnika", response1.data)
-              this.boats = response1.data;
+              console.log("avanture vlasnika", response1.data)
+              this.adventures = response1.data;
             })
       }
     })
@@ -133,42 +94,33 @@ export default {
           console.log('Login user is unavailable')
           return;
         });
-
-  },
-  methods: {
-    DisplayBoat(id){
-      var path = window.location.href
-      if (path.includes('/boat/')){
-        path = path.split('/boat/')[0]
-      }
-      window.location.href =path+ "/boat/"+id.toString();
-
     },
-    DisplayBoatRegistration() {
+     methods: {
+   
+    DisplayAdventureRegistration() {
 
-        this.display = 'boatRegistration'
+        this.display = 'adventureRegistration'
     },
-    DisplayProfile(){
+     DisplayProfile(){
       this.display = 'profile';
     },
-    DisplayReservations(){
-      this.display = 'reservations';
+     AdventureSearch(adventureName){
+      return adventureName.includes(this.search_adventure)
     },
-    DisplayDashboard(){
-     this.display= 'dashboard'
-    },
-    DisplayChangeBoatInformations(){
-      this.display = 'change'
-    },
-    BoatSearch(boatName){
-      return boatName.includes(this.search_boat)
-    },
+     DisplayAdventure(id){
+      var path = window.location.href
+      if (path.includes('/adventure/')){
+        path = path.split('/adventure/')[0]
+      }
 
+      window.location.href =path+ "/adventure/"+id.toString();
+      
+     
 
+    }
   }
 }
 </script>
-
 <style scoped>
 .homeb-view {
   display: flex;

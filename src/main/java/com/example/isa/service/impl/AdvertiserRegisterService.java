@@ -2,16 +2,17 @@ package com.example.isa.service.impl;
 
 import com.example.isa.dto.AdvertiserRegistrationDto;
 import com.example.isa.exception.BadUserTypeException;
-import com.example.isa.model.BoatOwner;
-import com.example.isa.model.FishingInstructor;
-import com.example.isa.model.MansionOwner;
-import com.example.isa.model.User;
+import com.example.isa.model.*;
 import com.example.isa.repository.BoatOwnerRepository;
 import com.example.isa.repository.FishingInstructorRepository;
 import com.example.isa.repository.MansionOwnerRepository;
+import com.example.isa.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class AdvertiserRegisterService {
@@ -24,17 +25,22 @@ public class AdvertiserRegisterService {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private FishingInstructorRepository fishnigInstructorRepository;
+    @Autowired
+    private RoleRepository roleRepository;
 
-    public AdvertiserRegisterService(MansionOwnerRepository mansionOwnerRepository, BoatOwnerRepository boatOwnerRepository,FishingInstructorRepository fishnigInstructorRepository) {
+    public AdvertiserRegisterService(MansionOwnerRepository mansionOwnerRepository, BoatOwnerRepository boatOwnerRepository,FishingInstructorRepository fishnigInstructorRepository,RoleRepository roleRepository) {
         this.mansionOwnerRepository = mansionOwnerRepository;
         this.boatOwnerRepository = boatOwnerRepository;
         this.fishnigInstructorRepository=fishnigInstructorRepository;
+        this.roleRepository=roleRepository;
     }
 
     public User saveNewAdvertiser(AdvertiserRegistrationDto dat) throws BadUserTypeException {
         String type = dat.getType();
         dat.setPassword(passwordEncoder.encode(dat.getPassword()));
         Object user = null;
+
+
         switch(type) {
             case "mansion":
                 user = dat.createMansionOwner();
@@ -45,8 +51,14 @@ public class AdvertiserRegisterService {
                 boatOwnerRepository.save((BoatOwner) user);
                 break;
             case "fishing":
-            	 user = dat.createFishingInstructor();
-            	 fishnigInstructorRepository.save((FishingInstructor) user);
+            	 FishingInstructor f = dat.createFishingInstructor();
+                 List<Authority> authorities = new ArrayList<Authority>();
+                 Authority auth = roleRepository.findByName("ROLE_FISHING_INSTRUCTOR");
+                 authorities.add(auth);
+                 f.setAuthorities(authorities);
+                fishnigInstructorRepository.save(f);
+
+
                  break;
             default:
                 throw new BadUserTypeException();

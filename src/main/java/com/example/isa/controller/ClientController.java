@@ -31,7 +31,8 @@ public class ClientController {
 	private AuthenticationService authenticationService;
 
 
-	@PreAuthorize("hasAnyRole('ROLE_CLIENT','ROLE_BOAT_OWNER', 'ROLE_MANSION_OWNER')")
+
+	@PreAuthorize("hasAnyRole('ROLE_CLIENT','ROLE_BOAT_OWNER','ROLE_MANSION_OWNER','ROLE_FISHING_INSTRUCTOR')")
 	@RequestMapping(method = RequestMethod.GET, value = "/userData",produces = MediaType.APPLICATION_JSON_VALUE )
 	@CrossOrigin(origins = "*")	
 	public ResponseEntity<User> getUserData(){

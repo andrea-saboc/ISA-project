@@ -44,6 +44,7 @@ public class BoatController {
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/boat",produces = MediaType.APPLICATION_JSON_VALUE)
+	@CrossOrigin(origins = "*")
 	public ResponseEntity<String> getBoatById(@RequestParam Long id) throws JsonProcessingException{
 		System.out.println("We are searchinng for" +id);
 		Boat boat = service.getById(id);

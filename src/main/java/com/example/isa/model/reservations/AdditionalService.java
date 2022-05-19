@@ -3,19 +3,9 @@ package com.example.isa.model.reservations;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
+import com.example.isa.model.Adventure;
 import com.example.isa.model.Boat;
 import com.example.isa.model.Mansion;
 
@@ -23,8 +13,9 @@ import com.example.isa.model.Mansion;
 @Table(name = "AdditionalService")
 public class AdditionalService {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    //@Column(name = "id")
+    @Column(name = "id", unique = true)
+    @SequenceGenerator(name = "user_sequence_generator", sequenceName = "user_sequence", initialValue = 100)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_sequence_generator")
     private Long id;
 
     private String name;
@@ -37,6 +28,9 @@ public class AdditionalService {
     @ManyToOne
     @JoinColumn(name = "mansion_id", referencedColumnName = "id", nullable = true)
     private Mansion mansion;
+    @ManyToOne
+    @JoinColumn(name = "adventure_id", referencedColumnName = "id", nullable = true)
+    private Adventure adventure;
 
 
     @ManyToMany
@@ -57,6 +51,13 @@ public class AdditionalService {
         this.pricePerDay = pricePerDay;
         this.pricePerHour = pricePerHour;
         this.boat = boat;
+    }
+
+    public AdditionalService(String name, double pricePerDay, double pricePerHour, Adventure adventure) {
+        this.name = name;
+        this.pricePerDay = pricePerDay;
+        this.pricePerHour = pricePerHour;
+        this.adventure = adventure;
     }
 
     public Long getId() {
@@ -105,5 +106,13 @@ public class AdditionalService {
 
     public void setMansion(Mansion mansion) {
         this.mansion = mansion;
+    }
+
+    public Adventure getAdventure() {
+        return adventure;
+    }
+
+    public void setAdventure(Adventure adventure) {
+        this.adventure = adventure;
     }
 }

@@ -20,6 +20,9 @@ public class Rule {
     @ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     @JoinColumn(name = "mansion_id", referencedColumnName = "id", nullable = true)
     private Set<Mansion> mansions = new HashSet<Mansion>();
+    @ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+    @JoinColumn(name = "adventure_id", referencedColumnName = "id", nullable = true)
+    private Set<Adventure> adventure = new HashSet<Adventure>();
 
     public Rule(){}
     public Rule(String rule){
@@ -30,6 +33,10 @@ public class Rule {
     public void addMansion(Mansion newMansion) {mansions.add(newMansion);}
     public void addBoat(Boat newBoat){
         boat.add(newBoat);
+    }
+
+    public void addAdventure(Adventure newAdventure){
+        adventure.add(newAdventure);
     }
 
     public Integer getRuleId() {
