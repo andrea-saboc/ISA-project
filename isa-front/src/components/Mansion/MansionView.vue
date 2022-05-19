@@ -66,12 +66,43 @@
           <br>
           <br>
         </div>
-        <hr>
-        <div class="info">
+
+        <hr v-if="loggedUser!=null && loggedUser.advertiserType == null">
+        <div class="info" v-if="loggedUser!=null && loggedUser.advertiserType == null">
           <h2><button class="btn btn-lg-link" v-on:click="ShowReservationOffers" v-if="loggedUser">Show reservationOffers</button></h2>
         </div>
+        <hr v-if="loggedUser!=null && loggedUser.advertiserType == null">
 
-        <hr>
+        <hr v-if="loggedUser!=null && mansionToShow.mansionOwner.id==loggedUser.id">
+        <div class="subscribers" v-if="loggedUser!=null && mansionToShow.mansionOwner.id==loggedUser.id">
+          <p style="font-weight: bolder; font-size: 26px">
+            Subscribers
+          </p>
+          <div v-if="mansionSubscribers.length==0">
+            <p> No subscribers yet!</p>
+          </div>
+          <div v-else>
+            <table class="table">
+              <thead>
+              <tr>
+                <th scope="col"></th>
+                <th scope="col">Name</th>
+                <th scope="col">Surname</th>
+                <th scope="col">Email</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr v-for="(s, index) in mansionSubscribers" :key="s.id">
+                <td>{{index+1}}</td>
+                <td>{{s.name}}</td>
+                <td>{{s.surname}}</td>
+                <td>{{s.email}}</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <hr v-if="loggedUser!=null && mansionToShow.mansionOwner.id==loggedUser.id">
 
         <hr v-if="mansionToShow.rules!=null && mansionToShow.rules.length!=0">
         <div class="navigation-equipments" v-if="mansionToShow.rules!=null && mansionToShow.rules.length!=0">
@@ -345,6 +376,7 @@ export default {
   name: "MansionView",
   data: function () {
     return {
+      mansionSubscribers: new Array(),
       startDateTimeQuick: '',
       numberOfGuestsQuick: '',
       numberOfHoursQuick: 0,
@@ -438,6 +470,23 @@ export default {
           this.address = this.mansionToShow.address
           console.log(response.data)
           this.mansionOwner = this.mansionToShow.mansionOwner
+          axios
+              .get(devServer.proxy + "/getMansionsSubscribers", {
+                params:
+                    {
+                      mansionId: this.mansionToShow.id
+                    },
+                headers: {
+                  'Authorization': this.$store.getters.tokenString
+                }
+              })
+          .then((resp1 =>{
+            this.mansionSubscribers = resp1.data
+            console.log("Mansion subscribers: ", this.mansionSubscribers)
+          }))
+              .catch(() => {
+                alert("Error occured while trying to find mansion subscribers!")
+              })
           this.calculateAvailableDaysForCalendar()
         })
   },

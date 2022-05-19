@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.example.isa.model.*;
+import com.example.isa.model.reservations.MansionReservation;
 import com.example.isa.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,8 @@ public class SubscriptionService {
 	AuthenticationService authenticationService;
 	@Autowired
 	BoatRepository boatRepository;
+	@Autowired
+	MansionRepository mansionRepository;
 	
 	
 	public BoatSubscription newBoatSubscription(Boat boat) {
@@ -82,5 +85,9 @@ public class SubscriptionService {
 
 	public List<User> getAllSubscribersByBoatId(Long boatId) {
 		return getAllSubscribersByBoat(boatRepository.findById(boatId).get());
+	}
+
+	public List<User> getAllSubscribersByMansionId(Long mansionId) {
+		return getAllSubscribersByMansion(mansionRepository.findById(mansionId).get());
 	}
 }

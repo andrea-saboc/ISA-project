@@ -69,6 +69,14 @@ public class SubscriptionsController {
 
 	}
 
+	@PreAuthorize("hasRole('ROLE_MANSION_OWNER')")
+	@RequestMapping(method = RequestMethod.GET, value = "/getMansionsSubscribers", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<User>> getMansionsSubscribers(@RequestParam Long mansionId) throws JsonProcessingException{
+		System.out.println("U kontroleru trazimo pretplatnike na vikendicu sa id "+mansionId);
+		return new ResponseEntity<>(service.getAllSubscribersByMansionId(mansionId), HttpStatus.OK);
+
+	}
+
 
 
 	
