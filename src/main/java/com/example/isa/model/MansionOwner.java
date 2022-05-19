@@ -7,7 +7,8 @@ import javax.persistence.Entity;
 @Entity
 @DiscriminatorValue("MansionOwner")
 public class MansionOwner extends User{
-	
+    private transient final String role = "ROLE_MANSION_OWNER";
+    private static final long serialVersionUID = 1L;
     @Column(name = "advertiser_reason")
     private String reason;
     @Column(name = "type")

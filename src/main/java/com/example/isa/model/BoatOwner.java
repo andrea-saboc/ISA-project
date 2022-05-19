@@ -10,6 +10,8 @@ public class BoatOwner extends User{
     /*@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)*/
    //private Integer IDAdvertiser;
+    private transient final String role = "ROLE_BOAT_OWNER";
+    private static final long serialVersionUID = 1L;
     @Column(name = "advertiser_reason")
     private String reason;
     @Column(name = "type")
