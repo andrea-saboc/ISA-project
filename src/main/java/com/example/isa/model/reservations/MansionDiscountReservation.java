@@ -94,8 +94,9 @@ public class MansionDiscountReservation extends DiscountReservation{
 		this.setValidUntil(res.getValidUntil());
 		this.setUser(res.getUser());
 	}
-	
-	
 
-
+	@Override
+	public String getEntityName() {
+		return this.mansion.getName();
+	}
 }

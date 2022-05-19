@@ -2,6 +2,7 @@ package com.example.isa.repository;
 
 import java.util.List;
 
+import com.example.isa.model.Client;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.example.isa.model.Boat;
@@ -13,5 +14,6 @@ public interface BoatSubscriptionRepository extends JpaRepository<BoatSubscripti
 	List<BoatSubscription> findAllBySubscriber(User user);
 	BoatSubscription findById(long id);
 	BoatSubscription findBySubscriberAndBoat(User user,Boat boat);
+	List<BoatSubscription> findAllByBoat(Boat boat);
 
 }
