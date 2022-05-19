@@ -247,7 +247,7 @@ public class ReservationController {
     public ResponseEntity<String> getMansionOwnerReservations() {
         try {
             List<MansionReservation> mansionReservations = collectingMansionResService.getOwnerReservation();
-            List<MansionDiscountReservation> mansionDiscountReservations = new ArrayList<>();
+            List<MansionDiscountReservation> mansionDiscountReservations = mansionDiscountReservationService.getLoggedUserReservations();
             AllMansionOwnerReservationsDTO allMansionOwnerReservationsDTO = new AllMansionOwnerReservationsDTO();
             allMansionOwnerReservationsDTO.mansionReservations = mansionReservations;
             allMansionOwnerReservationsDTO.mansionDiscountReservations = mansionDiscountReservations;

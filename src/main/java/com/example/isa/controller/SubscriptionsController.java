@@ -2,6 +2,7 @@ package com.example.isa.controller;
 
 import java.util.List;
 
+import com.example.isa.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -9,10 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import com.example.isa.model.Boat;
-import com.example.isa.model.BoatSubscription;
-import com.example.isa.model.Mansion;
-import com.example.isa.model.MansionSubscription;
 import com.example.isa.service.SubscriptionService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
@@ -63,6 +60,25 @@ public class SubscriptionsController {
 			return new ResponseEntity<>(service.getClientBoatSubscriptionByBoatOwner(id), HttpStatus.OK);
 
 	}
+
+	@PreAuthorize("hasRole('ROLE_BOAT_OWNER')")
+	@RequestMapping(method = RequestMethod.GET, value = "/getBoatsSubscribers", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<User>> getBoatsSubscribers(@RequestParam Long boatId) throws JsonProcessingException{
+		System.out.println("U kontroleru trazimo pretplatnike na brod sa id "+boatId);
+		return new ResponseEntity<>(service.getAllSubscribersByBoatId(boatId), HttpStatus.OK);
+
+	}
+
+	@PreAuthorize("hasRole('ROLE_MANSION_OWNER')")
+	@RequestMapping(method = RequestMethod.GET, value = "/getMansionsSubscribers", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<User>> getMansionsSubscribers(@RequestParam Long mansionId) throws JsonProcessingException{
+		System.out.println("U kontroleru trazimo pretplatnike na vikendicu sa id "+mansionId);
+		return new ResponseEntity<>(service.getAllSubscribersByMansionId(mansionId), HttpStatus.OK);
+
+	}
+
+
+
 	
 	@PreAuthorize("hasRole('ROLE_CLIENT')")
 	@RequestMapping(method = RequestMethod.GET, value = "/subscriptions/mansions",produces = MediaType.APPLICATION_JSON_VALUE)

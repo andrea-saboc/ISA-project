@@ -1,7 +1,15 @@
 package com.example.isa.service.impl.reservations;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
+import com.example.isa.mail.MailService;
+import com.example.isa.model.*;
+import com.example.isa.model.reservations.BoatDiscountReservation;
+import com.example.isa.repository.MansionOwnerRepository;
+import com.example.isa.service.SubscriptionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
@@ -9,7 +17,6 @@ import org.springframework.stereotype.Service;
 import com.example.isa.dto.NewDiscountReservationDto;
 import com.example.isa.exception.CancelledReservationException;
 import com.example.isa.exception.OfferNotAvailableException;
-import com.example.isa.model.Mansion;
 import com.example.isa.model.reservations.DiscountReservation;
 import com.example.isa.model.reservations.MansionDiscountReservation;
 import com.example.isa.model.reservations.ReservationStatus;
@@ -27,6 +34,12 @@ public class MansionDiscountReservationService implements DiscountReservationSer
 	MansionRepository mansionRepo;
 	@Autowired
 	AuthenticationService authenticationService;
+	@Autowired
+	MansionOwnerRepository mansionOwnerRepository;
+	@Autowired
+	SubscriptionService subscriptionService;
+	@Autowired
+	MailService<String> mailService;
 	
 
 	@Override
@@ -73,10 +86,39 @@ public class MansionDiscountReservationService implements DiscountReservationSer
 
 	@Override
 	public DiscountReservation createDiscountReservation(NewDiscountReservationDto dto) {
-		// TODO Auto-generated method stub
-		return null;
+		MansionDiscountReservation mansionDiscountReservation = new MansionDiscountReservation();
+		Mansion mansion = mansionRepo.findById(dto.boatId).get();
+		mansionDiscountReservation.setMansion(mansion);
+		mansionDiscountReservation.setStatus(ReservationStatus.ACTIVE);
+		mansionDiscountReservation.setPriceWithDiscount(dto.priceWithDiscount);
+		mansionDiscountReservation.setNumberOfGuests(dto.numberOfGuests);
+		mansionDiscountReservation.setValidUntil(dto.validUntil);
+		mansionDiscountReservation.setStartDate(dto.startDate);
+		mansionDiscountReservation.setEndDate(getEndDate(dto));
+		mansionDiscountReservation.setType("MANSION");
+		mansionDiscountReservation.setPriceWithoutDiscount(dto.getPrice(mansion));
+		mansionDiscountReservation.calculatePercentageOfDiscount();
+		reservationRepo.save(mansionDiscountReservation);
+		notifyAllSubscribers(mansionDiscountReservation);
+		return mansionDiscountReservation;
 	}
-	
+
+	private void notifyAllSubscribers(MansionDiscountReservation mansionDiscountReservation) {
+		List<User> subscribers = subscriptionService.getAllSubscribersByMansion(mansionDiscountReservation.getMansion());
+		for (User c : subscribers) {
+			mailService.sendNotificationAboutDiscountReservation((Client) c, mansionDiscountReservation);
+		}
+	}
+
+	private Date getEndDate(NewDiscountReservationDto dto) {
+		Date endDate;
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(dto.startDate);
+		cal.add(Calendar.DAY_OF_MONTH, dto.days);
+		endDate = cal.getTime();
+		return endDate;
+	}
+
 	public void recordCanceledReservation(MansionDiscountReservation res) {
 		
 		MansionDiscountReservation canceled = new MansionDiscountReservation(res);
@@ -85,6 +127,14 @@ public class MansionDiscountReservationService implements DiscountReservationSer
 	}
 
 
-
-
+	public List<MansionDiscountReservation> getLoggedUserReservations() {
+		User user = authenticationService.getLoggedUser();
+		MansionOwner mansionOwner = mansionOwnerRepository.findById(user.getId()).get();
+		List<Mansion> ownersMansions = mansionRepo.findAllByMansionOwnerAndDeletedFalse(mansionOwner);
+		List<MansionDiscountReservation> mansionDiscountReservations = new ArrayList<>();
+		for ( Mansion mansion : ownersMansions) {
+			mansionDiscountReservations.addAll(reservationRepo.findAllByMansion(mansion));
+		}
+		return mansionDiscountReservations;
+	}
 }

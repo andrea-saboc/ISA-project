@@ -66,19 +66,50 @@
           <br>
           <br>
         </div>
-        <hr>
-        <div class="info">
+
+        <hr v-if="loggedUser!=null && loggedUser.advertiserType == null">
+        <div class="info" v-if="loggedUser!=null && loggedUser.advertiserType == null">
           <h2><button class="btn btn-lg-link" v-on:click="ShowReservationOffers" v-if="loggedUser">Show reservationOffers</button></h2>
         </div>
+        <hr v-if="loggedUser!=null && loggedUser.advertiserType == null">
 
-        <hr>
+        <hr v-if="loggedUser!=null && mansionToShow.mansionOwner.id==loggedUser.id">
+        <div class="subscribers" v-if="loggedUser!=null && mansionToShow.mansionOwner.id==loggedUser.id">
+          <p style="font-weight: bolder; font-size: 26px">
+            Subscribers
+          </p>
+          <div v-if="mansionSubscribers.length==0">
+            <p> No subscribers yet!</p>
+          </div>
+          <div v-else>
+            <table class="table">
+              <thead>
+              <tr>
+                <th scope="col"></th>
+                <th scope="col">Name</th>
+                <th scope="col">Surname</th>
+                <th scope="col">Email</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr v-for="(s, index) in mansionSubscribers" :key="s.id">
+                <td>{{index+1}}</td>
+                <td>{{s.name}}</td>
+                <td>{{s.surname}}</td>
+                <td>{{s.email}}</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <hr v-if="loggedUser!=null && mansionToShow.mansionOwner.id==loggedUser.id">
 
         <hr v-if="mansionToShow.rules!=null && mansionToShow.rules.length!=0">
         <div class="navigation-equipments" v-if="mansionToShow.rules!=null && mansionToShow.rules.length!=0">
           <p style="font-weight: bolder; font-size: 26px">
             Rules
           </p>
-          <div v-if="mansionToShow.rules!=null">
+          <div v-if="mansionToShow.rules!=null" && mansionToShow.rules.length!=0>
             <div v-for="rule in mansionToShow.rules" :key="rule.ruleId">
               <p >
                 {{rule.rule}}
@@ -279,7 +310,7 @@
         </div>
       </div>
     </div>
-    <!-- Modal -->
+    <!-- Modal Quick reservations -->
     <div class="modal fade" id="addQuickResModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -305,11 +336,6 @@
                 <input type="number" class="form-control" placeholder="Days" aria-label="Username" v-model="numberOfDaysQuick" aria-describedby="basic-addon1">
               </div>
 
-              <div class="input-group mb-3">
-                <span class="input-group-text" id="basic-addon7">Days</span>
-                <input type="number" class="form-control" placeholder="Hours" aria-label="Username" v-model="numberOfHoursQuick" aria-describedby="basic-addon1">
-              </div>
-
             </div>
             <div class="input-group mb-3">
               <span class="input-group-text" id="basic-addon111">Number of guests</span>
@@ -319,6 +345,17 @@
               <span class="input-group-text" id="basic-addon11">Final price</span>
               <input type="number" class="form-control" placeholder="Price" aria-label="Username" v-model="priceQuick" aria-describedby="basic-addon1">
             </div>
+            <v-date-picker mode="dateTime" is24hr v-model="availableUntil" style="width: 100%">
+              <template v-slot="{ inputValue, inputEvents }">
+                <input
+                    class="px-2 py-1 border rounded focus:outline-none focus:border-blue-300"
+                    :value="inputValue"
+                    v-on="inputEvents"
+                    style="overflow: visible"
+                    placeholder="From time"
+                />
+              </template>
+            </v-date-picker>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-primary" v-on:click="addQuickReservation">Add</button>
@@ -339,6 +376,7 @@ export default {
   name: "MansionView",
   data: function () {
     return {
+      mansionSubscribers: new Array(),
       startDateTimeQuick: '',
       numberOfGuestsQuick: '',
       numberOfHoursQuick: 0,
@@ -369,6 +407,7 @@ export default {
       reservedDates: [],
       quickReservationsFree: new Array(),
       quickReservationReserved: new Array(),
+      availableUntil: '',
       calendar_attributes: [
         {
           key: 'today',
@@ -396,6 +435,18 @@ export default {
     var path = window.location.href;
     var mansionid = path.split('/mansion/')[1].replaceAll('%20', ' ');
     console.log("Mansion view --> masnion id: ", mansionid.toString())
+    axios.get(devServer.proxy + "/userData", {
+      headers: {
+        'Authorization' : this.$store.getters.tokenString
+      }
+    })
+        .then(response => {
+              console.log("Logged user in mnsion view: ", response.data)
+              this.loggedUser = response.data
+            }
+        ).catch(() =>{
+      this.loggedUser = null
+    })
     axios
         .get('http://localhost:8080/mansion', {
           params:
@@ -419,6 +470,24 @@ export default {
           this.address = this.mansionToShow.address
           console.log(response.data)
           this.mansionOwner = this.mansionToShow.mansionOwner
+          axios
+              .get(devServer.proxy + "/getMansionsSubscribers", {
+                params:
+                    {
+                      mansionId: this.mansionToShow.id
+                    },
+                headers: {
+                  'Authorization': this.$store.getters.tokenString
+                }
+              })
+          .then((resp1 =>{
+            this.mansionSubscribers = resp1.data
+            console.log("Mansion subscribers: ", this.mansionSubscribers)
+          }))
+              .catch(() => {
+                alert("Error occured while trying to find mansion subscribers!")
+              })
+          this.calculateAvailableDaysForCalendar()
         })
   },
   methods:{
@@ -453,6 +522,133 @@ export default {
             console.log(response.data)
           });
 
+    },
+    calculateAvailableDaysForCalendar(){
+      for(var tmp in this.availablePeriods) {
+        var startDate = new Date(this.availablePeriods[tmp].startDate);
+        var endDate = new Date(this.availablePeriods[tmp].endDate)
+        this.availableDates.push({
+          start: new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate()),
+          end: new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate())
+        });
+      }
+      for(var reservation in this.boatReservations){
+        var startDateRes = new Date(this.mansionReservations[reservation].startDate)
+        var endDateRes = new Date(this.mansionReservations[reservation].endDate)
+        this.reservedDates.push({
+          start: new Date(startDateRes.getFullYear(), startDateRes.getMonth(), startDateRes.getDate(), startDateRes.getHours(), startDateRes.getMinutes()),
+          end: new Date(endDateRes.getFullYear(), endDateRes.getMonth(), endDateRes.getDate(), endDateRes.getHours(), endDateRes.getMinutes())
+        });
+      }
+      for (var id in this.reservedDates){
+        this.calendar_attributes.push({
+          highlight: {
+            start: { fillMode: 'outline' },
+            base: { fillMode: 'outline' },
+            end: { fillMode: 'outline' },
+          },
+          dates: { start: this.reservedDates[id].start, end: this.reservedDates[id].end },
+        })
+      }
+      console.log("Calculated available days:", this.availableDates)
+      console.log("Calculated reserved days:", this.reservedDates)
+      console.log('Calenar attributes before:',this.calendar_attributes)
+      this.calculateDiscountReservations()
+      console.log('Calendar attributes after:',this.calendar_attributes)
+    },
+    calculateDiscountReservations(){
+      axios
+          .get(devServer.proxy + "/getMansionDiscountReservations", {
+            headers: {
+              'Authorization' : this.$store.getters.tokenString
+            },
+            params:{
+              "boatId" : this.mansionToShow.id
+            }
+          })
+          .then(response =>
+          {
+            console.log('Got discount reservation:', response.data)
+            this.quickReservationsFree = response.data.freeReservations;
+            this.quickReservationReserved = response.data.reservedReservations;
+            console.log("Free quick reservations:", this.quickReservationsFree)
+            console.log("Reserved quick reservations:", this.quickReservationReserved)
+
+            for(var i in this.quickReservationsFree){
+              var startDate = new Date(this.quickReservationsFree[i].startDate)
+              var endDate = new Date(this.quickReservationsFree[i].endDate)
+              console.log(i, "Start day for free is:", startDate)
+              console.log(i, "End day for free is:", endDate)
+              this.calendar_attributes.push({
+                highlight: {
+                  start: { fillMode: 'solid', color: 'teal' },
+                  base: { fillMode: 'solid', color: 'teal' },
+                  end: { fillMode: 'solid', color: 'teal' }
+                },
+                dates: { start: startDate, end: endDate },
+              })
+            }
+            console.log("Free discount reservations are added")
+            for(var j in this.quickReservationReserved){
+              var startDate1 = new Date(this.quickReservationReserved[j].startDate)
+              var endDate1 = new Date(this.quickReservationReserved[j].endDate)
+              this.calendar_attributes.push({
+                highlight: {
+                  start: { fillMode: 'solid' },
+                  base: { fillMode: 'solid' },
+                  end: { fillMode: 'solid' },
+                  color: 'pink'
+                },
+                dates: { start: startDate1, end: endDate1 },
+              })
+            }
+            console.log("Reserved discount reservations are added")
+            console.log(this.calendar_attributes)
+          })
+
+    },
+    addAvailabilityPeriod(){
+      axios
+          .post(devServer.proxy + "/addAvailablePeriodForMansion", {
+            "boatId" : this.mansionToShow.id,
+            "startTime" : this.startDateTime,
+            "endTime" : this.endDateTime
+          }, {
+            headers: {
+              'Authorization' : this.$store.getters.tokenString
+            }
+          })
+          .then(response => {
+            this.availablePeriods = response.data
+            console.log("New available periods: ", this.availablePeriods )
+            this.calculateAvailableDaysForCalendar()
+          })
+
+    },
+    addQuickReservation(){
+      console.log("pokusavam da kreiram")
+      axios.post(devServer.proxy + "/createDiscountMansionReservation", {
+        "boatId" : this.mansionToShow.id,
+        "startDate" : this.startDateTimeQuick,
+        "days" : this.numberOfDaysQuick,
+        "hours" : this.numberOfHoursQuick,
+        "numberOfGuests" : this.numberOfGuestsQuick,
+        "priceWithDiscount": this.priceQuick,
+        "validUntil" : this.availableUntil
+      }, {
+        headers: {
+          'Authorization': this.$store.getters.tokenString,
+          'Content-Type': 'application/json'
+        }
+      })
+          .then(response => {
+            alert("response data",response.data)
+          })
+      .catch(() =>
+      {
+        alert("Error happened!")
+      })
+      this.calculateAvailableDaysForCalendar()
     }
 
   }

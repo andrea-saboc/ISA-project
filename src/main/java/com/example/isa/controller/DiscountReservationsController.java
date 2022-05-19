@@ -146,22 +146,31 @@ public class DiscountReservationsController {
 		}
 	}
 
-	@PreAuthorize("hasRole('ROLE_BOAT_OWNER')")
+	@PreAuthorize("hasRole('ROLE_MANSION_OWNER')")
 	@RequestMapping(method = RequestMethod.POST, value = "/createDiscountMansionReservation",produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<DiscountReservation> createMansionDiscountReservationAll(@RequestBody NewDiscountReservationDto dto){
+		System.out.println("U kontroleru cdmrr");
 		try{
-			return new ResponseEntity<>(mansionReservationService.createDiscountReservation(dto), HttpStatus.OK);
+
+			System.out.println(dto);
+			DiscountReservation createdDiscountReservation = mansionReservationService.createDiscountReservation(dto);
+			System.out.println("Okej status");
+			return new ResponseEntity<>(createdDiscountReservation, HttpStatus.OK);
 		}
 		catch (Exception e){
+			System.out.println("Ne okej status");
 			System.out.println(e);
 			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
 		}
 	}
 
+	@PreAuthorize("hasRole('ROLE_MANSION_OWNER')")
 	@RequestMapping(method = RequestMethod.GET, value = "/getMansionDiscountReservations",produces = MediaType.APPLICATION_JSON_VALUE )
-	@CrossOrigin(origins = "*")
 	public ResponseEntity<AllBoatDiscountReservationsDto> getMansionDiscountReservationsAll(@RequestParam Long boatId){
-		//mansion owner
-		return null;
+		AllBoatDiscountReservationsDto allBoatDiscountReservationsDTO = new AllBoatDiscountReservationsDto();
+		allBoatDiscountReservationsDTO.freeReservations = mansionReservationService.getAvailableDiscountReservations(boatId);
+		allBoatDiscountReservationsDTO.reservedReservations = mansionReservationService.getReservedDiscountReservations(boatId);
+
+		return new ResponseEntity<>(allBoatDiscountReservationsDTO, HttpStatus.OK);
 	}
 }

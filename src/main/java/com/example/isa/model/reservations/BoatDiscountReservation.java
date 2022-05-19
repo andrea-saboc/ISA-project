@@ -67,10 +67,7 @@ public class BoatDiscountReservation extends DiscountReservation{
 		this.boatOwnerFeedback = boatOwnerFeedback;
 	}
 
-	public double calculatePercentageOfDiscount() {
-		return 100.00 - getPriceWithDiscount()/getPriceWithDiscount();
-		
-	}
+
 	
 	public BoatDiscountReservation(BoatDiscountReservation res) {
 		
@@ -85,4 +82,8 @@ public class BoatDiscountReservation extends DiscountReservation{
 		this.setUser(res.getUser());
 	}
 
+	@Override
+	public String getEntityName() {
+		return this.boat.getName();
+	}
 }

@@ -39,21 +39,31 @@ public class AdvertiserRegisterService {
         String type = dat.getType();
         dat.setPassword(passwordEncoder.encode(dat.getPassword()));
         Object user = null;
-
+        List<Authority> authorities = new ArrayList<>();
+        Authority auth = null;
 
         switch(type) {
             case "mansion":
                 user = dat.createMansionOwner();
-                mansionOwnerRepository.save((MansionOwner) user);
+
+                auth = roleRepository.findByName("ROLE_MANSION_OWNER");
+                authorities.add(auth);
+                MansionOwner mansionOwner = (MansionOwner) user;
+                mansionOwner.setAuthorities(authorities);
+                mansionOwnerRepository.save(mansionOwner);
                 break;
             case "boat":
                 user = dat.createBoatOwner();
-                boatOwnerRepository.save((BoatOwner) user);
+                auth = roleRepository.findByName("ROLE_BOAT_OWNER");
+                authorities.add(auth);
+                BoatOwner boatOwner = (BoatOwner) user;
+                boatOwner.setAuthorities(authorities);
+                boatOwnerRepository.save(boatOwner);
                 break;
             case "fishing":
             	 FishingInstructor f = dat.createFishingInstructor();
-                 List<Authority> authorities = new ArrayList<Authority>();
-                 Authority auth = roleRepository.findByName("ROLE_FISHING_INSTRUCTOR");
+                 authorities = new ArrayList<Authority>();
+                 auth = roleRepository.findByName("ROLE_FISHING_INSTRUCTOR");
                  authorities.add(auth);
                  f.setAuthorities(authorities);
                 fishnigInstructorRepository.save(f);

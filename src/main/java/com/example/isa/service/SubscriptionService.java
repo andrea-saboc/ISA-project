@@ -1,15 +1,13 @@
 package com.example.isa.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.example.isa.model.*;
-import com.example.isa.repository.BoatOwnerRepository;
-import com.example.isa.repository.ClientRepository;
+import com.example.isa.model.reservations.MansionReservation;
+import com.example.isa.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.example.isa.repository.BoatSubscriptionRepository;
-import com.example.isa.repository.MansionSubscriptionRepository;
 
 @Service
 public class SubscriptionService {
@@ -24,6 +22,10 @@ public class SubscriptionService {
 	ClientRepository clientRepository;
 	@Autowired
 	AuthenticationService authenticationService;
+	@Autowired
+	BoatRepository boatRepository;
+	@Autowired
+	MansionRepository mansionRepository;
 	
 	
 	public BoatSubscription newBoatSubscription(Boat boat) {
@@ -61,5 +63,31 @@ public class SubscriptionService {
 		Client client = clientRepository.findById(id).get();
 		List<BoatSubscription> boatSubscriptions = boatSubsRepo.findAllBySubscriber(client);
 		return boatSubscriptions;
+	}
+
+	public List<User> getAllSubscribersByMansion(Mansion mansion){
+		List<MansionSubscription> mansionSubscriptions = new ArrayList<>(mansionSubRepo.findAllByMansion(mansion));
+		List<User> clientsSubscribed = new ArrayList<>();
+		for (MansionSubscription ms : mansionSubscriptions){
+			clientsSubscribed.add(ms.getSubscriber());
+		}
+		return clientsSubscribed;
+	}
+
+	public List<User> getAllSubscribersByBoat(Boat boat){
+		List<BoatSubscription> boatSubscriptions = new ArrayList<>(boatSubsRepo.findAllByBoat(boat));
+		List<User> clientsSubscribed = new ArrayList<>();
+		for (BoatSubscription bs : boatSubscriptions){
+			clientsSubscribed.add(bs.getSubscriber());
+		}
+		return clientsSubscribed;
+	}
+
+	public List<User> getAllSubscribersByBoatId(Long boatId) {
+		return getAllSubscribersByBoat(boatRepository.findById(boatId).get());
+	}
+
+	public List<User> getAllSubscribersByMansionId(Long mansionId) {
+		return getAllSubscribersByMansion(mansionRepository.findById(mansionId).get());
 	}
 }

@@ -13,7 +13,7 @@ import com.example.isa.model.reservations.ReservationStatus;
 
 public interface MansionDiscountReservationRepository extends JpaRepository<MansionDiscountReservation,Long>{
 
-	List<DiscountReservation> findAllByMansion(Mansion mansion);
+	List<MansionDiscountReservation> findAllByMansion(Mansion mansion);
 	List<MansionDiscountReservation> findAllByMansionAndStatus(User user,ReservationStatus status);
 	List<MansionDiscountReservation> findAllByUserAndStatus(User u,ReservationStatus status);
 	

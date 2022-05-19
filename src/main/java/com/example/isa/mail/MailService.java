@@ -2,6 +2,9 @@ package com.example.isa.mail;
 
 import javax.mail.MessagingException;
 
+import com.example.isa.mail.formatter.*;
+import com.example.isa.model.*;
+import com.example.isa.model.reservations.DiscountReservation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.mail.SimpleMailMessage;
@@ -9,16 +12,6 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import com.example.isa.mail.formatter.AccountActivationFormatter;
-import com.example.isa.mail.formatter.BoatComplaintFormatter;
-import com.example.isa.mail.formatter.BoatReservationConfirmationMailFormatter;
-import com.example.isa.mail.formatter.MansionComplaintFormatter;
-import com.example.isa.mail.formatter.MansionReservationConfirmationMailFormatter;
-import com.example.isa.mail.formatter.OwnerComplaintMailFormatter;
-import com.example.isa.model.AdvertiserComplaint;
-import com.example.isa.model.BoatComplaint;
-import com.example.isa.model.MansionComplaint;
-import com.example.isa.model.User;
 import com.example.isa.model.reservations.BoatReservation;
 import com.example.isa.model.reservations.MansionReservation;
 
@@ -32,6 +25,18 @@ public class MailService<T> {
 	        this.env = env;
 	        this.mailSender = mailSender;
 	    }
+
+		@Async
+		public void sendNotificationAboutDiscountReservation(Client client, DiscountReservation discountReservation){
+			NotificationAboutDiscountReservationIsCreatedFotmatter formater = new NotificationAboutDiscountReservationIsCreatedFotmatter();
+			SimpleMailMessage message = new SimpleMailMessage();
+			message.setFrom("adventurelandisa@gmail.com");
+			message.setTo("s.andrea1723@gmail.com");
+			message.setText(formater.getText( discountReservation, client));
+			message.setSubject(formater.getSubject(discountReservation));
+
+			mailSender.send(message);
+		}
 
 	    @Async
 	    public void sendClientRegistrationMail(String recipient, String activationCode, AccountActivationFormatter mailFormatter) throws MessagingException {

@@ -70,11 +70,41 @@
     <br>
     <br>
   </div>
-  <hr>
-    <div class="info">
+  <hr v-if="loggedUser!=null && loggedUser.advertiserType == null">
+    <div class="info" v-if="loggedUser!=null && loggedUser.advertiserType == null">
       <h2><button class="btn btn-lg-link" v-on:click="ShowReservationOffer">Show reservationOffers</button></h2>
     </div>
-    <hr>
+    <hr v-if="loggedUser!=null && loggedUser.advertiserType == null">
+      <hr v-if="loggedUser!=null && boatToShow.boatOwner.id==loggedUser.id">
+      <div class="subscribers" v-if="loggedUser!=null && boatToShow.boatOwner.id==loggedUser.id">
+        <p style="font-weight: bolder; font-size: 26px">
+          Subscribers
+        </p>
+        <div v-if="boatSubscribers.length==0">
+          <p> No subscribers yet!</p>
+        </div>
+        <div v-else>
+          <table class="table">
+            <thead>
+            <tr>
+              <th scope="col"></th>
+              <th scope="col">Name</th>
+              <th scope="col">Surname</th>
+              <th scope="col">Email</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="(s, index) in boatSubscribers" :key="s.id">
+              <td>{{index+1}}</td>
+              <td>{{s.name}}</td>
+              <td>{{s.surname}}</td>
+              <td>{{s.email}}</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <hr v-if="loggedUser!=null && boatToShow.boatOwner.id==loggedUser.id">
     <div class="navigation-equipments">
       <p style="font-weight: bolder; font-size: 26px">
         Navigation equipment
@@ -402,7 +432,7 @@
             </div>
 
             <div class="input-group mb-3">
-              <span class="input-group-text" id="basic-addon7">Days</span>
+              <span class="input-group-text" id="basic-addon7">Hours</span>
               <input type="number" class="form-control" placeholder="Hours" aria-label="Username" v-model="numberOfHoursQuick" aria-describedby="basic-addon1">
             </div>
 
@@ -415,6 +445,17 @@
             <span class="input-group-text" id="basic-addon11">Final price</span>
             <input type="number" class="form-control" placeholder="Price" aria-label="Username" v-model="priceQuick" aria-describedby="basic-addon1">
           </div>
+          <v-date-picker mode="dateTime" is24hr v-model="availableUntil" style="width: 100%">
+            <template v-slot="{ inputValue, inputEvents }">
+              <input
+                  class="px-2 py-1 border rounded focus:outline-none focus:border-blue-300"
+                  :value="inputValue"
+                  v-on="inputEvents"
+                  style="overflow: visible"
+                  placeholder="From time"
+              />
+            </template>
+          </v-date-picker>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-primary" v-on:click="addQuickReservation">Add</button>
@@ -441,6 +482,7 @@ export default {
       numberOfHoursQuick: 0,
       numberOfDaysQuick: 0,
       priceQuick: '',
+      boatSubscribers: new Array,
       clientResEmail: '',
       clientResEmailForm: true,
       clientResEmailExists: true,
@@ -464,6 +506,7 @@ export default {
       additionalServices : [],
       boatReservations : [],
       reservedDates : [],
+      availableUntil: '',
       quickReservationsFree: new Array(),
       quickReservationReserved: new Array(),
       calendar_attributes: [
@@ -524,7 +567,7 @@ export default {
       this.address = this.boatToShow.address
       console.log(response.data)
       this.boatOwner = this.boatToShow.boatOwner
-      axios
+     axios
           .post(devServer.proxy + "/getBoatAvailability", {
             "boatId": this.boatToShow.id
           }, {
@@ -532,7 +575,7 @@ export default {
               'Authorization': this.$store.getters.tokenString
             }
           })
-          .then(response => {
+         .then(response => {
             this.availablePeriods = response.data
             console.log("Available periods for boat: ", this.availablePeriods)
             axios.get(devServer.proxy + "/additionalServices", {
@@ -543,7 +586,8 @@ export default {
               headers: {
                 'Authorization': this.$store.getters.tokenString
               }
-            }).then(resp => {
+            })
+            .then(resp => {
               this.additionalServices = resp.data
               axios.get(devServer.proxy + "/getReservedDatesForBoat", {
                 params:
@@ -553,19 +597,52 @@ export default {
                 headers: {
                   'Authorization': this.$store.getters.tokenString
                 }
-              }) .then((resp1 => {
-                this.boatReservations = resp1.data
+              })
+                  .then((resp1 => {
+               this.boatReservations = resp1.data
                 console.log('Boat reservations:', this.boatReservations)
-                this.calculateAvailableDaysForCalendar()
+                console.log("Loged user id is: ", this.loggedUser.id, " , and boaToShow ", this.boatToShow.boatOwner.id)
+                if(this.loggedUser.id == this.boatToShow.boatOwner.id) {
+                  console.log("In trying to get subscribers!")
+                  axios
+                      .get(devServer.proxy + "/getBoatsSubscribers", {
+                        params:
+                            {
+                              boatId: boatId
+                            },
+                        headers: {
+                          'Authorization': this.$store.getters.tokenString
+                        }
+                      })
+                      .then((resp => {
+                       this.boatSubscribers = resp.data
+                        console.log('Boat subscribers: ', this.boatSubscribers)
+                      /*})
+                  )
+                      .catch(() => {
+                        alert("Error occured while trying to find boat subscribers!")
+                      })
+                }
               }))
             })
-          }
-          )
+
+
     }
-    )
+    )*/}))
+                      .catch(() => {
+                        alert("Error occured while trying to find boat subscribers!")
+                      })
+                      }//if
+                    this.calculateAvailableDaysForCalendar()
+                }))
+            })
+         })
+    })
     .catch(()=>{
       console.log("The is a trouble")
     })
+
+
   },
   methods:{
     calculateAvailableDaysForCalendar(){
@@ -771,7 +848,8 @@ export default {
         "days" : this.numberOfDaysQuick,
         "hours" : this.numberOfHoursQuick,
         "numberOfGuests" : this.numberOfGuestsQuick,
-        "priceWithDiscount": this.priceQuick
+        "priceWithDiscount": this.priceQuick,
+        "validUntil" : this.availableUntil
       }, {
         headers: {
           'Authorization': this.$store.getters.tokenString,

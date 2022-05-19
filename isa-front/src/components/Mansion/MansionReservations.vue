@@ -94,7 +94,6 @@
         </tr>
         </thead>
         <tbody>
-        <div v-if="filteredDiscountReservations.length!=0">
           <tr v-for="(reservation, index) in filteredDiscountReservations" :key="reservation.id" style="align-content: center"
               v-on:click="selectReservation(reservation, 'DISCOUNT_MANSION')" data-toggle="modal" data-target="#exampleModal">
             <th scope="row" style="align-content: center" >{{index+1}}</th>
@@ -113,7 +112,6 @@
               </button>
             </td>
           </tr>
-        </div>
 
         </tbody>
       </table>

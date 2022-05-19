@@ -5,6 +5,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import com.example.isa.mail.MailService;
+import com.example.isa.model.Client;
+import com.example.isa.service.SubscriptionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
@@ -35,6 +38,10 @@ public class BoatDiscountReservationService implements DiscountReservationServic
 	AuthenticationService authenticationService;
 	@Autowired
 	BoatOwnerRepository boatOwnerRepository;
+	@Autowired
+	MailService<String> mailService;
+	@Autowired
+	SubscriptionService subscriptionService;
 	
 
 	
@@ -119,9 +126,16 @@ public class BoatDiscountReservationService implements DiscountReservationServic
 		boatDiscountReservation.setPriceWithoutDiscount(dto.getPrice(boat));
 		boatDiscountReservation.calculatePercentageOfDiscount();
 		reservationRepo.save(boatDiscountReservation);
+		notifyAllSubscribers(boatDiscountReservation);
 		return boatDiscountReservation;
 	}
 
+	private void notifyAllSubscribers(BoatDiscountReservation boatDiscountReservation) {
+		List<User> subscribers = subscriptionService.getAllSubscribersByBoat(boatDiscountReservation.getBoat());
+		for (User c : subscribers){
+			mailService.sendNotificationAboutDiscountReservation((Client) c, boatDiscountReservation);
+		}
+	}
 
 
 }
