@@ -452,7 +452,7 @@
                   :value="inputValue"
                   v-on="inputEvents"
                   style="overflow: visible"
-                  placeholder="From time"
+                  placeholder="Valid until"
               />
             </template>
           </v-date-picker>
@@ -838,8 +838,20 @@ export default {
           'Content-Type': 'application/json'
         }
       })
-      .then(response =>
-      alert(response.data))
+      .then(response =>{
+            alert(response.data)
+        this.clientResEmail = '';
+            this.clientResAdditionalServices = new Array();
+            this.clientResStartDate ='';
+            this.clientResNumberOfDays=''
+            this.clientResNumberOfHours=''
+            this.clientResNumberOfGuests=''
+      }
+      )
+      .catch( function (err){
+        alert(err)
+      })
+      this.calculateAvailableDaysForCalendar()
     },
     addQuickReservation(){
       axios.post(devServer.proxy + "/createDiscountBoatReservation", {

@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.example.isa.mail.MailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -54,6 +55,8 @@ public class BoatReservationServiceImpl implements ReservationService{
 	BoatReservationSuggestionServiceImpl boatReservationSuggestionService;
 	@Autowired
 	AuthenticationService authenticationService;
+	@Autowired
+	MailService<String> mailService;
 	
 	
 	@Override
@@ -90,6 +93,7 @@ public class BoatReservationServiceImpl implements ReservationService{
 			availablePeriodsRepo.delete(period);
 	        newBoatReservation.setAdditionalServices(addAdditionalServices(res.getAdditionalServices()));
 	        newBoatReservation.setTotalPrice( dto.getPrice(boat) + accountAdditionalServices(newBoatReservation.getAdditionalServices(),res));
+			mailService.notifyClientAboutCreatedReservation(newBoatReservation);
 			return boatReservationRepo.save(newBoatReservation);
 		}
     }

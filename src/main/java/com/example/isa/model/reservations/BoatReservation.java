@@ -63,7 +63,9 @@ public class BoatReservation extends Reservation{
 		this.boatOwnerFeedback = boatOwnerFeedback;
 	}
 
-
+	public String getName(){
+		return this.boat.getName();
+	}
 
 
 }

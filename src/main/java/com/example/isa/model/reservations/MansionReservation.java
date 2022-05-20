@@ -11,6 +11,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
+import com.example.isa.model.Client;
 import com.example.isa.model.ClientFeedback;
 import com.example.isa.model.Mansion;
 import com.example.isa.model.User;
@@ -45,6 +46,7 @@ public class MansionReservation extends Reservation{
 		super();
 	}
 
+
 	public Mansion getMansion() {
 		return mansion;
 	}
@@ -71,6 +73,10 @@ public class MansionReservation extends Reservation{
 
 	public void setMansion(Mansion mansion) {
 		this.mansion = mansion;
+	}
+
+	public String getName(){
+		return this.mansion.getName();
 	}
 	
 	

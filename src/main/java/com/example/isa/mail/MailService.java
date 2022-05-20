@@ -1,10 +1,12 @@
 package com.example.isa.mail;
 
 import javax.mail.MessagingException;
+import javax.management.Notification;
 
 import com.example.isa.mail.formatter.*;
 import com.example.isa.model.*;
 import com.example.isa.model.reservations.DiscountReservation;
+import com.example.isa.model.reservations.Reservation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.mail.SimpleMailMessage;
@@ -27,11 +29,23 @@ public class MailService<T> {
 	    }
 
 		@Async
+    public void notifyClientAboutCreatedReservation(Reservation newReservation) {
+			NotificationAboutCreatedReservationFormatter formater = new NotificationAboutCreatedReservationFormatter();
+			SimpleMailMessage message = new SimpleMailMessage();
+			message.setFrom("adventurelandisa@gmail.com");
+			message.setTo("s.andrea1723@gmail.com");
+			message.setText(formater.getText( newReservation));
+			message.setSubject(formater.getSubject(newReservation));
+
+			mailSender.send(message);
+    }
+
+    @Async
 		public void sendNotificationAboutDiscountReservation(Client client, DiscountReservation discountReservation){
 			NotificationAboutDiscountReservationIsCreatedFotmatter formater = new NotificationAboutDiscountReservationIsCreatedFotmatter();
 			SimpleMailMessage message = new SimpleMailMessage();
 			message.setFrom("adventurelandisa@gmail.com");
-			message.setTo("s.andrea1723@gmail.com");
+			message.setTo("s.andrea1723@gmail.com"); //client.mail
 			message.setText(formater.getText( discountReservation, client));
 			message.setSubject(formater.getSubject(discountReservation));
 

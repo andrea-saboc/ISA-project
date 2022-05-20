@@ -352,7 +352,7 @@
                     :value="inputValue"
                     v-on="inputEvents"
                     style="overflow: visible"
-                    placeholder="From time"
+                    placeholder="Valid until"
                 />
               </template>
             </v-date-picker>
@@ -624,6 +624,50 @@ export default {
             this.calculateAvailableDaysForCalendar()
           })
 
+    },
+    addAditionalServiceToRes(additionalService){
+      let checkbox = document.getElementById(additionalService.id + 'ascr').checked
+      console.log("additional service is selected:", checkbox)
+      if(checkbox){
+        this.clientResAdditionalServices.push(additionalService)
+      } else{
+        for( var i = 0; i < this.clientResAdditionalServices.length; i++){
+
+          if ( this.clientResAdditionalServices[i] === additionalService) {
+            this.clientResAdditionalServices.splice(i, 1);
+          }
+
+        }
+      }
+    },
+    makeReservationForClient(){
+      axios.post(devServer.proxy+ "/makeMansionReservationClient", {
+        email : this.clientResEmail,
+        additionalServiceSet : this.clientResAdditionalServices,
+        startDate : this.clientResStartDate,
+        days : this.clientResNumberOfDays,
+        "boatId" : this.mansionToShow.id,
+        numberOfGuests : this.clientResNumberOfGuests
+      }, {
+        headers: {
+          'Authorization': this.$store.getters.tokenString,
+          'Content-Type': 'application/json'
+        }
+      })
+          .then(response =>{
+                alert(response.data)
+                this.clientResEmail = '';
+                this.clientResAdditionalServices = new Array();
+                this.clientResStartDate ='';
+                this.clientResNumberOfDays=''
+                this.clientResNumberOfHours=''
+                this.clientResNumberOfGuests=''
+              }
+          )
+          .catch( function (err){
+            alert(err)
+          })
+      this.calculateAvailableDaysForCalendar()
     },
     addQuickReservation(){
       console.log("pokusavam da kreiram")

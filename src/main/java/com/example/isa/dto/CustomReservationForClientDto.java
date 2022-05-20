@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.example.isa.model.Boat;
+import com.example.isa.model.Mansion;
 import com.example.isa.model.reservations.Reservation;
 
 public class CustomReservationForClientDto {
@@ -30,12 +31,16 @@ public class CustomReservationForClientDto {
                 '}';
     }
 
-	public double toResSearchDto() {
+	public double toResSearchDto() { //ne znam za cega ovo sluzi
 		// TODO Auto-generated method stub
 		return 0;
 	}
 	public double getPrice(Boat b) {
 		return b.getPricePerDay() * this.days + b.getPricePerHour() * this.hours;
 	}
+
+    public double getPrice(Mansion m){
+        return m.getPricePerDay()*this.days;
+    }
 	
 }

@@ -31,7 +31,7 @@ import com.example.isa.model.User;
 @Table(name = "reservation")
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "reservation_type", discriminatorType = DiscriminatorType.STRING)
-public class Reservation {
+public abstract class Reservation {
 	
 	private String type="";
 	
@@ -192,6 +192,8 @@ public class Reservation {
 	public void setStatus(ReservationStatus status) {
 		this.status = status;
 	}
+
+	public abstract String getName();
 
 
 

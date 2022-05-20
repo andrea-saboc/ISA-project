@@ -238,7 +238,22 @@ public class ReservationController {
             else return new ResponseEntity<>("Wrong params, try again!", HttpStatus.OK);
         } catch (Exception e){
             System.out.println(e);
-            return new ResponseEntity<>("Error when making a reservation!", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>("No available periods in selected time!", HttpStatus.OK);
+        }
+    }
+
+    @PreAuthorize("hasRole('ROLE_MANSION_OWNER')")
+    @RequestMapping(method = RequestMethod.POST, value = "/makeMansionReservationClient")
+    public ResponseEntity<String> makeMansionReservationClient(@RequestBody CustomReservationForClientDto dto){
+        System.out.println(dto);
+        try{
+           MansionReservation mansionReservation = mansionResService.createReservationForClient(dto);
+            if (mansionReservation!=null)
+                return new ResponseEntity<>("Reservation for client is created successfully!", HttpStatus.OK);
+            else return new ResponseEntity<>("Wrong params, try again!", HttpStatus.OK);
+        } catch (Exception e){
+            System.out.println(e);
+            return new ResponseEntity<>("No available periods in selected time!", HttpStatus.OK);
         }
     }
 

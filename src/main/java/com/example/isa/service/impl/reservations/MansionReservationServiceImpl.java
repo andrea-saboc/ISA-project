@@ -6,6 +6,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.example.isa.mail.MailService;
+import com.example.isa.model.*;
+import com.example.isa.model.reservations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -17,14 +20,6 @@ import com.example.isa.dto.ReservationDto;
 import com.example.isa.exception.EntityDeletedException;
 import com.example.isa.exception.ImpossibleDueToPenaltyPoints;
 import com.example.isa.exception.PeriodNoLongerAvailableException;
-import com.example.isa.model.Client;
-import com.example.isa.model.Mansion;
-import com.example.isa.model.MansionAvailablePeriod;
-import com.example.isa.model.reservations.AdditionalService;
-import com.example.isa.model.reservations.MansionReservation;
-import com.example.isa.model.reservations.Reservation;
-import com.example.isa.model.reservations.ReservationStartEndDateFormatter;
-import com.example.isa.model.reservations.ReservationStatus;
 import com.example.isa.repository.AdditionalServiceRepository;
 import com.example.isa.repository.ClientRepository;
 import com.example.isa.repository.MansionAvailablePeriodRepository;
@@ -51,6 +46,8 @@ public class MansionReservationServiceImpl implements ReservationService{
 	AuthenticationService authenticationService;
 	@Autowired
 	ClientRepository clientRepository;
+	@Autowired
+	MailService<String> mailService;
 	
 	
 	
@@ -163,9 +160,40 @@ public class MansionReservationServiceImpl implements ReservationService{
 
 
 	@Override
-	public Reservation createReservationForClient(CustomReservationForClientDto dto){
-		// TODO Auto-generated method stub
-		return null;
+	@Transactional(readOnly=false,propagation=Propagation.REQUIRED,isolation= Isolation.SERIALIZABLE)
+	public MansionReservation createReservationForClient(CustomReservationForClientDto dto) throws PeriodNoLongerAvailableException, ParseException{
+		ReservationDto res = new ReservationDto(dto);
+		ReservationStartEndDateFormatter formatter = new ReservationStartEndDateFormatter(res);
+		Date startDate = formatter.startDate;
+		Date endDate = formatter.endDate;
+
+		MansionAvailablePeriod period = availablePeriodsRepo.getPeriodOfInterest(startDate, endDate, res.getEntityId());
+		Mansion mansion = mansionRepo.findByIdAndDeletedFalse(res.getEntityId());
+		if(period == null) {
+			throw new PeriodNoLongerAvailableException();
+		}
+		else {
+
+			Client client = clientRepository.findByEmail(dto.email);
+			MansionReservation newMansionReservation = new MansionReservation(client, startDate, endDate, res.getNumberOfGuests(), dto.toResSearchDto(), mansion);
+
+
+			if(!period.getStartDate().equals(startDate)) {
+				MansionAvailablePeriod periodBefore = new MansionAvailablePeriod(period.getStartDate(),startDate,period.getMansion());
+				availablePeriodsRepo.save(periodBefore);
+			}
+			if(!period.getEndDate().equals(endDate)) {
+				MansionAvailablePeriod periodAfter = new MansionAvailablePeriod(endDate,period.getEndDate(),period.getMansion());
+				availablePeriodsRepo.save(periodAfter);
+			}
+
+
+			availablePeriodsRepo.delete(period);
+			newMansionReservation.setAdditionalServices(addAdditionalServices(res.getAdditionalServices()));
+			newMansionReservation.setTotalPrice( dto.getPrice(mansion) + accountAdditionalServices(newMansionReservation.getAdditionalServices(),res));
+			mailService.notifyClientAboutCreatedReservation(newMansionReservation);
+			return mansionReservationRepo.save(newMansionReservation);
+		}
 	}
 	
 
