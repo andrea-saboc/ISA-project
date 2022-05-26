@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.example.isa.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -11,13 +12,6 @@ import org.springframework.stereotype.Service;
 import com.example.isa.dto.AddAvailablePeriodDto;
 import com.example.isa.dto.BoatRegistrationDto;
 import com.example.isa.dto.LongIdDto;
-import com.example.isa.model.Address;
-import com.example.isa.model.Boat;
-import com.example.isa.model.BoatAvailablePeriod;
-import com.example.isa.model.BoatOwner;
-import com.example.isa.model.Image;
-import com.example.isa.model.Rule;
-import com.example.isa.model.User;
 import com.example.isa.model.reservations.AdditionalService;
 import com.example.isa.model.reservations.BoatReservation;
 import com.example.isa.repository.AdditionalServiceRepository;
@@ -41,6 +35,8 @@ public class BoatService {
 	private AdditionalServiceRepository additionalServiceRepository;
 	@Autowired
 	private CollectingBoatReservationsServiceImpl boatReservationService;
+	@Autowired
+	private EntityImageService entityImageService;
 
 	public BoatService(BoatsRepository br, ImageRepository ir, BoatOwnerRepository bor, BoatAvailablePeriodRepository apr, AdditionalServiceRepository additionalServiceRepository){
 		this.boatsRepository = br;
@@ -103,8 +99,11 @@ public class BoatService {
 		newBoat.setGPS(dto.GPS);
 		newBoat.setCancellationPolicy(dto.cancellationPolicy);
 		newBoat.setVHFradio(dto.VHFradio);
-		newBoat.setExteriorImages(convertString2Image(dto.ExteriorImages, newBoat, false));
-		newBoat.setInteriorImages(convertString2Image(dto.InteriorImages, newBoat, true));
+		System.out.println("Exterior images saving"+dto.getExteriorImages().size());
+		newBoat.setExteriorImages(new HashSet<>(entityImageService.createAndSaveImages("BoatOwners",boatOwner.getEmail(),dto.getName(),dto.getExteriorImages())));
+		System.out.println("Int images saving"+dto.getInteriorImages().size());
+		newBoat.setInteriorImages(new HashSet<>(entityImageService.createAndSaveImages("BoatOwners",boatOwner.getEmail(),dto.getName(),dto.getInteriorImages())));
+		System.out.println("Donee with saving");
 		newBoat.setRules(convertString2Rule(dto.rules, newBoat));
 		newBoat.setPricePerHour(dto.pricePerHour);
 		newBoat.setPricePerDay(dto.pricePerDay);

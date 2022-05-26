@@ -12,9 +12,13 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Set;
+import java.util.stream.Stream;
 
 @Service
 public class EntityImageService {
@@ -25,6 +29,7 @@ public class EntityImageService {
         String path = "main" + File.separator + "resources" + File.separator + "public";
         String dirName = name.replace(' ', '_');
         String imgPath = "images"+File.separator + dirName;
+        long numberOfImages = 0;
 
         File dir = null;
         try {
@@ -34,11 +39,14 @@ public class EntityImageService {
                     System.out.println("Succesfuly created new directory for new entity");
                 }
             }
+            else{
+                System.out.println("Counting!!!!******");
+                numberOfImages = dir.list().length;
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        int numberOfImages = 0;
         for(String img : images) {
             numberOfImages++;
             String imageString = img.split(",")[1];

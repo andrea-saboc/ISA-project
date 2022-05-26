@@ -111,14 +111,33 @@
       </div>
 
       <div class="double-field">
-        <div class="mb-3 col-md-5">
-          <label for="interiorImages" class="form-label">Interior images</label>
-          <input class="form-control" type="file" id="interiorImages" multiple @change="onInteriorImagesSelected">
+        <div>
+          <div class="mb-3 col-md-5">
+            <label for="interiorImages" class="form-label">Interior images</label>
+            <input class="form-control" type="file" id="interiorImages" multiple @change="onInteriorImagesSelected">
+          </div>
+          <br>
+          <div>
+            <div v-for="(image, index) in interiorImagesForFront" :key="(image, index)">
+              <button v-on:click="removeImageI(image, index)" class="btn btn-danger rounded-circle removeImageBtn end-0 m-4">X</button>
+              <img class="ms-3 me-3 mt-3 newImage img-fluid" v-bind:src="image.path" >
+            </div>
+          </div>
         </div>
-        <div class="mb-3 col-md-5">
-          <label for="exteriorImages" class="form-label">Exterior images</label>
-          <input class="form-control" type="file" id="exteriorImages" multiple @change="onExteriorImagesSelected">
+        <div>
+          <div class="mb-3 col-md-5">
+            <label for="exteriorImages" class="form-label">Exterior images</label>
+            <input class="form-control" type="file" id="exteriorImages" multiple @change="onExteriorImagesSelected">
+          </div>
+          <br>
+          <div>
+            <div v-for="(image, index) in exteriorImagesForFront" :key="(image, index)">
+              <button v-on:click="removeImageE(image, index)" class="btn btn-danger rounded-circle removeImageBtn end-0 m-4">X</button>
+              <img class="ms-3 me-3 mt-3 newImage img-fluid" v-bind:src="image.path" >
+            </div>
+          </div>
         </div>
+
       </div>
       <div class="double-field">
       </div>
@@ -217,6 +236,8 @@ export default {
       imgInter : new Array(),
       imgExter : new Array(),
       rules : new Array(),
+      interiorImagesForFront: [],
+      exteriorImagesForFront: [],
       selectedExteriorImages : new Array(),
       selectedInteriorImages : new Array(),
       additionalServices : new Array(),
@@ -246,23 +267,57 @@ export default {
 
     },
     onExteriorImagesSelected(event){
-      this.imgExter = new Array()
-      console.log(typeof(this.imgExter))
-      console.log(event)
+      for(var img of event.target.files){
+        this.exteriorImagesForFront.push(
+            {
+              path: URL.createObjectURL(img)
+            }
+        );
+      }
       this.selectedExteriorImages = event.target.files
-      console.log(this.selectedExteriorImages)
-      //const reader = new FileReader()
       console.log("selected exterior image length is", this.selectedExteriorImages)
-      for (var img in this.selectedExteriorImages){
-        console.log(isNaN(img))
-          if (isNaN(img)) {
-            return;
-          }
-
-          console.log("before pushig file index:", img)
-          this.onUpload(this.selectedExteriorImages[img])
+      for (var imgg in this.selectedExteriorImages){
+        console.log(isNaN(imgg))
+        if (isNaN(imgg)) {
+          return;
+        }
+        console.log("before pushig file index:", imgg)
+        this.onUpload(this.selectedExteriorImages[imgg])
+      }
+    },
+    onInteriorImagesSelected(event){
+      this.selectedInteriorImages = event.target.files
+      for (var img of event.target.files) {
+        console.log("tu sam", img)
+        this.interiorImagesForFront.push(
+            {
+              path: URL.createObjectURL(img)
+            }
+        );
+      }
+      console.log(this.selectedInteriorImages)
+      //const reader = new FileReader()
+      console.log("selected exterior image length is", this.selectedInteriorImages)
+      for (var imgg in this.selectedInteriorImages){
+        console.log(isNaN(imgg))
+        if (isNaN(imgg)) {
+          return;
+        }
+        console.log("before pushig file index:", imgg)
+        this.onUploadI(this.selectedInteriorImages[imgg])
       }
 
+    },
+    onUploadI: function(file){ //images for backend create base64 Image
+      console.log(this.imgInter)
+      console.log("In onUpload, file:", file)
+      console.log("Type of the file is", file.type)
+      const reader= new FileReader();
+      reader.onload = (e) =>{
+        console.log("e:",e.target.result)
+        this.imgInter.push(e.target.result)
+      }
+      reader.readAsDataURL(file);
     },
     onUpload: function(file){
       console.log(this.imgExter)
@@ -275,35 +330,13 @@ export default {
       }
       reader.readAsDataURL(file);
     },
-    onInteriorImagesSelected(event){
-      this.imgExter = new Array()
-      console.log(typeof(this.imgInter))
-      console.log(event)
-      this.selectedInteriorImages = event.target.files
-      console.log(this.selectedInteriorImages)
-      //const reader = new FileReader()
-      console.log("selected exterior image length is", this.selectedInteriorImages)
-      for (var img in this.selectedInteriorImages){
-        console.log(isNaN(img))
-        if (isNaN(img)) {
-          return;
-        }
-
-        console.log("before pushig file index:", img)
-        this.onUploadI(this.selectedInteriorImages[img])
-      }
-
+    removeImageI: function(image, index){
+      this.interiorImagesForFront.splice(index, 1)
+      this.imgInter.splice(index, 1)
     },
-    onUploadI: function(file){
-      console.log(this.imgInter)
-      console.log("In onUpload, file:", file)
-      console.log("Type of the file is", file.type)
-      const reader= new FileReader();
-      reader.onload = (e) =>{
-        console.log("e:",e.target.result)
-        this.imgInter.push(e.target.result)
-      }
-      reader.readAsDataURL(file);
+    removeImageE: function(image, index){
+      this.exteriorImagesForFront.splice(index, 1)
+      this.imgExter.splice(index, 1)
     },
     registerBoat(){
       alert("Registering a boat")

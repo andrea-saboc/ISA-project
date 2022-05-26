@@ -46,7 +46,6 @@ public class AdventureController {
     @RequestMapping(method = RequestMethod.POST, value = "/registerAdventure",produces = MediaType.APPLICATION_JSON_VALUE)
     @CrossOrigin(origins = "*")
     public ResponseEntity<String> registerAdventure(@RequestBody AdventureRegistrationDto dto){
-        System.out.println("In registering boat service");
         System.out.println(dto);
         Adventure savedAdventure = service.registerAdventure(dto);
 

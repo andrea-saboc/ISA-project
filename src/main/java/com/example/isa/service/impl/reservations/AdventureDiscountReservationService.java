@@ -65,7 +65,7 @@ public class AdventureDiscountReservationService implements DiscountReservationS
         adventureDiscountReservation.setPriceWithoutDiscount(dto.getPrice(adventure));
         adventureDiscountReservation.calculatePercentageOfDiscount();
         reservationRepo.save(adventureDiscountReservation);
-        //notifyAllSubscribers(adventureDiscountReservation);
+        notifyAllSubscribers(adventureDiscountReservation);
         return adventureDiscountReservation;
     }
 

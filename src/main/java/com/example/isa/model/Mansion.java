@@ -25,10 +25,10 @@ public class Mansion {
 	@JoinColumn(name = "address_id", referencedColumnName = "id", nullable = true)
 	private Address address;
 	private String promoDescription;
-	@OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER, mappedBy = "mansion")
-	public Set<Image> InteriorImages = new HashSet<Image>();
-	@OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER, mappedBy = "mansion")
-	public Set<Image> ExteriorImages = new HashSet<Image>();
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	private Set<EntityImage> InteriorImages = new HashSet<EntityImage>();
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	private Set<EntityImage> ExteriorImages = new HashSet<EntityImage>();
 	@ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER, mappedBy = "mansions")
 	public Set<Rule> rules = new HashSet<Rule>();
 	@OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER, mappedBy = "mansion")
@@ -101,19 +101,19 @@ public class Mansion {
 		this.promoDescription = promoDescription;
 	}
 
-	public Set<Image> getInteriorImages() {
+	public Set<EntityImage> getInteriorImages() {
 		return InteriorImages;
 	}
 
-	public void setInteriorImages(Set<Image> interiorImages) {
+	public void setInteriorImages(Set<EntityImage> interiorImages) {
 		InteriorImages = interiorImages;
 	}
 
-	public Set<Image> getExteriorImages() {
+	public Set<EntityImage> getExteriorImages() {
 		return ExteriorImages;
 	}
 
-	public void setExteriorImages(Set<Image> exteriorImages) {
+	public void setExteriorImages(Set<EntityImage> exteriorImages) {
 		ExteriorImages = exteriorImages;
 	}
 

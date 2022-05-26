@@ -42,10 +42,13 @@ public class Boat {
 	@OneToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
 	@JoinColumn(name = "address_id", referencedColumnName = "id")
 	private Address address;
-	@OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
-	public Set<Image> InteriorImages = new HashSet<Image>();
-	@OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
-	public Set<Image> ExteriorImages = new HashSet<Image>();
+
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	private Set<EntityImage> InteriorImages = new HashSet<EntityImage>();
+
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	private Set<EntityImage> ExteriorImages = new HashSet<EntityImage>();
+
 	@ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER, mappedBy = "boat")
 	public Set<Rule> rules = new HashSet<Rule>();
 
@@ -208,19 +211,19 @@ public class Boat {
 	
 	
 
-	public Set<Image> getInteriorImages() {
+	public Set<EntityImage> getInteriorImages() {
 		return InteriorImages;
 	}
 
-	public void setInteriorImages(Set<Image> interiorImages) {
+	public void setInteriorImages(Set<EntityImage> interiorImages) {
 		InteriorImages = interiorImages;
 	}
 
-	public Set<Image> getExteriorImages() {
+	public Set<EntityImage> getExteriorImages() {
 		return ExteriorImages;
 	}
 
-	public void setExteriorImages(Set<Image> exteriorImages) {
+	public void setExteriorImages(Set<EntityImage> exteriorImages) {
 		ExteriorImages = exteriorImages;
 	}
 
