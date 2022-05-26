@@ -1,5 +1,5 @@
 <template>
-<div class="mansion-view">
+<div class="mansion-view" v-if="adventureToShow!=null">
 <br>
 <br>
 <br>
@@ -7,9 +7,6 @@
   <div class="row">
     <div class="colinfo">
   <br class="sm">
-  <p style="text-transform: uppercase; font-size: 18px; color: gray">
-    {{adventureToShow.type}}
-  </p>
   <p class="fw-bold" style="font-size: 30px; font-weight: bolder; text-transform: uppercase">
     {{adventureToShow.name}}  <i class="fa fa-star" aria-hidden="true"></i>
   </p>
@@ -93,11 +90,10 @@
       <h4>Equipment</h4>
       {{adventureToShow.equipment}}
     </div>
-    <br>
-    <br>
   </div>
 
-  <hr v-if="adventureToShow.rules!=null && adventureToShow.rules.length!=0">
+<!--RULES -->
+ <hr v-if="adventureToShow.rules!=null && adventureToShow.rules.length!=0">
       <div class="navigation-equipments" v-if="adventureToShow.rules!=null && adventureToShow.rules.length!=0">
         <p style="font-weight: bolder; font-size: 26px">
           Rules
@@ -113,6 +109,248 @@
 
       </div>
 
+      <!-- Additional services -->
+      <hr>
+      <div v-if="additionalServices!=null && additionalServices.length!=0">
+      <p style="font-weight: bolder; font-size: 26px">
+        Additional services
+      </p>
+      <div class="additional-services">
+        <table class="table table-striped">
+          <thead>
+          <tr>
+            <th>
+              Service
+            </th>
+            <th>
+              Price/h
+            </th>
+            <th>
+              Price/day
+            </th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr v-for="ar in additionalServices" :key="ar.id">
+            <td>{{ar.name}}</td>
+            <td>{{ar.pricePerHour}}</td>
+            <td>{{ar.pricePerDay}}</td>
+          </tr>
+          </tbody>
+        </table>
+
+      </div>
+      </div>
+ <!-- KALENDAR -->
+
+ <p style="font-weight: bolder; font-size: 26px">
+        Calendar OVAJ DEO IDE NA POCETAK STRANICE INSTRUKTORA
+      </p>
+      <button v-if="loggedUser!=null && fishingInstructor.id==loggedUser.id" type="button" class="btn btn-primary" data-bs-toggle="modal" style="margin: 0.5%" data-bs-target="#exampleModal">Add availability period</button>
+      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Add availability for {{fishingInstructor.name}}</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times" aria-hidden="true"></i></button>
+            </div>
+            <div class="modal-body">
+              <v-date-picker mode="dateTime" is24hr v-model="startDateTime" style="width: 100%" :disabled-dates="disavailableDates" @dayclick="dayClicked">
+                <template v-slot="{ inputValue, inputEvents }">
+                  <input
+                      class="px-2 py-1 border rounded focus:outline-none focus:border-blue-300"
+                      :value="inputValue"
+                      v-on="inputEvents"
+                      style="overflow: visible"
+                      placeholder="From time"
+                  />
+                </template>
+              </v-date-picker>
+              <v-date-picker  mode="dateTime" is24hr v-model="endDateTime" style="width: 100%" :disabled-dates="disavailableDates">
+                <template v-slot="{ inputValue, inputEvents }">
+                  <input
+                      class="px-2 py-1 border rounded focus:outline-none focus:border-blue-300"
+                      :value="inputValue"
+                      v-on="inputEvents"
+                      placeholder="To time"
+                  />
+                </template>
+              </v-date-picker>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary"  data-bs-dismiss="modal"  v-on:click="addAvailabilityPeriod">Add</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <br>
+      <v-calendar :columns="$screens({ default: 1, lg: 2 })" :attributes='calendar_attributes'
+                  :available-dates='availableDates'/>
+      <hr>
+
+<!-- Brza rezervacija -->
+      <p style="font-weight: bolder; font-size: 26px">
+        Discounts
+      </p>
+      <button v-if="loggedUser!=null && fishingInstructor.id==loggedUser.id" type="button" class="btn btn-primary" data-bs-toggle="modal" style="margin: 0.5%" data-bs-target="#addQuickResModal">Add new quick reservation</button>
+      <hr>
+
+
+      <!-- MAPA -->
+      <p style="font-weight: bolder; font-size: 26px">
+        Location
+      </p>
+      <p style="font-size: 18px;">
+        {{address.address}}, {{address.city}}, {{address.country}}
+        <br>
+        {{address.latitude}}, {{address.longitude}}
+      </p>
+      <ol-map :loadTilesWhileAnimating="true" :loadTilesWhileInteracting="true" style="height:400px">
+
+        <ol-view ref="view" :center="[address.longitude,address.latitude]" :rotation="rotation" :zoom="zoom" :projection="projection" />
+
+        <ol-tile-layer>
+          <ol-source-osm />
+        </ol-tile-layer>
+
+        <ol-vector-layer>
+          <ol-source-vector>
+            <ol-feature>
+              <ol-geom-point :coordinates="[address.longitude,address.latitude]"></ol-geom-point>
+              <ol-style>
+                <ol-style-circle radius="5">
+                  <ol-style-fill color="white"></ol-style-fill>
+                  <ol-style-stroke color="red" :width="10" ></ol-style-stroke>
+                </ol-style-circle>
+              </ol-style>
+            </ol-feature>
+
+          </ol-source-vector>
+
+        </ol-vector-layer>
+
+      </ol-map>
+
+</div>
+      <div class="coladd-reservation" v-if="loggedUser!=null && loggedUser.id==fishingInstructor.id">
+      <div class="input-reservations">
+      <h5>
+        Add reservation
+      </h5>
+        <div class="mb-3">
+            <div class="input-group mb-3">
+              <span class="input-group-text" id="basic-addon3">Email</span>
+              <input type="text" class="form-control" v-model="clientResEmail" v-on="{keydown: checkEmail}" aria-label="Username" aria-describedby="basic-addon1">
+            </div>
+            <p v-if="!clientResEmailForm" style="font-size: small; font-style: italic">Invalid email.</p>
+            <p v-if="!clientResEmailExists" style="font-size: small; font-style: italic">User not registered.</p>
+          <label for="reservationStart" class="form-label">Select start time</label>
+          <v-date-picker mode="dateTime" is24hr v-model="clientResStartDate" id="reservationStart" :available-dates='availableDates'>
+            <template v-slot="{ inputValue, inputEvents }">
+              <input
+                  class="px-2 py-1 border rounded focus:outline-none focus:border-blue-300"
+                  :value="inputValue"
+                  v-on="inputEvents"
+                  style="overflow: visible"
+                  placeholder="From time"
+              />
+            </template>
+          </v-date-picker>
+          <div class="horizontal">
+            <div class="input-group mb-3">
+              <span class="input-group-text" id="basic-addon4">Days</span>
+              <input type="number" class="form-control" v-model="clientResNumberOfDays"  aria-label="Username" aria-describedby="basic-addon1">
+            </div>
+            <div class="input-group mb-3" style="margin-left: 2%">
+              <span class="input-group-text" id="basic-addon1">Hours</span>
+              <input type="number" class="form-control" v-model="clientResNumberOfHours"  aria-label="Username" aria-describedby="basic-addon1">
+            </div>
+          </div>
+          <hr>
+          <div v-if="additionalServices!=null && additionalServices.length!=0">
+            Addition services:
+            <table>
+              <tbody>
+              <tr v-for="as in additionalServices" :key="as.id">
+                <td><div class="form-check">
+                  <input class="form-check-input" type="checkbox" value=""  v-bind:id="as.id+'ascr'"  v-on:click="addAditionalServiceToRes(as)">
+                  <label class="form-check-label" for="as.id+'ascr'">
+                    {{as.name}}
+                  </label>
+                </div></td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon2">Number of guests</span>
+            <input type="number" class="form-control" min="1" max="{{adventureToShow.capacity}}" v-model="clientResNumberOfGuests"  aria-label="Username" aria-describedby="basic-addon1">
+          </div>
+          <br>
+          <button type="button" class="btn btn-primary" style="width: 100%" >Add reservation</button>
+        </div>
+      </div>
+      </div>
+    </div>
+  <!-- Modal -->
+  <div class="modal fade" id="addQuickResModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Add new quick reservation</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times" aria-hidden="true"></i></button>
+        </div>
+        <div class="modal-body">
+          <v-date-picker mode="dateTime" is24hr v-model="startDateTimeQuick" style="width: 100%" :disabled-dates='disavailableDates'>
+            <template v-slot="{ inputValue, inputEvents }">
+              <input
+                  class="px-2 py-1 border rounded focus:outline-none focus:border-blue-300"
+                  :value="inputValue"
+                  v-on="inputEvents"
+                  style="overflow: visible"
+                  placeholder="From time"
+              />
+            </template>
+          </v-date-picker>
+          <div class="horizontal">
+            <div class="input-group mb-3" style="margin-right: 5%">
+              <span class="input-group-text" id="basic-addon6">Days</span>
+              <input type="number" class="form-control" placeholder="Days" aria-label="Username" v-model="numberOfDaysQuick" aria-describedby="basic-addon1">
+            </div>
+
+            <div class="input-group mb-3">
+              <span class="input-group-text" id="basic-addon7">Hours</span>
+              <input type="number" class="form-control" placeholder="Hours" aria-label="Username" v-model="numberOfHoursQuick" aria-describedby="basic-addon1">
+            </div>
+
+          </div>
+          <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon111">Number of guests</span>
+            <input type="number" class="form-control" placeholder="Number of guests" aria-label="Username" v-model="numberOfGuestsQuick" aria-describedby="basic-addon1">
+          </div>
+          <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon11">Final price</span>
+            <input type="number" class="form-control" placeholder="Price" aria-label="Username" v-model="priceQuick" aria-describedby="basic-addon1">
+          </div>
+          <v-date-picker mode="dateTime" is24hr v-model="availableUntil" style="width: 100%">
+            <template v-slot="{ inputValue, inputEvents }">
+              <input
+                  class="px-2 py-1 border rounded focus:outline-none focus:border-blue-300"
+                  :value="inputValue"
+                  v-on="inputEvents"
+                  style="overflow: visible"
+                  placeholder="Valid until"
+              />
+            </template>
+          </v-date-picker>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" v-on:click="addQuickReservation">Add</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+       
+      </div>
+    </div>
 
 </div>
 </div>
@@ -121,37 +359,76 @@
 
 
 <script>
-
+import {ref} from "vue";
 import axios from 'axios'
+import {devServer} from "../../../vue.config";
+
 export default {
   name: "AdventureView",
   data: function (){
     return{
+      adventureToShow: [],
       loggedUser: null,
       user: null,
-      adventureToShow: [],
-      address: [],
       fishingInstructor: [],
       token:null,
-      imagesAll: []
+      imagesAll: [],
+      startDateTimeQuick: '',
+      numberOfGuestsQuick: '',
+      numberOfHoursQuick: 0,
+      numberOfDaysQuick: 0,
+      priceQuick: '',
+       clientResEmail: '',
+      clientResEmailForm: true,
+      clientResEmailExists: true,
+      clientResAdditionalServices: new Array(),
+      clientResStartDate: '',
+      clientResEndDate: '',
+      clientResNumberOfGuests: '',
+      clientResNumberOfHours: '',
+      clientResNumberOfDays: '',
+       startDateTime: '',
+      endDateTime: '',
+       address: [],
+        value: '',
+      availablePeriods: [],
+      availableDates: [],
+      disavailableDates: [],
+      additionalServices : [],
+      validateDates:[],
+      fishingReservations : [],
+      reservedDates : [],
+      availableUntil: '',
+      quickReservationsFree: new Array(),
+      quickReservationReserved: new Array(),
+      calendar_attributes: [
+        {
+          key: 'today',
+          highlight: 'red',
+          dates: [new Date()]
+        },
+      ]
+
+
     }
 
   },
-   computed: {
-  now: function () {
-    return this.user
+  setup() {
+    const projection = ref('EPSG:4326')
+    const zoom = ref(8)
+    const rotation = ref(0)
+    return {
+      projection,
+      zoom,
+      rotation
     }
   },
+  
   mounted() {
-
-
       this.token = localStorage.getItem('token').substring(1, localStorage.getItem('token').length-1);
-   console.log('toke je',this.token)
-    var path = window.location.href;
-     console.log(" Path je ", path)
-    var adventureId = path.split('/adventure/')[1].replaceAll('%20', ' ');
-    console.log("Bpat view --> adventureId id: ", adventureId.toString())
-
+      var path = window.location.href;
+      var adventureId = path.split('/adventure/')[1].replaceAll('%20', ' ');
+   
     axios.get("http://localhost:8080/userData", {
       headers: {
         'Authorization' :  'Bearer ' + this.token,
@@ -160,7 +437,10 @@ export default {
         .then(response => {
           this.loggedUser = response.data
           console.log("ULOGOVANI KORISNIK JE ", this.loggedUser)
-          axios
+        }).catch(() =>{
+          this.loggedUser = null
+    })
+    axios
          .get('http://localhost:8080/adventure', {
       params:
           {
@@ -172,30 +452,58 @@ export default {
     })
     .then(response => {
       this.adventureToShow = response.data
-       console.log("Boat to show:", this.adventureToShow)
+       console.log("Adventure to show:", this.adventureToShow.rules)
       this.address = this.adventureToShow.address
       console.log(response.data)
       this.fishingInstructor = this.adventureToShow.fishingInstructor
+      axios
+          .post(devServer.proxy + "/getFishingAvailability", {
+            "fishingId": this.adventureToShow.fishingInstructor.id
+          }, {
+            headers: {
+              'Authorization': 'Bearer ' + this.token,
+            }
+          })
+          .then(response => {
+            this.availablePeriods = response.data
+            console.log("Available periods for fishing: ", this.availablePeriods)
+            axios.get(devServer.proxy + "/additionalServicesAdventure", {
+              params:
+                  {
+                    id: adventureId
+                  },
+              headers: {
+                'Authorization': this.$store.getters.tokenString
+              }
+            })
+            .then(resp => {
+              this.additionalServices = resp.data
+              axios.get(devServer.proxy + "/getAllReservedAdventureDatesForFishing", {
+                headers: {
+                  'Authorization': 'Bearer ' + this.token,
+                
+              }
+            })
+
+            .then((resp1 => {
+               this.fishingReservations = resp1.data
+               console.log('Fishing instructor reservations:', this.fishingReservations)
+                this.calculateAvailableDaysForCalendar()
+
+            }))
+            })
+          })
       for(var i=0;i<this.adventureToShow.images.length;i++){
-          this.setImg(this.adventureToShow.images[i]);
-      
+          this.setImg(this.adventureToShow.images[i])
     }
-    console.log(this.imagesAll)
-     
+    }).catch(() =>{
+         console.log("There is some problem")
     })
-    .catch(()=>{
-      console.log("The is a trouble")
-    })
-   }
-        ).catch(() =>{
-          this.loggedUser = null
-           console.log("POSTOJI PROBLEM")
-    })
-   
   },
   methods:
   {
-    setImg: function(image){
+    setImg: function(image)
+    {
       console.log('Image path je ',image.path)
       axios.get('http://localhost:8080/entityImage/'+image.path, {
       headers: {
@@ -209,23 +517,213 @@ export default {
            let base64ImageString = Buffer.from(response.data, 'binary').toString('base64')
       let srcValue = "data:image/png;base64,"+base64ImageString
       this.imagesAll.push(srcValue)
-      
-            
-  
-           
           
     })
     .catch(()=>{
       console.log("The is a trouble")
     })
     
-  }
+  },
+
+  calculateAvailableDaysForCalendar(){
+      for(var tmp in this.availablePeriods) {
+        var startDate = new Date(this.availablePeriods[tmp].startDate);
+        var endDate = new Date(this.availablePeriods[tmp].endDate)
+        if(startDate<Date.now() && endDate>=Date.now())
+        { 
+          this.availableDates.push({
+          start: new Date(Date.now()),
+          end: new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate())
+        });
+        }
+        if(startDate>=Date.now()){
+        this.availableDates.push({
+          start: new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate()),
+          end: new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate())
+        });
+      }
+      }
+
+       var d = new Date();
+       d.setDate(d.getDate() - 85600);
+       console.log("DATUM JE ",d);
+       this.disavailableDates.push({
+          start: d,
+          end: new Date(Date.now())
+       });
+       for(var tmp1 in this.availablePeriods) {
+        var startDate1 = new Date(this.availablePeriods[tmp1].startDate);
+        var endDate1 = new Date(this.availablePeriods[tmp1].endDate)
+        if(startDate1<Date.now() && endDate1>=Date.now())
+        { 
+          this.disavailableDates.push({
+          start: new Date(Date.now()),
+          end: new Date(endDate1.getFullYear(), endDate1.getMonth(), endDate1.getDate())
+        });
+        }
+        if(startDate1>=Date.now()){
+        this.disavailableDates.push({
+          start: new Date(startDate1.getFullYear(), startDate1.getMonth(), startDate1.getDate()),
+          end: new Date(endDate1.getFullYear(), endDate1.getMonth(), endDate1.getDate())
+        });
+      }
+      }
+
+      for(var reservation in this.fishingReservations){
+        var startDateRes = new Date(this.fishingReservations[reservation].startDate)
+        var endDateRes = new Date(this.fishingReservations[reservation].endDate)
+        this.reservedDates.push({
+          start: new Date(startDateRes.getFullYear(), startDateRes.getMonth(), startDateRes.getDate(), startDateRes.getHours(), startDateRes.getMinutes()),
+          end: new Date(endDateRes.getFullYear(), endDateRes.getMonth(), endDateRes.getDate(), endDateRes.getHours(), endDateRes.getMinutes())
+        });
+      }
+      for (var id in this.reservedDates){
+        this.calendar_attributes.push({
+          highlight: {
+            start: { fillMode: 'outline' },
+            base: { fillMode: 'outline' },
+            end: { fillMode: 'outline' },
+          },
+          dates: { start: this.reservedDates[id].start, end: this.reservedDates[id].end },
+        })
+      }
+      console.log("Calculated available days:", this.availableDates)
+      console.log("Calculated reserved days:", this.reservedDates)
+      console.log('Calenar attributes before:',this.calendar_attributes)
+      this.calculateDiscountReservations()
+      console.log('Calendar attributes after:',this.calendar_attributes)
+    },
+    calculateDiscountReservations(){
+      axios
+      .get(devServer.proxy + "/getAdventureDiscountReservations", {
+        headers: {
+          'Authorization' : this.$store.getters.tokenString
+        },
+        params:{
+          "adventureId": this.adventureToShow.id
+        }
+      })
+      .then(response =>
+      {
+        console.log('Got discount reservation:', response.data)
+        this.quickReservationsFree = response.data.freeReservations;
+        this.quickReservationReserved = response.data.reservedReservations;
+        console.log("Free quick reservations:", this.quickReservationsFree)
+        console.log("Reserved quick reservations:", this.quickReservationReserved)
+
+        for(var i in this.quickReservationsFree){
+          var startDate = new Date(this.quickReservationsFree[i].startDate)
+          var endDate = new Date(this.quickReservationsFree[i].endDate)
+          this.disavailableDates.push({
+          start: new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate()),
+          end: new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate())
+        });
+          console.log(i, "Start day for free is:", startDate)
+          console.log(i, "End day for free is:", endDate)
+          this.calendar_attributes.push({
+            highlight: {
+              start: { fillMode: 'solid', color: 'teal' },
+              base: { fillMode: 'solid', color: 'teal' },
+              end: { fillMode: 'solid', color: 'teal' }
+            },
+            dates: { start: startDate, end: endDate },
+          })
+        }
+        console.log("Free discount reservations are added")
+        for(var j in this.quickReservationReserved){
+          var startDate1 = new Date(this.quickReservationReserved[j].startDate)
+          var endDate1 = new Date(this.quickReservationReserved[j].endDate)
+          this.disavailableDates.push({
+          start: new Date(startDate1.getFullYear(), startDate1.getMonth(), startDate1.getDate()),
+          end: new Date(endDate1.getFullYear(), endDate1.getMonth(), endDate1.getDate())
+        });
+          this.calendar_attributes.push({
+            highlight: {
+              start: { fillMode: 'solid' },
+              base: { fillMode: 'solid' },
+              end: { fillMode: 'solid' },
+              color: 'pink'
+            },
+            dates: { start: startDate1, end: endDate1 },
+          })
+        }
+        console.log("Reserved discount reservations are added")
+        console.log(this.calendar_attributes)
+      })
+    },
+    addAvailabilityPeriod(){
+
+      if(this.endDateTime<this.startDateTime)
+      {
+        alert("End Date is before Start Date")
+        return;
+      }
+      if(this.endDateTime=== '' ||  this.startDateTime=== '')
+      {
+        alert("Enter all fields")
+        return;
+      }
+      else{
+      axios
+      .post(devServer.proxy + "/addAvailablePeriodForFishing", {
+        "fishingId" : this.adventureToShow.fishingInstructor.id,
+        "startTime" : this.startDateTime,
+        "endTime" : this.endDateTime
+      }, {
+        headers: {
+          'Authorization' : this.$store.getters.tokenString
+        }
+      })
+      .then(response => {
+        this.availablePeriods = response.data
+        console.log("New available periods: ", this.availablePeriods )
+        this.startDateTime="";
+        this.endDateTime="";
+        this.calculateAvailableDaysForCalendar()
+      })
+      }
+
+    },
+    addQuickReservation(){
+      if(this.startDateTimeQuick==='' || this.numberOfDaysQuick===''||  this.numberOfHoursQuick==='' || this.numberOfGuestsQuick===''
+      || this.priceQuick===''|| this.availableUntil==='')
+       {
+        alert("Enter all fields")
+        return;
+      }
+      if(this.availableUntil>this.startDateTimeQuick)
+      {
+        alert("Valide until must be before starte date");
+        return;
+      }
+      else{
+      axios.post(devServer.proxy + "/createDiscountAdventureReservation", {
+                                     
+        "boatId" : this.adventureToShow.id,
+        "startDate" : this.startDateTimeQuick,
+        "days" : this.numberOfDaysQuick,
+        "hours" : this.numberOfHoursQuick,
+        "numberOfGuests" : this.numberOfGuestsQuick,
+        "priceWithDiscount": this.priceQuick,
+        "validUntil" : this.availableUntil
+      }, {
+        headers: {
+          'Authorization': this.$store.getters.tokenString,
+          'Content-Type': 'application/json'
+        }
+      })
+      this.calculateAvailableDaysForCalendar()
+      this.startDateTimeQuick="";
+      this.numberOfDaysQuick="";
+      this.numberOfHoursQuick="";
+      this.numberOfGuestsQuick="";
+      this.priceQuick="";
+      this.availableUntil="";
+    }
+    }
  }
 }
-
-
 </script>
-
 <style scoped>
 .mansion-view{
   horiz-align: center;

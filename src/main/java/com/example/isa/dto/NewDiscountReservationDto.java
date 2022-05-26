@@ -1,5 +1,6 @@
 package com.example.isa.dto;
 
+import com.example.isa.model.Adventure;
 import com.example.isa.model.Boat;
 import com.example.isa.model.Mansion;
 import com.example.isa.model.reservations.AdditionalService;
@@ -24,6 +25,9 @@ public class NewDiscountReservationDto {
     public double getPrice(Mansion mansion) {
         return mansion.getPricePerDay()*this.days;
     }
+    public double getPrice(Adventure adventure) {
+        return adventure.getPricePerDay()*this.days + adventure.getPricePerHour() * this.hours;}
+
 
     @Override
     public String toString() {

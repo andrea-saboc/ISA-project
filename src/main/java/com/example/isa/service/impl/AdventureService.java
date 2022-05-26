@@ -1,11 +1,14 @@
 package com.example.isa.service.impl;
 
+import com.example.isa.dto.AddAvailablePeriodDto;
+import com.example.isa.dto.AddAvailablePeriodFishingInstructorDto;
 import com.example.isa.dto.AdventureRegistrationDto;
 import com.example.isa.dto.BoatRegistrationDto;
 import com.example.isa.model.*;
 import com.example.isa.model.reservations.AdditionalService;
 import com.example.isa.repository.AdditionalServiceRepository;
 import com.example.isa.repository.AdventureRepository;
+import com.example.isa.repository.FishingAvailablePeriodRepository;
 import com.example.isa.repository.FishingInstructorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -26,16 +29,19 @@ public class AdventureService {
     private AdditionalServiceRepository additionalServiceRepository;
     @Autowired
     private EntityImageService entityImageService;
+    @Autowired
+    private FishingAvailablePeriodRepository fishingAvailablePeriodRepository;
 
 
 
     @Autowired
-    public AdventureService(AdventureRepository ar,FishingInstructorRepository fishingInstructorRepository,AdditionalServiceRepository additionalServiceRepository,EntityImageService entityImageService) {
+    public AdventureService(AdventureRepository ar,FishingInstructorRepository fishingInstructorRepository,AdditionalServiceRepository additionalServiceRepository,EntityImageService entityImageService,FishingAvailablePeriodRepository fishingAvailablePeriodRepository) {
 
         this.adventureRepository = ar;
         this.additionalServiceRepository=additionalServiceRepository;
         this.fishingInstructorRepository=fishingInstructorRepository;
         this.entityImageService=entityImageService;
+        this.fishingInstructorRepository=fishingInstructorRepository;
 
     }
 
@@ -115,5 +121,19 @@ public class AdventureService {
         return adventures;
     }
 
+    public List<FishingAvailablePeriod> getFishingAvailablePeriod(Long fishingId) {
+        FishingInstructor fishingInstructor=fishingInstructorRepository.findById(fishingId).get();
+
+        List<FishingAvailablePeriod> fishingAvailablePeriods = fishingAvailablePeriodRepository.findByFishingInstructor(fishingInstructor);
+        return fishingAvailablePeriods;
+    }
+    public List<FishingAvailablePeriod> addFishingAvailabilities(AddAvailablePeriodFishingInstructorDto dto) {
+        FishingInstructor fishingInstructor=fishingInstructorRepository.findById(dto.fishingId).get();
+        FishingAvailablePeriod availablePeriod= new FishingAvailablePeriod(dto.startTime, dto.endTime,fishingInstructor);
+
+        fishingAvailablePeriodRepository.save(availablePeriod);
+        List<FishingAvailablePeriod> fishingNewAvailability = fishingAvailablePeriodRepository.findByFishingInstructor(fishingInstructor);
+        return fishingNewAvailability;
+    }
 
 }

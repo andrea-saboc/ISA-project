@@ -17,6 +17,8 @@ public class SubscriptionService {
 	@Autowired
 	MansionSubscriptionRepository mansionSubRepo;
 	@Autowired
+	AdventureSubscriptionRepository adventureSubscriptionRepository;
+	@Autowired
 	BoatOwnerRepository boatOwnerRepository;
 	@Autowired
 	ClientRepository clientRepository;
@@ -26,16 +28,21 @@ public class SubscriptionService {
 	BoatRepository boatRepository;
 	@Autowired
 	MansionRepository mansionRepository;
+	@Autowired
+	AdventureRepository adventureRepository;
 	
 	
 	public BoatSubscription newBoatSubscription(Boat boat) {
 		return boatSubsRepo.save(new BoatSubscription(authenticationService.getLoggedUser(),boat));
 	}
 	public MansionSubscription newMansionSubscription(Mansion mansion) {
-		
-		
 		System.out.println("new mansion subs");
 		return mansionSubRepo.save(new MansionSubscription(authenticationService.getLoggedUser(), mansion));
+	}
+
+	public AdventureSubscription newAdventureSubscription(Adventure adventure) {
+		return adventureSubscriptionRepository.save(new AdventureSubscription(authenticationService.getLoggedUser(),adventure));
+
 	}
 	public void cancelBoatSubscription(BoatSubscription boat) {
 		boatSubsRepo.delete(boat);
@@ -69,6 +76,15 @@ public class SubscriptionService {
 		List<MansionSubscription> mansionSubscriptions = new ArrayList<>(mansionSubRepo.findAllByMansion(mansion));
 		List<User> clientsSubscribed = new ArrayList<>();
 		for (MansionSubscription ms : mansionSubscriptions){
+			clientsSubscribed.add(ms.getSubscriber());
+		}
+		return clientsSubscribed;
+	}
+
+	public List<User> getAllSubscribersByAdventure(Adventure adventure){
+		List<AdventureSubscription> adventureSubscription = new ArrayList<>(adventureSubscriptionRepository.findAllByAdventure(adventure));
+		List<User> clientsSubscribed = new ArrayList<>();
+		for (AdventureSubscription ms : adventureSubscription){
 			clientsSubscribed.add(ms.getSubscriber());
 		}
 		return clientsSubscribed;

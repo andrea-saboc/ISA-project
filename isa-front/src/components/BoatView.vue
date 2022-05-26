@@ -414,7 +414,7 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times" aria-hidden="true"></i></button>
         </div>
         <div class="modal-body">
-          <v-date-picker mode="dateTime" is24hr v-model="startDateTimeQuick" style="width: 100%" :disabled-dates="availableDates">
+          <v-date-picker mode="dateTime" is24hr v-model="startDateTimeQuick" style="width: 100%" :disabled-dates="availableDates" >
             <template v-slot="{ inputValue, inputEvents }">
               <input
                   class="px-2 py-1 border rounded focus:outline-none focus:border-blue-300"
@@ -649,10 +649,12 @@ export default {
       for(var tmp in this.availablePeriods) {
         var startDate = new Date(this.availablePeriods[tmp].startDate);
         var endDate = new Date(this.availablePeriods[tmp].endDate)
+     
         this.availableDates.push({
           start: new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate()),
           end: new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate())
         });
+        
       }
       for(var reservation in this.boatReservations){
         var startDateRes = new Date(this.boatReservations[reservation].startDate)
@@ -869,6 +871,7 @@ export default {
         }
       })
       this.calculateAvailableDaysForCalendar()
+    
     }
 
   },

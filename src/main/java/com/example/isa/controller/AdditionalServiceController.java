@@ -33,4 +33,14 @@ public class AdditionalServiceController {
 
     }
 
+    @RequestMapping(method = RequestMethod.GET, value = "/additionalServicesAdventure",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> getByAdventure(@RequestParam Long id) throws JsonProcessingException{
+        List<AdditionalService> additionalServiceList = service.getByAdventureid(id);
+        ObjectMapper mapper = new ObjectMapper();
+        String jsonString = mapper.writeValueAsString(additionalServiceList);
+        System.out.println(jsonString);
+        return new ResponseEntity<>(jsonString, HttpStatus.OK);
+
+    }
+
 }

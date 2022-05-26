@@ -2,6 +2,7 @@ package com.example.isa.repository;
 
 import java.util.List;
 
+import com.example.isa.model.Adventure;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.example.isa.model.Boat;
@@ -12,4 +13,5 @@ public interface AdditionalServiceRepository extends JpaRepository<AdditionalSer
 	
 	List<AdditionalService> findAllByBoat(Boat b);
 	List<AdditionalService> findAllByMansion(Mansion m);
+	List<AdditionalService> findAllByAdventure(Adventure adventure);
 }

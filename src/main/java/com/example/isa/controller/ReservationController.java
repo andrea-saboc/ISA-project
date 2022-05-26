@@ -47,7 +47,8 @@ public class ReservationController {
 	CollectingBoatReservationsServiceImpl collectingBoatResService;
 	@Autowired
 	CollectionMansionReservationsImpl collectingMansionResService;
-	
+	@Autowired
+    CollectingAdventureReservationsServiceImpl collectingAdventureReservationsService;
 	@Autowired
 	BoatDiscountReservationService boatDiscountReservationService;
     @Autowired
@@ -220,6 +221,20 @@ public class ReservationController {
             List<BoatReservation> boatReservations = collectingBoatResService.getBoatReservationsByBoat(boatId);
             ObjectMapper mapper = new ObjectMapper();
             String jsonString = mapper.writeValueAsString(boatReservations);
+            System.out.println(jsonString);
+            return new ResponseEntity<>(jsonString, HttpStatus.OK);
+        } catch (Exception e){
+            return new ResponseEntity<>("Bad request", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PreAuthorize("hasRole('ROLE_FISHING_INSTRUCTOR')")
+    @RequestMapping(method = RequestMethod.GET, value = "/getAllReservedAdventureDatesForFishing")
+    public ResponseEntity<String> getAllReservedAdventureDatesForFishing(){
+        try {
+            List<AdventureReservation> adventureReservations = collectingAdventureReservationsService.getAllAdventureReservation();
+            ObjectMapper mapper = new ObjectMapper();
+            String jsonString = mapper.writeValueAsString(adventureReservations);
             System.out.println(jsonString);
             return new ResponseEntity<>(jsonString, HttpStatus.OK);
         } catch (Exception e){

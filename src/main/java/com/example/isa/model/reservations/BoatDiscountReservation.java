@@ -31,7 +31,6 @@ public class BoatDiscountReservation extends DiscountReservation{
 	private ClientFeedback boatOwnerFeedback;
 
 
-
 	
 	public BoatDiscountReservation(Date startDate, Date endDate, int numberOfGuests,
 			double priceWithDiscount, Boat boat) {
