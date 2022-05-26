@@ -45,7 +45,7 @@ public class RegisterController {
     
 	@RequestMapping(method = RequestMethod.POST, value = "/client",consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE )
 	@CrossOrigin(origins = "*")
-    public ResponseEntity<String> registerPatient(HttpServletRequest request,@RequestBody ClientRegistrationDto clientDto) {
+    public ResponseEntity<String> registerClient(HttpServletRequest request,@RequestBody ClientRegistrationDto clientDto) {
     	
         
         if (this.clientRegistrationService.clientExists(clientDto.getEmail()))
