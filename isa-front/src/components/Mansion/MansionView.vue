@@ -403,7 +403,7 @@ export default {
       availablePeriods: [],
       availableDates: [],
       additionalServices: [],
-      boatReservations: [],
+      mansionReservations: [],
       reservedDates: [],
       quickReservationsFree: new Array(),
       quickReservationReserved: new Array(),
@@ -532,7 +532,7 @@ export default {
           end: new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate())
         });
       }
-      for(var reservation in this.boatReservations){
+      for(var reservation in this.mansionReservations){
         var startDateRes = new Date(this.mansionReservations[reservation].startDate)
         var endDateRes = new Date(this.mansionReservations[reservation].endDate)
         this.reservedDates.push({
