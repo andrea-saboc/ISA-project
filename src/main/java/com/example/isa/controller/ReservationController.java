@@ -36,6 +36,8 @@ public class ReservationController {
 	BoatReservationServiceImpl boatResService;
 	@Autowired 
 	MansionReservationServiceImpl mansionResService;
+    @Autowired
+    AdventureReservationServiceImpl adventureReservationService;
 	
 
 	@Autowired
@@ -250,6 +252,25 @@ public class ReservationController {
             BoatReservation boatReservation = boatResService.createReservationForClient(dto);
             if (boatReservation!=null)
             return new ResponseEntity<>("Reservation for client is created successfully!", HttpStatus.OK);
+            else return new ResponseEntity<>("Wrong params, try again!", HttpStatus.OK);
+        } catch (Exception e){
+            System.out.println(e);
+            return new ResponseEntity<>("No available periods in selected time!", HttpStatus.OK);
+        }
+    }
+
+    @PreAuthorize("hasRole('ROLE_FISHING_INSTRUCTOR')")
+    @RequestMapping(method = RequestMethod.POST, value = "/makeAdventureReservationClient")
+    @CrossOrigin(origins = "*")
+    public ResponseEntity<String> makeAdventureReservationClient(@RequestBody CustomReservationForClientDto dto){
+        System.out.println(dto.getAdditionalServiceSet());
+        System.out.println(dto.toString());
+        
+        try{
+            AdventureReservation adventureReservation=adventureReservationService.createReservationForClient(dto);
+
+            if (adventureReservation!=null)
+                return new ResponseEntity<>("Reservation for client is created successfully!", HttpStatus.OK);
             else return new ResponseEntity<>("Wrong params, try again!", HttpStatus.OK);
         } catch (Exception e){
             System.out.println(e);

@@ -287,8 +287,9 @@
             <span class="input-group-text" id="basic-addon2">Number of guests</span>
             <input type="number" class="form-control" min="1" max="{{adventureToShow.capacity}}" v-model="clientResNumberOfGuests"  aria-label="Username" aria-describedby="basic-addon1">
           </div>
-          <br>
-          <button type="button" class="btn btn-primary" style="width: 100%" >Add reservation</button>
+         
+      <br>
+          <button type="button" class="btn btn-primary" style="width: 100%" v-on:click="makeReservationForClient()">Add reservation</button>
         </div>
       </div>
       </div>
@@ -381,7 +382,7 @@ export default {
        clientResEmail: '',
       clientResEmailForm: true,
       clientResEmailExists: true,
-      clientResAdditionalServices: new Array(),
+      clientResAdditionalServices: [],
       clientResStartDate: '',
       clientResEndDate: '',
       clientResNumberOfGuests: '',
@@ -389,6 +390,7 @@ export default {
       clientResNumberOfDays: '',
        startDateTime: '',
       endDateTime: '',
+      place:'',
        address: [],
         value: '',
       availablePeriods: [],
@@ -712,6 +714,13 @@ export default {
           'Content-Type': 'application/json'
         }
       })
+
+      .then(response =>{
+            alert("Uspesno, ",response.data)
+      })
+      .catch( function (err){
+        alert(err)
+      })
       this.calculateAvailableDaysForCalendar()
       this.startDateTimeQuick="";
       this.numberOfDaysQuick="";
@@ -720,6 +729,77 @@ export default {
       this.priceQuick="";
       this.availableUntil="";
     }
+    },checkEmail(){
+        if (!this.validEmail(this.clientResEmail)){
+          this.clientResEmailForm = false
+        } else{
+          this.clientResEmailForm = true
+        }/*else {
+          this.clientResEmailForm = true
+          axios.post(devServer.proxy + '/emailExistsClient', {
+            email: this.clientResEmail
+          }, {
+            headers: {
+              'Authorization': this.$store.getters.tokenString,
+              'Content-Type': 'application/json'
+            }
+          }).then(response =>{
+            this.clientResEmailExists = response.data
+            if(!this.clientResEmailExists){
+              alert("User with that email is not registered yet!")
+            }
+          })
+        }*/
+    },
+    validEmail: function (email) {
+      var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      return re.test(email);
+    },
+    addAditionalServiceToRes(additionalService){
+      let checkbox = document.getElementById(additionalService.id + 'ascr').checked
+      console.log("additional service is selected:", checkbox)
+      if(checkbox){
+        this.clientResAdditionalServices.push(additionalService)
+      } else{
+        for( var i = 0; i < this.clientResAdditionalServices.length; i++){
+
+          if ( this.clientResAdditionalServices[i] === additionalService) {
+            this.clientResAdditionalServices.splice(i, 1);
+          }
+
+        }
+      }
+      console.log("additional service is :", this.clientResAdditionalServices)
+    }, 
+    makeReservationForClient(){
+      axios.post(devServer.proxy+ "/makeAdventureReservationClient", {
+          email : this.clientResEmail,
+          additionalServiceSet : this.clientResAdditionalServices,
+          startDate : this.clientResStartDate,
+          days : this.clientResNumberOfDays,
+          hours : this.clientResNumberOfHours,
+          "boatId" : this.adventureToShow.id,
+          numberOfGuests : this.clientResNumberOfGuests
+      }, {
+        headers: {
+          'Authorization': this.$store.getters.tokenString,
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(response =>{
+            alert(response.data)
+        this.clientResEmail = '';
+            this.clientResAdditionalServices = new Array();
+            this.clientResStartDate ='';
+            this.clientResNumberOfDays=''
+            this.clientResNumberOfHours=''
+            this.clientResNumberOfGuests=''
+      }
+      )
+      .catch( function (err){
+        alert(err)
+      })
+      this.calculateAvailableDaysForCalendar()
     }
  }
 }

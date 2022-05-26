@@ -3,14 +3,16 @@ package com.example.isa.dto;
 import java.util.Date;
 import java.util.List;
 
+import com.example.isa.model.Adventure;
 import com.example.isa.model.Boat;
 import com.example.isa.model.Mansion;
+import com.example.isa.model.reservations.AdditionalService;
 
 
 public class ReservationDto {
 	
 	private long entityId;
-	private List<Long> additionalServices;
+	private List<AdditionalService> additionalServices;
 	private int numberOfGuests;
 	private double price;
 	private String startDate;
@@ -26,10 +28,10 @@ public class ReservationDto {
 	public void setEntityId(long boatId) {
 		this.entityId = boatId;
 	}
-	public List<Long> getAdditionalServices() {
+	public List<AdditionalService> getAdditionalServices() {
 		return additionalServices;
 	}
-	public void setAdditionalServices(List<Long> additionalServices) {
+	public void setAdditionalServices(List<AdditionalService> additionalServices) {
 		this.additionalServices = additionalServices;
 	}
 	public int getNumberOfGuests() {
@@ -74,7 +76,7 @@ public class ReservationDto {
 	public void setNumberOfHours(int numberOfHours) {
 		this.numberOfHours = numberOfHours;
 	}
-	public ReservationDto(long boatId, List<Long> additionalServices, int numberOfGuests, double price,
+	public ReservationDto(long boatId, List<AdditionalService> additionalServices, int numberOfGuests, double price,
 			String startDate, String startTime, int numberOfDays, int numberOfHours) {
 		super();
 		this.entityId = boatId;
@@ -91,6 +93,10 @@ public class ReservationDto {
 		return b.getPricePerDay() * this.numberOfDays + b.getPricePerHour() * this.numberOfHours;
 	}
 	public double getPrice(Mansion b) {
+		int numberOfWeeks = this.numberOfDays / 7;
+		return b.getPriceForSevenDays() * numberOfWeeks + b.getPricePerDay() * (this.numberOfDays - numberOfWeeks * 7);
+	}
+	public double getPrice(Adventure b) {
 		int numberOfWeeks = this.numberOfDays / 7;
 		return b.getPriceForSevenDays() * numberOfWeeks + b.getPricePerDay() * (this.numberOfDays - numberOfWeeks * 7);
 	}

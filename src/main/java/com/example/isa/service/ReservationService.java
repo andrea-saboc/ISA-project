@@ -19,7 +19,7 @@ public interface ReservationService {
 	
 	public Reservation createReservationForClient(CustomReservationForClientDto dto)  throws PeriodNoLongerAvailableException, ParseException, java.text.ParseException;
 	
-	public Set<AdditionalService> addAdditionalServices(List<Long> additinalServices);
+	public Set<AdditionalService> addAdditionalServices(List<AdditionalService> additinalServices);
 	
 	public double accountAdditionalServices(Set<AdditionalService> additinalServices,ReservationDto res);	
 	
