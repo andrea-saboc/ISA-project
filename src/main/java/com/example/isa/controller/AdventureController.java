@@ -1,9 +1,10 @@
 package com.example.isa.controller;
 
-import com.example.isa.dto.AdventureRegistrationDto;
-import com.example.isa.dto.BoatRegistrationDto;
+import com.example.isa.dto.*;
 import com.example.isa.model.Adventure;
 import com.example.isa.model.Boat;
+import com.example.isa.model.BoatAvailablePeriod;
+import com.example.isa.model.FishingAvailablePeriod;
 import com.example.isa.service.impl.AdventureService;
 import com.example.isa.service.impl.BoatService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -68,28 +69,31 @@ public class AdventureController {
         System.out.println("In contoler");
         return new ResponseEntity<>(jsonString, HttpStatus.OK);
     }
-
-    /*@RequestMapping(value = "/entityImage/images/{entity}/{imgName}", method = RequestMethod.GET,
-            produces = MediaType.IMAGE_JPEG_VALUE)
+    @RequestMapping(method = RequestMethod.POST, value = "/getFishingAvailability", produces = MediaType.APPLICATION_JSON_VALUE)
     @CrossOrigin(origins = "*")
-    public ResponseEntity<byte[]> getImageRes( @PathVariable String entity,@PathVariable String imgName) throws IOException {
-        System.out.println("TU SAM PICKO");
-        //byte[] img = entityImageService.getImageByte(role, user, entity, imgName);
-        /*byte[] img = entityImageService.getEntityImage(entity, imgName);
-        if(img != null){
-            return ResponseEntity
-                    .ok()
-                    .contentType(MediaType.IMAGE_JPEG)
-                    .body(img);
-        }else{
-            return ResponseEntity
-                    .badRequest()
-                    .contentType(MediaType.IMAGE_JPEG).body(null);
-        }+/
+    public ResponseEntity<List<FishingAvailablePeriod>> getAvailablePeriod(@RequestBody LongIdDto dto) throws JsonProcessingException{
+        System.out.println("In getting availability for adventure");
+        List<FishingAvailablePeriod> fishingAvailablePeriods = service.getFishingAvailablePeriod(dto.fishingId);
+        ObjectMapper mapper = new ObjectMapper();
+        System.out.print("Before coverting" + fishingAvailablePeriods.toString());
+        String jsonString = mapper.writeValueAsString(fishingAvailablePeriods);
+        System.out.println(jsonString);
+        System.out.println("In contoler");
+        return new ResponseEntity<>(fishingAvailablePeriods, HttpStatus.OK);
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value ="/addAvailablePeriodForFishing", produces = MediaType.APPLICATION_JSON_VALUE)
+    @CrossOrigin(origins = "*")
+    public ResponseEntity<String> addAvailablePeriodForFishing(@RequestBody AddAvailablePeriodFishingInstructorDto dto) throws JsonProcessingException{
+        System.out.println("Adding available period for fishingInstructor!");
+        List<FishingAvailablePeriod> fishingAvailablePeriods = service.addFishingAvailabilities(dto);
+        ObjectMapper mapper = new ObjectMapper();
+        String jsonString = mapper.writeValueAsString(fishingAvailablePeriods);
+        System.out.println(jsonString);
+        System.out.println("Finished");
+        return new ResponseEntity<>(jsonString, HttpStatus.OK);
+    }
 
 
-        return null;
-
-    }*/
 
 }

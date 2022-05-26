@@ -2,6 +2,9 @@ package com.example.isa.controller;
 
 import java.util.List;
 
+import com.example.isa.dto.AllAdventureDiscountReservationsDto;
+import com.example.isa.model.reservations.AdventureDiscountReservation;
+import com.example.isa.service.impl.reservations.AdventureDiscountReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -32,6 +35,8 @@ public class DiscountReservationsController {
 	
 	@Autowired
 	BoatDiscountReservationService boatReservationService;
+	@Autowired
+	AdventureDiscountReservationService adventureDiscountReservationService;
 	
 	@Autowired
 	MansionDiscountReservationService mansionReservationService;
@@ -78,6 +83,18 @@ public class DiscountReservationsController {
 			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
 		}
 	}
+
+	@PreAuthorize("hasRole('ROLE_FISHING_INSTRUCTOR')")
+	@RequestMapping(method = RequestMethod.POST, value = "/createDiscountAdventureReservation",produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<DiscountReservation> createDiscountAdventureReservation(@RequestBody NewDiscountReservationDto dto){
+		try{
+			return new ResponseEntity<>(adventureDiscountReservationService.createDiscountReservation(dto), HttpStatus.OK);
+		}
+		catch (Exception e){
+			System.out.println(e);
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		}
+	}
 	
 	@PreAuthorize("hasRole('ROLE_CLIENT')")
 	@RequestMapping(method = RequestMethod.POST, value = "/cancelDiscountBoatReservation",produces = MediaType.APPLICATION_JSON_VALUE)
@@ -112,9 +129,17 @@ public class DiscountReservationsController {
 		
 		return new ResponseEntity<>(allBoatDiscountReservationsDTO, HttpStatus.OK);
 	}
-	
-	
-	
+
+	@RequestMapping(method = RequestMethod.GET, value = "/getAdventureDiscountReservations",produces = MediaType.APPLICATION_JSON_VALUE )
+	@CrossOrigin(origins = "*")
+	public ResponseEntity<AllAdventureDiscountReservationsDto> getAdventureDiscountReservations(@RequestParam Long adventureId){
+		AllAdventureDiscountReservationsDto allAdventureDiscountReservationsDto = new AllAdventureDiscountReservationsDto();
+		allAdventureDiscountReservationsDto.freeReservations = adventureDiscountReservationService.getAvailableDiscountReservations(adventureId);
+		allAdventureDiscountReservationsDto.reservedReservations = adventureDiscountReservationService.getReservedDiscountReservations(adventureId);
+
+		return new ResponseEntity<>(allAdventureDiscountReservationsDto, HttpStatus.OK);
+	}
+
 	@PreAuthorize("hasRole('ROLE_CLIENT')")
 	@RequestMapping(method = RequestMethod.GET, value = "/mansionDiscountReservations",produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> getMansionDiscountReservations(@RequestParam Long id) throws JsonProcessingException{

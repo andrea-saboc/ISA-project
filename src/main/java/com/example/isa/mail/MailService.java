@@ -45,12 +45,23 @@ public class MailService<T> {
 			NotificationAboutDiscountReservationIsCreatedFotmatter formater = new NotificationAboutDiscountReservationIsCreatedFotmatter();
 			SimpleMailMessage message = new SimpleMailMessage();
 			message.setFrom("adventurelandisa@gmail.com");
-			message.setTo("s.andrea1723@gmail.com"); //client.mail
+			message.setTo("alexmirkovic1719@gmail.com"); //client.mail
 			message.setText(formater.getText( discountReservation, client));
 			message.setSubject(formater.getSubject(discountReservation));
 
 			mailSender.send(message);
 		}
+
+	@Async
+	public void sendNotificationAboutDiscountReservation1(Client client, DiscountReservation discountReservation){
+		NotificationAboutDiscountReservationIsCreatedFotmatter formater = new NotificationAboutDiscountReservationIsCreatedFotmatter();
+		SimpleMailMessage message = new SimpleMailMessage();
+		message.setFrom("adventurelandisa@gmail.com");
+		message.setTo("alexmirkovic1719@gmail.com"); //client.mail
+		message.setText(formater.getText( discountReservation, client));
+		message.setSubject(formater.getSubject(discountReservation));
+		mailSender.send(message);
+	}
 
 	    @Async
 	    public void sendClientRegistrationMail(String recipient, String activationCode, AccountActivationFormatter mailFormatter) throws MessagingException {
