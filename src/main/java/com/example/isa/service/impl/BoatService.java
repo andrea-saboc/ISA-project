@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.example.isa.dto.ChangeBoatDto;
 import com.example.isa.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -70,6 +71,30 @@ public class BoatService {
 			additionalServiceWithBoat.add(as1);
 		}
 		return additionalServiceWithBoat;
+	}
+
+	public Boat changeBoat(ChangeBoatDto dto) {
+		Boat boatToChange = boatsRepository.findById(dto.id).get();
+		if(boatToChange == null) return null;
+		boatToChange.setName(dto.name);
+		boatToChange.setPricePerDay(dto.pricePerDay);
+		boatToChange.setPriceForSevenDays(dto.priceForSevenDays);
+		boatToChange.setPricePerHour(dto.pricePerHour);
+		boatToChange.setLength(dto.length);
+		boatToChange.setEnginePower(dto.enginePower);
+		boatToChange.setRadar(dto.radar);
+		boatToChange.setCancellationPolicy(dto.cancellationPolicy);
+		boatToChange.setPromoDescription(dto.promoDescription);
+		boatToChange.setType(dto.type);
+		boatToChange.setVHFradio(dto.VHFradio);
+		boatToChange.setGPS(dto.GPS);
+		boatToChange.setMaxSpeed(dto.maxSpeed);
+		boatToChange.setNumberOfEngines(dto.numberOfEngines);
+		boatToChange.setFishfinder(dto.fishfinder);
+		boatToChange.setCapacity(dto.capacity);
+		boatToChange = boatsRepository.save(boatToChange);
+		return boatToChange;
+
 	}
 
 	private Boat createBoat(BoatRegistrationDto dto) {
@@ -221,6 +246,7 @@ public class BoatService {
 		boat.setDeleted(true);
 		boatsRepository.save(boat);
 	}
+
 
 
 }
