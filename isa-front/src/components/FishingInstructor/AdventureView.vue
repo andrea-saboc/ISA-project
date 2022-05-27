@@ -506,7 +506,8 @@ export default {
   {
     setImg: function(image)
     {
-      console.log('Image path je ',image.path)
+      console.log('Image path je ',image.path.toString().replaceAll('\\','/'))
+      console.log('http://localhost:8080/entityImage/'+image.path)
       axios.get('http://localhost:8080/entityImage/'+image.path, {
       headers: {
         'Authorization' : 'Bearer ' + this.token,

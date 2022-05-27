@@ -32,6 +32,9 @@ public class MansionService {
 
 	@Autowired
 	MansionAvailablePeriodRepository mansionAvailablePeriodRepository;
+
+	@Autowired
+	EntityImageService entityImageService;
 	
 	public List<Mansion> getAll() {
 		
@@ -86,8 +89,8 @@ public class MansionService {
 		newMansion.setPromoDescription(dto.promoDescription);
 		newMansion.setAddress(mansionAddress);
 		newMansion.setCancellationPolicy(dto.cancellationPolicy);
-		//newMansion.setExteriorImages(convertString2Image(dto.ExteriorImages, newMansion, false));
-		//newMansion.setInteriorImages(convertString2Image(dto.InteriorImages, newMansion, true));
+		newMansion.setExteriorImages(new HashSet<>(entityImageService.createAndSaveImages("MansionOwners",mansionOwner.getEmail(),dto.getName(),dto.getExteriorImages())));
+		newMansion.setInteriorImages(new HashSet<>(entityImageService.createAndSaveImages("MansionOwners",mansionOwner.getEmail(),dto.getName(),dto.getInteriorImages())));
 		newMansion.setRules(convertString2Rule(dto.rules, newMansion));
 		newMansion.setRooms(converMap2Room(dto.rooms, newMansion));
 		newMansion.setPricePerDay(dto.pricePerDay);
