@@ -72,7 +72,7 @@ public class AdventureDiscountReservationService implements DiscountReservationS
     private void notifyAllSubscribers(AdventureDiscountReservation adventureDiscountReservation) {
         List<User> subscribers = subscriptionService.getAllSubscribersByAdventure(adventureDiscountReservation.getAdventure());
         for (User c : subscribers) {
-            mailService.sendNotificationAboutDiscountReservation((Client) c, adventureDiscountReservation);
+            mailService.sendNotificationAboutDiscountReservation1((Client) c, adventureDiscountReservation);
         }
     }
     private Date getEndDate(NewDiscountReservationDto dto) {

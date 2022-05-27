@@ -60,7 +60,7 @@ public class FishingAvailablePeriod {
         this.endDate = endDate;
     }
 
-    public FishingInstructor getBoat() {
+    public FishingInstructor getFishingInstructor() {
         return fishingInstructor;
     }
 

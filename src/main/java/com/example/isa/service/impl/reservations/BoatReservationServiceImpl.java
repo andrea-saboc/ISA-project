@@ -93,7 +93,7 @@ public class BoatReservationServiceImpl implements ReservationService{
 			availablePeriodsRepo.delete(period);
 	        newBoatReservation.setAdditionalServices(addAdditionalServices(res.getAdditionalServices()));
 	        newBoatReservation.setTotalPrice( dto.getPrice(boat) + accountAdditionalServices(newBoatReservation.getAdditionalServices(),res));
-			mailService.notifyClientAboutCreatedReservation(newBoatReservation);
+			//mailService.notifyClientAboutCreatedReservation(newBoatReservation);
 			return boatReservationRepo.save(newBoatReservation);
 		}
     }
@@ -140,10 +140,10 @@ public class BoatReservationServiceImpl implements ReservationService{
 	}
 
 	@Override
-	public Set<AdditionalService> addAdditionalServices(List<Long> additionalServices) {
+	public Set<AdditionalService> addAdditionalServices(List<AdditionalService> additionalServices) {
 		Set<AdditionalService> services = new HashSet<AdditionalService>();		
-        for(long id : additionalServices) {       	
-        	AdditionalService service = additinalServicesRepo.findById(id).orElse(null);			
+        for(AdditionalService id1 : additionalServices) {
+        	AdditionalService service = additinalServicesRepo.findById(id1.getId()).orElse(null);
 			services.add(service);
         }
         return services;

@@ -10,5 +10,6 @@ import java.util.List;
 public interface  AdventureReservationRepository extends JpaRepository<AdventureReservation, Long> {
     List<AdventureReservation> findAllByType(String type);
     List<AdventureReservation> findAllByUser(User user);
+    AdventureReservation findById(long id);
 
 }
