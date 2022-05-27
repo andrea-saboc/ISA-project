@@ -444,7 +444,7 @@ INSERT INTO public.mansion_discount_reservation(
 
 	INSERT INTO public.discount_reservation(
     	id, end_date, number_of_guests, percentage_of_discount, price_with_discount, price_without_discount, start_date, type, valid_until, optlock, system_user, status)
-    	VALUES (10, '2022-06-11 00:00:00', 6, 25, 300, 375, '2022-06-07 00:00:00', 'ADVENTURE DISCOUNT', '2022-02-28 00:00:00', 0, 507, 'ACTIVE');
+    	VALUES (10, '2022-06-11 00:00:00', 6, 25, 300, 375, '2022-06-07 00:00:00', 'ADVENTURE DISCOUNT', '2022-02-28 00:00:00', 0, 400, 'ACTIVE');
     INSERT INTO public.adventure_discount_reservation(
     	id, adventure_id, feedback_id, owner_feedback_id)
     	VALUES (10, 1, null, null);
@@ -452,7 +452,7 @@ INSERT INTO public.mansion_discount_reservation(
 
     	INSERT INTO public.discount_reservation(
             	id, end_date, number_of_guests, percentage_of_discount, price_with_discount, price_without_discount, start_date, type, valid_until, optlock, system_user, status)
-            	VALUES (11, '2022-05-30 00:00:00', 6, 25, 300, 375, '2022-05-26 00:00:00', 'ADVENTURE DISCOUNT', '2022-02-28 00:00:00', 0, 507, 'RESERVED');
+            	VALUES (11, '2022-05-30 00:00:00', 6, 25, 300, 375, '2022-05-26 00:00:00', 'ADVENTURE DISCOUNT', '2022-02-28 00:00:00', 0, 401, 'RESERVED');
             INSERT INTO public.adventure_discount_reservation(
             	id, adventure_id, feedback_id, owner_feedback_id)
             	VALUES (11, 1, null, null);

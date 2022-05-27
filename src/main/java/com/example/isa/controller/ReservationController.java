@@ -55,6 +55,9 @@ public class ReservationController {
 	BoatDiscountReservationService boatDiscountReservationService;
     @Autowired
     MansionDiscountReservationService mansionDiscountReservationService;
+
+    @Autowired
+    AdventureDiscountReservationService adventureDiscountReservationService;
 	
 	@Autowired
 	CollectingActiveReservationsService reservationService;
@@ -265,7 +268,7 @@ public class ReservationController {
     public ResponseEntity<String> makeAdventureReservationClient(@RequestBody CustomReservationForClientDto dto){
         System.out.println(dto.getAdditionalServiceSet());
         System.out.println(dto.toString());
-        
+
         try{
             AdventureReservation adventureReservation=adventureReservationService.createReservationForClient(dto);
 
@@ -304,6 +307,24 @@ public class ReservationController {
             allMansionOwnerReservationsDTO.mansionDiscountReservations = mansionDiscountReservations;
             ObjectMapper mapper = new ObjectMapper();
             String jsonString = mapper.writeValueAsString(allMansionOwnerReservationsDTO);
+            System.out.println(jsonString);
+            return new ResponseEntity<>(jsonString, HttpStatus.OK);
+
+        } catch (Exception e) {
+            return new ResponseEntity<>("Bad request", HttpStatus.BAD_REQUEST);
+        }
+    }
+    @PreAuthorize("hasRole('ROLE_FISHING_INSTRUCTOR')")
+    @RequestMapping(method = RequestMethod.GET, value = "/getFishingInstructorReservations")
+    public ResponseEntity<String> getFishingInstructorReservations() {
+        try {
+            List<AdventureReservation> adventureReservations = collectingAdventureReservationsService.getOwnerReservation();
+            List<AdventureDiscountReservation> adventureDiscountReservations = adventureDiscountReservationService.getLoggedUserReservation();
+            AllFishingInstructorReservationsDTO allFishingInstructorReservationsDTO = new AllFishingInstructorReservationsDTO();
+            allFishingInstructorReservationsDTO.adventureDiscountReservations = adventureDiscountReservations;
+            allFishingInstructorReservationsDTO.adventureReservations = adventureReservations;
+            ObjectMapper mapper = new ObjectMapper();
+            String jsonString = mapper.writeValueAsString(allFishingInstructorReservationsDTO);
             System.out.println(jsonString);
             return new ResponseEntity<>(jsonString, HttpStatus.OK);
 

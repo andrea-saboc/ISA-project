@@ -1,8 +1,11 @@
 package com.example.isa.repository;
 
+import com.example.isa.model.Adventure;
+import com.example.isa.model.Mansion;
 import com.example.isa.model.User;
 import com.example.isa.model.reservations.AdventureReservation;
 import com.example.isa.model.reservations.BoatReservation;
+import com.example.isa.model.reservations.MansionReservation;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -11,5 +14,6 @@ public interface  AdventureReservationRepository extends JpaRepository<Adventure
     List<AdventureReservation> findAllByType(String type);
     List<AdventureReservation> findAllByUser(User user);
     AdventureReservation findById(long id);
+    List<AdventureReservation> findAllByAdventure(Adventure a);
 
 }

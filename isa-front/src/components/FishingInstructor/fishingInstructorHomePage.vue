@@ -22,6 +22,13 @@
           </a>
         </div>
       </li>
+      <li class="header">Reservations</li>
+      <li>
+        <a href="#" v-on:click = "DisplayReservations()">
+          <i class="fa fa-calendar-check-o" aria-hidden="true"></i>  Reservations
+        </a>
+      </li>
+      
       <li class="header">Profile</li>
       <li>
         <a href="#" v-on:click="DisplayProfile()">
@@ -37,8 +44,14 @@
      <div v-if="display == 'adventure'">
       <AdventureView></AdventureView>
     </div>
+    <div v-if="display=='reservations'">
+      <AdventureReservation></AdventureReservation>
+    </div>
     <div v-if="display == 'profile'">
       <Profile></Profile>
+    </div>
+    <div v-if="display=='change'">
+      <ChangeAdventureInformation></ChangeAdventureInformation>
     </div>
   </div>
 </div>
@@ -48,12 +61,13 @@
 import Profile from "../Profile";
 import AdventureRegistration from "../FishingInstructor/AdventureRegistration";
 import AdventureView from "../FishingInstructor/AdventureView";
+import AdventureReservation from "../FishingInstructor/AdventureReservation";
 import axios from "axios";
 import {devServer} from "../../../vue.config";
 
 export default{
   name: "fishingInstructorHomePage",
-  components:{AdventureRegistration,AdventureView,Profile},
+  components:{AdventureRegistration,AdventureView,Profile,AdventureReservation},
     data: function(){
         return{
           display: 'dashboard',
@@ -114,9 +128,9 @@ export default{
       }
 
       window.location.href =path+ "/adventure/"+id.toString();
-      
-     
-
+    },
+    DisplayReservations(){
+      this.display = 'reservations';
     }
   }
 }

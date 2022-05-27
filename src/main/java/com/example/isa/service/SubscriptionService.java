@@ -72,6 +72,12 @@ public class SubscriptionService {
 		return boatSubscriptions;
 	}
 
+	public List<AdventureSubscription> getClientAdventureSubscriptionByFishingInstructor(Long id) {
+		Client client = clientRepository.findById(id).get();
+		List<AdventureSubscription> adventureSubscription = adventureSubscriptionRepository.findAllBySubscriber(client);
+		return adventureSubscription;
+	}
+
 	public List<User> getAllSubscribersByMansion(Mansion mansion){
 		List<MansionSubscription> mansionSubscriptions = new ArrayList<>(mansionSubRepo.findAllByMansion(mansion));
 		List<User> clientsSubscribed = new ArrayList<>();

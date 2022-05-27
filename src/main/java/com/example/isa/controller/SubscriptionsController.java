@@ -61,6 +61,14 @@ public class SubscriptionsController {
 
 	}
 
+	@PreAuthorize("hasRole('ROLE_FISHING_INSTRUCTOR')")
+	@RequestMapping(method = RequestMethod.GET, value = "/subscriptions/adventureByFishingInstructor", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<AdventureSubscription>> getAdventureByFishingInstructor(@RequestParam Long id) throws JsonProcessingException{
+		System.out.println("U kontroleru trazimo pretplatnike na brodove");
+		return new ResponseEntity<>(service.getClientAdventureSubscriptionByFishingInstructor(id), HttpStatus.OK);
+
+	}
+
 	@PreAuthorize("hasRole('ROLE_BOAT_OWNER')")
 	@RequestMapping(method = RequestMethod.GET, value = "/getBoatsSubscribers", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<User>> getBoatsSubscribers(@RequestParam Long boatId) throws JsonProcessingException{

@@ -13,5 +13,6 @@ public interface AdventureRepository extends JpaRepository<Adventure, Long> {
     List<Adventure> findAllByFishingInstructorAndDeleted(FishingInstructor fishingInstructor, boolean delete);
     Adventure findByIdAndDeletedFalse(long id);
     List<Adventure> findAdventureByFishingInstructor(FishingInstructor fishingInstructor);
+    List<Adventure> findAllByFishingInstructorAndDeletedFalse(FishingInstructor fishingInstructor);
 }
 

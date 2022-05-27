@@ -25,6 +25,10 @@ public class ReservationReportService {
 	private MansionReservationRepository mansionRegularReservationRepository;
 	@Autowired
 	private  MansionDiscountReservationRepository mansionDiscountReservationRepository;
+	@Autowired
+	private AdventureDiscountReservationRepository adventureDiscountReservationRepository;
+	@Autowired
+	private AdventureReservationRepository adventureReservationRepository;
 	
 	@Autowired
 	private PenaltyManagementService penaltyManagementService;
@@ -42,6 +46,12 @@ public class ReservationReportService {
 				reservationReport=createReportForRegularMansionReservation(dto);
 				break;
 			case DISCOUNT_MANSION:
+				reservationReport=createReportForDiscountMansionReservation(dto);
+				break;
+			case REGULAR_ADVENTURE:
+				reservationReport=createReportForRegularAdventureReservation(dto);
+				break;
+			case DISCOUNT_ADVENTURE:
 				reservationReport=createReportForDiscountMansionReservation(dto);
 				break;
 
@@ -87,6 +97,38 @@ public class ReservationReportService {
 		}
 		mansionReservation.setStatus(ReservationStatus.REPORT_CREATED);
 		mansionRegularReservationRepository.save(mansionReservation);
+		return reservationReport;
+	}
+
+	private ReservationReport createReportForRegularAdventureReservation(ReportDTO dto) {
+		AdventureReservation adventureReservation = adventureReservationRepository.findById(dto.id).get();
+		ReservationReport reservationReport = new ReservationReport();
+		reservationReport.setClientShowedUp(dto.clientShowedUp);
+		reservationReport.setApproved(false);
+		reservationReport.setReservation(adventureReservation);
+		reservationReport.setReportText(dto.reportText);
+		reservationReport.setRequestedToSanction(dto.requestedToSanction);
+		if(!dto.clientShowedUp) {
+			penaltyManagementService.addPenaltyToClient(adventureReservation.getUser());
+		}
+		adventureReservation.setStatus(ReservationStatus.REPORT_CREATED);
+		adventureReservationRepository.save(adventureReservation);
+		return reservationReport;
+	}
+
+	private ReservationReport createReportForDiscountAdventureReservation(ReportDTO dto) {
+		AdventureDiscountReservation adventureDiscountReservation = adventureDiscountReservationRepository.findById(dto.id).get();
+		ReservationReport reservationReport = new ReservationReport();
+		reservationReport.setClientShowedUp(dto.clientShowedUp);
+		reservationReport.setApproved(false);
+		reservationReport.setDiscountReservation(adventureDiscountReservation);
+		reservationReport.setReportText(dto.reportText);
+		reservationReport.setRequestedToSanction(dto.requestedToSanction);
+		if(!dto.clientShowedUp) {
+			penaltyManagementService.addPenaltyToClient(adventureDiscountReservation.getUser());
+		}
+		adventureDiscountReservation.setStatus(ReservationStatus.REPORT_CREATED);
+		adventureDiscountReservationRepository.save(adventureDiscountReservation);
 		return reservationReport;
 	}
 
