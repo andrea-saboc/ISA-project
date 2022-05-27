@@ -111,8 +111,8 @@
       </div>
 
       <div class="double-field">
-        <div>
-          <div class="mb-3 col-md-5">
+        <div class="mb-3 col-md-5">
+          <div >
             <label for="interiorImages" class="form-label">Interior images</label>
             <input class="form-control" type="file" id="interiorImages" multiple @change="onInteriorImagesSelected">
           </div>
@@ -124,8 +124,8 @@
             </div>
           </div>
         </div>
-        <div>
-          <div class="mb-3 col-md-5">
+        <div class="mb-3 col-md-5">
+          <div >
             <label for="exteriorImages" class="form-label">Exterior images</label>
             <input class="form-control" type="file" id="exteriorImages" multiple @change="onExteriorImagesSelected">
           </div>

@@ -234,18 +234,18 @@
 
           </div>
         </div>
-        <div v-if="(mansionToShow.InteriorImages!=null && mansionToShow.InteriorImages.length!=0) || (mansionToShow.ExteriorImages!=null && mansionToShow.ExteriorImages.length>0)">
+        <div v-if="(mansionToShow.interiorImages!=null && mansionToShow.interiorImages.length!=0) || (mansionToShow.exteriorImages!=null && mansionToShow.exteriorImages.length>0)">
           <hr>
           <p style="font-weight: bolder; font-size: 26px">
             Images
           </p>
           <div class="gallery">
-            <figure v-for="inImg in mansionToShow.InteriorImages" :key="inImg.id" class="gallery__item galleritem-1">
-              <img v-bind:src="getImg(inImg)" class="gallery-img" alt="Image 1">
-            </figure>
-            <figure v-for="inImg in mansionToShow.ExteriorImages" :key="inImg.id" class="gallery__item galleritem-1">
-              <img v-bind:src="getImg(inImg)" class="gallery-img" alt="Image 1">
-            </figure>
+            <div v-for="(image, index) in allExteriorImages" :key="(image, index)">
+              <img class="ms-3 me-3 mt-3 newImage img-fluid" id="image123"  v-bind:src="image">
+            </div>
+            <div v-for="(image, index) in allInteriorImages" :key="(image, index)">
+              <img class="ms-3 me-3 mt-3 newImage img-fluid" id="image1234"  v-bind:src="image">
+            </div>
           </div>
         </div>
         <hr>
@@ -376,6 +376,9 @@ export default {
   name: "MansionView",
   data: function () {
     return {
+      token: null,
+      allInteriorImages: [],
+      allExteriorImages: [],
       mansionSubscribers: new Array(),
       startDateTimeQuick: '',
       numberOfGuestsQuick: '',
@@ -428,6 +431,8 @@ export default {
     }
   },
   mounted() {
+    this.token = localStorage.getItem('token').substring(1, localStorage.getItem('token').length-1);
+
     this.user = this.$store.state.userType
 
     console.log("User", this.$store.state.userType)
@@ -488,9 +493,58 @@ export default {
                 alert("Error occured while trying to find mansion subscribers!")
               })
           this.calculateAvailableDaysForCalendar()
+          console.log("Days calculated")
+          this.setImages();
+          console.log("Images set")
         })
   },
   methods:{
+    setImages() {
+      console.log("In set images function")
+      console.log("Boat to show", this.mansionToShow)
+      console.log(this.mansionToShow.exteriorImages)
+      for (var eimg of this.mansionToShow.exteriorImages) {
+        console.log('Image path je ', eimg.toString().replaceAll('\\','/'))
+        console.log(devServer.proxy + "/entityImage/"+"/" + eimg.path)
+        axios.get('http://localhost:8080/entityImage/'+eimg.path, {
+          headers: {
+            'Authorization': 'Bearer ' + this.token,
+          },
+          responseType: 'arraybuffer',
+        })
+            .then(response => {
+              console.log('response sa backa', response)
+
+              let base64ImageString = Buffer.from(response.data, 'binary').toString('base64')
+              let srcValue = "data:image/png;base64," + base64ImageString
+              this.allExteriorImages.push(srcValue)
+            })
+            .catch(() => {
+              console.log("There is a trouble")
+            })
+      }
+      for(var iimg of this.mansionToShow.interiorImages){
+        console.log('Image path je ', iimg.toString().replaceAll('\\','/'))
+        console.log(devServer.proxy + "/entityImage/"+"/" + iimg.path)
+        axios.get('http://localhost:8080/entityImage/'+iimg.path, {
+          headers: {
+            'Authorization': 'Bearer ' + this.token,
+          },
+          responseType: 'arraybuffer',
+        })
+            .then(response => {
+              console.log('response sa backa', response)
+
+              let base64ImageString = Buffer.from(response.data, 'binary').toString('base64')
+              let srcValue = "data:image/png;base64," + base64ImageString
+              this.allInteriorImages.push(srcValue)
+            })
+            .catch(() => {
+              console.log("There is a trouble")
+            })
+      }
+      console.log("all exterior images", this.allExteriorImages)
+    },
     ShowReservationOffers(){
       window.location.href = "/mansionReservationOffers/" + this.mansionToShow.id.toString();
     },
@@ -509,7 +563,6 @@ export default {
           });
     },
     SubscribeClient(){
-      //alert(this.boatToShow.id)
       axios
           .post(devServer.proxy + '/subscriptions/newMansionSubscription', this.mansionToShow, {
             headers: {
