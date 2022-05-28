@@ -1,6 +1,8 @@
 package com.example.isa.dto;
 
+import com.example.isa.model.Rule;
 import com.example.isa.model.reservations.AdditionalService;
+import org.apache.tomcat.util.digester.Rules;
 
 import java.util.Set;
 
@@ -28,9 +30,13 @@ public class ChangeBoatDto {
     public String promoDescription;
     public Set<String> InteriorImages;
     public Set<String> ExteriorImages;
+    public Set<Integer> InteriorImagesToDelete;
+    public Set<Integer> ExteriorImagesToDelete;
     public int capacity;
-    public Set<String> rules;
+    public Set<Rule> rules;
+    public Set<Integer> rulesToDelete;
     public Set<AdditionalService> additionalServices;
+    public Set<Long> deleteAdditionalServices;
 
     @Override
     public String toString() {
@@ -62,6 +68,14 @@ public class ChangeBoatDto {
                 ", rules=" + rules +
                 ", additionalServices=" + additionalServices +
                 '}';
+    }
+
+    public Set<Long> getDeleteAdditionalServices() {
+        return deleteAdditionalServices;
+    }
+
+    public void setDeleteAdditionalServices(Set<Long> deleteAdditionalServices) {
+        this.deleteAdditionalServices = deleteAdditionalServices;
     }
 
     public Long getId() {
@@ -256,11 +270,11 @@ public class ChangeBoatDto {
         this.capacity = capacity;
     }
 
-    public Set<String> getRules() {
+    public Set<Rule> getRules() {
         return rules;
     }
 
-    public void setRules(Set<String> rules) {
+    public void setRules(Set<Rule> rules) {
         this.rules = rules;
     }
 

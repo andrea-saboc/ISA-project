@@ -6,6 +6,7 @@ import java.util.List;
 import javax.management.relation.Role;
 
 import com.example.isa.dto.*;
+import com.example.isa.service.impl.AdditionalServiceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -35,6 +36,8 @@ public class BoatController {
 	private BoatService service;
 	@Autowired
 	private BoatFilteringServiceImpl filteringService;
+	@Autowired
+	private AdditionalServiceService additionalServiceService;
 
 	public BoatController(BoatService bs){
 		this.service = bs;
@@ -99,6 +102,7 @@ public class BoatController {
 		String responseMessege;
 		System.out.println("Trying to change boat");
 		if (changedBoat != null){
+			additionalServiceService.changeAdditionalServices(dto);
 			responseMessege = "Boat successfully changed!";
 		} else{
 			responseMessege = "Error ocured while trying to change boat!";

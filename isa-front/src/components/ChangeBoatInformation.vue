@@ -124,29 +124,47 @@
 
       <div class="double-field">
         <div class="mb-3 col-md-5">
-          <div >
-            <label for="interiorImages" class="form-label">Interior images</label>
-            <input class="form-control" type="file" id="interiorImages" multiple @change="onInteriorImagesSelected">
-          </div>
-          <br>
           <div>
-            <div v-for="(image, index) in interiorImagesForFront" :key="(image, index)">
-              <button v-on:click="removeImageI(image, index)" class="btn btn-danger rounded-circle removeImageBtn end-0 m-4">X</button>
-              <img class="ms-3 me-3 mt-3 newImage img-fluid" v-bind:src="image.path" >
+            <div >
+              <label for="interiorImages" class="form-label">Interior images</label>
+              <input class="form-control" type="file" id="interiorImages" multiple @change="onInteriorImagesSelected">
+            </div>
+            <br>
+            <div>
+              <table>
+                <tbody>
+                <tr v-for="(image, index) in allInteriorImages" :key="(image, index)">
+                    <td>
+                      <img class="ms-3 me-3 mt-3 newImage img-fluid" v-bind:src="image.path" >
+                    </td>
+                  <td>
+                    <button v-on:click="removeImageI(image, index)" type="button">x</button>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
         <div class="mb-3 col-md-5">
-          <div >
+          <div>
             <label for="exteriorImages" class="form-label">Exterior images</label>
             <input class="form-control" type="file" id="exteriorImages" multiple @change="onExteriorImagesSelected">
           </div>
           <br>
           <div>
-            <div v-for="(image, index) in exteriorImagesForFront" :key="(image, index)">
-              <button v-on:click="removeImageE(image, index)" class="btn btn-danger rounded-circle removeImageBtn end-0 m-4">X</button>
-              <img class="ms-3 me-3 mt-3 newImage img-fluid" v-bind:src="image.path" >
-            </div>
+            <table>
+              <tbody>
+              <tr v-for="(image, index) in allExteriorImages" :key="(image, index)">
+                <td>
+                  <img class="ms-3 me-3 mt-3 newImage img-fluid" v-bind:src="image.path" >
+                </td>
+                <td>
+                  <button v-on:click="removeImageE(image, index)" type="button">x</button>
+                </td>
+              </tr>
+              </tbody>
+            </table>
           </div>
         </div>
 
@@ -168,11 +186,23 @@
           <button type="button" class="btn btn-secondary btn-sm" id="rr" v-on:click="addRule" >Add rule</button>
         </div>
       </div>
-      <div class="my-11">
-        <label v-for="(rule, index) in rules"
-               :key="index">
-          {{index+1}}. {{rule}}
-        </label>
+      <div v-if="rules.length>0">
+        <table class="table table-striped">
+          <thead>
+          <tr>
+            <th></th>
+            <th>Rule</th>
+            <th></th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr v-for="(r, index) in rules" :key="(r, index)">
+            <th>{{ index +1}}</th>
+            <th>{{ r.rule }}</th>
+            <th><button type="button" v-on:click="removeRule(r, index)" >x</button></th>
+          </tr>
+          </tbody>
+        </table>
       </div>
       <hr class="my-4">
       <h5>Additional services</h5>
@@ -192,8 +222,30 @@
         </div>
         <div class="col-3">
           <br>
-          <button type="button" class="btn btn-secondary btn-sm" id="as" v-on:click="addAdditionalService">Add service</button>
+          <button type="button" class="btn btn-secondary btn-sm" id="as" v-on:click="addAdditionalService()">Add service</button>
         </div>
+      </div>
+      <div v-if="additionalServices.length>0">
+        <table class="table table-striped">
+            <thead>
+              <tr>
+                  <th></th>
+                <th>Name</th>
+                <th> Price per day</th>
+                <th>Price per hour</th>
+                <th></th>
+              </tr>
+            </thead>
+          <tbody>
+            <tr v-for="(as, index) in additionalServiceNew" :key="(as, index)">
+              <th>{{ index +1}}</th>
+              <th>{{ as.name }}</th>
+              <th>{{ as.pricePerDay }}</th>
+              <th>{{ as.pricePerHour }}</th>
+              <th><button type="button" v-on:click="removeAdditionalService(as, index)" >x</button></th>
+            </tr>
+          </tbody>
+        </table>
       </div>
       <hr class="my-4">
       <h5>Renting pricelist</h5>
@@ -213,7 +265,7 @@
         </div>
       </div>
       <hr>
-      <button class="w-100 btn btn-primary btn-lg" type="submit" @click="saveChanges">Save changes</button>
+      <button class="w-100 btn btn-primary btn-lg" type="button" @click="saveChanges">Save changes</button>
     </form>
   </div>
 
@@ -250,11 +302,12 @@ export default {
       imgInter : new Array(),
       imgExter : new Array(),
       rules : new Array(),
-      interiorImagesForFront: [],
-      exteriorImagesForFront: [],
+      rulesToDelete : new Array(),
       selectedExteriorImages : new Array(),
       selectedInteriorImages : new Array(),
       additionalServices : new Array(),
+      additionalServiceNew : new Array(),
+      additionalServicesDeleted : new Array(),
       additionalServiceName : '',
       additionalServicePricePerHour : '',
       additionalServicePricePerDay : '',
@@ -265,7 +318,12 @@ export default {
       boats : new Array(),
       possibleToChange: true,
       user: null,
-
+      allExteriorImages: new Array(),
+      allInteriorImages: new Array(),
+      interiorImagesOldNum: 0,
+      exteriorImagesOldNum: 0,
+      deleteOldExterior: new Array(),
+      deleteOldInterior: new Array(),
       boatName: ''
     }
   },
@@ -275,7 +333,7 @@ export default {
    // if (this.user!=null && this.user =='BoatOwner'){
       axios.get(devServer.proxy+"/ownersBoats", {
         headers: {
-          'Authorization' : this.$store.getters.tokenString
+          'Authorization' : 'Bearer ' + this.token
         }
       })
           .then(response1 => {
@@ -283,7 +341,7 @@ export default {
             this.boats = response1.data;
             if(this.boats.length>0){
               this.selectedBoat = this.boats[0];
-              this.setFields()
+            this.setFields()
             }
 
           })
@@ -314,18 +372,22 @@ export default {
                 "longitude": this.longitude,
                 "latitude": this.latitude,
                 "promoDescription": this.promoDescription,
-                // "InteriorImages": new Array(),
-               // "ExteriorImages": this.imgExter,
+                "InteriorImages": this.imgInter,
+                "ExteriorImages": this.imgExter,
+                "InteriorImagesToDelete": this.deleteOldInterior,
+                "ExteriorImagesToDelete": this.deleteOldExterior,
                 "capacity": this.capacity,
-                //"rules": this.rules,
+                "rules": this.rules,
+                "rulesToDelete" : this.rulesToDelete,
                 "pricePerHour": this.pricePerHour,
                 "pricePerDay": this.pricePerDay,
                 "priceForSevenDays": this.priceForSevenDays,
-                //"additionalServices": this.additionalServices
+                "additionalServices": this.additionalServiceNew,
+                "deleteAdditionalServices": this.additionalServicesDeleted
 
               }, {
                 headers: {
-                  'Authorization' : this.$store.getters.tokenString
+                  'Authorization' : 'Bearer ' + this.token,
                 }
               })
           .then(response => {
@@ -334,6 +396,94 @@ export default {
           .catch(()=>{
             alert("The boat is not possible to change")
           });
+    },
+    setImg(img){
+      axios.get('http://localhost:8080/entityImage/'+img.path, {
+        headers: {
+          'Authorization': 'Bearer ' + this.token,
+        },
+        responseType: 'arraybuffer',
+      })
+          .then(response => {
+            console.log('response sa backa', response)
+            console.log("Id of the exterior image is ", img.id)
+            let base64ImageString = Buffer.from(response.data, 'binary').toString('base64')
+            let srcValue = "data:image/png;base64," + base64ImageString
+            this.allExteriorImages.push({
+              id: img.id,
+              path: srcValue
+            })
+
+          })
+          .catch(() => {
+            console.log("There is a trouble")
+          })
+    },
+    setImgI(img){
+      axios.get('http://localhost:8080/entityImage/'+img.path, {
+        headers: {
+          'Authorization': 'Bearer ' + this.token,
+        },
+        responseType: 'arraybuffer',
+      })
+          .then(response => {
+            console.log('response sa backa', response)
+            console.log("Id of the exterior image is ", img.id)
+            let base64ImageString = Buffer.from(response.data, 'binary').toString('base64')
+            let srcValue = "data:image/png;base64," + base64ImageString
+            this.allInteriorImages.push({
+              id: img.id,
+              path: srcValue
+            })
+
+          })
+          .catch(() => {
+            console.log("There is a trouble")
+          })
+    },
+    setImages() {
+      for (var eimg of this.selectedBoat.exteriorImages) {
+        this.setImg(eimg);
+
+      }
+      console.log(this.selectedBoat.interiorImages.length)
+      for(var iimg of this.selectedBoat.interiorImages){
+        console.log('Image path je ', iimg.toString().replaceAll('\\','/'))
+        console.log(devServer.proxy + "/entityImage/"+"/" + iimg.path)
+        this.setImgI(iimg);
+
+      }
+      console.log("all exterior images", this.allExteriorImages);
+      console.log("all interior images", this.allInteriorImages);
+
+    },
+    initializeAdditionalSrvices() {
+      axios.get(devServer.proxy + "/additionalServices", {
+        params:
+            {
+              id: this.selectedBoat.id
+            },
+        headers: {
+          'Authorization': 'Bearer ' + this.token,
+        }
+      })
+          .then(response1 => {
+            console.log("Additional services", response1.data)
+            this.additionalServices = response1.data;
+            console.log("Setting additional services", this.additionalServices.length)
+            for(var as of this.additionalServices) {
+              this.additionalServiceNew.push({
+                id : as.id,
+                name : as.name,
+                pricePerDay : as.pricePerDay,
+                pricePerHour : as.pricePerHour
+              })
+            }
+
+          })
+    },
+    setAdditionalServices() {
+      this.initializeAdditionalSrvices();
     },
     setFields(){
       this.name = this.selectedBoat.name;
@@ -344,7 +494,8 @@ export default {
       this.capacity = this.selectedBoat.capacity;
       this.enginePower = this.selectedBoat.enginePower;
       this.fishfinder = this.selectedBoat.fishfinder;
-      this.gps = this.selectedBoat.gps;
+      this.GPS = this.selectedBoat.gps;
+      this.VHF = this.selectedBoat.vhfradio;
       this.engineNum = this.selectedBoat.numberOfEngines;
       this.priceForSevenDays = this.selectedBoat.priceForSevenDays;
       this.pricePerDay = this.selectedBoat.pricePerDay;
@@ -356,6 +507,24 @@ export default {
       this.country = this.selectedBoat.address.country;
       this.longitude = this.selectedBoat.address.longitude;
       this.latitude = this.selectedBoat.address.latitude;
+      this.additionalServices = new Array();
+      this.additionalServiceNew = new Array();
+      this.additionalServicesDeleted = new Array();
+      this.rules =this.selectedBoat.rules;
+      this.rulesToDelete = new Array();
+      this.allExteriorImages = new Array();
+      this.allInteriorImages= new Array();
+      this.interiorImagesOldNum= 0;
+      this.exteriorImagesOldNum= 0;
+      this.deleteOldExterior=  new Array();
+      this.deleteOldInterior= new Array();
+      this.interiorImagesOldNum = this.selectedBoat.interiorImages.length;
+      this.exteriorImagesOldNum = this.selectedBoat.exteriorImages.length;
+      this.selectedExteriorImages = new Array();
+      this.selectedInteriorImages = new Array();
+      this.setAdditionalServices();
+      this.setImages();
+
     },
     changeBoat(){
       console.log("selectovani brod", this.selectedBoat)
@@ -390,7 +559,133 @@ export default {
       .catch(()=>{
         alert("The boat is not possible to be deleted")
       })
-    }
+    },
+    removeAdditionalService(as, index){
+      console.log("To delete", as.id)
+      this.additionalServiceNew.splice(index, 1);
+      if(as.id!= -1) {
+        alert("in if")
+        this.additionalServicesDeleted.push(as.id);
+        console.log("To delete ", this.additionalServicesDeleted)
+      }
+      alert("refresh??")
+    },
+    addAdditionalService(){
+      var name = document.getElementById('new-additional-service-name').value;
+      var hour = document.getElementById('new-additional-service-hour').value;
+      var day = document.getElementById('new-additional-service-day').value;
+      this.additionalServiceNew.push({id: -1, name: name, pricePerHour: hour, pricePerDay: day });
+      document.getElementById('new-additional-service-name').value='';
+      document.getElementById('new-additional-service-hour').value='';
+      document.getElementById('new-additional-service-day').value='';
+
+    },
+    removeRule(r, index){
+      this.rules.splice(index,1);
+      if(r.ruleId!=-1)
+      this.rulesToDelete.push(r.ruleId);
+      console.log("after deleting: ", this.rules);
+    },
+    addRule(){
+      var ruleText = document.getElementById('new-rule').value;
+      this.rules.push({
+        ruleId : -1,
+        rule : ruleText
+      })
+      document.getElementById('new-rule').value='';
+    },
+    onExteriorImagesSelected(event){
+      for(var img of event.target.files){
+        this.allExteriorImages.push(
+            {
+              path: URL.createObjectURL(img)
+            }
+        );
+      }
+      this.selectedExteriorImages = event.target.files
+      console.log("selected exterior image length is", this.selectedExteriorImages)
+      for (var imgg in this.selectedExteriorImages){
+        console.log(isNaN(imgg))
+        if (isNaN(imgg)) {
+          return;
+        }
+        console.log("before pushig file index:", imgg)
+        this.onUpload(this.selectedExteriorImages[imgg])
+      }
+    },
+    onInteriorImagesSelected(event){
+      this.selectedInteriorImages = event.target.files
+      for (var img of event.target.files) {
+        console.log("tu sam", img)
+        this.allInteriorImages.push(
+            {
+              path: URL.createObjectURL(img)
+            }
+        );
+      }
+      console.log(this.selectedInteriorImages)
+      //const reader = new FileReader()
+      console.log("selected exterior image length is", this.selectedInteriorImages)
+      for (var imgg in this.selectedInteriorImages){
+        console.log(isNaN(imgg))
+        if (isNaN(imgg)) {
+          return;
+        }
+        console.log("before pushig file index:", imgg)
+        this.onUploadI(this.selectedInteriorImages[imgg])
+      }
+
+    },
+    onUploadI: function(file){ //images for backend create base64 Image
+      console.log(this.imgInter)
+      console.log("In onUpload, file:", file)
+      console.log("Type of the file is", file.type)
+      const reader= new FileReader();
+      reader.onload = (e) =>{
+        console.log("e:",e.target.result)
+        this.imgInter.push(e.target.result)
+      }
+      reader.readAsDataURL(file);
+    },
+    onUpload: function(file){
+      console.log(this.imgExter)
+      console.log("In onUpload, file:", file)
+      console.log("Type of the file is", file.type)
+      const reader= new FileReader();
+      reader.onload = (e) =>{
+        console.log("e:",e.target.result)
+        this.imgExter.push(e.target.result)
+      }
+      reader.readAsDataURL(file);
+    },
+    removeImageI: function(image, index){
+      this.allInteriorImages.splice(index, 1)
+          if (index<this.interiorImagesOldNum){
+            this.interiorImagesOldNum--;
+            console.log("image",image)
+            this.alert("image id:",image.id)
+            this.deleteOldInterior.push(image.id); //kako da dodjem do id slike?
+          } else{
+            let indexToDelete = index-this.interiorImagesOldNum;
+            this.imgInter.splice(indexToDelete, 1);
+          }
+    },
+    removeImageE: function(image, index){
+      this.allExteriorImages.splice(index, 1)
+      console.log("Exterior image index is ", index, ", and old images num", this.exteriorImagesOldNum, "and id: ", image.id)
+          if (index<this.exteriorImagesOldNum){
+            console.log("here 1")
+            this.exteriorImagesOldNum--;
+            console.log("here 2")
+            console.log("image",image)
+            this.deleteOldExterior.push(image.id);
+            console.log("Deleting old ", this.deleteOldExterior)
+          }else{
+            let indexToDelete = index-this.exteriorImagesOldNum;
+            console.log("Deleting a newly added image at index: ",indexToDelete, "there ara", this.imgExter.length )
+            this.imgExter.splice(indexToDelete,1)
+          }
+    },
   }
 
 }

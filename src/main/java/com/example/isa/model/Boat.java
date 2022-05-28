@@ -1,4 +1,6 @@
 package com.example.isa.model;
+import com.example.isa.model.reservations.AdditionalService;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -52,6 +54,9 @@ public class Boat {
 	@ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER, mappedBy = "boat")
 	public Set<Rule> rules = new HashSet<Rule>();
 
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	private Set<AdditionalService> additionalServices = new HashSet<AdditionalService>();
+
 
 
 	public Boat(String ime_mi_je_brod, String neka_adresa, String promo_opis_moj, float v) {
@@ -69,7 +74,7 @@ public class Boat {
 
 
 	public void addRule(Rule newRule){
-		newRule.addBoat(this);
+	//	newRule.addBoat(this);
 		rules.add(newRule);
 	}
 
@@ -78,6 +83,13 @@ public class Boat {
 		return id;
 	}
 
+	public Set<AdditionalService> getAdditionalServices() {
+		return additionalServices;
+	}
+
+	public void setAdditionalServices(Set<AdditionalService> additionalServices) {
+		this.additionalServices = additionalServices;
+	}
 
 	public String getCancellationPolicy() {
 		return cancellationPolicy;

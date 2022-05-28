@@ -1,7 +1,11 @@
 package com.example.isa.service.impl;
 
 
+import com.example.isa.dto.ChangeBoatDto;
+import com.example.isa.model.Boat;
 import com.example.isa.model.EntityImage;
+import com.example.isa.repository.EntityImageRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StreamUtils;
@@ -22,6 +26,9 @@ import java.util.stream.Stream;
 
 @Service
 public class EntityImageService {
+
+    @Autowired
+    EntityImageRepository entityImageRepository;
 
     public ArrayList<EntityImage> createAndSaveImages(String role, String owner, String name, Set<String> images){
         ArrayList<EntityImage> entityImages = new ArrayList<EntityImage>();
@@ -126,5 +133,23 @@ public class EntityImageService {
         }
 
         return null;
+    }
+
+    public ArrayList<EntityImage> removeAndAddNewExterior(ChangeBoatDto dto, Boat boatToChange) {
+        ArrayList<EntityImage> entityImages = new ArrayList<>(boatToChange.getExteriorImages());
+        entityImages.addAll(createAndSaveImages("BoatOwner", boatToChange.boatOwner.getEmail(), boatToChange.getName(), dto.ExteriorImages));
+        for(Integer id : dto.ExteriorImagesToDelete){
+            entityImages.remove(entityImageRepository.findById(id).get());
+        }
+        return entityImages;
+    }
+
+    public ArrayList<EntityImage> removeAndAddNewInterior(ChangeBoatDto dto, Boat boatToChange) {
+        ArrayList<EntityImage> entityImages = new ArrayList<>(boatToChange.getInteriorImages());
+        entityImages.addAll(createAndSaveImages("BoatOwner", boatToChange.boatOwner.getEmail(), boatToChange.getName(), dto.InteriorImages));
+        for(Integer id : dto.InteriorImagesToDelete){
+            entityImages.remove(entityImageRepository.findById(id).get());
+        }
+        return entityImages;
     }
 }
