@@ -45,10 +45,10 @@
 
    <div class="input-group">
       <div class="input-group-prepend">
-         <span class="input-group-text" id="" v-on:click="ChangeAddress">Address</span>
+         <span class="input-group-text" id="" >Address</span>
       </div>
       <input type="text" class="form-control"  v-model="address">
-      <button class="btn btn-outline-secondary" type="button">Change</button>
+      <button class="btn btn-outline-secondary" type="button" v-on:click="ChangeAddress">Change</button>
    </div>
 
    <div class="input-group">
@@ -222,6 +222,9 @@ export default{
                console.log(response.data)
                alert(response.data)
                this.LoadUser();
+               this.oldPassword ="";
+               this.newPassword="";
+               this.newPasswordRepeated="";
             });        
          }else{
             alert('Repeated password not right')

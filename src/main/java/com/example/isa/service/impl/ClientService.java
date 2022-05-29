@@ -41,16 +41,15 @@ public class ClientService {
 		return userRepository.findAll();
 	}
 
-    public Client updateClientInfo(Client user) {
-    	
-        Client c = clientRepository.findByEmail(user.getEmail());
+    public User updateUser(User user) {
+    	User c = userRepository.findByEmail(user.getEmail());
         c.setName(user.getName());
         c.setSurname(user.getSurname());
         c.setCity(user.getCity());
         c.setCountry(user.getCountry());
         c.setAddress(user.getAddress()); 
         c.setPhoneNumber(user.getPhoneNumber());
-        return clientRepository.save(c);  
+        return userRepository.save(c);
     }
     
     public Client getLoggedClient() {
@@ -59,13 +58,12 @@ public class ClientService {
     }
     
     public void ChangePassword(ChangingPasswordDto passwords)  throws BadCredentialsException{
-    	
-    	Client client = clientRepository.findByEmail(authenticationService.getLoggedUser().getEmail());
+    	User client = userRepository.findByEmail(authenticationService.getLoggedUser().getEmail());
        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(client.getEmail(),
                         passwords.getOldPassword()));
         
 		client.setPassword(passwordEncoder.encode(passwords.getNewPassword()));
-		clientRepository.save(client);
+		userRepository.save(client);
     }
     
 	public User createDeletionRequest(String reason) {

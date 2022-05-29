@@ -20,7 +20,7 @@
         <label for="mansion-name" class="form-label">Mansion name</label>
         <input type="text" class="form-control" id="mansion-name" v-model = "name" required>
       </div>
-      <div class="double-field">
+      <div class="double-field" style="margin-top: 2%; margin-bottom: 2%">
         <div class="col-4">
           <label for="number_rooms" class="form-label">Number of rooms</label>
           <input type="number" class="form-control" id="number_rooms"  v-model = "numberOfRooms" required>
@@ -31,7 +31,7 @@
 
         </div>
         <div class="col-3">
-          <button type="button" class="btn btn-secondary btn-sm" id="room-adding-button" v-on:click="addRoom ">Add room</button>
+          <button type="button" style="margin-top: 15%" class="btn btn-secondary btn-sm" id="room-adding-button" v-on:click="addRoom ">Add room</button>
         </div>
       </div>
       <div v-if="selectedMansion!=null && selectedMansion.rooms.length>0">
@@ -72,12 +72,12 @@
       </div>
       <div class="double-field">
         <div class="col-md-5">
-          <label for="longitude" class="form-label">Longitude</label>
-          <input type="text" class="form-control" id="longitude" v-model="longitude" required>
-        </div>
-        <div class="col-md-5">
           <label for="latitude" class="form-label">Latitude</label>
           <input type="text" class="form-control" id="latitude" v-model="latitude" required>
+        </div>
+        <div class="col-md-5">
+          <label for="longitude" class="form-label">Longitude</label>
+          <input type="text" class="form-control" id="longitude" v-model="longitude" required>
         </div>
       </div>
       <hr class="my-4">
@@ -389,8 +389,6 @@ export default {
       }
       console.log(this.selectedMansion.interiorImages.length)
       for(var iimg of this.selectedMansion.interiorImages){
-        console.log('Image path je ', iimg.toString().replaceAll('\\','/'))
-        console.log(devServer.proxy + "/entityImage/"+"/" + iimg.path)
         this.setImgI(iimg);
 
       }
@@ -585,7 +583,6 @@ export default {
       if (index<this.interiorImagesOldNum){
         this.interiorImagesOldNum--;
         console.log("image",image)
-        this.alert("image id:",image.id)
         this.deleteOldInterior.push(image.id); //kako da dodjem do id slike?
       } else{
         let indexToDelete = index-this.interiorImagesOldNum;

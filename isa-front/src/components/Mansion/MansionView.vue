@@ -1,30 +1,25 @@
 <template>
-  <div class="mansion-view" v-if="mansionToShow!=null">
+  <div class="mansion-view" v-show="mansionToShow!=null">
     <br>
     <br>
     <br>
-    <div class="row">
+     <div class="row">
       <div class="colinfo">
         <br class="sm">
-        <p style="text-transform: uppercase; font-size: 18px; color: gray">
-          {{mansionToShow.type}}
-        </p>
         <p class="fw-bold" style="font-size: 30px; font-weight: bolder; text-transform: uppercase">
           {{mansionToShow.name}} · {{mansionToShow.avgGrade}} <i class="fa fa-star" aria-hidden="true"></i>
-
-
         </p>
+              <br class="sm">
+              <p style="font-size: 18px">
+                Offered by {{ mansionOwner.name }} {{ mansionOwner.surname }}
+                <br>
+                {{address.address}}, {{address.city}}, {{address.country}}
+              </p>
         <br class="sm">
-        <p style="font-size: 18px">
-          Offered by {{ mansionOwner.name }} {{ mansionOwner.surname }}
-          <br>
-          {{address.address}}, {{address.city}}, {{address.country}}
-        </p>
-        <br class="sm">
-        <div v-if="clientSubscribed != 'true' && user!=null && user=='Client'">
-          <button  class="btn btn-primary" v-on:click="SubscribeClient" ><i class="fa fa-star-o" aria-hidden="true"></i>
-            Subscribe</button></div>
-        <hr>
+         <div v-show="clientSubscribed != 'true' && user!=null && user=='Client'">
+           <button  class="btn btn-primary" v-on:click="SubscribeClient" ><i class="fa fa-star-o" aria-hidden="true"></i>
+             Subscribe</button></div>
+         <hr>
         <div class="additional-desc">
           <div class="icons">
             <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-cash-coin" viewBox="0 0 16 16">
@@ -36,9 +31,9 @@
           </div>
           <div class="info">
             <h5 style="margin-top: 5%; font-weight: bolder">{{mansionToShow.pricePerDay}}€ per day · {{mansionToShow.priceForSevenDays}}€ per week</h5>
-
           </div>
         </div>
+
         <div class="additional-desc">
           <div class="icons">
             <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-star" viewBox="0 0 16 16">
@@ -50,7 +45,7 @@
             <h4>Description</h4>
             {{mansionToShow.promoDescription}}
           </div>
-        </div>
+          </div>
         <div class="additional-desc">
           <div class="icons">
             <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-journal-x" viewBox="0 0 16 16">
@@ -67,136 +62,141 @@
           <br>
         </div>
         <hr>
-        <h4 style="font-weight: bolder">Rooms</h4>
-        <div v-if="mansionToShow.rooms!=undefined && mansionToShow.rooms.length>0">
-          <table class="table table-striped">
-            <thead>
-            <tr>
-              <th>Beds</th>
-              <th>Number of rooms</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr v-for="(key, value) in rooms" :key="value">
-              <th>{{ key[0]}} bedded</th>
-              <th>{{ key[1] }} rooms</th>
-            </tr>
-            </tbody>
-          </table>
-        </div>
-        <div v-else>
-          <h5>There are no rooms yet!</h5>
-        </div>
 
-        <hr v-if="loggedUser!=null && loggedUser.advertiserType == null">
-        <div class="info" v-if="loggedUser!=null  && loggedUser.advertiserType == null" >
-          <h2><button class="btn btn-lg-link" v-on:click="ShowReservationOffers">Show reservationOffers</button></h2>
-        </div>
-        <hr v-if="loggedUser!=null && mansionToShow.mansionOwner.id==loggedUser.id">
-        <div class="subscribers" v-if="loggedUser!=null && mansionToShow.mansionOwner.id==loggedUser.id">
-          <p style="font-weight: bolder; font-size: 26px">
-            Subscribers
-          </p>
-          <div v-if="mansionSubscribers.length==0">
-            <p> No subscribers yet!</p>
-          </div>
-          <div v-else>
-            <table class="table">
-              <thead>
-              <tr>
-                <th scope="col"></th>
-                <th scope="col">Name</th>
-                <th scope="col">Surname</th>
-                <th scope="col">Email</th>
-              </tr>
-              </thead>
-              <tbody>
-              <tr v-for="(s, index) in mansionSubscribers" :key="s.id">
-                <td>{{index+1}}</td>
-                <td>{{s.name}}</td>
-                <td>{{s.surname}}</td>
-                <td>{{s.email}}</td>
-              </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
 
+       <h4 style="font-weight: bolder">Rooms</h4>
+       <div v-if="mansionToShow.rooms!=undefined && mansionToShow.rooms.length>0">
+       <table class="table table-striped">
+         <thead>
+         <tr>
+           <th>Beds</th>
+           <th>Number of rooms</th>
+         </tr>
+         </thead>
+         <tbody>
+         <tr v-for="(key, value) in rooms" :key="value">
+           <th>{{ key[0]}} bedded</th>
+           <th>{{ key[1] }} rooms</th>
+         </tr>
+         </tbody>
+       </table>
+     </div>
+     <div v-else>
+       <h5>There are no rooms yet!</h5>
+     </div>
+
+     <hr v-show="loggedUser!=null && loggedUser.advertiserType == null">
+      <div class="info" v-show="loggedUser!=null  && loggedUser.advertiserType == null" >
+        <h2><button class="btn btn-lg-link" v-on:click="ShowReservationOffers">Show reservationOffers</button></h2>
+      </div>
+       <hr v-show="loggedUser!=null && mansionOwner.id==loggedUser.id">
+  <div class="subscribers" v-show="loggedUser!=null && mansionOwner.id==loggedUser.id">
+
+    <p style="font-weight: bolder; font-size: 26px">
+    Subscribers
+    </p>
+    <div v-if="mansionSubscribers.length==0">
+    <p> No subscribers yet!</p>
+    </div>
+    <div v-else>
+    <table class="table">
+    <thead>
+    <tr>
+    <th scope="col"></th>
+    <th scope="col">Name</th>
+    <th scope="col">Surname</th>
+    <th scope="col">Email</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr v-for="(s, index) in mansionSubscribers" :key="s.id">
+    <td>{{index+1}}</td>
+    <td>{{s.name}}</td>
+    <td>{{s.surname}}</td>
+    <td>{{s.email}}</td>
+    </tr>
+    </tbody>
+    </table>
+    </div>
+    </div>
         <hr v-if="mansionToShow.rules!=null && mansionToShow.rules.length!=0">
-        <div class="navigation-equipments" v-if="mansionToShow.rules!=null && mansionToShow.rules.length!=0">
-          <p style="font-weight: bolder; font-size: 26px">
-            Rules
-          </p>
-          <div v-if="mansionToShow.rules!=null" && mansionToShow.rules.length!=0>
-            <div v-for="rule in mansionToShow.rules" :key="rule.ruleId">
-              <p >
-                {{rule.rule}}
-              </p>
-            </div>
 
-          </div>
+                 <div class="navigation-equipments" v-if="mansionToShow.rules!=null && mansionToShow.rules.length!=0">
+                 <p style="font-weight: bolder; font-size: 26px">
+                 Rules
+                 </p>
 
-        </div>
-        <hr>
-        <p style="font-weight: bolder; font-size: 26px">
-          Calendar
-        </p>
-        <button v-if="loggedUser!=null && mansionToShow.mansionOwner.id==loggedUser.id" type="button" class="btn btn-primary" data-bs-toggle="modal" style="margin: 0.5%" data-bs-target="#exampleModal">Add availability period</button>
+                  <div v-if="mansionToShow.rules!=null && mansionToShow.rules.length!=0">
+                  <div v-for="rule in mansionToShow.rules" :key="rule.ruleId">
+                  <p >
+                  {{rule.rule}}
+                  </p>
+                  </div>
+
+                  </div>
+
+                  </div>
+                  <hr>
+                  <p style="font-weight: bolder; font-size: 26px">
+                  Calendar
+                  </p>
+                  <button v-if="loggedUser!=null && mansionOwner.id==loggedUser.id" type="button" class="btn btn-primary" data-bs-toggle="modal" style="margin: 0.5%" data-bs-target="#exampleModal">Add availability period</button>
         <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Add availability for {{mansionToShow.name}}</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times" aria-hidden="true"></i></button>
-              </div>
-              <div class="modal-body">
-                <v-date-picker mode="dateTime" is24hr v-model="startDateTime" style="width: 100%" :disabled-dates="availableDates">
+                  <div class="modal-dialog">
+                  <div class="modal-content">
+                  <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Add availability for {{mansionToShow.name}}</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times" aria-hidden="true"></i></button>
+                  </div>
+                  <div class="modal-body">
+                  <v-date-picker mode="dateTime" is24hr v-model="startDateTime" style="width: 100%" :disabled-dates="availableDates">
                   <template v-slot="{ inputValue, inputEvents }">
-                    <input
-                        class="px-2 py-1 border rounded focus:outline-none focus:border-blue-300"
-                        :value="inputValue"
-                        v-on="inputEvents"
-                        style="overflow: visible"
-                        placeholder="From time"
-                    />
+                  <input
+                  class="px-2 py-1 border rounded focus:outline-none focus:border-blue-300"
+                  :value="inputValue"
+                  v-on="inputEvents"
+                  style="overflow: visible"
+                  placeholder="From time"
+                  />
                   </template>
-                </v-date-picker>
-                <v-date-picker  mode="dateTime" is24hr v-model="endDateTime" style="width: 100%" :disabled-dates="availableDates">
+                  </v-date-picker>
+                  <v-date-picker  mode="dateTime" is24hr v-model="endDateTime" style="width: 100%" :disabled-dates="availableDates">
                   <template v-slot="{ inputValue, inputEvents }">
-                    <input
-                        class="px-2 py-1 border rounded focus:outline-none focus:border-blue-300"
-                        :value="inputValue"
-                        v-on="inputEvents"
-                        placeholder="To time"
-                    />
+                  <input
+                  class="px-2 py-1 border rounded focus:outline-none focus:border-blue-300"
+                  :value="inputValue"
+                  v-on="inputEvents"
+                  placeholder="To time"
+                  />
                   </template>
-                </v-date-picker>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" v-on:click="addAvailabilityPeriod" data-bs-dismiss="modal">Add</button>
-              </div>
-            </div>
-          </div>
+                  </v-date-picker>
+                  </div>
+                  <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-primary" v-on:click="addAvailabilityPeriod" data-bs-dismiss="modal">Add</button>
+                  </div>
+                  </div>
+                  </div>
         </div>
+
         <br>
-        <v-calendar :columns="$screens({ default: 1, lg: 2 })" :attributes='calendar_attributes'
-                    :available-dates='availableDates'/>
-        <hr>
-        <p style="font-weight: bolder; font-size: 26px">
-          Discounts
-        </p>
-        <button v-if="loggedUser!=null && mansionToShow.mansionOwner.id==loggedUser.id" type="button" class="btn btn-primary" data-bs-toggle="modal" style="margin: 0.5%" data-bs-target="#addQuickResModal">Add new quick reservation</button>
-        <hr>
-        <p style="font-weight: bolder; font-size: 26px">
-          Location
-        </p>
-        <p style="font-size: 18px;">
-          {{address.address}}, {{address.city}}, {{address.country}}
-          <br>
-          {{address.latitude}}, {{address.longitude}}
-        </p>
-        <ol-map :loadTilesWhileAnimating="true" :loadTilesWhileInteracting="true" style="height:400px">
+                  <v-calendar :columns="$screens({ default: 1, lg: 2 })" :attributes='calendar_attributes'
+                  :available-dates='availableDates'/>
+                  <hr>
+                  <p style="font-weight: bolder; font-size: 26px">
+                  Discounts
+                  </p>
+                  <button v-show="loggedUser!=null && mansionOwner.id==loggedUser.id" type="button" class="btn btn-primary" data-bs-toggle="modal" style="margin: 0.5%" data-bs-target="#addQuickResModal">Add new quick reservation</button>
+                  <hr>
+                  <p style="font-weight: bolder; font-size: 26px">
+                  Location
+                  </p>
+                  <p style="font-size: 18px;">
+                  {{address.address}}, {{address.city}}, {{address.country}}
+                  <br>
+                  {{address.latitude}}, {{address.longitude}}
+                  </p>
+      <ol-map :loadTilesWhileAnimating="true" :loadTilesWhileInteracting="true" style="height:400px">
 
           <ol-view ref="view" :center="[address.longitude,address.latitude]" :rotation="rotation" :zoom="zoom" :projection="projection" />
 
@@ -207,7 +207,7 @@
           <ol-vector-layer>
             <ol-source-vector>
               <ol-feature>
-                <ol-geom-point :coordinates="[address.longitude,address.latitude]"></ol-geom-point>
+                <ol-geom-point :coordinates="[address.longitude, address.latitude]"></ol-geom-point>
                 <ol-style>
                   <ol-style-circle radius="5">
                     <ol-style-fill color="white"></ol-style-fill>
@@ -252,7 +252,7 @@
 
           </div>
         </div>
-        <div v-if="(mansionToShow.interiorImages!=null && mansionToShow.interiorImages.length!=0) || (mansionToShow.exteriorImages!=null && mansionToShow.exteriorImages.length>0)">
+       <div v-if="(mansionToShow.interiorImages!=null && mansionToShow.interiorImages.length!=0) || (mansionToShow.exteriorImages!=null && mansionToShow.exteriorImages.length>0)">
           <hr>
           <p style="font-weight: bolder; font-size: 26px">
             Images
@@ -266,68 +266,70 @@
             </div>
           </div>
         </div>
-        <hr>
+               <hr>
       </div>
-      <div class="coladd-reservation" v-if="loggedUser!=null && mansionToShow.mansionOwner!=null && loggedUser.id==mansionToShow.mansionOwner.id">
-        <div class="input-reservations">
-          <h5>
-            Add reservation
-          </h5>
-          <div class="mb-3">
-            <div class="input-group mb-3">
-              <span class="input-group-text" id="basic-addon3">Email</span>
-              <input type="text" class="form-control" v-model="clientResEmail" v-on="{keydown: checkEmail}" aria-label="Username" aria-describedby="basic-addon1">
-            </div>
-            <p v-if="!clientResEmailForm" style="font-size: small; font-style: italic">Invalid email.</p>
-            <p v-if="!clientResEmailExists" style="font-size: small; font-style: italic">User not registered.</p>
-            <label for="reservationStart" class="form-label">Select start time</label>
-            <v-date-picker mode="dateTime" is24hr v-model="clientResStartDate" id="reservationStart" :available-dates='availableDates'>
-              <template v-slot="{ inputValue, inputEvents }">
-                <input
-                    class="px-2 py-1 border rounded focus:outline-none focus:border-blue-300"
-                    :value="inputValue"
-                    v-on="inputEvents"
-                    style="overflow: visible"
-                    placeholder="From time"
-                />
-              </template>
-            </v-date-picker>
-            <div class="horizontal">
-              <div class="input-group mb-3">
-                <span class="input-group-text" id="basic-addon4">Days</span>
-                <input type="number" class="form-control" v-model="clientResNumberOfDays"  aria-label="Username" aria-describedby="basic-addon1">
-              </div>
-              <div class="input-group mb-3" style="margin-left: 2%">
-                <span class="input-group-text" id="basic-addon1">Hours</span>
-                <input type="number" class="form-control" v-model="clientResNumberOfHours"  aria-label="Username" aria-describedby="basic-addon1">
-              </div>
-            </div>
-            <hr>
-            <div v-if="additionalServices!=null && additionalServices.length!=0">
-              Addition services:
-              <table>
-                <tbody>
-                <tr v-for="as in additionalServices" :key="as.id">
-                  <td><div class="form-check">
-                    <input class="form-check-input" type="checkbox" value=""  v-bind:id="as.id+'ascr'"  v-on:click="addAditionalServiceToRes(as)">
-                    <label class="form-check-label" for="as.id+'ascr'">
-                      {{as.name}}
-                    </label>
-                  </div></td>
-                </tr>
-                </tbody>
-              </table>
-            </div>
-            <div class="input-group mb-3">
-              <span class="input-group-text" id="basic-addon2">Number of guests</span>
-              <input type="number" class="form-control" min="1" max="{{mansionToShow.capacity}}" v-model="clientResNumberOfGuests"  aria-label="Username" aria-describedby="basic-addon1">
-            </div>
-            <br>
-            <button type="button" class="btn btn-primary" style="width: 100%" v-on:click="makeReservationForClient()">Add reservation</button>
-          </div>
-        </div>
+       <!--Nova kolona za dodavanje rezervacije-->
+             <div class="coladd-reservation" v-if="loggedUser!=null && mansionOwner!=null && loggedUser.id==mansionOwner.id">
+               <div class="input-reservations">
+                 <h5>
+                   Add reservation
+                 </h5>
+                 <div class="mb-3">
+                   <div class="input-group mb-3">
+                     <span class="input-group-text" id="basic-addon3">Email</span>
+                     <input type="text" class="form-control" v-model="clientResEmail" v-on="{keydown: checkEmail}" aria-label="Username" aria-describedby="basic-addon1">
+                   </div>
+                   <p v-if="!clientResEmailForm" style="font-size: small; font-style: italic">Invalid email.</p>
+                   <p v-if="!clientResEmailExists" style="font-size: small; font-style: italic">User not registered.</p>
+                   <label for="reservationStart" class="form-label">Select start time</label>
+                   <v-date-picker mode="dateTime" is24hr v-model="clientResStartDate" id="reservationStart" :available-dates='availableDates'>
+                     <template v-slot="{ inputValue, inputEvents }">
+                       <input
+                           class="px-2 py-1 border rounded focus:outline-none focus:border-blue-300"
+                           :value="inputValue"
+                           v-on="inputEvents"
+                           style="overflow: visible"
+                           placeholder="From time"
+                       />
+                     </template>
+                   </v-date-picker>
+                   <div class="horizontal">
+                     <div class="input-group mb-3">
+                       <span class="input-group-text" id="basic-addon4">Days</span>
+                       <input type="number" class="form-control" v-model="clientResNumberOfDays"  aria-label="Username" aria-describedby="basic-addon1">
+                     </div>
+                     <div class="input-group mb-3" style="margin-left: 2%">
+                       <span class="input-group-text" id="basic-addon1">Hours</span>
+                       <input type="number" class="form-control" v-model="clientResNumberOfHours"  aria-label="Username" aria-describedby="basic-addon1">
+                     </div>
+                   </div>
+                   <hr>
+                   <div v-if="additionalServices!=null && additionalServices.length!=0">
+                     Addition services:
+                     <table>
+                       <tbody>
+                       <tr v-for="as in additionalServices" :key="as.id">
+                         <td><div class="form-check">
+                           <input class="form-check-input" type="checkbox" value=""  v-bind:id="as.id+'ascr'"  v-on:click="addAditionalServiceToRes(as)">
+                           <label class="form-check-label" for="as.id+'ascr'">
+                             {{as.name}}
+                           </label>
+                         </div></td>
+                       </tr>
+                       </tbody>
+                     </table>
+                   </div>
+                   <div class="input-group mb-3">
+                     <span class="input-group-text" id="basic-addon2">Number of guests</span>
+                     <input type="number" class="form-control" min="1" max="{{mansionToShow.capacity}}" v-model="clientResNumberOfGuests"  aria-label="Username" aria-describedby="basic-addon1">
+                   </div>
+                   <br>
+                   <button type="button" class="btn btn-primary" style="width: 100%" v-on:click="makeReservationForClient()">Add reservation</button>
+                 </div>
+               </div>
       </div>
-    </div>
+
+
     <!-- Modal Quick reservations -->
     <div class="modal fade" id="addQuickResModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
       <div class="modal-dialog">
@@ -382,6 +384,7 @@
         </div>
       </div>
     </div>
+  </div>
   </div>
 </template>
 
@@ -460,54 +463,47 @@ export default {
       }
     })
         .then(response => {
-              console.log("Logged user in mnsion view: ", response.data)
+              console.log("Logged user in mansion view: ", response.data)
               this.loggedUser = response.data
-            }
-        ).catch(() =>{
-      this.loggedUser = null
-    })
-    axios
-        .get('http://localhost:8080/mansion', {
-          params:
-              {
-                id: mansionid
-              },
-          headers: {
-            'Authorization': 'Bearer ' + this.token
-          }
-        })
-        .then(response => {
+          axios
+              .get('http://localhost:8080/mansion', {
+                params:
+                    {
+                      id: mansionid
+                    },
+                headers: {
+                  'Authorization': 'Bearer ' + this.token
+                }
+              })
+              .then(response => {
 
-          this.mansionToShow = response.data
-          console.log(this.mansionToShow)
+                this.mansionToShow = response.data
+                console.log(this.mansionToShow)
 
-          //alert(this.user)
-          if (this.user == 'Client'){
-            this.CheckClientSubscription()}
+                if (this.loggedUser.advertiserType == undefined){
+                  this.CheckClientSubscription()}
 
-          console.log("Mansion to show:", this.mansionToShow)
-          this.address = this.mansionToShow.address
-          this.mansionOwner = this.mansionToShow.mansionOwner
-          console.log("Da li je ulogovan vlasnik: ",this.loggedUser.id = this.mansionToShow.mansionOwner.id)
-          if(this.loggedUser.id == this.mansionToShow.mansionOwner.id) {
-            axios
-                .get(devServer.proxy + "/getMansionsSubscribers", {
-                  params:
-                      {
-                        mansionId: this.mansionToShow.id
-                      },
-                  headers: {
-                    'Authorization': this.$store.getters.tokenString
-                  }
-                })
-                .then((resp1 => {
-                  this.mansionSubscribers = resp1.data
-                  console.log("Mansion subscribers: ", this.mansionSubscribers)
-                }))
-                .catch(() => {
-                  alert("Error occured while trying to find mansion subscribers!")
-                })
-                axios.get(devServer.proxy + "/additionalServicesMansion", {
+                this.address = this.mansionToShow.address
+                this.mansionOwner = this.mansionToShow.mansionOwner
+                if(this.loggedUser.id == this.mansionToShow.mansionOwner.id) {
+                  axios
+                      .get(devServer.proxy + "/getMansionsSubscribers", {
+                        params:
+                            {
+                              mansionId: this.mansionToShow.id
+                            },
+                        headers: {
+                          'Authorization': this.$store.getters.tokenString
+                        }
+                      })
+                      .then((resp1 => {
+                        this.mansionSubscribers = resp1.data
+                        console.log("Mansion subscribers: ", this.mansionSubscribers)
+                      }))
+                      .catch(() => {
+                        alert("Error occured while trying to find mansion subscribers!")
+                      })
+                  axios.get(devServer.proxy + "/additionalServicesMansion", {
                     params:
                         {
                           id: this.mansionToShow.id
@@ -516,22 +512,27 @@ export default {
                       'Authorization': 'Bearer ' + this.token,
                     }
                   })
-            .then((response=>{
-              this.additionalServices = response.data;
-              console.log("Additional services for mansion: ", this.additionalServices)
-            }))
-            .catch((err) =>{
-              alert("Error ocured while trying to get additional services!")
-              console.log("Error:", err)
-            })
-          }
-          this.calculateAvailableDaysForCalendar()
-          console.log("Days calculated")
-          this.setImages();
-          this.setRooms();
-          console.log("Images set")
+                      .then((response=>{
+                        this.additionalServices = response.data;
+                        console.log("Additional services for mansion: ", this.additionalServices)
+                      }))
+                      .catch((err) =>{
+                        alert("Error ocured while trying to get additional services!")
+                        console.log("Error:", err)
+                      })
+                }
+                this.calculateAvailableDaysForCalendar()
+                console.log("Days calculated")
+                this.setImages();
+                this.setRooms();
+                console.log("Images set")
 
-        })
+              })
+            }
+        ).catch(() =>{
+      this.loggedUser = null
+    })
+
   },
   methods:{
     setRooms(){
@@ -790,7 +791,33 @@ export default {
         alert("Error happened!")
       })
       this.calculateAvailableDaysForCalendar()
-    }
+    },
+    checkEmail(){
+      if (!this.validEmail(this.clientResEmail)){
+        this.clientResEmailForm = false
+      } else{
+        this.clientResEmailForm = true
+      }/*else {
+          this.clientResEmailForm = true
+          axios.post(devServer.proxy + '/emailExistsClient', {
+            email: this.clientResEmail
+          }, {
+            headers: {
+              'Authorization': this.$store.getters.tokenString,
+              'Content-Type': 'application/json'
+            }
+          }).then(response =>{
+            this.clientResEmailExists = response.data
+            if(!this.clientResEmailExists){
+              alert("User with that email is not registered yet!")
+            }
+          })
+        }*/
+    },
+    validEmail: function (email) {
+      var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      return re.test(email);
+    },
 
   }
 }

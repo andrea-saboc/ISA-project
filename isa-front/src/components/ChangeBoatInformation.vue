@@ -108,12 +108,12 @@
       </div>
       <div class="double-field">
         <div class="col-md-5">
-          <label for="longitude" class="form-label">Longitude</label>
-          <input type="text" class="form-control" id="longitude" placeholder="1223" v-model="longitude" required>
-        </div>
-        <div class="col-md-5">
           <label for="latitude" class="form-label">Latitude</label>
           <input type="text" class="form-control" id="latitude" v-model="latitude" placeholder="1223" required>
+        </div>
+        <div class="col-md-5">
+          <label for="longitude" class="form-label">Longitude</label>
+          <input type="text" class="form-control" id="longitude" placeholder="1223" v-model="longitude" required>
         </div>
       </div>
       <hr class="my-4">

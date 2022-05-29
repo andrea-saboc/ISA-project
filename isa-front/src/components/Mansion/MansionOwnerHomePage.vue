@@ -22,7 +22,7 @@
       </li>
       <li v-for="mansion in mansions" :key="mansion.id" >
         <div  v-if="MansionSearch(mansion.name)">
-          <a v-on:click="DisplayMansion(mansion.id)">
+          <a v-on:click="DisplayMansion(mansion.id)" type="button">
             <i class="fa fa-home" aria-hidden="true"></i> {{mansion.name}}
           </a>
         </div>
