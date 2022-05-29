@@ -54,4 +54,19 @@ public class Rule {
     public void setRule(String rule) {
         this.rule = rule;
     }
+
+    @Override
+    public String toString() {
+        return "Rule{" +
+                "ruleId=" + ruleId +
+                ", rule='" + rule + '\'' +
+                ", boat=" + boat +
+                ", mansions=" + mansions +
+                ", adventure=" + adventure +
+                '}';
+    }
+
+    public void removeBoat(Boat boat) {
+        this.boat.remove(boat);
+    }
 }

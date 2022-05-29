@@ -339,9 +339,6 @@ export default {
       this.imgExter.splice(index, 1)
     },
     registerBoat(){
-      alert("Registering a boat")
-      alert(this.name)
-      alert(this.type)
       axios
       .post('http://localhost:8080/registerBoat',
           {

@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.management.relation.Role;
 
+import com.example.isa.dto.*;
+import com.example.isa.service.impl.AdditionalServiceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -19,10 +21,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.isa.dto.AddAvailablePeriodDto;
-import com.example.isa.dto.BoatRegistrationDto;
-import com.example.isa.dto.LongIdDto;
-import com.example.isa.dto.SearchDto;
 import com.example.isa.model.Boat;
 import com.example.isa.model.BoatAvailablePeriod;
 import com.example.isa.model.User;
@@ -38,6 +36,8 @@ public class BoatController {
 	private BoatService service;
 	@Autowired
 	private BoatFilteringServiceImpl filteringService;
+	@Autowired
+	private AdditionalServiceService additionalServiceService;
 
 	public BoatController(BoatService bs){
 		this.service = bs;
@@ -79,8 +79,8 @@ public class BoatController {
 		return new ResponseEntity<>(jsonString, HttpStatus.OK);
 	}
 
+	@PreAuthorize("hasRole('ROLE_BOAT_OWNER')")
 	@RequestMapping(method = RequestMethod.POST, value = "/registerBoat",produces = MediaType.APPLICATION_JSON_VALUE)
-	@CrossOrigin(origins = "*")
 	public ResponseEntity<String> registerBoat(@RequestBody BoatRegistrationDto dto){
 		System.out.println("In registering boat service");
 		System.out.println(dto);
@@ -93,6 +93,22 @@ public class BoatController {
 			responseMessege = "Error ocured while saving boat!";
 		}
 		return new ResponseEntity<>(responseMessege, HttpStatus.OK);
+	}
+
+	@PreAuthorize("hasRole('ROLE_BOAT_OWNER')")
+	@RequestMapping(method = RequestMethod.POST, value = "/changeBoat",produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> changeBoat(@RequestBody ChangeBoatDto dto){
+		Boat changedBoat = service.changeBoat(dto);
+		String responseMessege;
+		System.out.println("Trying to change boat");
+		if (changedBoat != null){
+			additionalServiceService.changeAdditionalServices(dto);
+			responseMessege = "Boat successfully changed!";
+		} else{
+			responseMessege = "Error ocured while trying to change boat!";
+		}
+		return new ResponseEntity<>(responseMessege, HttpStatus.OK);
+
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/getBoatAvailability", produces = MediaType.APPLICATION_JSON_VALUE)
