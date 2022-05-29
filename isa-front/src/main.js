@@ -13,6 +13,7 @@ import VCalendar from 'v-calendar';
 import OpenLayersMap from '.'
 
 
+
 window.$ = window.jQuery = require('jquery');
 
 

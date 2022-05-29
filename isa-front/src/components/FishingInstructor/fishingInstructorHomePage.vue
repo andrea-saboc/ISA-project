@@ -4,6 +4,12 @@
     <div class="sidebar-logo">
       {{loggedUser.name}} {{loggedUser.surname}}
     </div>
+     <li>
+      <a v-on:click="DisplayDashboard()">
+        <i class="fa fa-tachometer" aria-hidden="true"></i>
+        Dashboard
+      </a>
+    </li>
 
     <ul class="sidebar-navigation">
       <li class="header">Adventures</li>
@@ -32,14 +38,24 @@
       <li class="header">Profile</li>
       <li>
         <a href="#" v-on:click="DisplayProfile()">
-          <i class="fa fa-cog" aria-hidden="true"></i> Settings
+          <i class="fa fa-cog" aria-hidden="true"></i> Profile
         </a>
       </li>
-      </ul>
+      
+       <li class="header">Log Out</li>
+      <li>
+        <button type="button" class="btn btn-primary" v-on:click="logOut">Log out</button>
+
+      </li>
+    </ul>
+  
  </div>
  <div class="router-elem">
     <div v-if="display == 'adventureRegistration'">
       <AdventureRegistration></AdventureRegistration>
+    </div>
+      <div v-if="display=='dashboard'">
+      <FishingInstructorDashboard></FishingInstructorDashboard>
     </div>
      <div v-if="display == 'adventure'">
       <AdventureView></AdventureView>
@@ -62,12 +78,13 @@ import Profile from "../Profile";
 import AdventureRegistration from "../FishingInstructor/AdventureRegistration";
 import AdventureView from "../FishingInstructor/AdventureView";
 import AdventureReservation from "../FishingInstructor/AdventureReservation";
+import FishingInstructorDashboard from "../FishingInstructor/FishingInstructorDashboard";
 import axios from "axios";
 import {devServer} from "../../../vue.config";
 
 export default{
   name: "fishingInstructorHomePage",
-  components:{AdventureRegistration,AdventureView,Profile,AdventureReservation},
+  components:{AdventureRegistration,AdventureView,Profile,AdventureReservation,FishingInstructorDashboard},
     data: function(){
         return{
           display: 'dashboard',
@@ -131,7 +148,17 @@ export default{
     },
     DisplayReservations(){
       this.display = 'reservations';
-    }
+    },  
+     DisplayDashboard(){
+     this.display= 'dashboard'
+    },
+    logOut(){
+      let router = this.$router;
+      localStorage.removeItem('token');
+      localStorage.clear();
+      router.push("/login");
+      return;
+      }
   }
 }
 </script>

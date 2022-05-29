@@ -67,6 +67,8 @@ export default {
   },
 
   mounted(){
+          
+    localStorage.removeItem('token');
     this.user = this.$store.state.userType
     if(this.user == 'Client')
       window.location.href = "/clientHomePage";
