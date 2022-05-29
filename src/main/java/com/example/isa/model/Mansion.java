@@ -9,7 +9,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "Mansion")
-public class Mansion {
+public class Mansion extends AbstractEntity{
 	
 	@Id
 	@Column(name = "id", unique = true)
@@ -31,7 +31,7 @@ public class Mansion {
 	private Set<EntityImage> ExteriorImages = new HashSet<EntityImage>();
 	@ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER, mappedBy = "mansions")
 	public Set<Rule> rules = new HashSet<Rule>();
-	@OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER, mappedBy = "mansion")
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private Set<Room> rooms = new HashSet<>();
 	private float avgGrade;
 	@ManyToOne(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER)
@@ -103,6 +103,11 @@ public class Mansion {
 
 	public Set<EntityImage> getInteriorImages() {
 		return InteriorImages;
+	}
+
+	@Override
+	public User getOwner() {
+		return (User) mansionOwner;
 	}
 
 	public void setInteriorImages(Set<EntityImage> interiorImages) {

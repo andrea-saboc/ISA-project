@@ -3,18 +3,16 @@ package com.example.isa.service.impl;
 import java.util.*;
 
 import com.example.isa.dto.AddAvailablePeriodDto;
+import com.example.isa.dto.ChangeMansionDto;
 import com.example.isa.dto.MansionRegistrationDto;
 import com.example.isa.model.*;
 import com.example.isa.model.reservations.AdditionalService;
-import com.example.isa.repository.AdditionalServiceRepository;
-import com.example.isa.repository.MansionAvailablePeriodRepository;
-import com.example.isa.repository.MansionOwnerRepository;
+import com.example.isa.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.example.isa.dto.SearchDto;
-import com.example.isa.repository.MansionRepository;
 
 import javax.sound.midi.SysexMessage;
 
@@ -35,7 +33,10 @@ public class MansionService {
 
 	@Autowired
 	EntityImageService entityImageService;
-	
+
+	@Autowired
+	RuleRepository ruleRepository;
+
 	public List<Mansion> getAll() {
 		
 		return mansionRepo.findAll();
@@ -62,6 +63,7 @@ public class MansionService {
 
     public Mansion registerMansion(MansionRegistrationDto dto) {
 		System.out.println("In registering mansion service!");
+		System.out.println(dto);
 		Mansion newMansion = createMansion(dto);
 		newMansion = mansionRepo.save(newMansion);
 		Set<AdditionalService> additionalServices = addMansionToServices(dto.additionalServices, newMansion);
@@ -92,20 +94,18 @@ public class MansionService {
 		newMansion.setExteriorImages(new HashSet<>(entityImageService.createAndSaveImages("MansionOwners",mansionOwner.getEmail(),dto.getName(),dto.getExteriorImages())));
 		newMansion.setInteriorImages(new HashSet<>(entityImageService.createAndSaveImages("MansionOwners",mansionOwner.getEmail(),dto.getName(),dto.getInteriorImages())));
 		newMansion.setRules(convertString2Rule(dto.rules, newMansion));
-		newMansion.setRooms(converMap2Room(dto.rooms, newMansion));
+		newMansion.setRooms(converMap2Room(dto.rooms));
 		newMansion.setPricePerDay(dto.pricePerDay);
 		newMansion.setPriceForSevenDays(dto.priceForSevenDays);
 		return newMansion;
 	}
 
-	private Set<Room> converMap2Room(List<Integer> rooms, Mansion newMansion) {
+	private Set<Room> converMap2Room(List<Integer> rooms) {
 		List<Integer> listOfBeds = new ArrayList<>(rooms);
 		Set<Room> convertedRooms = new HashSet<>();
 		for ( Integer i : listOfBeds) {
-				Room newRoom = new Room(newMansion, i);
+				Room newRoom = new Room( i);
 				convertedRooms.add(newRoom);
-
-			
 		}
 		System.out.println(rooms);
 		return convertedRooms;
@@ -128,4 +128,40 @@ public class MansionService {
 		List<MansionAvailablePeriod> mansionNewAvailability = mansionAvailablePeriodRepository.findByMansion(mansion);
 		return  mansionNewAvailability;
     }
+
+	public Mansion changeMansion(ChangeMansionDto dto) {
+		Mansion mansionToChange = mansionRepo.findById(dto.id).get();
+		if(mansionToChange == null) return null;
+		mansionToChange.setName(dto.name);
+		mansionToChange.setPricePerDay(dto.pricePerDay);
+		mansionToChange.setPriceForSevenDays(dto.priceForSevenDays);
+		mansionToChange.setCancellationPolicy(dto.cancellationPolicy);
+		mansionToChange.setPromoDescription(dto.promoDescription);
+		mansionToChange.setRules(makeRules(dto));
+		mansionToChange.setExteriorImages(new HashSet<>(entityImageService.removeAndAddNewExterior(dto, mansionToChange)));
+		mansionToChange.setInteriorImages(new HashSet<>(entityImageService.removeAndAddNewInterior(dto, mansionToChange)));
+		mansionToChange.setRooms(converMap2Room(dto.rooms));
+		mansionToChange = mansionRepo.save(mansionToChange);
+		return mansionToChange;
+	}
+
+	private Set<Rule> makeRules(ChangeMansionDto dto) {
+		System.out.println("Making rules mansion***");
+		Mansion mansion = mansionRepo.findById(dto.id).get();
+		Set<Rule> newRules = new HashSet<>();
+		for (Rule r : dto.rules){
+			if(r.getRuleId()==-1){
+				Rule newRule = new Rule(r.getRule());
+				newRule.addMansion(mansion);
+				newRules.add(newRule);
+			}
+
+		}
+		for(Integer rid : dto.rulesToDelete){
+			Rule rd= ruleRepository.findById(rid).get();
+			rd.removeMansion(mansion);
+			ruleRepository.save(rd);
+		}
+		return newRules;
+	}
 }

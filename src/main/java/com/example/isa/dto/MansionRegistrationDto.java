@@ -57,8 +57,6 @@ public class MansionRegistrationDto {
                 ", longitude='" + longitude + '\'' +
                 ", latitude='" + latitude + '\'' +
                 ", promoDescription='" + promoDescription + '\'' +
-                ", InteriorImages=" + InteriorImages +
-                ", ExteriorImages=" + ExteriorImages +
                 ", rules=" + rules +
                 ", additionalServices=" + additionalServices +
                 ", rooms=" + rooms +

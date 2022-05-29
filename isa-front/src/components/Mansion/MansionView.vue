@@ -66,13 +66,32 @@
           <br>
           <br>
         </div>
-
-        <hr v-if="loggedUser!=null && loggedUser.advertiserType == null">
-        <div class="info" v-if="loggedUser!=null && loggedUser.advertiserType == null">
-          <h2><button class="btn btn-lg-link" v-on:click="ShowReservationOffers" v-if="loggedUser">Show reservationOffers</button></h2>
+        <hr>
+        <h4 style="font-weight: bolder">Rooms</h4>
+        <div v-if="mansionToShow.rooms!=undefined && mansionToShow.rooms.length>0">
+          <table class="table table-striped">
+            <thead>
+            <tr>
+              <th>Beds</th>
+              <th>Number of rooms</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="(key, value) in rooms" :key="value">
+              <th>{{ key[0]}} bedded</th>
+              <th>{{ key[1] }} rooms</th>
+            </tr>
+            </tbody>
+          </table>
         </div>
-        <hr v-if="loggedUser!=null && loggedUser.advertiserType == null">
+        <div v-else>
+          <h5>There are no rooms yet!</h5>
+        </div>
 
+        <hr v-if="loggedUser!=null && loggedUser.advertiserType == null">
+        <div class="info" v-if="loggedUser!=null  && loggedUser.advertiserType == null" >
+          <h2><button class="btn btn-lg-link" v-on:click="ShowReservationOffers">Show reservationOffers</button></h2>
+        </div>
         <hr v-if="loggedUser!=null && mansionToShow.mansionOwner.id==loggedUser.id">
         <div class="subscribers" v-if="loggedUser!=null && mansionToShow.mansionOwner.id==loggedUser.id">
           <p style="font-weight: bolder; font-size: 26px">
@@ -102,7 +121,6 @@
             </table>
           </div>
         </div>
-        <hr v-if="loggedUser!=null && mansionToShow.mansionOwner.id==loggedUser.id">
 
         <hr v-if="mansionToShow.rules!=null && mansionToShow.rules.length!=0">
         <div class="navigation-equipments" v-if="mansionToShow.rules!=null && mansionToShow.rules.length!=0">
@@ -203,7 +221,7 @@
           </ol-vector-layer>
 
         </ol-map>
-        <hr>
+        <hr v-if="additionalServices.length!=0">
         <div v-if="additionalServices!=null && additionalServices.length!=0">
           <p style="font-weight: bolder; font-size: 26px">
             Additional services
@@ -377,6 +395,7 @@ export default {
   data: function () {
     return {
       token: null,
+      rooms: new Map(),
       allInteriorImages: [],
       allExteriorImages: [],
       mansionSubscribers: new Array(),
@@ -433,16 +452,11 @@ export default {
   mounted() {
     this.token = localStorage.getItem('token').substring(1, localStorage.getItem('token').length-1);
 
-    this.user = this.$store.state.userType
-
-    console.log("User", this.$store.state.userType)
-
     var path = window.location.href;
     var mansionid = path.split('/mansion/')[1].replaceAll('%20', ' ');
-    console.log("Mansion view --> masnion id: ", mansionid.toString())
     axios.get(devServer.proxy + "/userData", {
       headers: {
-        'Authorization' : this.$store.getters.tokenString
+        'Authorization' : 'Bearer ' + this.token
       }
     })
         .then(response => {
@@ -459,46 +473,76 @@ export default {
                 id: mansionid
               },
           headers: {
-            'Authorization': this.$store.getters.tokenString
+            'Authorization': 'Bearer ' + this.token
           }
         })
         .then(response => {
 
           this.mansionToShow = response.data
+          console.log(this.mansionToShow)
 
           //alert(this.user)
           if (this.user == 'Client'){
             this.CheckClientSubscription()}
 
           console.log("Mansion to show:", this.mansionToShow)
-          console.log(this.mansionToShow.address)
           this.address = this.mansionToShow.address
-          console.log(response.data)
           this.mansionOwner = this.mansionToShow.mansionOwner
-          axios
-              .get(devServer.proxy + "/getMansionsSubscribers", {
-                params:
-                    {
-                      mansionId: this.mansionToShow.id
-                    },
-                headers: {
-                  'Authorization': this.$store.getters.tokenString
-                }
-              })
-          .then((resp1 =>{
-            this.mansionSubscribers = resp1.data
-            console.log("Mansion subscribers: ", this.mansionSubscribers)
-          }))
-              .catch(() => {
-                alert("Error occured while trying to find mansion subscribers!")
-              })
+          console.log("Da li je ulogovan vlasnik: ",this.loggedUser.id = this.mansionToShow.mansionOwner.id)
+          if(this.loggedUser.id == this.mansionToShow.mansionOwner.id) {
+            axios
+                .get(devServer.proxy + "/getMansionsSubscribers", {
+                  params:
+                      {
+                        mansionId: this.mansionToShow.id
+                      },
+                  headers: {
+                    'Authorization': this.$store.getters.tokenString
+                  }
+                })
+                .then((resp1 => {
+                  this.mansionSubscribers = resp1.data
+                  console.log("Mansion subscribers: ", this.mansionSubscribers)
+                }))
+                .catch(() => {
+                  alert("Error occured while trying to find mansion subscribers!")
+                })
+                axios.get(devServer.proxy + "/additionalServicesMansion", {
+                    params:
+                        {
+                          id: this.mansionToShow.id
+                        },
+                    headers: {
+                      'Authorization': 'Bearer ' + this.token,
+                    }
+                  })
+            .then((response=>{
+              this.additionalServices = response.data;
+              console.log("Additional services for mansion: ", this.additionalServices)
+            }))
+            .catch((err) =>{
+              alert("Error ocured while trying to get additional services!")
+              console.log("Error:", err)
+            })
+          }
           this.calculateAvailableDaysForCalendar()
           console.log("Days calculated")
           this.setImages();
+          this.setRooms();
           console.log("Images set")
+
         })
   },
   methods:{
+    setRooms(){
+        console.log("setting rooms!")
+      for(var r of this.mansionToShow.rooms){
+        if(this.rooms.has(r.numberOfBeds))
+          this.rooms.set(r.numberOfBeds, this.rooms.get(r.numberOfBeds)+1)
+        else this.rooms.set(r.numberOfBeds, 1)
+      }
+      console.log("After setting rooms", this.rooms.length)
+    },
     setImages() {
       console.log("In set images function")
       console.log("Boat to show", this.mansionToShow)

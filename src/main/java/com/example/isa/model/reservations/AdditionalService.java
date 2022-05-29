@@ -38,7 +38,14 @@ public class AdditionalService {
     joinColumns=@JoinColumn(name="service_id"),
        inverseJoinColumns=@JoinColumn(name="reservation_id"))
     private Set<Reservation> reservations = new HashSet<Reservation>();
-    
+
+    public AdditionalService(String name, double pricePerDay, double pricePerHour, Mansion mansion) {
+        this.name = name;
+        this.pricePerDay = pricePerDay;
+        this.pricePerHour = pricePerHour;
+        this.mansion = mansion;
+    }
+
     public void addReservation(Reservation newBoat){
     	reservations.add(newBoat);
     }

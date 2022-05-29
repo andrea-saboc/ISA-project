@@ -69,4 +69,7 @@ public class Rule {
     public void removeBoat(Boat boat) {
         this.boat.remove(boat);
     }
+    public void removeMansion(Mansion mansion){
+        this.mansions.remove(mansion);
+    }
 }

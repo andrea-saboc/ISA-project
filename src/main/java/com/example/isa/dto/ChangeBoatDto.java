@@ -6,7 +6,7 @@ import org.apache.tomcat.util.digester.Rules;
 
 import java.util.Set;
 
-public class ChangeBoatDto {
+public class ChangeBoatDto extends AbstractChangeDto{
     public Long id;
     public String name;
     public String type;
@@ -68,6 +68,32 @@ public class ChangeBoatDto {
                 ", rules=" + rules +
                 ", additionalServices=" + additionalServices +
                 '}';
+    }
+
+    @Override
+    public Set<Integer> getInteriorImagesToDelete() {
+        return InteriorImagesToDelete;
+    }
+
+    public void setInteriorImagesToDelete(Set<Integer> interiorImagesToDelete) {
+        InteriorImagesToDelete = interiorImagesToDelete;
+    }
+
+    @Override
+    public Set<Integer> getExteriorImagesToDelete() {
+        return ExteriorImagesToDelete;
+    }
+
+    public void setExteriorImagesToDelete(Set<Integer> exteriorImagesToDelete) {
+        ExteriorImagesToDelete = exteriorImagesToDelete;
+    }
+
+    public Set<Integer> getRulesToDelete() {
+        return rulesToDelete;
+    }
+
+    public void setRulesToDelete(Set<Integer> rulesToDelete) {
+        this.rulesToDelete = rulesToDelete;
     }
 
     public Set<Long> getDeleteAdditionalServices() {

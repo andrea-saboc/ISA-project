@@ -2,15 +2,15 @@ package com.example.isa.controller;
 
 import java.util.List;
 
-import com.example.isa.dto.AddAvailablePeriodDto;
-import com.example.isa.dto.BoatRegistrationDto;
-import com.example.isa.dto.MansionRegistrationDto;
+import com.example.isa.dto.*;
 import com.example.isa.model.BoatAvailablePeriod;
 import com.example.isa.model.MansionAvailablePeriod;
+import com.example.isa.service.impl.AdditionalServiceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.isa.dto.SearchDto;
 import com.example.isa.model.Boat;
 import com.example.isa.model.Mansion;
 import com.example.isa.service.impl.MansionFilteringServiceImpl;
@@ -33,9 +32,11 @@ public class MansionController {
 	MansionService service;
 	@Autowired
 	MansionFilteringServiceImpl filteringService;
+	@Autowired
+	AdditionalServiceService additionalServiceService;
 
+	@PreAuthorize("hasRole('ROLE_MANSION_OWNER')")
 	@RequestMapping(method = RequestMethod.POST, value = "/registerMansion",produces = MediaType.APPLICATION_JSON_VALUE)
-	@CrossOrigin(origins = "*")
 	public ResponseEntity<String> registerMansion(@RequestBody MansionRegistrationDto dto){
 		System.out.println("In registering mansion service");
 		System.out.println(dto);
@@ -48,6 +49,22 @@ public class MansionController {
 			responseMessege = "Error ocured while saving mansion!";
 		}
 		return new ResponseEntity<>(responseMessege, HttpStatus.OK);
+	}
+
+	@PreAuthorize("hasRole('ROLE_MANSION_OWNER')")
+	@RequestMapping(method = RequestMethod.POST, value = "/changeMansion",produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> changeMansion(@RequestBody ChangeMansionDto dto){
+		Mansion changedMansion = service.changeMansion(dto);
+		String responseMessege;
+		System.out.println("Trying to change mansion");
+		if (changedMansion != null){
+			additionalServiceService.changeAdditionalServices(dto);
+			responseMessege = "Boat successfully changed!";
+		} else{
+			responseMessege = "Error ocured while trying to change boat!";
+		}
+		return new ResponseEntity<>(responseMessege, HttpStatus.OK);
+
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/mansions",produces = MediaType.APPLICATION_JSON_VALUE)
@@ -75,14 +92,14 @@ public class MansionController {
             return  new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    
-    @RequestMapping(method = RequestMethod.POST,value = "/deleteMansion",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @CrossOrigin(origins = "*")
-    public ResponseEntity<String> deleteMansion(@RequestBody long id){
-    	
-    	System.out.println("USli u kontroler");
+
+	@PreAuthorize("hasRole('ROLE_MANSION_OWNER')")
+	@RequestMapping(method = RequestMethod.POST,value = "/deleteMansion",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> deleteMansion(@RequestBody LongIdDto id){
+    	System.out.println("Trying to delete mansion: "+id.boatId);
         try {
-            return new ResponseEntity<>(service.deleteMansion(id).getName() + " has been deleted.", HttpStatus.OK);
+			service.deleteMansion(id.boatId);
+            return new ResponseEntity<String>("Successfully deleted mansion!", HttpStatus.OK);
         } catch (Exception e){
         	System.out.println(e);
             return  new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);

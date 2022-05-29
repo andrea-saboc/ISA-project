@@ -157,6 +157,7 @@ export default {
   name: "MansionRegistration",
   data(){
     return {
+      token: null,
       name: '',
       address : '',
       numberOfBeds: 0,
@@ -182,6 +183,10 @@ export default {
       pricePerDay: '',
       priceForSevenDays: ''
     }
+  },
+  mounted() {
+    this.token = localStorage.getItem('token').substring(1, localStorage.getItem('token').length-1);
+
   },
   methods:{
     addRoom(){
@@ -304,17 +309,19 @@ export default {
                 "rooms": roomArray,
                 "rules": this.rules
 
-
               }, {
                 headers: {
-                  'Authorization' : this.$store.getters.tokenString
+                  'Authorization' : 'Bearer ' + this.token,
                 }
               })
           .then(response => {
             alert(response.data)
             this.messege = response.data
           })
-      .catch((error) => alert(error));
+      .catch((error) => {
+        alert("Error occured while trying to register!")
+        console.log("Registering mansion error", error)
+      });
 
     }
   }

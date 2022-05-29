@@ -7,7 +7,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "Boat")
-public class Boat {
+public class Boat extends AbstractEntity{
 	
 	@Id
 	@Column(name = "id", unique = true)
@@ -76,6 +76,10 @@ public class Boat {
 	public void addRule(Rule newRule){
 	//	newRule.addBoat(this);
 		rules.add(newRule);
+	}
+
+	public User getOwner(){
+		return (User) boatOwner;
 	}
 
 

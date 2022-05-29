@@ -190,6 +190,16 @@ INSERT INTO public.additional_service(
     id, name, price_per_day, price_per_hour,adventure_id, boat_id, mansion_id)
 VALUES (7, 'wifi', 30, 12, 1,null, null );
 
+INSERT INTO public.additional_service(
+    id, name, price_per_day, price_per_hour,adventure_id, boat_id, mansion_id)
+VALUES (8, 'spa', 30, 12, null,null, 8 );
+INSERT INTO public.additional_service(
+    id, name, price_per_day, price_per_hour,adventure_id, boat_id, mansion_id)
+VALUES (9, 'breakfast', 50, 22, null,null, 8);
+INSERT INTO public.additional_service(
+    id, name, price_per_day, price_per_hour,adventure_id, boat_id, mansion_id)
+VALUES (10, 'hairstylist', 12, 36, null,null, 1);
+
 INSERT INTO public.fishing_available_period(
     available_period_id, end_date, start_date, fishing_id)
 VALUES (1, '2022-06-10 00:00:00', '2022-06-01 00:00:00', 507);

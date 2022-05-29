@@ -1,7 +1,9 @@
 package com.example.isa.service.impl;
 
 
+import com.example.isa.dto.AbstractChangeDto;
 import com.example.isa.dto.ChangeBoatDto;
+import com.example.isa.model.AbstractEntity;
 import com.example.isa.model.Boat;
 import com.example.isa.model.EntityImage;
 import com.example.isa.repository.EntityImageRepository;
@@ -135,19 +137,19 @@ public class EntityImageService {
         return null;
     }
 
-    public ArrayList<EntityImage> removeAndAddNewExterior(ChangeBoatDto dto, Boat boatToChange) {
+    public ArrayList<EntityImage> removeAndAddNewExterior(AbstractChangeDto dto, AbstractEntity boatToChange) {
         ArrayList<EntityImage> entityImages = new ArrayList<>(boatToChange.getExteriorImages());
-        entityImages.addAll(createAndSaveImages("BoatOwner", boatToChange.boatOwner.getEmail(), boatToChange.getName(), dto.ExteriorImages));
-        for(Integer id : dto.ExteriorImagesToDelete){
+        entityImages.addAll(createAndSaveImages("BoatOwner", boatToChange.getOwner().getEmail(), boatToChange.getName(), dto.getExteriorImages()));
+        for(Integer id : dto.getExteriorImagesToDelete()){
             entityImages.remove(entityImageRepository.findById(id).get());
         }
         return entityImages;
     }
 
-    public ArrayList<EntityImage> removeAndAddNewInterior(ChangeBoatDto dto, Boat boatToChange) {
+    public ArrayList<EntityImage> removeAndAddNewInterior(AbstractChangeDto dto, AbstractEntity boatToChange) {
         ArrayList<EntityImage> entityImages = new ArrayList<>(boatToChange.getInteriorImages());
-        entityImages.addAll(createAndSaveImages("BoatOwner", boatToChange.boatOwner.getEmail(), boatToChange.getName(), dto.InteriorImages));
-        for(Integer id : dto.InteriorImagesToDelete){
+        entityImages.addAll(createAndSaveImages("BoatOwner", boatToChange.getOwner().getEmail(), boatToChange.getName(), dto.getInteriorImages()));
+        for(Integer id : dto.getInteriorImagesToDelete()){
             entityImages.remove(entityImageRepository.findById(id).get());
         }
         return entityImages;

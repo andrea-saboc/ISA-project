@@ -11,13 +11,10 @@ public class Room {
     private Long id;
     private int numberOfBeds;
 
-    @ManyToOne
-    private Mansion mansion;
 
     public Room(){}
 
-    public Room(Mansion mansion, int numberOfBeds){
-        this.mansion = mansion;
+    public Room( int numberOfBeds){
         this.numberOfBeds = numberOfBeds;
     }
 
@@ -37,20 +34,11 @@ public class Room {
         this.numberOfBeds = numberOfBeds;
     }
 
-    public Mansion getMansion() {
-        return mansion;
-    }
-
-    public void setMansion(Mansion mansion) {
-        this.mansion = mansion;
-    }
-
     @Override
     public String toString() {
         return "Room{" +
                 "id=" + id +
                 ", numberOfBeds=" + numberOfBeds +
-                ", mansion=" + mansion +
                 '}';
     }
 }

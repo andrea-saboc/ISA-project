@@ -225,7 +225,7 @@
           <button type="button" class="btn btn-secondary btn-sm" id="as" v-on:click="addAdditionalService()">Add service</button>
         </div>
       </div>
-      <div v-if="additionalServices.length>0">
+      <div v-if="additionalServiceNew.length>0">
         <table class="table table-striped">
             <thead>
               <tr>
@@ -457,7 +457,7 @@ export default {
       console.log("all interior images", this.allInteriorImages);
 
     },
-    initializeAdditionalSrvices() {
+    setAdditionalServices() {
       axios.get(devServer.proxy + "/additionalServices", {
         params:
             {
@@ -481,9 +481,6 @@ export default {
             }
 
           })
-    },
-    setAdditionalServices() {
-      this.initializeAdditionalSrvices();
     },
     setFields(){
       this.name = this.selectedBoat.name;
@@ -528,7 +525,6 @@ export default {
     },
     changeBoat(){
       console.log("selectovani brod", this.selectedBoat)
-      alert(this.selectedBoat.id)
       this.boatName=this.selectedBoat.name;
       this.setFields();
     },
@@ -548,10 +544,11 @@ export default {
           }
         })
             .then(response1 => {
-              console.log("brodovi vlasnika", response1.data)
+              console.log("brodovi vlasnika nakon brisanja", response1.data)
               this.boats = response1.data;
               if (this.boats.length > 0) {
                 this.selectedBoat = this.boats[0];
+                this.setFields()
               }
 
             })
