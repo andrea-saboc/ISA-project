@@ -51,7 +51,8 @@ export default{
     },
     methods:{
       Login(){
-          localStorage.removeItem('token');
+        localStorage.removeItem('token');
+        localStorage.clear();
         let store = this.$store;
         this.CheckIfEmpty()
         if(!this.fieldEmpty){

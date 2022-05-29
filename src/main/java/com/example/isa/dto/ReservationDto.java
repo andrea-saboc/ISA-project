@@ -20,8 +20,10 @@ public class ReservationDto {
 	public Date startDateTime;
 	private int numberOfDays;
 	private int numberOfHours;
-	
-	
+
+
+
+
 	public long getEntityId() {
 		return entityId;
 	}

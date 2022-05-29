@@ -1,6 +1,8 @@
 package com.example.isa.service.impl.reservations;
 
 
+import com.example.isa.dto.ReservationCalendarDTO;
+import com.example.isa.dto.ReservationDto;
 import com.example.isa.model.*;
 import com.example.isa.model.reservations.AdventureReservation;
 import com.example.isa.model.reservations.BoatReservation;
@@ -47,6 +49,22 @@ public class CollectingAdventureReservationsServiceImpl {
             adventureReservation.addAll(adventureReservationRepository.findAllByAdventure(adventure));
         }
         return adventureReservation;
+    }
+
+    public List<ReservationCalendarDTO> getAllAdventureForCalendar()
+    {
+        List<AdventureReservation> adventureReservation=getOwnerReservation();
+        List<ReservationCalendarDTO> reservationCalendarDTO=  new ArrayList<>();
+
+        for(AdventureReservation a : adventureReservation)
+        {
+            String title="Avantura:"+a.getAdventure().getName();
+            String description="Pocetak: "+a.getStartDate()+"\n kraj je "+a.getEndDate()+"\n korisnik koji je rezervisao: "+a.getUser().getName()+ " "+a.getUser().getSurname();
+            ReservationCalendarDTO r= new ReservationCalendarDTO(a.getStartDate(),a.getEndDate(),title,description);
+            reservationCalendarDTO.add(r);
+        }
+        return reservationCalendarDTO;
+
     }
 
 }

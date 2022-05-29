@@ -281,20 +281,20 @@ VALUES (6, 2, null, null);
 
 INSERT INTO public.reservation(
     reservation_type, id, end_date, number_of_guests, start_date, total_price, type, system_user)
-VALUES ('ADVENTURE', 7, '2022-02-07 00:00:00', 4, '2022-01-28 00:08:00', 230, 'ADVENTURE', 401);
+VALUES ('ADVENTURE', 7, '2022-06-07 00:00:00', 4, '2022-05-28 00:08:00', 230, 'ADVENTURE', 401);
 INSERT INTO public.adventure_reservation(
     id, adventure_id, feedback_id, owner_feedback_id)
 VALUES (7, 1, null, null);
 INSERT INTO public.reservation(
     reservation_type, id, end_date, number_of_guests, start_date, total_price, type, system_user)
-VALUES ('ADVENTURE', 8, '2022-02-09 00:00:00', 4, '2022-02-07 00:00:00', 230, 'ADVENTURE', 401);
+VALUES ('ADVENTURE', 8, '2022-06-09 00:00:00', 4, '2022-06-07 00:00:00', 230, 'ADVENTURE', 401);
 INSERT INTO public.adventure_reservation(
     id, adventure_id, feedback_id, owner_feedback_id)
 VALUES (8, 1, null, null);
 
 INSERT INTO public.reservation(
     reservation_type, id, end_date, number_of_guests, start_date, total_price, type, system_user)
-VALUES ('ADVENTURE', 9, '2022-02-10 00:00:00', 4, '2022-02-15 00:00:00', 230, 'ADVENTURE', 400);
+VALUES ('ADVENTURE', 9, '2022-06-15 00:00:00', 4, '2022-06-10 00:00:00', 230, 'ADVENTURE', 400);
 INSERT INTO public.adventure_reservation(
     id, adventure_id, feedback_id, owner_feedback_id)
 VALUES (9, 2, null, null);

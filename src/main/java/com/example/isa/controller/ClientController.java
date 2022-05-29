@@ -51,7 +51,7 @@ public class ClientController {
 		return ResponseEntity.ok(userService.updateClientInfo(user));
 	}
 	
-	@PreAuthorize("hasRole('ROLE_CLIENT')")
+	@PreAuthorize("hasRole('ROLE_CLIENT','ROLE_FISHING_INSTRUCTOR')")
 	@RequestMapping(method = RequestMethod.POST, value = "/changePassword",produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
 	@CrossOrigin(origins = "*")	
 	public ResponseEntity<String> updatePassword(@RequestBody ChangingPasswordDto dto) throws JsonProcessingException{	
@@ -63,7 +63,7 @@ public class ClientController {
 		}
 	}
 
-	@PreAuthorize("hasRole('ROLE_CLIENT')")
+	@PreAuthorize("hasRole('ROLE_CLIENT','ROLE_FISHING_INSTRUCTOR')")
 	@RequestMapping(method = RequestMethod.POST, value = "/createDeletionRequest",produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
 	@CrossOrigin(origins = "*")	
 	public ResponseEntity<User> createDeletionRequest(@RequestBody String reason) throws JsonProcessingException{	
