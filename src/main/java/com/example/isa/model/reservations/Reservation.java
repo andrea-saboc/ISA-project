@@ -31,7 +31,7 @@ import com.example.isa.model.User;
 @Table(name = "reservation")
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "reservation_type", discriminatorType = DiscriminatorType.STRING)
-public abstract class Reservation {
+public abstract class Reservation extends AbstractReservation {
 	
 	private String type="";
 	

@@ -85,4 +85,9 @@ public class BoatDiscountReservation extends DiscountReservation{
 	public String getEntityName() {
 		return this.boat.getName();
 	}
+
+	@Override
+	public double getTotalPrice() {
+		return getPriceWithDiscount();
+	}
 }

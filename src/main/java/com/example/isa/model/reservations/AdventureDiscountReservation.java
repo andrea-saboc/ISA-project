@@ -83,7 +83,8 @@ public class AdventureDiscountReservation extends DiscountReservation{
     }
 
 
-
-
-
+    @Override
+    public double getTotalPrice() {
+        return getPriceWithDiscount();
+    }
 }

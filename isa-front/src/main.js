@@ -10,8 +10,7 @@ import store from './store'
 import App from './App.vue'
 import 'bootstrap';
 import VCalendar from 'v-calendar';
-import OpenLayersMap from '.'
-
+import OpenLayersMap from '.';
 
 
 window.$ = window.jQuery = require('jquery');

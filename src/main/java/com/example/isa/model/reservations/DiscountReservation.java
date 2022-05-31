@@ -29,7 +29,7 @@ import com.example.isa.model.User;
 @Entity
 @Table(name = "discount_reservation")
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class DiscountReservation implements Serializable{
+public abstract class DiscountReservation extends AbstractReservation implements Serializable{
 
 	private static final long serialVersionUID = 6715093951843998707L;
 	

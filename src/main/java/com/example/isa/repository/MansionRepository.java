@@ -13,4 +13,6 @@ public interface MansionRepository extends JpaRepository<Mansion, Long> {
 	Mansion findById(long id);
 	List<Mansion> findAllByMansionOwnerAndDeletedFalse(MansionOwner mansionOwner);
 	Mansion findByIdAndDeletedFalse(long id);
+
+    List<Mansion> findAllByMansionOwner(MansionOwner mansionOwner);
 }

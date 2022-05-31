@@ -99,4 +99,9 @@ public class MansionDiscountReservation extends DiscountReservation{
 	public String getEntityName() {
 		return this.mansion.getName();
 	}
+
+	@Override
+	public double getTotalPrice() {
+		return getPriceWithDiscount();
+	}
 }

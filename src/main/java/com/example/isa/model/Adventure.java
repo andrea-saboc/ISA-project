@@ -8,7 +8,7 @@ import java.util.Set;
 
 @Entity
 @Table(name="Adventure")
-public class Adventure {
+public class Adventure extends AbstractEntity{
 
 	@Id
 	@Column(name = "id", unique = true)
@@ -78,6 +78,21 @@ public class Adventure {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	@Override
+	public Set<EntityImage> getExteriorImages() {
+		return images;
+	}
+
+	@Override
+	public Set<EntityImage> getInteriorImages() {
+		return images;
+	}
+
+	@Override
+	public User getOwner() {
+		return fishingInstructor;
 	}
 
 	public String getName() {
