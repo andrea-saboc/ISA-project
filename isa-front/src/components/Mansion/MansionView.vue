@@ -137,51 +137,92 @@
 
                   </div>
                   <hr>
-                  <p style="font-weight: bolder; font-size: 26px">
-                  Calendar
-                  </p>
-                  <button v-if="loggedUser!=null && mansionOwner.id==loggedUser.id" type="button" class="btn btn-primary" data-bs-toggle="modal" style="margin: 0.5%" data-bs-target="#exampleModal">Add availability period</button>
-        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                  <div class="modal-dialog">
-                  <div class="modal-content">
+        <div class="row">
+          <div>
+            <p style="font-weight: bolder; font-size: 26px">
+              Calendar
+            </p>
+            <button v-if="loggedUser!=null && mansionOwner.id==loggedUser.id" type="button" class="btn btn-primary" data-bs-toggle="modal" style="margin: 0.5%" data-bs-target="#exampleModal">Add availability period</button>
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
                   <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLabel">Add availability for {{mansionToShow.name}}</h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times" aria-hidden="true"></i></button>
+                    <h5 class="modal-title" id="exampleModalLabel">Add availability for {{mansionToShow.name}}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times" aria-hidden="true"></i></button>
                   </div>
                   <div class="modal-body">
-                  <v-date-picker mode="dateTime" is24hr v-model="startDateTime" style="width: 100%" :disabled-dates="availableDates">
-                  <template v-slot="{ inputValue, inputEvents }">
-                  <input
-                  class="px-2 py-1 border rounded focus:outline-none focus:border-blue-300"
-                  :value="inputValue"
-                  v-on="inputEvents"
-                  style="overflow: visible"
-                  placeholder="From time"
-                  />
-                  </template>
-                  </v-date-picker>
-                  <v-date-picker  mode="dateTime" is24hr v-model="endDateTime" style="width: 100%" :disabled-dates="availableDates">
-                  <template v-slot="{ inputValue, inputEvents }">
-                  <input
-                  class="px-2 py-1 border rounded focus:outline-none focus:border-blue-300"
-                  :value="inputValue"
-                  v-on="inputEvents"
-                  placeholder="To time"
-                  />
-                  </template>
-                  </v-date-picker>
+                    <v-date-picker mode="dateTime" is24hr v-model="startDateTime" style="width: 100%" :disabled-dates="availableDates">
+                      <template v-slot="{ inputValue, inputEvents }">
+                        <input
+                            class="px-2 py-1 border rounded focus:outline-none focus:border-blue-300"
+                            :value="inputValue"
+                            v-on="inputEvents"
+                            style="overflow: visible"
+                            placeholder="From time"
+                        />
+                      </template>
+                    </v-date-picker>
+                    <v-date-picker  mode="dateTime" is24hr v-model="endDateTime" style="width: 100%" :disabled-dates="availableDates">
+                      <template v-slot="{ inputValue, inputEvents }">
+                        <input
+                            class="px-2 py-1 border rounded focus:outline-none focus:border-blue-300"
+                            :value="inputValue"
+                            v-on="inputEvents"
+                            placeholder="To time"
+                        />
+                      </template>
+                    </v-date-picker>
                   </div>
                   <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                  <button type="button" class="btn btn-primary" v-on:click="addAvailabilityPeriod" data-bs-dismiss="modal">Add</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" v-on:click="addAvailabilityPeriod" data-bs-dismiss="modal">Add</button>
                   </div>
-                  </div>
-                  </div>
+                </div>
+              </div>
+            </div>
+
+            <br>
+            <v-calendar :columns="$screens({ default: 1, lg: 2 })" :attributes='calendar_attributes'
+                        :available-dates='availableDates'/>
+            <div>
+
+            </div>
+          </div>
+          <div class="availabile-periods" style="margin: 2%">
+            <h5>Availble periods</h5>
+            <select class="form-select form-select-lg mb-3 custom-select" style="width: 20%" aria-label=".form-select-lg example" v-model="selectedYear" v-on:change="changeYear">
+              <option v-bind:value=thisYear selected>
+                {{thisYear}}
+              </option>
+              <option v-bind:value=thisYear+1>
+                {{thisYear+1}}
+              </option>
+              <option v-bind:value="thisYear+2">
+                {{thisYear+2}}
+              </option>
+            </select>
+            <div v-if="availablePeriodsToShow.length>0">
+              <table class="table">
+                <thead>
+                <th>From</th>
+                <th>To</th>
+                </thead>
+                <tbody>
+                <tr v-for="a in availablePeriodsToShow"  :key="a.id">
+                  <td>{{new Date(a.startDate).getDate()}}.{{new Date(a.startDate).getMonth()+1}}.{{new Date(a.startDate).getFullYear()}}.</td>
+                  <td>{{new Date(a.endDate).getDate()}}.{{new Date(a.endDate).getMonth()+1}}.{{new Date(a.endDate).getFullYear()}}.</td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+            <div v-else>
+              <h5>Not available!</h5>
+            </div>
+
+          </div>
+
         </div>
 
-        <br>
-                  <v-calendar :columns="$screens({ default: 1, lg: 2 })" :attributes='calendar_attributes'
-                  :available-dates='availableDates'/>
                   <hr>
                   <p style="font-weight: bolder; font-size: 26px">
                   Discounts
@@ -378,7 +419,7 @@
             </v-date-picker>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-primary" v-on:click="addQuickReservation">Add</button>
+            <button type="button" class="btn btn-primary" v-on:click="addQuickReservation" data-bs-dismiss="modal">Add</button>
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
           </div>
         </div>
@@ -397,6 +438,9 @@ export default {
   name: "MansionView",
   data: function () {
     return {
+      availablePeriodsToShow: new Array(),
+      selectedYear: new Date().getFullYear(),
+      thisYear: new Date().getFullYear(),
       token: null,
       rooms: new Map(),
       allInteriorImages: [],
@@ -502,39 +546,83 @@ export default {
                       }))
                       .catch(() => {
                         alert("Error occured while trying to find mansion subscribers!")
-                      })
-                  axios.get(devServer.proxy + "/additionalServicesMansion", {
+                      }) //subscribero
+                  axios.get(devServer.proxy + "/getReservedDatesForMansion",{
                     params:
                         {
-                          id: this.mansionToShow.id
+                          "boatId": this.mansionToShow.id
                         },
                     headers: {
                       'Authorization': 'Bearer ' + this.token,
                     }
-                  })
-                      .then((response=>{
-                        this.additionalServices = response.data;
-                        console.log("Additional services for mansion: ", this.additionalServices)
-                      }))
-                      .catch((err) =>{
-                        alert("Error ocured while trying to get additional services!")
-                        console.log("Error:", err)
-                      })
-                }
-                this.calculateAvailableDaysForCalendar()
+                  } )
+                      .then(response3 =>{
+                        this.mansionReservations=response3.data;
+                        this.calculateAvailableDaysForCalendar();
+                      }) //rezervisani od vikendice
+                } //ako je ulogovan owner
+                ///Unutar ifa drugi axios poziv
+                axios
+                    .post(devServer.proxy + "/getMansionAvailability", {
+                          "boatId" : this.mansionToShow.id
+                        }, {
+                          headers: {
+                            'Authorization': 'Bearer ' + this.token,
+                          }
+                        }
+                    )
+                    .then(response2 => {
+                      this.availablePeriods = response2.data
+                      console.log("Available dates for mansion", this.availablePeriods)
+                      this.changeYear();
+                      this.calculateAvailableDaysForCalendar()
+                    }) //dostupnost vikendice
+                    .catch((err)=>{
+                      alert("Error while trying to get available periods!")
+                      console.log(err);
+                    }) //dostupnpost vikendice
+                axios.get(devServer.proxy + "/additionalServicesMansion", {
+                  params:
+                      {
+                        id: this.mansionToShow.id
+                      },
+                  headers: {
+                    'Authorization': 'Bearer ' + this.token,
+                  }
+                })
+                    .then((response=>{
+                      this.additionalServices = response.data;
+                      console.log("Additional services for mansion: ", this.additionalServices)
+                    }))//aditional services
+                    .catch((err) =>{
+                      alert("Error ocured while trying to get additional services!")
+                      console.log("Error:", err)
+                    })
+
                 console.log("Days calculated")
                 this.setImages();
                 this.setRooms();
                 console.log("Images set")
 
-              })
-            }
-        ).catch(() =>{
+              }) //nakon sto se dobije vikendica
+            })//nakon sto se dobija klijent ili ti user
+        .catch(() =>{
       this.loggedUser = null
     })
 
   },
   methods:{
+    changeYear(){
+      this.availablePeriodsToShow = new Array();
+      for(var tmp of this.availablePeriods){
+        var startDate = new Date(tmp.startDate);
+        var endDate = new Date(tmp.endDate)
+        if(startDate.getFullYear() == this.selectedYear || endDate.getFullYear() == this.selectedYear){
+          this.availablePeriodsToShow.push(tmp);
+        }
+
+      }
+    },
     setRooms(){
         console.log("setting rooms!")
       for(var r of this.mansionToShow.rooms){
@@ -706,21 +794,37 @@ export default {
 
     },
     addAvailabilityPeriod(){
-      axios
-          .post(devServer.proxy + "/addAvailablePeriodForMansion", {
-            "boatId" : this.mansionToShow.id,
-            "startTime" : this.startDateTime,
-            "endTime" : this.endDateTime
-          }, {
-            headers: {
-              'Authorization' : this.$store.getters.tokenString
-            }
-          })
-          .then(response => {
-            this.availablePeriods = response.data
-            console.log("New available periods: ", this.availablePeriods )
-            this.calculateAvailableDaysForCalendar()
-          })
+      if(this.startDateTime!= '' && this.endDateTime!='') {
+        var dateFirst = new Date(this.startDateTime);
+        var dateSecond = new Date(this.endDateTime)
+        if(dateFirst > dateSecond){
+          alert("End Date must be after start date!")
+        } else
+        {
+          axios
+              .post(devServer.proxy + "/addAvailablePeriodForMansion", {
+                "boatId": this.mansionToShow.id,
+                "startTime": this.startDateTime,
+                "endTime": this.endDateTime
+              }, {
+                headers: {
+                  'Authorization': this.$store.getters.tokenString
+                }
+              })
+              .then(response => {
+                this.availablePeriods = response.data
+                console.log("New available periods: ", this.availablePeriods)
+                this.calculateAvailableDaysForCalendar()
+              })
+              .catch((err) => {
+                alert("Error with adding new period!")
+                console.log(err.data)
+              })
+        }
+      }
+      else{
+        alert("Neither start or end time can be empty!")
+      }
 
     },
     addAditionalServiceToRes(additionalService){
@@ -768,29 +872,39 @@ export default {
       this.calculateAvailableDaysForCalendar()
     },
     addQuickReservation(){
-      console.log("pokusavam da kreiram")
-      axios.post(devServer.proxy + "/createDiscountMansionReservation", {
-        "boatId" : this.mansionToShow.id,
-        "startDate" : this.startDateTimeQuick,
-        "days" : this.numberOfDaysQuick,
-        "hours" : this.numberOfHoursQuick,
-        "numberOfGuests" : this.numberOfGuestsQuick,
-        "priceWithDiscount": this.priceQuick,
-        "validUntil" : this.availableUntil
-      }, {
-        headers: {
-          'Authorization': this.$store.getters.tokenString,
-          'Content-Type': 'application/json'
-        }
-      })
-          .then(response => {
-            alert("response data",response.data)
-          })
-      .catch(() =>
-      {
-        alert("Error happened!")
-      })
-      this.calculateAvailableDaysForCalendar()
+      var startDate = new Date(this.startDateTimeQuick);
+      var valid = new Date(this.availableUntil);
+      if(valid >= startDate){
+        alert("Quick reservation must be valid just BEFORE the reservation starts!");
+        return;
+      }
+      else{
+        console.log("pokusavam da kreiram")
+        axios.post(devServer.proxy + "/createDiscountMansionReservation", {
+          "boatId" : this.mansionToShow.id,
+          "startDate" : this.startDateTimeQuick,
+          "days" : this.numberOfDaysQuick,
+          "hours" : this.numberOfHoursQuick,
+          "numberOfGuests" : this.numberOfGuestsQuick,
+          "priceWithDiscount": this.priceQuick,
+          "validUntil" : this.availableUntil
+        }, {
+          headers: {
+            'Authorization': this.$store.getters.tokenString,
+            'Content-Type': 'application/json'
+          }
+        })
+            .then(response => {
+              console.log(response.data)
+              alert(response.data)
+            })
+            .catch(() =>
+            {
+              alert("Error happened!")
+            })
+        this.calculateAvailableDaysForCalendar()
+      }
+
     },
     checkEmail(){
       if (!this.validEmail(this.clientResEmail)){

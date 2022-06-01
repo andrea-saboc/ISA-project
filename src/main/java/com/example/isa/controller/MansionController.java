@@ -3,7 +3,6 @@ package com.example.isa.controller;
 import java.util.List;
 
 import com.example.isa.dto.*;
-import com.example.isa.model.BoatAvailablePeriod;
 import com.example.isa.model.MansionAvailablePeriod;
 import com.example.isa.service.impl.AdditionalServiceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.isa.model.Boat;
 import com.example.isa.model.Mansion;
 import com.example.isa.service.impl.MansionFilteringServiceImpl;
 import com.example.isa.service.impl.MansionService;
@@ -54,6 +52,9 @@ public class MansionController {
 	@PreAuthorize("hasRole('ROLE_MANSION_OWNER')")
 	@RequestMapping(method = RequestMethod.POST, value = "/changeMansion",produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> changeMansion(@RequestBody ChangeMansionDto dto){
+		if(service.isReserved(dto.id)){
+			return new ResponseEntity<>("Mansion is reserved, not possible to change or delete!", HttpStatus.OK);
+		}
 		Mansion changedMansion = service.changeMansion(dto);
 		String responseMessege;
 		System.out.println("Trying to change mansion");
@@ -96,6 +97,9 @@ public class MansionController {
 	@PreAuthorize("hasRole('ROLE_MANSION_OWNER')")
 	@RequestMapping(method = RequestMethod.POST,value = "/deleteMansion",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> deleteMansion(@RequestBody LongIdDto id){
+		if(service.isReserved(id.boatId)){
+			return new ResponseEntity<>("Mansion is reserved, not possible to change or delete!", HttpStatus.OK);
+		}
     	System.out.println("Trying to delete mansion: "+id.boatId);
         try {
 			service.deleteMansion(id.boatId);
@@ -133,13 +137,31 @@ public class MansionController {
 	@CrossOrigin(origins = "*")
 	public ResponseEntity<String> addAvailablePeriodForBoat(@RequestBody AddAvailablePeriodDto dto) throws JsonProcessingException{
 		System.out.println("Adding available period for mansion!");
-		List<MansionAvailablePeriod> mansionAvailabilities = service.addBoatAvailabilities(dto);
+		if (dto.endTime == null || dto.startTime==null){
+			return new ResponseEntity<>("Neither start or end time can be empty!", HttpStatus.BAD_REQUEST);
+		}
+		if(dto.endTime.before(dto.startTime)){
+			return new ResponseEntity<>("End time is before start time!", HttpStatus.BAD_REQUEST);
+		}
+
+		List<MansionAvailablePeriod> mansionAvailabilities = service.addMansionAvailabilities(dto);
 		ObjectMapper mapper = new ObjectMapper();
-		System.out.print("Before coverting" + mansionAvailabilities.toString());
 		String jsonString = mapper.writeValueAsString(mansionAvailabilities);
 		System.out.println(jsonString);
-		System.out.println("Finished");
 		return new ResponseEntity<>(jsonString, HttpStatus.OK);
+	}
+
+	@RequestMapping(method = RequestMethod.POST, value = "/getMansionAvailability", produces = MediaType.APPLICATION_JSON_VALUE)
+	@CrossOrigin(origins = "*")
+	public ResponseEntity<List<MansionAvailablePeriod>> getAvailablePeriod(@RequestBody LongIdDto dto) throws JsonProcessingException{
+		System.out.println("In getting availability for boats");
+		List<MansionAvailablePeriod> boatAvailabilities = service.getMansionAvailbilities(dto.boatId);
+		ObjectMapper mapper = new ObjectMapper();
+		System.out.print("Before coverting" + boatAvailabilities.toString());
+		String jsonString = mapper.writeValueAsString(boatAvailabilities);
+		System.out.println(jsonString);
+		System.out.println("In contoler");
+		return new ResponseEntity<>(boatAvailabilities, HttpStatus.OK);
 	}
 	
 	

@@ -537,7 +537,7 @@ export default {
         }
       })
       .then(response => {
-        alert("Boat successfully deleted!", response.data)
+        alert(response.data)
         axios.get(devServer.proxy + "/ownersBoats", {
           headers: {
             'Authorization': this.$store.getters.tokenString

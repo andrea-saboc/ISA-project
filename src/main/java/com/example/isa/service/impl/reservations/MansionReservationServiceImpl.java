@@ -1,14 +1,15 @@
 package com.example.isa.service.impl.reservations;
 
 import java.text.ParseException;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.time.LocalDateTime;
+import java.util.*;
 
 import com.example.isa.mail.MailService;
 import com.example.isa.model.*;
 import com.example.isa.model.reservations.*;
+import com.example.isa.repository.*;
+import com.example.isa.service.impl.ClientService;
+import com.example.isa.service.impl.DateCoverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -20,11 +21,6 @@ import com.example.isa.dto.ReservationDto;
 import com.example.isa.exception.EntityDeletedException;
 import com.example.isa.exception.ImpossibleDueToPenaltyPoints;
 import com.example.isa.exception.PeriodNoLongerAvailableException;
-import com.example.isa.repository.AdditionalServiceRepository;
-import com.example.isa.repository.ClientRepository;
-import com.example.isa.repository.MansionAvailablePeriodRepository;
-import com.example.isa.repository.MansionRepository;
-import com.example.isa.repository.MansionReservationRepository;
 import com.example.isa.service.AuthenticationService;
 import com.example.isa.service.ReservationService;
 
@@ -37,6 +33,8 @@ public class MansionReservationServiceImpl implements ReservationService{
 	MansionRepository mansionRepo;
 	@Autowired 
 	MansionReservationRepository mansionReservationRepo;
+	@Autowired
+	MansionDiscountReservationRepository mansionDiscountReservationRepository;
 
 	@Autowired
 	MansionAvailablePeriodRepository availablePeriodsRepo;
@@ -48,7 +46,18 @@ public class MansionReservationServiceImpl implements ReservationService{
 	ClientRepository clientRepository;
 	@Autowired
 	MailService<String> mailService;
-	
+	@Autowired
+	ClientService clientService;
+	@Autowired
+	CollectionMansionReservationsImpl collectionMansionReservationsService;
+
+
+
+	public List<AbstractReservation> getAllMansionReservations(Mansion mansion){
+		List<AbstractReservation> allReservations = new ArrayList<>(mansionReservationRepo.findAllByMansionAndStatusNot(mansion, ReservationStatus.CANCELLED));
+		allReservations.addAll(mansionDiscountReservationRepository.findAllByMansionAndStatusNot(mansion, ReservationStatus.CANCELLED));
+		return allReservations;
+	}
 	
 	
 	@Override
@@ -161,7 +170,7 @@ public class MansionReservationServiceImpl implements ReservationService{
 
 	@Override
 	@Transactional(readOnly=false,propagation=Propagation.REQUIRED,isolation= Isolation.SERIALIZABLE)
-	public MansionReservation createReservationForClient(CustomReservationForClientDto dto) throws PeriodNoLongerAvailableException, ParseException{
+	public int createReservationForClient(CustomReservationForClientDto dto) throws PeriodNoLongerAvailableException, ParseException{
 		ReservationDto res = new ReservationDto(dto);
 		ReservationStartEndDateFormatter formatter = new ReservationStartEndDateFormatter(res);
 		Date startDate = formatter.startDate;
@@ -170,14 +179,19 @@ public class MansionReservationServiceImpl implements ReservationService{
 		MansionAvailablePeriod period = availablePeriodsRepo.getPeriodOfInterest(startDate, endDate, res.getEntityId());
 		Mansion mansion = mansionRepo.findByIdAndDeletedFalse(res.getEntityId());
 		if(period == null) {
-			throw new PeriodNoLongerAvailableException();
+			return 5;
+			//throw new PeriodNoLongerAvailableException();
 		}
 		else {
 
-			Client client = clientRepository.findByEmail(dto.email);
+			Client client = clientRepository.findByEmailAndBlockedFalseAndDeletedFalse(dto.email);
+			if (client == null){
+				return 2;
+			}
+			if(!clientService.clientAvailable(client, startDate, endDate)){
+				return 4;
+			}
 			MansionReservation newMansionReservation = new MansionReservation(client, startDate, endDate, res.getNumberOfGuests(), dto.toResSearchDto(), mansion);
-
-
 			if(!period.getStartDate().equals(startDate)) {
 				MansionAvailablePeriod periodBefore = new MansionAvailablePeriod(period.getStartDate(),startDate,period.getMansion());
 				availablePeriodsRepo.save(periodBefore);
@@ -192,9 +206,25 @@ public class MansionReservationServiceImpl implements ReservationService{
 			newMansionReservation.setAdditionalServices(addAdditionalServices(res.getAdditionalServices()));
 			newMansionReservation.setTotalPrice( dto.getPrice(mansion) + accountAdditionalServices(newMansionReservation.getAdditionalServices(),res));
 			mailService.notifyClientAboutCreatedReservation(newMansionReservation);
-			return mansionReservationRepo.save(newMansionReservation);
+			MansionReservation newRes = mansionReservationRepo.save(newMansionReservation);
+			if(newRes == null){
+				return 3;
+			}
+			return 1;
 		}
 	}
-	
 
+
+    public boolean isThereAReservationAfterToday(Mansion mansion) {
+		List<AbstractReservation> allReservations = collectionMansionReservationsService.getAllNotCancelledReservationsByMansion(mansion);
+		LocalDateTime today = LocalDateTime.now();
+		for (AbstractReservation ar : allReservations){
+			if ((DateCoverter.convertToLocalDateTimeViaInstant(ar.getStartDate()).isAfter((today))
+			|| (DateCoverter.convertToLocalDateTimeViaInstant(ar.getStartDate()).isBefore(today) && DateCoverter.convertToLocalDateTimeViaInstant(ar.getEndDate()).isAfter(today))
+			) && (ar.getStatus()== ReservationStatus.RESERVED || ar.getStatus() == ReservationStatus.ACTIVE)){
+	return true;
+			}
+		}
+		return false;
+    }
 }

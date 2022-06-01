@@ -17,6 +17,7 @@ public interface AdventureDiscountReservationRepository  extends JpaRepository<A
     AdventureDiscountReservation findById(long id);
     List<AdventureDiscountReservation> findAllByAdventure(Adventure b);
     List<DiscountReservation> findAllByAdventureAndStatus(Adventure b, ReservationStatus status);
+    List<AdventureDiscountReservation> findAllByUserAndStatusNot(User user, ReservationStatus status);
 
     List<AdventureDiscountReservation> findAllByUserAndStatus(User u, ReservationStatus status);
 

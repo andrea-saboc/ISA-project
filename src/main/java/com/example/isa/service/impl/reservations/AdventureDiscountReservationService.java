@@ -14,7 +14,6 @@ import com.example.isa.service.SubscriptionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
-import com.example.isa.service.DiscountReservationService;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -51,7 +50,7 @@ public class AdventureDiscountReservationService implements DiscountReservationS
     }
 
     @Override
-    public DiscountReservation createDiscountReservation(NewDiscountReservationDto dto) {
+    public int createDiscountReservation(NewDiscountReservationDto dto) {
         AdventureDiscountReservation adventureDiscountReservation = new AdventureDiscountReservation();
         Adventure adventure = adventureRepository.findById(dto.boatId).get();
         adventureDiscountReservation.setAdventure(adventure);
@@ -66,7 +65,7 @@ public class AdventureDiscountReservationService implements DiscountReservationS
         adventureDiscountReservation.calculatePercentageOfDiscount();
         reservationRepo.save(adventureDiscountReservation);
         notifyAllSubscribers(adventureDiscountReservation);
-        return adventureDiscountReservation;
+        return 1;
     }
 
     private void notifyAllSubscribers(AdventureDiscountReservation adventureDiscountReservation) {

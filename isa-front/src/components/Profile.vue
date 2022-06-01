@@ -239,9 +239,13 @@ export default{
          }
       })
          .then(response => {
-            alert('submited')
+            alert(response.data);
             console.log(response.data)
-      });
+      })
+         .catch((err) =>{
+           alert("It is impossible to create deletion request!")
+           console.log(err);
+         });
 
       }
 

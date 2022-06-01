@@ -98,6 +98,9 @@ public class BoatController {
 	@PreAuthorize("hasRole('ROLE_BOAT_OWNER')")
 	@RequestMapping(method = RequestMethod.POST, value = "/changeBoat",produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> changeBoat(@RequestBody ChangeBoatDto dto){
+		if(service.isReserved(dto.id)){
+			return new ResponseEntity<>("Boat is reserved, not possible to change or delete!", HttpStatus.OK);
+		}
 		Boat changedBoat = service.changeBoat(dto);
 		String responseMessege;
 		System.out.println("Trying to change boat");
@@ -128,6 +131,12 @@ public class BoatController {
 	@CrossOrigin(origins = "*")
 	public ResponseEntity<String> addAvailablePeriodForBoat(@RequestBody AddAvailablePeriodDto dto) throws JsonProcessingException{
 		System.out.println("Adding available period for boat!");
+		if (dto.endTime == null || dto.startTime==null){
+			return new ResponseEntity<>("Neither start or end time can be empty!", HttpStatus.BAD_REQUEST);
+		}
+		if(dto.endTime.before(dto.startTime)){
+			return new ResponseEntity<>("End time is before start time!", HttpStatus.BAD_REQUEST);
+		}
 		List<BoatAvailablePeriod> boatAvailabilities = service.addBoatAvailabilities(dto);
 		ObjectMapper mapper = new ObjectMapper();
 		System.out.print("Before coverting" + boatAvailabilities.toString());
@@ -166,6 +175,9 @@ public class BoatController {
 	@PreAuthorize("hasRole('ROLE_BOAT_OWNER')")
 	@RequestMapping(method = RequestMethod.POST, value = "/deleteBoat",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> deleteBoat(@RequestBody LongIdDto boatId){
+		if(service.isReserved(boatId.boatId)){
+			return new ResponseEntity<>("Boat is reserved, not possible to change or delete!", HttpStatus.OK);
+		}
 		System.out.println("I'm trying to delete boat id:"+ boatId.boatId);
 		try {
 			service.deleteBoat(boatId.boatId);

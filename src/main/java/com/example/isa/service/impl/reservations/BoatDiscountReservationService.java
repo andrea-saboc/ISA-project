@@ -8,6 +8,7 @@ import java.util.List;
 import com.example.isa.mail.MailService;
 import com.example.isa.model.Client;
 import com.example.isa.service.SubscriptionService;
+import com.example.isa.service.impl.BoatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
@@ -42,6 +43,10 @@ public class BoatDiscountReservationService implements DiscountReservationServic
 	MailService<String> mailService;
 	@Autowired
 	SubscriptionService subscriptionService;
+	@Autowired
+	BoatService boatService;
+	@Autowired
+	CollectingBoatReservationsServiceImpl collectingBoatReservationsService;
 	
 
 	
@@ -112,7 +117,7 @@ public class BoatDiscountReservationService implements DiscountReservationServic
 	}
 
 	@Override
-	public DiscountReservation createDiscountReservation(NewDiscountReservationDto dto) {
+	public int createDiscountReservation(NewDiscountReservationDto dto) {
 		BoatDiscountReservation boatDiscountReservation = new BoatDiscountReservation();
 		Boat boat = boatRepo.findById(dto.boatId).get();
 		boatDiscountReservation.setBoat(boat);
@@ -122,12 +127,18 @@ public class BoatDiscountReservationService implements DiscountReservationServic
 		boatDiscountReservation.setValidUntil(dto.validUntil);
 		boatDiscountReservation.setStartDate(dto.startDate);
 		boatDiscountReservation.setEndDate(getEndDate(dto));
+		if(boatService.overlapsWithAvailability(boatDiscountReservation.getStartDate(), boatDiscountReservation.getEndDate(), boat.getId())){
+			return 2;
+		}
+		if(collectingBoatReservationsService.overlapsWithActiveReservations(boatDiscountReservation.getStartDate(), boatDiscountReservation.getEndDate(), boat)){
+			return 3;
+		}
 		boatDiscountReservation.setType("BOAT");
 		boatDiscountReservation.setPriceWithoutDiscount(dto.getPrice(boat));
 		boatDiscountReservation.calculatePercentageOfDiscount();
 		reservationRepo.save(boatDiscountReservation);
 		notifyAllSubscribers(boatDiscountReservation);
-		return boatDiscountReservation;
+		return 1;
 	}
 
 	private void notifyAllSubscribers(BoatDiscountReservation boatDiscountReservation) {

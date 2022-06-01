@@ -6,15 +6,13 @@ import com.example.isa.dto.AddAvailablePeriodDto;
 import com.example.isa.dto.ChangeMansionDto;
 import com.example.isa.dto.MansionRegistrationDto;
 import com.example.isa.model.*;
+import com.example.isa.model.reservations.AbstractReservation;
 import com.example.isa.model.reservations.AdditionalService;
 import com.example.isa.repository.*;
+import com.example.isa.service.impl.reservations.MansionReservationServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-
-import com.example.isa.dto.SearchDto;
-
-import javax.sound.midi.SysexMessage;
 
 @Service
 public class MansionService {
@@ -37,6 +35,12 @@ public class MansionService {
 	@Autowired
 	RuleRepository ruleRepository;
 
+	@Autowired
+	AddressRepository addressRepository;
+
+	@Autowired
+	MansionReservationServiceImpl mansionReservationService;
+
 	public List<Mansion> getAll() {
 		
 		return mansionRepo.findAll();
@@ -52,6 +56,10 @@ public class MansionService {
 		return mansionRepo.findById(id).get();
 	}
 
+	public boolean isReserved(Long id)
+	{
+	  	return (mansionReservationService.isThereAReservationAfterToday(mansionRepo.findById(id).get()));
+	}
 
     public List<Mansion> getByOwnerId() {
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -121,13 +129,48 @@ public class MansionService {
 		return convertedRules;
 	}
 
-    public List<MansionAvailablePeriod> addBoatAvailabilities(AddAvailablePeriodDto dto) {
+    public List<MansionAvailablePeriod> addMansionAvailabilities(AddAvailablePeriodDto dto) {
 		Mansion mansion = mansionRepo.findById(dto.boatId).get();
 		MansionAvailablePeriod availablePeriod = new MansionAvailablePeriod(dto.startTime, dto.endTime, mansion);
+		 if (isThereAReservation(availablePeriod, dto.boatId)){
+			return mansionAvailablePeriodRepository.findByMansion(mansion);
+		}
+		 if(insideOtherPeriod(availablePeriod, mansionAvailablePeriodRepository.findByMansion(mansion))){
+			return mansionAvailablePeriodRepository.findByMansion(mansion);
+		}
 		mansionAvailablePeriodRepository.save(availablePeriod);
 		List<MansionAvailablePeriod> mansionNewAvailability = mansionAvailablePeriodRepository.findByMansion(mansion);
 		return  mansionNewAvailability;
     }
+
+	private boolean isThereAReservation(MansionAvailablePeriod availablePeriod, Long boatId) {
+		Mansion mansion = mansionRepo.findById(boatId).get();
+		List<AbstractReservation> reservations = mansionReservationService.getAllMansionReservations(mansion);
+		for (AbstractReservation ar : reservations){
+			if(ar.getStartDate().after(availablePeriod.getEndDate()) && (availablePeriod.getEndDate().before(ar.getEndDate()))){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private boolean insideOtherPeriod(MansionAvailablePeriod availablePeriod, List<MansionAvailablePeriod> byMansion) {
+		//(StartDate1 <= EndDate2) and (StartDate2 <= EndDate1)
+		Boolean overlaps = false;
+		for (MansionAvailablePeriod ma : byMansion){
+			if((ma.getStartDate()).before(availablePeriod.getEndDate()) && (availablePeriod.getStartDate().before(ma.getEndDate()))){
+				if (ma.getStartDate().after(availablePeriod.getStartDate())){;
+					ma.setStartDate(availablePeriod.getStartDate());
+				}
+				if(ma.getEndDate().before(availablePeriod.getEndDate())){
+					ma.setEndDate(availablePeriod.getEndDate());
+				}
+				mansionAvailablePeriodRepository.save(ma);
+				return true;
+			}
+		}
+		return overlaps;
+	}
 
 	public Mansion changeMansion(ChangeMansionDto dto) {
 		Mansion mansionToChange = mansionRepo.findById(dto.id).get();
@@ -141,6 +184,13 @@ public class MansionService {
 		mansionToChange.setExteriorImages(new HashSet<>(entityImageService.removeAndAddNewExterior(dto, mansionToChange)));
 		mansionToChange.setInteriorImages(new HashSet<>(entityImageService.removeAndAddNewInterior(dto, mansionToChange)));
 		mansionToChange.setRooms(converMap2Room(dto.rooms));
+		Address boatAddress = addressRepository.findById(mansionToChange.getAddress().getId()).get();
+		boatAddress.setCountry(dto.country);
+		boatAddress.setCity(dto.city);
+		boatAddress.setAddress(dto.address);
+		boatAddress.setLatitude(dto.latitude);
+		boatAddress.setLongitude(dto.longitude);
+		addressRepository.save(boatAddress);
 		mansionToChange = mansionRepo.save(mansionToChange);
 		return mansionToChange;
 	}
@@ -163,5 +213,21 @@ public class MansionService {
 			ruleRepository.save(rd);
 		}
 		return newRules;
+	}
+
+	public List<MansionAvailablePeriod> getMansionAvailbilities(Long boatId) {
+		Mansion mansion =mansionRepo.findById(boatId).get();
+		List<MansionAvailablePeriod> mansionAvailablePeriods = mansionAvailablePeriodRepository.findByMansion(mansion);
+		return mansionAvailablePeriods;
+	}
+
+	public boolean overlapsWithAvailability(Date startDate, Date endDate, Long id) {
+		List<MansionAvailablePeriod> mansionAvailablePeriods = getMansionAvailbilities(id);
+		for (MansionAvailablePeriod ma : mansionAvailablePeriods ){
+			if(ma.getStartDate().before(endDate) && startDate.before(ma.getStartDate())){
+				return true;
+			}
+		}
+		return false;
 	}
 }

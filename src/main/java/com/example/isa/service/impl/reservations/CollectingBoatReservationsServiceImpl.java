@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.example.isa.model.reservations.AbstractReservation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.isa.model.Boat;
 import com.example.isa.model.BoatOwner;
-import com.example.isa.model.User;
 import com.example.isa.model.reservations.BoatDiscountReservation;
 import com.example.isa.model.reservations.BoatReservation;
 import com.example.isa.model.reservations.ReservationStatus;
@@ -70,7 +70,23 @@ public class CollectingBoatReservationsServiceImpl {
 
 	public List<BoatReservation> getBoatReservationsByBoat(Long boatId) {
 		Boat boat = boatRepo.findById(boatId).get();
-		List<BoatReservation> boatReservations = boatReservationRepo.findAllByBoat(boat);
+		List<BoatReservation> boatReservations = boatReservationRepo.findAllByBoatAndStatusNot(boat, ReservationStatus.CANCELLED);
 		return boatReservations;
+	}
+
+	public List<AbstractReservation> getAllNotCancelledReservationsByBoat(Boat boat){
+		List<AbstractReservation> allMansionReservations = new ArrayList<>(boatReservationRepo.findAllByBoatAndStatusNot(boat, ReservationStatus.CANCELLED));
+		allMansionReservations.addAll(boatDiscountReservationRepo.findAllByBoatAndStatusNot(boat, ReservationStatus.CANCELLED));
+		return allMansionReservations;
+	}
+
+	public boolean overlapsWithActiveReservations(Date startDate, Date endDate, Boat boat) {
+		List<AbstractReservation> allReservations = getAllNotCancelledReservationsByBoat(boat);
+		for (AbstractReservation ar : allReservations){
+			if (ar.getStartDate().before(endDate) && startDate.before(ar.getEndDate())){
+				return true;
+			}
+		}
+		return false;
 	}
 }

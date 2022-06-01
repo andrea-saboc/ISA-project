@@ -45,7 +45,7 @@ public class MailService<T> {
 			NotificationAboutDiscountReservationIsCreatedFotmatter formater = new NotificationAboutDiscountReservationIsCreatedFotmatter();
 			SimpleMailMessage message = new SimpleMailMessage();
 			message.setFrom("adventurelandisa@gmail.com");
-			message.setTo("alexmirkovic1719@gmail.com"); //client.mail
+			message.setTo("s.andrea1723@gmail.com"); //client.mail
 			message.setText(formater.getText( discountReservation, client));
 			message.setSubject(formater.getSubject(discountReservation));
 

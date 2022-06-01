@@ -1,47 +1,47 @@
 INSERT INTO public.system_user(
-    user_type, id, address, blocked, city, country, email, name, password, phone_number, surname)
-VALUES ('MansionOwner', 5, 'Trg 34', false, 'Paris', 'France', 'ana@gmail.com','Ana', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '78555', 'Grkovic');
+    user_type, id, address, blocked, city, country, email, name, password, phone_number, surname, deleted)
+VALUES ('MansionOwner', 5, 'Trg 34', false, 'Paris', 'France', 'ana@gmail.com','Ana', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '78555', 'Grkovic', false);
 INSERT INTO public.mansion_owner(
     type, advertiser_registration_approved, advertiser_reason, id)
 VALUES ('mansion', true, 'I am a mansion owner', 5);
 
 INSERT INTO public.system_user(
-    user_type, id, address, blocked, city, country, email, name, password, phone_number, surname)
-VALUES ('Administrator', 6, 'Tolstojeva 10', false, 'Novi Sad', 'Srbija', 'admin@gmail.com','Adminka', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra','069652256','mirkovic');
+    user_type, id, address, blocked, city, country, email, name, password, phone_number, surname, deleted)
+VALUES ('Administrator', 6, 'Tolstojeva 10', false, 'Novi Sad', 'Srbija', 'admin@gmail.com','Adminka', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra','069652256','mirkovic', false);
 INSERT INTO administrator(
     id)
 VALUES ('6');
 
 INSERT INTO public.system_user(
-    user_type, id, address, blocked, city, country, email, name, password, phone_number, surname)
-VALUES ('FishingInstructor', 507, 'Vojvode Supljikca', false, 'Novi Sad', 'Srbija', 'alexmirkovic1719@gmail.com','Alex', '$2a$10$KBYOmrL4g3ce5.wfagQnveII0Ubylu0s/1pP/zl2pagffN7uDfAKS','069652256','Mirkovic');
+    user_type, id, address, blocked, city, country, email, name, password, phone_number, surname, deleted)
+VALUES ('FishingInstructor', 507, 'Vojvode Supljikca', false, 'Novi Sad', 'Srbija', 'alexmirkovic1719@gmail.com','Alex', '$2a$10$KBYOmrL4g3ce5.wfagQnveII0Ubylu0s/1pP/zl2pagffN7uDfAKS','069652256','Mirkovic', false);
 INSERT INTO public.fishing_instructor(
     type, advertiser_registration_approved, advertiser_reason, id)
 VALUES ('fishing', true, 'I want to advertise', 507);
 INSERT INTO public.system_user(
-    user_type, id, address, blocked, city, country, email, name, password, phone_number, surname)
-VALUES ('BoatOwner', 90, 'St Marc 45', false, 'Genova', 'Italy', 'markijan@gmail.com', 'Mark', '$2a$10$KBYOmrL4g3ce5.wfagQnveII0Ubylu0s/1pP/zl2pagffN7uDfAKS', '09787', 'Markijani');
+    user_type, id, address, blocked, city, country, email, name, password, phone_number, surname, deleted)
+VALUES ('BoatOwner', 90, 'St Marc 45', false, 'Genova', 'Italy', 'markijan@gmail.com', 'Mark', '$2a$10$KBYOmrL4g3ce5.wfagQnveII0Ubylu0s/1pP/zl2pagffN7uDfAKS', '09787', 'Markijani', false);
 INSERT INTO public.boat_owner(
     type, advertiser_registration_approved, advertiser_reason, id)
 VALUES ('boat', true, 'I want to advertise', 90);
 
 INSERT INTO public.system_user(
-    user_type, id, address, blocked, city, country, email, name, password, phone_number, surname)
-VALUES ('CLIENT', 400, 'Trg 34', false, 'Trebinje', 'Bosnia and Herzegovina', 'littlevamp999@gmail.com','Anja', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '78555', 'Laketa');
+    user_type, id, address, blocked, city, country, email, name, password, phone_number, surname, deleted)
+VALUES ('CLIENT', 400, 'Trg 34', false, 'Trebinje', 'Bosnia and Herzegovina', 'littlevamp999@gmail.com','Anja', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '78555', 'Laketa', false);
 INSERT INTO public.client(
     activation_code, client_loyalty_points,client_penalty_points, id)
 VALUES ('code', 0, 0, 400);
 
 INSERT INTO public.system_user(
-    user_type, id, address, blocked, city, country, email, name, password, phone_number, surname)
-VALUES ('CLIENT', 401, 'Trg 34', false, 'Gacko', 'Bosnia and Herzegovina', 'mikymilane@gmail.com','Milan', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '78555', 'Milovic');
+    user_type, id, address, blocked, city, country, email, name, password, phone_number, surname, deleted)
+VALUES ('CLIENT', 401, 'Trg 34', false, 'Gacko', 'Bosnia and Herzegovina', 'mikymilane@gmail.com','Milan', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '78555', 'Milovic', false );
 INSERT INTO public.client(
     activation_code, client_loyalty_points,client_penalty_points, id)
 VALUES ('code', 0, 0, 401);
 
 INSERT INTO public.system_user(
-    user_type, id, address, blocked, city, country, email, name, password, phone_number, surname)
-VALUES ('CLIENT', 402, 'Trg 34', false, 'Belgrade', 'Serbia', 'anya@gmail.com','Anica', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '78555', 'Obrenovic');
+    user_type, id, address, blocked, city, country, email, name, password, phone_number, surname, deleted)
+VALUES ('CLIENT', 402, 'Trg 34', false, 'Belgrade', 'Serbia', 'anya@gmail.com','Anica', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '78555', 'Obrenovic', false);
 INSERT INTO public.client(
     activation_code, client_loyalty_points,client_penalty_points, id)
 VALUES ('code', 0, 0, 402);

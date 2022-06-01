@@ -233,6 +233,20 @@ public class ReservationController {
         }
     }
 
+    @PreAuthorize("hasRole('ROLE_MANSION_OWNER')")
+    @RequestMapping(method = RequestMethod.GET, value = "/getReservedDatesForMansion")
+    public ResponseEntity<String> getReservedDatesForMansion(@RequestParam Long boatId){
+        try {
+            List<MansionReservation> boatReservations = collectingMansionResService.getAllMansionReservationsByMansion(boatId);
+            ObjectMapper mapper = new ObjectMapper();
+            String jsonString = mapper.writeValueAsString(boatReservations);
+            System.out.println(jsonString);
+            return new ResponseEntity<>(jsonString, HttpStatus.OK);
+        } catch (Exception e){
+            return new ResponseEntity<>("Bad request", HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @PreAuthorize("hasRole('ROLE_FISHING_INSTRUCTOR')")
     @RequestMapping(method = RequestMethod.GET, value = "/getAllReservedAdventureDatesForFishing")
     public ResponseEntity<String> getAllReservedAdventureDatesForFishing(){
@@ -269,9 +283,14 @@ public class ReservationController {
     public ResponseEntity<String> makeBoatReservationClient(@RequestBody CustomReservationForClientDto dto){
         System.out.println(dto);
         try{
-            BoatReservation boatReservation = boatResService.createReservationForClient(dto);
-            if (boatReservation!=null)
-            return new ResponseEntity<>("Reservation for client is created successfully!", HttpStatus.OK);
+            int code = boatResService.createReservationForClient(dto);
+            if (code == 1)
+                return new ResponseEntity<>("Reservation for client is created successfully!", HttpStatus.OK);
+            else if(code==2) return new ResponseEntity<>("Client with selected email adress does not exist in the system!", HttpStatus.OK);
+            else if(code==3) return new ResponseEntity<>("It is impossible to save the reservation", HttpStatus.OK);
+            else if(code==4) return new ResponseEntity<>("Client is not available at selected time!", HttpStatus.OK);
+            else if(code==5) return new ResponseEntity<>("Mansion is not available at selected time!", HttpStatus.OK);
+            else if(code==6) return new ResponseEntity<>("Captain is not available at selected time!", HttpStatus.OK);
             else return new ResponseEntity<>("Wrong params, try again!", HttpStatus.OK);
         } catch (Exception e){
             System.out.println(e);
@@ -287,10 +306,13 @@ public class ReservationController {
         System.out.println(dto.toString());
 
         try{
-            AdventureReservation adventureReservation=adventureReservationService.createReservationForClient(dto);
-
-            if (adventureReservation!=null)
+            int code = adventureReservationService.createReservationForClient(dto);
+            if (code == 1)
                 return new ResponseEntity<>("Reservation for client is created successfully!", HttpStatus.OK);
+            else if(code==2) return new ResponseEntity<>("Client with selected email adress does not exist in the system!", HttpStatus.OK);
+            else if(code==3) return new ResponseEntity<>("It is impossible to save the reservation", HttpStatus.OK);
+            else if(code==4) return new ResponseEntity<>("Client is not available at selected time!", HttpStatus.OK);
+            else if(code==5) return new ResponseEntity<>("Adventure is not available at selected time!", HttpStatus.OK);
             else return new ResponseEntity<>("Wrong params, try again!", HttpStatus.OK);
         } catch (Exception e){
             System.out.println(e);
@@ -303,9 +325,13 @@ public class ReservationController {
     public ResponseEntity<String> makeMansionReservationClient(@RequestBody CustomReservationForClientDto dto){
         System.out.println(dto);
         try{
-           MansionReservation mansionReservation = mansionResService.createReservationForClient(dto);
-            if (mansionReservation!=null)
+           int code = mansionResService.createReservationForClient(dto);
+            if (code == 1)
                 return new ResponseEntity<>("Reservation for client is created successfully!", HttpStatus.OK);
+            else if(code==2) return new ResponseEntity<>("Client with selected email adress does not exist in the system!", HttpStatus.OK);
+            else if(code==3) return new ResponseEntity<>("It is impossible to save the reservation", HttpStatus.OK);
+            else if(code==4) return new ResponseEntity<>("Client is not available at selected time!", HttpStatus.OK);
+            else if(code==5) return new ResponseEntity<>("Mansion is not available at selected time!", HttpStatus.OK);
             else return new ResponseEntity<>("Wrong params, try again!", HttpStatus.OK);
         } catch (Exception e){
             System.out.println(e);

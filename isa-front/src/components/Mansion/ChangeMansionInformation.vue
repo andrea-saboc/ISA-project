@@ -34,7 +34,6 @@
           <button type="button" style="margin-top: 15%" class="btn btn-secondary btn-sm" id="room-adding-button" v-on:click="addRoom ">Add room</button>
         </div>
       </div>
-      <div v-if="selectedMansion!=null && selectedMansion.rooms.length>0">
         <table class="table table-striped">
           <thead>
           <tr>
@@ -51,7 +50,6 @@
           </tr>
           </tbody>
         </table>
-      </div>
       <hr class="my-3">
       <h5>Location</h5>
 

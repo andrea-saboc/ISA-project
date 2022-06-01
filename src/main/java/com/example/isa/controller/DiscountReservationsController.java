@@ -74,25 +74,56 @@ public class DiscountReservationsController {
 
 	@PreAuthorize("hasRole('ROLE_BOAT_OWNER')")
 	@RequestMapping(method = RequestMethod.POST, value = "/createDiscountBoatReservation",produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<DiscountReservation> createBoatDiscountReservationAll(@RequestBody NewDiscountReservationDto dto){
+	public ResponseEntity<String> createBoatDiscountReservationAll(@RequestBody NewDiscountReservationDto dto){
 		try{
-			return new ResponseEntity<>(boatReservationService.createDiscountReservation(dto), HttpStatus.OK);
+			System.out.println(dto);
+			int code= boatReservationService.createDiscountReservation(dto);
+			if(code == 1)  return new ResponseEntity<>("Discount reservation successfully created!", HttpStatus.OK);
+			else if(code == 2) return new ResponseEntity<>("Discount reservation period overlaps withh availability period!", HttpStatus.OK);
+			else if(code == 3) return new ResponseEntity<>("Discount reservation could not be created because there is already a reservation that overlaps with selected period!", HttpStatus.OK);
+			else return new ResponseEntity<>("It is impossible to save discount reservation!", HttpStatus.OK);
 		}
 		catch (Exception e){
+			System.out.println("Ne okej status");
 			System.out.println(e);
-			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>("There is a problem!", HttpStatus.BAD_REQUEST);
+		}
+	}
+
+	@PreAuthorize("hasRole('ROLE_MANSION_OWNER')")
+	@RequestMapping(method = RequestMethod.POST, value = "/createDiscountMansionReservation",produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> createMansionDiscountReservationAll(@RequestBody NewDiscountReservationDto dto){
+		System.out.println("U kontroleru cdmrr");
+		try{
+			System.out.println(dto);
+			int code= mansionReservationService.createDiscountReservation(dto);
+			if(code == 1)  return new ResponseEntity<>("Discount reservation successfully created!", HttpStatus.OK);
+			else if(code == 2) return new ResponseEntity<>("Discount reservation period overlaps with availability period!", HttpStatus.OK);
+			else if(code == 3) return new ResponseEntity<>("Discount reservation could not be created because there is already a reservation that overlaps with selected period!", HttpStatus.OK);
+			else return new ResponseEntity<>("It is impossible to save discount reservation!", HttpStatus.OK);
+		}
+		catch (Exception e){
+			System.out.println("Ne okej status");
+			System.out.println(e);
+			return new ResponseEntity<>("There is a problem!", HttpStatus.BAD_REQUEST);
 		}
 	}
 
 	@PreAuthorize("hasRole('ROLE_FISHING_INSTRUCTOR')")
 	@RequestMapping(method = RequestMethod.POST, value = "/createDiscountAdventureReservation",produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<DiscountReservation> createDiscountAdventureReservation(@RequestBody NewDiscountReservationDto dto){
+	public ResponseEntity<String> createDiscountAdventureReservation(@RequestBody NewDiscountReservationDto dto){
 		try{
-			return new ResponseEntity<>(adventureDiscountReservationService.createDiscountReservation(dto), HttpStatus.OK);
+			System.out.println(dto);
+			int code= adventureDiscountReservationService.createDiscountReservation(dto);
+			if(code == 1)  return new ResponseEntity<>("Discount reservation successfully created!", HttpStatus.OK);
+			else if(code == 2) return new ResponseEntity<>("Discount reservation period overlaps with boat availability period!", HttpStatus.OK);
+			else if(code == 3) return new ResponseEntity<>("Discount reservation could not be created because there is already a reservation that overlaps with selected period!", HttpStatus.OK);
+			else return new ResponseEntity<>("It is impossible to save discount reservation!", HttpStatus.OK);
 		}
 		catch (Exception e){
+			System.out.println("Ne okej status");
 			System.out.println(e);
-			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>("There is a problem!", HttpStatus.BAD_REQUEST);
 		}
 	}
 	
@@ -168,24 +199,6 @@ public class DiscountReservationsController {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.OK);
-		}
-	}
-
-	@PreAuthorize("hasRole('ROLE_MANSION_OWNER')")
-	@RequestMapping(method = RequestMethod.POST, value = "/createDiscountMansionReservation",produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<DiscountReservation> createMansionDiscountReservationAll(@RequestBody NewDiscountReservationDto dto){
-		System.out.println("U kontroleru cdmrr");
-		try{
-
-			System.out.println(dto);
-			DiscountReservation createdDiscountReservation = mansionReservationService.createDiscountReservation(dto);
-			System.out.println("Okej status");
-			return new ResponseEntity<>(createdDiscountReservation, HttpStatus.OK);
-		}
-		catch (Exception e){
-			System.out.println("Ne okej status");
-			System.out.println(e);
-			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
 		}
 	}
 

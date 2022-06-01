@@ -44,7 +44,7 @@ public class AdventureReservationServiceImpl implements ReservationService {
     MailService<String> mailService;
     @Override
     @Transactional(readOnly=false,propagation= Propagation.REQUIRED,isolation= Isolation.SERIALIZABLE)
-    public AdventureReservation createReservationForClient(CustomReservationForClientDto dto) throws PeriodNoLongerAvailableException, ParseException {
+    public int createReservationForClient(CustomReservationForClientDto dto) throws PeriodNoLongerAvailableException, ParseException {
 
         ReservationDto res = new ReservationDto(dto);
         System.out.println(res.toString());
@@ -80,7 +80,11 @@ public class AdventureReservationServiceImpl implements ReservationService {
             newAdventureReservation.setAdditionalServices(addAdditionalServices(res.getAdditionalServices()));
             newAdventureReservation.setTotalPrice(dto.getPrice(adventure) + accountAdditionalServices(newAdventureReservation.getAdditionalServices(),res));
             //mailService.notifyClientAboutCreatedReservation(newAdventureReservation);
-            return adventureReservationRepository.save(newAdventureReservation);
+            AdventureReservation newRes =adventureReservationRepository.save(newAdventureReservation);
+            if (newRes == null){
+                return 3;
+            }
+            return 1;
         }
     }
 

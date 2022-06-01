@@ -1,19 +1,17 @@
 package com.example.isa.service.impl;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import com.example.isa.dto.ChangeBoatDto;
 import com.example.isa.model.*;
+import com.example.isa.model.reservations.AbstractReservation;
 import com.example.isa.repository.*;
+import com.example.isa.service.impl.reservations.BoatReservationServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.example.isa.dto.AddAvailablePeriodDto;
 import com.example.isa.dto.BoatRegistrationDto;
-import com.example.isa.dto.LongIdDto;
 import com.example.isa.model.reservations.AdditionalService;
 import com.example.isa.model.reservations.BoatReservation;
 import com.example.isa.service.impl.reservations.CollectingBoatReservationsServiceImpl;
@@ -31,11 +29,15 @@ public class BoatService {
 	@Autowired
 	private AdditionalServiceRepository additionalServiceRepository;
 	@Autowired
-	private CollectingBoatReservationsServiceImpl boatReservationService;
+	private CollectingBoatReservationsServiceImpl collectingBoatReservationsService;
 	@Autowired
 	private EntityImageService entityImageService;
 	@Autowired
 	private RuleRepository ruleRepository;
+	@Autowired
+	private AddressRepository addressRepository;
+	@Autowired
+	private BoatReservationServiceImpl boatReservationService;
 
 	public BoatService(BoatsRepository br, ImageRepository ir, BoatOwnerRepository bor, BoatAvailablePeriodRepository apr, AdditionalServiceRepository additionalServiceRepository){
 		this.boatsRepository = br;
@@ -93,9 +95,21 @@ public class BoatService {
 		boatToChange.setRules(makeRules(dto));
 		boatToChange.setExteriorImages(new HashSet<>(entityImageService.removeAndAddNewExterior(dto, boatToChange)));
 		boatToChange.setInteriorImages(new HashSet<>(entityImageService.removeAndAddNewInterior(dto, boatToChange)));
+		Address boatAddress = addressRepository.findById(boatToChange.getAddress().getId()).get();
+		boatAddress.setCountry(dto.country);
+		boatAddress.setCity(dto.city);
+		boatAddress.setAddress(dto.address);
+		boatAddress.setLatitude(dto.latitude);
+		boatAddress.setLongitude(dto.longitude);
+		addressRepository.save(boatAddress);
 		boatToChange = boatsRepository.save(boatToChange);
 		return boatToChange;
 
+	}
+
+	public boolean isReserved(Long id)
+	{
+		return boatReservationService.isThereAReservationAfterToday(boatsRepository.findById(id).get());
 	}
 
 	private Set<Rule> makeRules(ChangeBoatDto dto) {
@@ -200,14 +214,48 @@ public class BoatService {
 	public List<BoatAvailablePeriod> addBoatAvailabilities(AddAvailablePeriodDto dto) {
 		Boat boat = boatsRepository.findById(dto.boatId).get();
 		BoatAvailablePeriod availablePeriod = new BoatAvailablePeriod(dto.startTime, dto.endTime, boat);
+		if (isThereAReservation(availablePeriod, dto.boatId)){
+			return availablePeriodRepository.findByBoat(boat);
+		}
+		if(insideOtherPeriod(availablePeriod, availablePeriodRepository.findByBoat(boat))) {
+			return availablePeriodRepository.findByBoat(boat);
+		}
 		availablePeriodRepository.save(availablePeriod);
 		List<BoatAvailablePeriod> boatNewAvailability = availablePeriodRepository.findByBoat(boat);
 		return boatNewAvailability;
 	}
 
-    public List<AddAvailablePeriodDto> getFreeDaysForBoat(Long boatID) {
+	private boolean insideOtherPeriod(BoatAvailablePeriod availablePeriod, List<BoatAvailablePeriod> byBoat) {
+		Boolean overlaps = false;
+		for (BoatAvailablePeriod ma : byBoat){
+			if((ma.getStartDate()).before(availablePeriod.getEndDate()) && (availablePeriod.getStartDate().before(ma.getEndDate()))){
+				if (ma.getStartDate().after(availablePeriod.getStartDate())){;
+					ma.setStartDate(availablePeriod.getStartDate());
+				}
+				if(ma.getEndDate().before(availablePeriod.getEndDate())){
+					ma.setEndDate(availablePeriod.getEndDate());
+				}
+				availablePeriodRepository.save(ma);
+				return true;
+			}
+		}
+		return overlaps;
+	}
+
+	private boolean isThereAReservation(BoatAvailablePeriod availablePeriod, Long boatId) {
+		Boat boat = boatsRepository.findById(boatId).get();
+		List<AbstractReservation> reservations = collectingBoatReservationsService.getAllNotCancelledReservationsByBoat(boat);
+		for (AbstractReservation ar : reservations){
+			if(ar.getStartDate().after(availablePeriod.getEndDate()) && (availablePeriod.getEndDate().before(ar.getEndDate()))){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public List<AddAvailablePeriodDto> getFreeDaysForBoat(Long boatID) {
 		List<BoatAvailablePeriod> boatAvailablePeriods = getBoatAvailbilities(boatID);
-		List<BoatReservation> boatReservations = boatReservationService.getBoatReservationsByBoat(boatID);
+		List<BoatReservation> boatReservations = collectingBoatReservationsService.getBoatReservationsByBoat(boatID);
 		List<AddAvailablePeriodDto> availablePeriods = calculateAvailablePeriods(boatAvailablePeriods, boatReservations);
 		return availablePeriods;
     }
@@ -269,5 +317,13 @@ public class BoatService {
 	}
 
 
-
+	public boolean overlapsWithAvailability(Date startDate, Date endDate, Long id) {
+		List<BoatAvailablePeriod> mansionAvailablePeriods = getBoatAvailbilities(id);
+		for (BoatAvailablePeriod ma : mansionAvailablePeriods ){
+			if(ma.getStartDate().before(endDate) && startDate.before(ma.getStartDate())){
+				return true;
+			}
+		}
+		return false;
+	}
 }

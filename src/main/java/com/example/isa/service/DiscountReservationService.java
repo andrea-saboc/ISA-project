@@ -15,7 +15,7 @@ public interface DiscountReservationService {
     
     public List<DiscountReservation> getReservedDiscountReservations(long id);
     
-    public DiscountReservation createDiscountReservation(NewDiscountReservationDto dto);
+    public int createDiscountReservation(NewDiscountReservationDto dto);
     
     public DiscountReservation makeReservationOnDiscount(long resId) throws OfferNotAvailableException,ObjectOptimisticLockingFailureException, CancelledReservationException;
     

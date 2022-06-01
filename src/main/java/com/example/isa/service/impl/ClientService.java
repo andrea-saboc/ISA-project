@@ -2,7 +2,13 @@ package com.example.isa.service.impl;
 
 
 import java.nio.file.AccessDeniedException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
+import com.example.isa.model.reservations.AbstractReservation;
+import com.example.isa.service.ReservationService;
+import com.example.isa.service.impl.reservations.CollectingActiveReservationsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -19,6 +25,7 @@ import com.example.isa.repository.ClientRepository;
 import com.example.isa.repository.DeletionRequestRepository;
 import com.example.isa.repository.UserRepository;
 import com.example.isa.service.AuthenticationService;
+import org.springframework.transaction.reactive.AbstractReactiveTransactionManager;
 
 @Service
 public class ClientService {
@@ -35,6 +42,8 @@ public class ClientService {
 	private PasswordEncoder passwordEncoder;
     @Autowired
     private AuthenticationManager authenticationManager;
+	@Autowired
+	private CollectingActiveReservationsService collectingActiveReservationsService;
 	
 	
 	public Iterable<User> findAll()  throws AccessDeniedException{
@@ -66,9 +75,14 @@ public class ClientService {
 		userRepository.save(client);
     }
     
-	public User createDeletionRequest(String reason) {
-		deletionRequestRepository.save(new AccountDeletionRequest(authenticationService.getLoggedUser().getId(),reason));
-		return authenticationService.getLoggedUser();
+	public Boolean createDeletionRequest(String reason) {
+		User user = authenticationService.getLoggedUser();
+		List<AccountDeletionRequest> accountDeletionRequests = new ArrayList<>(deletionRequestRepository.findAllByClientId(user.getId()));
+		if(accountDeletionRequests.size()==0){
+			deletionRequestRepository.save(new AccountDeletionRequest(user.getId(),reason));
+			return true;
+		}
+		return false;
 	}
 	
 	
@@ -102,5 +116,15 @@ public class ClientService {
     
     public boolean userAlreadyActivated(String code) {   	
     	return clientRepository.findByActivationCodeAndBlockedFalse(code) != null;
+    }
+
+    public boolean clientAvailable(Client client, Date startDate, Date endDate) {
+		List<AbstractReservation> allClientReservations = new ArrayList<>(collectingActiveReservationsService.getAllReservationsByClient(client));
+		for (AbstractReservation ar : allClientReservations){
+			if(ar.getStartDate().before(endDate) && startDate.before(ar.getEndDate())){
+				return false;
+			}
+		}
+		return true;
     }
 }

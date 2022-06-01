@@ -17,7 +17,7 @@ public interface ReservationService {
 	
 	public Reservation createReservation(ReservationDto res) throws ParseException, PeriodNoLongerAvailableException, java.text.ParseException, EntityDeletedException, ImpossibleDueToPenaltyPoints;
 	
-	public Reservation createReservationForClient(CustomReservationForClientDto dto)  throws PeriodNoLongerAvailableException, ParseException, java.text.ParseException;
+	public int createReservationForClient(CustomReservationForClientDto dto)  throws PeriodNoLongerAvailableException, ParseException, java.text.ParseException;
 	
 	public Set<AdditionalService> addAdditionalServices(List<AdditionalService> additinalServices);
 	

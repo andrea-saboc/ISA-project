@@ -70,6 +70,9 @@ public class User implements UserDetails{
     @Column(name = "blocked")
     private boolean blocked;
 
+	@Column(name = "deleted")
+	private boolean deleted =false;
+
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "user_authority",
 			joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
@@ -107,6 +110,13 @@ public class User implements UserDetails{
 
 
 
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
+	}
 
 	public Long getId() {
 		return id;

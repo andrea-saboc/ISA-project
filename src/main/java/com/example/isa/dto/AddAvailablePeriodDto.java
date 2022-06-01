@@ -14,4 +14,13 @@ public class AddAvailablePeriodDto {
         this.endTime = endTime;
         this.boatId = boatId;
     }
+
+    @Override
+    public String toString() {
+        return "AddAvailablePeriodDto{" +
+                "startTime=" + startTime +
+                ", endTime=" + endTime +
+                ", boatId=" + boatId +
+                '}';
+    }
 }

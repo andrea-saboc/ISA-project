@@ -66,8 +66,12 @@ public class ClientController {
 	@PreAuthorize("hasAnyRole('ROLE_CLIENT','ROLE_BOAT_OWNER','ROLE_MANSION_OWNER','ROLE_FISHING_INSTRUCTOR')")
 	@RequestMapping(method = RequestMethod.POST, value = "/createDeletionRequest",produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
 	@CrossOrigin(origins = "*")	
-	public ResponseEntity<User> createDeletionRequest(@RequestBody String reason) throws JsonProcessingException{	
-		return ResponseEntity.ok(userService.createDeletionRequest(reason));
+	public ResponseEntity<String> createDeletionRequest(@RequestBody String reason) throws JsonProcessingException{
+		if(userService.createDeletionRequest(reason)){
+			return new ResponseEntity<>("Deletion request created!", HttpStatus.OK);
+		} else{
+			return new ResponseEntity<>("Deletion request is already created!", HttpStatus.OK);
+		}
 	}
 
 	@PreAuthorize("hasRole('ROLE_BOAT_OWNER')")

@@ -7,9 +7,9 @@ import java.util.List;
 
 import com.example.isa.mail.MailService;
 import com.example.isa.model.*;
-import com.example.isa.model.reservations.BoatDiscountReservation;
 import com.example.isa.repository.MansionOwnerRepository;
 import com.example.isa.service.SubscriptionService;
+import com.example.isa.service.impl.MansionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
@@ -40,6 +40,10 @@ public class MansionDiscountReservationService implements DiscountReservationSer
 	SubscriptionService subscriptionService;
 	@Autowired
 	MailService<String> mailService;
+	@Autowired
+	MansionService mansionService;
+	@Autowired
+	CollectionMansionReservationsImpl collectionMansionReservationsService;
 	
 
 	@Override
@@ -85,7 +89,7 @@ public class MansionDiscountReservationService implements DiscountReservationSer
 	}
 
 	@Override
-	public DiscountReservation createDiscountReservation(NewDiscountReservationDto dto) {
+	public int createDiscountReservation(NewDiscountReservationDto dto) {
 		MansionDiscountReservation mansionDiscountReservation = new MansionDiscountReservation();
 		Mansion mansion = mansionRepo.findById(dto.boatId).get();
 		mansionDiscountReservation.setMansion(mansion);
@@ -95,12 +99,18 @@ public class MansionDiscountReservationService implements DiscountReservationSer
 		mansionDiscountReservation.setValidUntil(dto.validUntil);
 		mansionDiscountReservation.setStartDate(dto.startDate);
 		mansionDiscountReservation.setEndDate(getEndDate(dto));
+		if(mansionService.overlapsWithAvailability(mansionDiscountReservation.getStartDate(), mansionDiscountReservation.getEndDate(), mansion.getId())){
+			return 2;
+		}
+		if(collectionMansionReservationsService.overlapsWithActiveReservations(mansionDiscountReservation.getStartDate(), mansionDiscountReservation.getEndDate(), mansion)){
+			return 3;
+		}
 		mansionDiscountReservation.setType("MANSION");
 		mansionDiscountReservation.setPriceWithoutDiscount(dto.getPrice(mansion));
 		mansionDiscountReservation.calculatePercentageOfDiscount();
 		reservationRepo.save(mansionDiscountReservation);
 		notifyAllSubscribers(mansionDiscountReservation);
-		return mansionDiscountReservation;
+		return 1;
 	}
 
 	private void notifyAllSubscribers(MansionDiscountReservation mansionDiscountReservation) {

@@ -216,50 +216,87 @@
 
       </div>
       <hr>
-      <p style="font-weight: bolder; font-size: 26px">
-        Calendar
-      </p>
-      <button v-if="loggedUser!=null && boatToShow.boatOwner.id==loggedUser.id" type="button" class="btn btn-primary" data-bs-toggle="modal" style="margin: 0.5%" data-bs-target="#exampleModal">Add availability period</button>
-      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">Add availability for {{boatToShow.name}}</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times" aria-hidden="true"></i></button>
-            </div>
-            <div class="modal-body">
-              <v-date-picker mode="dateTime" is24hr v-model="startDateTime" style="width: 100%" :disabled-dates="availableDates">
-                <template v-slot="{ inputValue, inputEvents }">
-                  <input
-                      class="px-2 py-1 border rounded focus:outline-none focus:border-blue-300"
-                      :value="inputValue"
-                      v-on="inputEvents"
-                      style="overflow: visible"
-                      placeholder="From time"
-                  />
-                </template>
-              </v-date-picker>
-              <v-date-picker  mode="dateTime" is24hr v-model="endDateTime" style="width: 100%" :disabled-dates="availableDates">
-                <template v-slot="{ inputValue, inputEvents }">
-                  <input
-                      class="px-2 py-1 border rounded focus:outline-none focus:border-blue-300"
-                      :value="inputValue"
-                      v-on="inputEvents"
-                      placeholder="To time"
-                  />
-                </template>
-              </v-date-picker>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary" v-on:click="addAvailabilityPeriod" data-bs-dismiss="modal">Add</button>
+      <div class="row">
+        <div>
+          <p style="font-weight: bolder; font-size: 26px">
+            Calendar
+          </p>
+          <button v-if="loggedUser!=null && boatToShow.boatOwner.id==loggedUser.id" type="button" class="btn btn-primary" data-bs-toggle="modal" style="margin: 0.5%" data-bs-target="#exampleModal">Add availability period</button>
+          <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Add availability for {{boatToShow.name}}</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times" aria-hidden="true"></i></button>
+                </div>
+                <div class="modal-body">
+                  <v-date-picker mode="dateTime" is24hr v-model="startDateTime" style="width: 100%" :disabled-dates="availableDates">
+                    <template v-slot="{ inputValue, inputEvents }">
+                      <input
+                          class="px-2 py-1 border rounded focus:outline-none focus:border-blue-300"
+                          :value="inputValue"
+                          v-on="inputEvents"
+                          style="overflow: visible"
+                          placeholder="From time"
+                      />
+                    </template>
+                  </v-date-picker>
+                  <v-date-picker  mode="dateTime" is24hr v-model="endDateTime" style="width: 100%" :disabled-dates="availableDates">
+                    <template v-slot="{ inputValue, inputEvents }">
+                      <input
+                          class="px-2 py-1 border rounded focus:outline-none focus:border-blue-300"
+                          :value="inputValue"
+                          v-on="inputEvents"
+                          placeholder="To time"
+                      />
+                    </template>
+                  </v-date-picker>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-primary" v-on:click="addAvailabilityPeriod" data-bs-dismiss="modal">Add</button>
+                </div>
+              </div>
             </div>
           </div>
+          <br>
+          <v-calendar :columns="$screens({ default: 1, lg: 2 })" :attributes='calendar_attributes'
+                      :available-dates='availableDates'/>
+        </div>
+        <div class="availabile-periods" style="margin: 2%">
+          <h5>Availble periods</h5>
+          <select class="form-select form-select-lg mb-3 custom-select" style="width: 20%" aria-label=".form-select-lg example" v-model="selectedYear" v-on:change="changeYear">
+            <option v-bind:value=thisYear selected>
+              {{thisYear}}
+            </option>
+            <option v-bind:value=thisYear+1>
+              {{thisYear+1}}
+            </option>
+            <option v-bind:value="thisYear+2">
+              {{thisYear+2}}
+            </option>
+          </select>
+          <div v-if="availablePeriodsToShow.length>0">
+            <table class="table">
+              <thead>
+              <th>From</th>
+              <th>To</th>
+              </thead>
+              <tbody>
+              <tr v-for="a in availablePeriodsToShow"  :key="a.id">
+                <td>{{new Date(a.startDate).getDate()}}.{{new Date(a.startDate).getMonth()+1}}.{{new Date(a.startDate).getFullYear()}}.</td>
+                <td>{{new Date(a.endDate).getDate()}}.{{new Date(a.endDate).getMonth()+1}}.{{new Date(a.endDate).getFullYear()}}.</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+          <div v-else>
+            <h5>Not available!</h5>
+          </div>
+
         </div>
       </div>
-      <br>
-      <v-calendar :columns="$screens({ default: 1, lg: 2 })" :attributes='calendar_attributes'
-                  :available-dates='availableDates'/>
+
       <hr>
       <p style="font-weight: bolder; font-size: 26px">
         Discounts
@@ -459,7 +496,7 @@
           </v-date-picker>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-primary" v-on:click="addQuickReservation">Add</button>
+          <button type="button" class="btn btn-primary" v-on:click="addQuickReservation" data-bs-dismiss="modal">Add</button>
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         </div>
       </div>
@@ -478,6 +515,9 @@ export default {
   name: "BoatView",
   data: function (){
     return{
+      availablePeriodsToShow: new Array(),
+      selectedYear: new Date().getFullYear(),
+      thisYear: new Date().getFullYear(),
       token: null,
       allInteriorImages: [],
       allExteriorImages: [],
@@ -578,93 +618,83 @@ export default {
             "boatId": this.boatToShow.id
           }, {
             headers: {
-              'Authorization': this.$store.getters.tokenString
+              'Authorization': 'Bearer ' + this.token,
             }
           })
          .then(response => {
             this.availablePeriods = response.data
             console.log("Available periods for boat: ", this.availablePeriods)
-            axios.get(devServer.proxy + "/additionalServices", {
+           this.changeYear();
+           this.calculateAvailableDaysForCalendar();
+         })//dostupnost broda
+      axios.get(devServer.proxy + "/additionalServices", {
+        params:
+            {
+              id: boatId
+            },
+        headers: {
+          'Authorization': 'Bearer ' + this.token,
+        }
+      })
+          .then(resp => {
+            this.additionalServices = resp.data
+            console.log("Additional services: ", )
+          })//additional services
+      axios.get(devServer.proxy + "/getReservedDatesForBoat", {
+        params:
+            {
+              boatId: boatId
+            },
+        headers: {
+          'Authorization': this.$store.getters.tokenString
+        }
+      })
+          .then((resp1 => {
+
+            this.boatReservations = resp1.data
+            this.calculateAvailableDaysForCalendar();
+            this.setImages();
+          }))//reserved dates for boat
+      if(this.loggedUser.id == this.boatToShow.boatOwner.id) {
+        console.log("In trying to get subscribers!")
+        axios
+            .get(devServer.proxy + "/getBoatsSubscribers", {
               params:
                   {
-                    id: boatId
+                    boatId: boatId
                   },
               headers: {
                 'Authorization': this.$store.getters.tokenString
               }
             })
-            .then(resp => {
-              this.additionalServices = resp.data
-              console.log("Additional services: ", )
-              axios.get(devServer.proxy + "/getReservedDatesForBoat", {
-                params:
-                    {
-                      boatId: boatId
-                    },
-                headers: {
-                  'Authorization': this.$store.getters.tokenString
-                }
-              })
-                  .then((resp1 => {
-
-               this.boatReservations = resp1.data
-                    console.log("Before calculating days")
-                    this.calculateAvailableDaysForCalendar();
-               console.log("Days calculated")
-                    this.setImages();
-               console.log("Images set")
-                console.log('Boat reservations:', this.boatReservations)
-                console.log("Loged user id is: ", this.loggedUser.id, " , and boaToShow ", this.boatToShow.boatOwner.id)
-                if(this.loggedUser.id == this.boatToShow.boatOwner.id) {
-                  console.log("In trying to get subscribers!")
-                  axios
-                      .get(devServer.proxy + "/getBoatsSubscribers", {
-                        params:
-                            {
-                              boatId: boatId
-                            },
-                        headers: {
-                          'Authorization': this.$store.getters.tokenString
-                        }
-                      })
-                      .then((resp => {
-                       this.boatSubscribers = resp.data
-                        console.log('Boat subscribers: ', this.boatSubscribers)
-
-                        /*})
-                    )
-                        .catch(() => {
-                          alert("Error occured while trying to find boat subscribers!")
-                        })
-                  }
-                }))
-              })
-
-
-      }
-      )*/}))
-                      .catch(() => {
-                        alert("Error occured while trying to find boat subscribers!")
-                      })
-                      }//if
-                }))
+            .then((resp => {
+              this.boatSubscribers = resp.data
+              console.log('Boat subscribers: ', this.boatSubscribers)}))
+            .catch(() => {
+              alert("Error occured while trying to find boat subscribers!")
             })
-         })
-    })
+      }//if
+    }) //tek kad se dobije brod
     .catch(()=>{
-      console.log("The is a trouble")
+      console.log("The is a trouble with getting a boat!")
     })
 
 
   },
   methods:{
+    changeYear(){
+      this.availablePeriodsToShow = new Array();
+      for(var tmp of this.availablePeriods){
+        var startDate = new Date(tmp.startDate);
+        var endDate = new Date(tmp.endDate)
+        if(startDate.getFullYear() == this.selectedYear || endDate.getFullYear() == this.selectedYear){
+          this.availablePeriodsToShow.push(tmp);
+        }
+
+      }
+    },
     setImages() {
-      console.log("In set images function")
-      console.log("Boat to show", this.boatToShow)
-      console.log(this.boatToShow.exteriorImages)
       for (var eimg of this.boatToShow.exteriorImages) {
-        console.log('Image path je ', eimg.toString().replaceAll('\\','/'))
-        console.log(devServer.proxy + "/entityImage/"+"/" + eimg.path)
         axios.get('http://localhost:8080/entityImage/'+eimg.path, {
           headers: {
             'Authorization': 'Bearer ' + this.token,
@@ -672,19 +702,16 @@ export default {
           responseType: 'arraybuffer',
         })
             .then(response => {
-              console.log('response sa backa', response)
-
               let base64ImageString = Buffer.from(response.data, 'binary').toString('base64')
               let srcValue = "data:image/png;base64," + base64ImageString
               this.allExteriorImages.push(srcValue)
             })
             .catch(() => {
+              alert("There is a trouble with setting exterior images!")
               console.log("There is a trouble")
             })
       }
       for(var iimg of this.boatToShow.interiorImages){
-        console.log('Image path je ', iimg.toString().replaceAll('\\','/'))
-        console.log(devServer.proxy + "/entityImage/"+"/" + iimg.path)
         axios.get('http://localhost:8080/entityImage/'+iimg.path, {
           headers: {
             'Authorization': 'Bearer ' + this.token,
@@ -692,17 +719,15 @@ export default {
           responseType: 'arraybuffer',
         })
             .then(response => {
-              console.log('response sa backa', response)
-
               let base64ImageString = Buffer.from(response.data, 'binary').toString('base64')
               let srcValue = "data:image/png;base64," + base64ImageString
               this.allInteriorImages.push(srcValue)
             })
             .catch(() => {
+              alert("There is a trouble with setting interior images!")
               console.log("There is a trouble")
             })
       }
-      console.log("all exterior images", this.allExteriorImages)
     },
     calculateAvailableDaysForCalendar(){
       for(var tmp in this.availablePeriods) {
@@ -733,11 +758,11 @@ export default {
           dates: { start: this.reservedDates[id].start, end: this.reservedDates[id].end },
         })
       }
-      console.log("Calculated available days:", this.availableDates)
+      /*console.log("Calculated available days:", this.availableDates)
       console.log("Calculated reserved days:", this.reservedDates)
-      console.log('Calenar attributes before:',this.calendar_attributes)
+      console.log('Calenar attributes before:',this.calendar_attributes)*/
       this.calculateDiscountReservations()
-      console.log('Calendar attributes after:',this.calendar_attributes)
+      //console.log('Calendar attributes after:',this.calendar_attributes)
     },
     calculateDiscountReservations(){
       axios
@@ -791,6 +816,13 @@ export default {
 
     },
     addAvailabilityPeriod(){
+      if(this.startDateTime!= '' && this.endDateTime!='') {
+        var dateFirst = new Date(this.startDateTime);
+        var dateSecond = new Date(this.endDateTime)
+        if(dateFirst > dateSecond){
+          alert("End Date must be after start date!")
+        } else
+        {
       axios
       .post(devServer.proxy + "/addAvailablePeriodForBoat", {
         "boatId" : this.boatToShow.id,
@@ -806,7 +838,15 @@ export default {
         console.log("New available periods: ", this.availablePeriods )
         this.calculateAvailableDaysForCalendar()
       })
-
+          .catch((err) => {
+            alert("Error with adding new period!")
+            console.log(err.data)
+          })
+        }
+      }
+      else{
+        alert("Neither start or end time can be empty!")
+      }
     },
     SubscribeClient(){
       //alert(this.boatToShow.id)
@@ -880,7 +920,6 @@ export default {
           if ( this.clientResAdditionalServices[i] === additionalService) {
             this.clientResAdditionalServices.splice(i, 1);
           }
-
         }
       }
     },
@@ -915,21 +954,37 @@ export default {
       this.calculateAvailableDaysForCalendar()
     },
     addQuickReservation(){
-      axios.post(devServer.proxy + "/createDiscountBoatReservation", {
-        "boatId" : this.boatToShow.id,
-        "startDate" : this.startDateTimeQuick,
-        "days" : this.numberOfDaysQuick,
-        "hours" : this.numberOfHoursQuick,
-        "numberOfGuests" : this.numberOfGuestsQuick,
-        "priceWithDiscount": this.priceQuick,
-        "validUntil" : this.availableUntil
-      }, {
-        headers: {
-          'Authorization': this.$store.getters.tokenString,
-          'Content-Type': 'application/json'
-        }
-      })
-      this.calculateAvailableDaysForCalendar()
+      var startDate = new Date(this.startDateTimeQuick);
+      var valid = new Date(this.availableUntil);
+      if(valid >= startDate){
+        alert("Quick reservation must be valid just BEFORE the reservation starts!");
+        return;
+      }else{
+        axios.post(devServer.proxy + "/createDiscountBoatReservation", {
+          "boatId" : this.boatToShow.id,
+          "startDate" : this.startDateTimeQuick,
+          "days" : this.numberOfDaysQuick,
+          "hours" : this.numberOfHoursQuick,
+          "numberOfGuests" : this.numberOfGuestsQuick,
+          "priceWithDiscount": this.priceQuick,
+          "validUntil" : this.availableUntil
+        }, {
+          headers: {
+            'Authorization': this.$store.getters.tokenString,
+            'Content-Type': 'application/json'
+          }
+        })
+            .then(response => {
+              console.log(response.data)
+              alert(response.data)
+            })
+            .catch(() =>
+            {
+              alert("Error happened!")
+            })
+        this.calculateAvailableDaysForCalendar()
+      }
+
     
     }
 

@@ -1,12 +1,17 @@
 package com.example.isa.service.impl.reservations;
 
 import java.text.ParseException;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import com.example.isa.mail.MailService;
+import com.example.isa.model.Mansion;
+import com.example.isa.model.reservations.*;
+import com.example.isa.service.impl.ClientService;
+import com.example.isa.service.impl.DateCoverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -21,11 +26,6 @@ import com.example.isa.exception.PeriodNoLongerAvailableException;
 import com.example.isa.model.Boat;
 import com.example.isa.model.BoatAvailablePeriod;
 import com.example.isa.model.Client;
-import com.example.isa.model.reservations.AdditionalService;
-import com.example.isa.model.reservations.BoatReservation;
-import com.example.isa.model.reservations.Reservation;
-import com.example.isa.model.reservations.ReservationStartEndDateFormatter;
-import com.example.isa.model.reservations.ReservationStatus;
 import com.example.isa.repository.AdditionalServiceRepository;
 import com.example.isa.repository.BoatAvailablePeriodRepository;
 import com.example.isa.repository.BoatOwnerRepository;
@@ -57,11 +57,15 @@ public class BoatReservationServiceImpl implements ReservationService{
 	AuthenticationService authenticationService;
 	@Autowired
 	MailService<String> mailService;
+	@Autowired
+	ClientService clientService;
+	@Autowired
+	CollectingBoatReservationsServiceImpl collectingBoatReservationsService;
 	
 	
 	@Override
 	@Transactional(readOnly=false,propagation=Propagation.REQUIRED,isolation= Isolation.SERIALIZABLE)
-    public BoatReservation createReservationForClient(CustomReservationForClientDto dto) throws PeriodNoLongerAvailableException, ParseException{
+    public int createReservationForClient(CustomReservationForClientDto dto) throws PeriodNoLongerAvailableException, ParseException{
     	
 		ReservationDto res = new ReservationDto(dto);
 		ReservationStartEndDateFormatter formatter = new ReservationStartEndDateFormatter(res);
@@ -72,11 +76,17 @@ public class BoatReservationServiceImpl implements ReservationService{
 		Boat boat = boatRepo.findById(res.getEntityId()).orElse(new Boat());
 		
 		if(period == null) {
-			throw new PeriodNoLongerAvailableException();
+			return 5;
 		}
 		else {
 			
-			Client client = clientRepository.findByEmail(dto.email);			
+			Client client = clientRepository.findByEmail(dto.email);
+			if (client == null){
+				return 2;
+			}
+			if(!clientService.clientAvailable(client, startDate, endDate)){
+				return 4;
+			}
 			BoatReservation newBoatReservation = new BoatReservation(client, startDate,endDate, res.getNumberOfGuests(), dto.toResSearchDto(),
 					boat);
 
@@ -93,8 +103,12 @@ public class BoatReservationServiceImpl implements ReservationService{
 			availablePeriodsRepo.delete(period);
 	        newBoatReservation.setAdditionalServices(addAdditionalServices(res.getAdditionalServices()));
 	        newBoatReservation.setTotalPrice( dto.getPrice(boat) + accountAdditionalServices(newBoatReservation.getAdditionalServices(),res));
-			//mailService.notifyClientAboutCreatedReservation(newBoatReservation);
-			return boatReservationRepo.save(newBoatReservation);
+			mailService.notifyClientAboutCreatedReservation(newBoatReservation);
+			BoatReservation newRes = boatReservationRepo.save(newBoatReservation);
+			if(newRes == null){
+				return 3;
+			}
+			return 1;
 		}
     }
 
@@ -191,6 +205,19 @@ public class BoatReservationServiceImpl implements ReservationService{
 		b.setStatus(ReservationStatus.CANCELLED);
 		boatReservationRepo.save(b);
 		return null;
+	}
+
+	public boolean isThereAReservationAfterToday(Boat boat) {
+		List<AbstractReservation> allReservations = collectingBoatReservationsService.getAllNotCancelledReservationsByBoat(boat);
+		LocalDateTime today = LocalDateTime.now();
+		for (AbstractReservation ar : allReservations){
+			if ((DateCoverter.convertToLocalDateTimeViaInstant(ar.getStartDate()).isAfter((today))
+					|| (DateCoverter.convertToLocalDateTimeViaInstant(ar.getStartDate()).isBefore(today) && DateCoverter.convertToLocalDateTimeViaInstant(ar.getEndDate()).isAfter(today))
+			) && (ar.getStatus()== ReservationStatus.RESERVED || ar.getStatus() == ReservationStatus.ACTIVE)){
+				return true;
+			}
+		}
+		return false;
 	}
 
 
