@@ -1,13 +1,11 @@
 package com.example.isa.service.impl.reservations;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
-import com.example.isa.model.Boat;
-import com.example.isa.model.BoatOwner;
-import com.example.isa.model.Mansion;
-import com.example.isa.model.MansionOwner;
+import com.example.isa.model.*;
 import com.example.isa.model.reservations.*;
 import com.example.isa.repository.MansionOwnerRepository;
 import com.example.isa.repository.MansionRepository;
@@ -86,5 +84,11 @@ public class CollectionMansionReservationsImpl {
 			}
 		}
 		return false;
+    }
+
+    public List<AbstractReservation> getAllNotCancelledReservationsByMansionAndClient(Client client, Long id) {
+		List<AbstractReservation> allReservations= new ArrayList<>(mansionReservationRepo.findAllByUserAndStatusNotAndMansion(client, ReservationStatus.CANCELLED, mansionRepository.findById(id).get()));
+		allReservations.addAll(discountReservationRepo.findAllByUserAndStatusNotAndMansion(client, ReservationStatus.CANCELLED, mansionRepository.findById(id).get()));
+		return allReservations;
     }
 }

@@ -2,17 +2,16 @@ package com.example.isa.service.impl.reservations;
 
 import java.text.ParseException;
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
+import com.example.isa.enums.EntityType;
 import com.example.isa.mail.MailService;
-import com.example.isa.model.Mansion;
+import com.example.isa.model.*;
 import com.example.isa.model.reservations.*;
 import com.example.isa.service.impl.ClientService;
 import com.example.isa.service.impl.DateCoverter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.PessimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -23,9 +22,6 @@ import com.example.isa.dto.ReservationDto;
 import com.example.isa.exception.EntityDeletedException;
 import com.example.isa.exception.ImpossibleDueToPenaltyPoints;
 import com.example.isa.exception.PeriodNoLongerAvailableException;
-import com.example.isa.model.Boat;
-import com.example.isa.model.BoatAvailablePeriod;
-import com.example.isa.model.Client;
 import com.example.isa.repository.AdditionalServiceRepository;
 import com.example.isa.repository.BoatAvailablePeriodRepository;
 import com.example.isa.repository.BoatOwnerRepository;
@@ -61,6 +57,8 @@ public class BoatReservationServiceImpl implements ReservationService{
 	ClientService clientService;
 	@Autowired
 	CollectingBoatReservationsServiceImpl collectingBoatReservationsService;
+	@Autowired
+	CollectionMansionReservationsImpl collectionMansionReservations;
 	
 	
 	@Override
@@ -73,6 +71,9 @@ public class BoatReservationServiceImpl implements ReservationService{
 		Date endDate = formatter.endDate;
 
 		BoatAvailablePeriod period = availablePeriodsRepo.getPeriodOfInterest(startDate, endDate,res.getEntityId());
+		Boat entity = boatRepo.findLockedById(res.getEntityId());
+		if (entity == null)
+			throw new PessimisticLockingFailureException("Some is already trying to reserve at the same time!");
 		Boat boat = boatRepo.findById(res.getEntityId()).orElse(new Boat());
 		
 		if(period == null) {
@@ -86,6 +87,9 @@ public class BoatReservationServiceImpl implements ReservationService{
 			}
 			if(!clientService.clientAvailable(client, startDate, endDate)){
 				return 4;
+			}
+			if(!clientHasAnActiveReservationAtEntity(client, boat)){
+				return 7;
 			}
 			BoatReservation newBoatReservation = new BoatReservation(client, startDate,endDate, res.getNumberOfGuests(), dto.toResSearchDto(),
 					boat);
@@ -112,6 +116,24 @@ public class BoatReservationServiceImpl implements ReservationService{
 		}
     }
 
+	private boolean clientHasAnActiveReservationAtEntity(Client client, AbstractEntity entity) {
+		List<AbstractReservation> allClientsReservations = new ArrayList<>();
+		if (entity.getEntityType() == EntityType.BOAT){
+			allClientsReservations.addAll(collectingBoatReservationsService.getAllNotCancelledReservationsByBoatAndClient(client, entity.getId()));
+		} else if(entity.getEntityType() == EntityType.AVENTURE){
+		} else if (entity.getEntityType() == EntityType.MANSION){
+			allClientsReservations.addAll(collectionMansionReservations.getAllNotCancelledReservationsByMansionAndClient(client, entity.getId()));
+		}
+		LocalDateTime now = LocalDateTime.now();
+		for (AbstractReservation ar : allClientsReservations){
+			if(DateCoverter.convertToLocalDateTimeViaInstant(ar.getStartDate()).isBefore(now)
+					&& DateCoverter.convertToLocalDateTimeViaInstant(ar.getEndDate()).isAfter(now)){
+				return true;
+			}
+		}
+		return false;
+	}
+
 
 	@Override
 	@Transactional(readOnly=false,propagation=Propagation.REQUIRED,isolation= Isolation.SERIALIZABLE)
@@ -123,6 +145,9 @@ public class BoatReservationServiceImpl implements ReservationService{
 		    
 	    BoatAvailablePeriod period = availablePeriodsRepo.getPeriodOfInterest(startDate, endDate,res.getEntityId());
 	    Boat boat = boatRepo.findByIdAndDeletedFalse(res.getEntityId());
+		Boat entity = boatRepo.findLockedById(res.getEntityId());
+		if (entity == null)
+			throw new PessimisticLockingFailureException("Some is already trying to reserve at the same time!");
 	    Client client = clientRepository.findByEmail(authenticationService.getLoggedUser().getEmail());
 	    
 	    if(period == null) {

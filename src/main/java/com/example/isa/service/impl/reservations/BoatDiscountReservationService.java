@@ -6,19 +6,17 @@ import java.util.Date;
 import java.util.List;
 
 import com.example.isa.mail.MailService;
-import com.example.isa.model.Client;
+import com.example.isa.model.*;
 import com.example.isa.service.SubscriptionService;
 import com.example.isa.service.impl.BoatService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.PessimisticLockingFailureException;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 
 import com.example.isa.dto.NewDiscountReservationDto;
 import com.example.isa.exception.CancelledReservationException;
 import com.example.isa.exception.OfferNotAvailableException;
-import com.example.isa.model.Boat;
-import com.example.isa.model.BoatOwner;
-import com.example.isa.model.User;
 import com.example.isa.model.reservations.BoatDiscountReservation;
 import com.example.isa.model.reservations.DiscountReservation;
 import com.example.isa.model.reservations.ReservationStatus;
@@ -27,6 +25,9 @@ import com.example.isa.repository.BoatOwnerRepository;
 import com.example.isa.repository.BoatRepository;
 import com.example.isa.service.AuthenticationService;
 import com.example.isa.service.DiscountReservationService;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class BoatDiscountReservationService implements DiscountReservationService{
@@ -77,18 +78,22 @@ public class BoatDiscountReservationService implements DiscountReservationServic
 	}
 
 	@Override
+	@Transactional(readOnly=false,propagation= Propagation.REQUIRED,isolation= Isolation.SERIALIZABLE)
 	public DiscountReservation makeReservationOnDiscount(long resId) throws OfferNotAvailableException,ObjectOptimisticLockingFailureException, CancelledReservationException{
 		
     	BoatDiscountReservation res = reservationRepo.findByIdAndStatus(resId,ReservationStatus.ACTIVE);    	
     	BoatDiscountReservation repeatedRes = reservationRepo.findByUserAndStartDateAndEndDateAndStatusAndBoat(
     			authenticationService.getLoggedUser(), res.getStartDate(), res.getEndDate(), ReservationStatus.CANCELLED,res.getBoat());
-    	
+
     	if(res == null)
 			throw new OfferNotAvailableException();
 		else if (repeatedRes != null) {
 			throw new CancelledReservationException();
 		}
     	else {
+			Boat entity = boatRepo.findLockedById(res.getBoat().getId());
+			if (entity == null)
+				throw new PessimisticLockingFailureException("This entity is being deleted!");
 	    	res.setStatus(ReservationStatus.RESERVED);
 	    	res.setUser(authenticationService.getLoggedUser());
 	    	return reservationRepo.save(res);
@@ -117,8 +122,12 @@ public class BoatDiscountReservationService implements DiscountReservationServic
 	}
 
 	@Override
+	@Transactional(readOnly=false,propagation= Propagation.REQUIRED,isolation= Isolation.SERIALIZABLE)
 	public int createDiscountReservation(NewDiscountReservationDto dto) {
 		BoatDiscountReservation boatDiscountReservation = new BoatDiscountReservation();
+		Boat entity = boatRepo.findLockedById(dto.boatId);
+		if (entity == null)
+			throw new PessimisticLockingFailureException("Some is already trying to reserve at the same time!");
 		Boat boat = boatRepo.findById(dto.boatId).get();
 		boatDiscountReservation.setBoat(boat);
 		boatDiscountReservation.setStatus(ReservationStatus.ACTIVE);
@@ -127,7 +136,7 @@ public class BoatDiscountReservationService implements DiscountReservationServic
 		boatDiscountReservation.setValidUntil(dto.validUntil);
 		boatDiscountReservation.setStartDate(dto.startDate);
 		boatDiscountReservation.setEndDate(getEndDate(dto));
-		if(boatService.overlapsWithAvailability(boatDiscountReservation.getStartDate(), boatDiscountReservation.getEndDate(), boat.getId())){
+		if(!boatService.inAvailabilityPeriods(boatDiscountReservation.getStartDate(), boatDiscountReservation.getEndDate(), boat.getId())){
 			return 2;
 		}
 		if(collectingBoatReservationsService.overlapsWithActiveReservations(boatDiscountReservation.getStartDate(), boatDiscountReservation.getEndDate(), boat)){

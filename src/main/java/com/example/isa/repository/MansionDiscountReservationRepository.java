@@ -19,6 +19,8 @@ public interface MansionDiscountReservationRepository extends JpaRepository<Mans
 	List<MansionDiscountReservation> findAllByUserAndStatus(User u,ReservationStatus status);
 	List<MansionDiscountReservation> findAllByUserAndStatusNot(User user, ReservationStatus status);
 
+	List<MansionDiscountReservation> findAllByUserAndStatusNotAndMansion(User user, ReservationStatus status, Mansion mansion);
+
 
 	MansionDiscountReservation findByIdAndStatus(long id,ReservationStatus status);
 	List<DiscountReservation> findAllByMansionAndStatus(Mansion mansion,ReservationStatus status);

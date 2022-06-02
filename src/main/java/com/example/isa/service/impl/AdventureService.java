@@ -13,6 +13,7 @@ import com.example.isa.repository.FishingInstructorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -51,6 +52,12 @@ public class AdventureService {
         System.out.println(adventures);
         return adventures;
     }
+
+    @Transactional
+    public Adventure findLockedById(Long id){
+        return adventureRepository.findLockedById(id);
+    }
+
     public Adventure getById(Long id) {
         return adventureRepository.findById(id).get();
     }

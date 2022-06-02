@@ -10,6 +10,7 @@ import com.example.isa.dto.*;
 import com.example.isa.model.reservations.*;
 import com.example.isa.service.impl.reservations.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.PessimisticLockingFailureException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -146,7 +147,11 @@ public class ReservationController {
             return new ResponseEntity<>("Reservation successfull!", HttpStatus.OK);
         } catch (ParseException e){
             return  new ResponseEntity<>("Check your date again!", HttpStatus.OK);
-        } catch (Exception e) {
+        }
+        catch (PessimisticLockingFailureException pe){
+            return new ResponseEntity<>("Client is reserving the entity!", HttpStatus.BAD_REQUEST);
+        }
+        catch (Exception e) {
         	return  new ResponseEntity<>(e.getMessage(), HttpStatus.OK);
         }
     }
@@ -291,7 +296,12 @@ public class ReservationController {
             else if(code==4) return new ResponseEntity<>("Client is not available at selected time!", HttpStatus.OK);
             else if(code==5) return new ResponseEntity<>("Mansion is not available at selected time!", HttpStatus.OK);
             else if(code==6) return new ResponseEntity<>("Captain is not available at selected time!", HttpStatus.OK);
+            else if(code==7) return new ResponseEntity<>("Client does not have an active reservation!", HttpStatus.OK);
             else return new ResponseEntity<>("Wrong params, try again!", HttpStatus.OK);
+        }
+        catch (PessimisticLockingFailureException pe){
+            System.out.println(pe);
+            return new ResponseEntity<>("Some is already trying to reserve at the same time!", HttpStatus.OK);
         } catch (Exception e){
             System.out.println(e);
             return new ResponseEntity<>("No available periods in selected time!", HttpStatus.OK);
@@ -332,6 +342,7 @@ public class ReservationController {
             else if(code==3) return new ResponseEntity<>("It is impossible to save the reservation", HttpStatus.OK);
             else if(code==4) return new ResponseEntity<>("Client is not available at selected time!", HttpStatus.OK);
             else if(code==5) return new ResponseEntity<>("Mansion is not available at selected time!", HttpStatus.OK);
+            else if(code==7) return new ResponseEntity<>("Client does not have an active reservation!", HttpStatus.OK);
             else return new ResponseEntity<>("Wrong params, try again!", HttpStatus.OK);
         } catch (Exception e){
             System.out.println(e);

@@ -1,5 +1,6 @@
 package com.example.isa.repository;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -26,4 +27,5 @@ public interface BoatDiscountReservationRepository extends JpaRepository<BoatDis
 	
 	BoatDiscountReservation findByUserAndStartDateAndEndDateAndStatusAndBoat(User user,Date startDate, Date endDate, ReservationStatus status,Boat boat);
 
+    List<DiscountReservation> findAllByUserAndStatusNotAndBoat(User user, ReservationStatus status, Boat boat);
 }

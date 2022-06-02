@@ -6,6 +6,7 @@ import com.example.isa.dto.*;
 import com.example.isa.model.MansionAvailablePeriod;
 import com.example.isa.service.impl.AdditionalServiceService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.PessimisticLockingFailureException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -104,7 +105,10 @@ public class MansionController {
         try {
 			service.deleteMansion(id.boatId);
             return new ResponseEntity<String>("Successfully deleted mansion!", HttpStatus.OK);
-        } catch (Exception e){
+        }catch (PessimisticLockingFailureException pe){
+			return new ResponseEntity<>("Client is reserving the entity!", HttpStatus.BAD_REQUEST);
+		}
+		catch (Exception e){
         	System.out.println(e);
             return  new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }

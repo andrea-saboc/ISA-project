@@ -1,4 +1,5 @@
 package com.example.isa.model;
+import com.example.isa.enums.EntityType;
 import com.example.isa.model.reservations.AdditionalService;
 
 import javax.persistence.*;
@@ -85,6 +86,11 @@ public class Boat extends AbstractEntity{
 
 	public Long getId() {
 		return id;
+	}
+
+	@Override
+	public EntityType getEntityType() {
+		return EntityType.BOAT;
 	}
 
 	public Set<AdditionalService> getAdditionalServices() {

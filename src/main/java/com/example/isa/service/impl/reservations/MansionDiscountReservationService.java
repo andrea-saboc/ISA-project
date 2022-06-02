@@ -11,6 +11,7 @@ import com.example.isa.repository.MansionOwnerRepository;
 import com.example.isa.service.SubscriptionService;
 import com.example.isa.service.impl.MansionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.PessimisticLockingFailureException;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +25,9 @@ import com.example.isa.repository.MansionDiscountReservationRepository;
 import com.example.isa.repository.MansionRepository;
 import com.example.isa.service.AuthenticationService;
 import com.example.isa.service.DiscountReservationService;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class MansionDiscountReservationService implements DiscountReservationService{
@@ -68,12 +72,12 @@ public class MansionDiscountReservationService implements DiscountReservationSer
 	}
 
 	@Override
+	@Transactional(readOnly=false,propagation= Propagation.REQUIRED,isolation= Isolation.SERIALIZABLE)
 	public DiscountReservation makeReservationOnDiscount(long resId) throws OfferNotAvailableException,ObjectOptimisticLockingFailureException, CancelledReservationException {
 		
     	MansionDiscountReservation res = reservationRepo.findByIdAndStatus(resId,ReservationStatus.ACTIVE);
     	MansionDiscountReservation repeatedRes = reservationRepo.findByUserAndStartDateAndEndDateAndStatusAndMansion(
     			authenticationService.getLoggedUser(),res.getStartDate(),res.getEndDate(), ReservationStatus.CANCELLED,res.getMansion());
-    			
     	if(res == null) {
     		throw new OfferNotAvailableException();
     	}
@@ -82,6 +86,9 @@ public class MansionDiscountReservationService implements DiscountReservationSer
     		throw new CancelledReservationException();
     	}
     	else {
+			Mansion entity = mansionRepo.findLockedById(res.getMansion().getId());
+			if (entity == null)
+				throw new PessimisticLockingFailureException("Some is already trying to reserve at the same time!");
     	res.setStatus(ReservationStatus.RESERVED);
     	res.setUser(authenticationService.getLoggedUser());
     	return reservationRepo.save(res);
@@ -89,9 +96,13 @@ public class MansionDiscountReservationService implements DiscountReservationSer
 	}
 
 	@Override
+	@Transactional(readOnly=false,propagation= Propagation.REQUIRED,isolation= Isolation.SERIALIZABLE)
 	public int createDiscountReservation(NewDiscountReservationDto dto) {
 		MansionDiscountReservation mansionDiscountReservation = new MansionDiscountReservation();
-		Mansion mansion = mansionRepo.findById(dto.boatId).get();
+		Mansion entity = mansionRepo.findLockedById(dto.boatId);
+		if (entity == null)
+			throw new PessimisticLockingFailureException("Some is already trying to reserve at the same time!");
+		Mansion  mansion= mansionRepo.findById(dto.boatId).get();
 		mansionDiscountReservation.setMansion(mansion);
 		mansionDiscountReservation.setStatus(ReservationStatus.ACTIVE);
 		mansionDiscountReservation.setPriceWithDiscount(dto.priceWithDiscount);
@@ -99,7 +110,7 @@ public class MansionDiscountReservationService implements DiscountReservationSer
 		mansionDiscountReservation.setValidUntil(dto.validUntil);
 		mansionDiscountReservation.setStartDate(dto.startDate);
 		mansionDiscountReservation.setEndDate(getEndDate(dto));
-		if(mansionService.overlapsWithAvailability(mansionDiscountReservation.getStartDate(), mansionDiscountReservation.getEndDate(), mansion.getId())){
+		if(mansionService.isInAvailabilityPeriods(mansionDiscountReservation.getStartDate(), mansionDiscountReservation.getEndDate(), mansion.getId())){
 			return 2;
 		}
 		if(collectionMansionReservationsService.overlapsWithActiveReservations(mansionDiscountReservation.getStartDate(), mansionDiscountReservation.getEndDate(), mansion)){

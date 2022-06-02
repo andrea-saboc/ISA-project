@@ -19,6 +19,7 @@ public interface BoatReservationRepository extends JpaRepository<BoatReservation
 	List<BoatReservation> findAllByBoat(Boat boat);
 	List<BoatReservation> findAllByBoatAndStatusNot(Boat boat, ReservationStatus status);
 	List<BoatReservation> findAllByUserAndStatusNot(User user, ReservationStatus status);
+	List<BoatReservation> findAllByUserAndStatusNotAndBoat(User user, ReservationStatus status, Boat boat);
 
 
 

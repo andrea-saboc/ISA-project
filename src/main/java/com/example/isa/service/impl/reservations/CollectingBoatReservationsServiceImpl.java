@@ -1,9 +1,11 @@
 package com.example.isa.service.impl.reservations;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+import com.example.isa.model.Client;
 import com.example.isa.model.reservations.AbstractReservation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -89,4 +91,10 @@ public class CollectingBoatReservationsServiceImpl {
 		}
 		return false;
 	}
+
+    public Collection<? extends AbstractReservation> getAllNotCancelledReservationsByBoatAndClient(Client client, Long id) {
+		List<AbstractReservation> allReservations = new ArrayList<>(boatReservationRepo.findAllByUserAndStatusNotAndBoat(client, ReservationStatus.CANCELLED, boatRepo.findById(id).get()));
+		allReservations.addAll(boatDiscountReservationRepo.findAllByUserAndStatusNotAndBoat(client, ReservationStatus.CANCELLED, boatRepo.findById(id).get()));
+		return allReservations;
+    }
 }

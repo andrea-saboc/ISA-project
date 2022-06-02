@@ -1,5 +1,7 @@
 package com.example.isa.model;
 
+import com.example.isa.enums.EntityType;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -55,6 +57,11 @@ public class Mansion extends AbstractEntity{
 
 	public Long getId() {
 		return id;
+	}
+
+	@Override
+	public EntityType getEntityType() {
+		return EntityType.MANSION;
 	}
 
 	public void setId(Long id) {

@@ -11,6 +11,7 @@ import com.example.isa.repository.*;
 import com.example.isa.service.impl.ClientService;
 import com.example.isa.service.impl.DateCoverter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.PessimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -70,6 +71,9 @@ public class MansionReservationServiceImpl implements ReservationService{
 		
 		MansionAvailablePeriod period = availablePeriodsRepo.getPeriodOfInterest(startDate, endDate,res.getEntityId());
 		Mansion mansion = mansionRepo.findByIdAndDeletedFalse(res.getEntityId());
+		Mansion entity = mansionRepo.findLockedById(res.getEntityId());
+		if (entity == null)
+			throw new PessimisticLockingFailureException("Some is already trying to reserve at the same time!");
 		Client client = clientRepository.findByEmail(authenticationService.getLoggedUser().getEmail());
 		
 		if(period == null) {
@@ -178,6 +182,9 @@ public class MansionReservationServiceImpl implements ReservationService{
 
 		MansionAvailablePeriod period = availablePeriodsRepo.getPeriodOfInterest(startDate, endDate, res.getEntityId());
 		Mansion mansion = mansionRepo.findByIdAndDeletedFalse(res.getEntityId());
+		Mansion entity = mansionRepo.findLockedById(res.getEntityId());
+		if (entity == null)
+			throw new PessimisticLockingFailureException("Some is already trying to reserve at the same time!");
 		if(period == null) {
 			return 5;
 			//throw new PeriodNoLongerAvailableException();

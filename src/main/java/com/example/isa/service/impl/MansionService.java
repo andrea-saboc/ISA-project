@@ -11,8 +11,12 @@ import com.example.isa.model.reservations.AdditionalService;
 import com.example.isa.repository.*;
 import com.example.isa.service.impl.reservations.MansionReservationServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.PessimisticLockingFailureException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class MansionService {
@@ -46,7 +50,11 @@ public class MansionService {
 		return mansionRepo.findAll();
 	}
 
+	@Transactional(readOnly=false,propagation= Propagation.REQUIRED,isolation= Isolation.SERIALIZABLE)
 	public Mansion deleteMansion(long id) {
+		Mansion entity = mansionRepo.findLockedById(id);
+		if (entity == null)
+			throw new PessimisticLockingFailureException("Some is already trying to reserve at the same time!");
 		Mansion mansion = mansionRepo.findById(id);
 		mansion.setDeleted(true);
 		return mansionRepo.save(mansion);
@@ -55,6 +63,7 @@ public class MansionService {
 	public Mansion getById(Long id) {
 		return mansionRepo.findById(id).get();
 	}
+
 
 	public boolean isReserved(Long id)
 	{
@@ -229,5 +238,22 @@ public class MansionService {
 			}
 		}
 		return false;
+	}
+
+	public boolean isInAvailabilityPeriods(Date startDate, Date endDate, Long id) {
+		List<MansionAvailablePeriod> mansionAvailablePeriods = getMansionAvailbilities(id);
+		for (MansionAvailablePeriod ma : mansionAvailablePeriods ){
+			if(!startDate.before(ma.getStartDate()) && !endDate.after(ma.getStartDate())){
+				return true;
+			}
+		}
+		return false;
+	}
+
+
+
+	@Transactional
+	public Mansion findLockedById(Long id){
+		return mansionRepo.findLockedById(id);
 	}
 }

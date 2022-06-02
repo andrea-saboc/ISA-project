@@ -6,6 +6,7 @@ import com.example.isa.dto.AllAdventureDiscountReservationsDto;
 import com.example.isa.model.reservations.AdventureDiscountReservation;
 import com.example.isa.service.impl.reservations.AdventureDiscountReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.PessimisticLockingFailureException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -67,7 +68,10 @@ public class DiscountReservationsController {
 		}
 		catch(ObjectOptimisticLockingFailureException | OfferNotAvailableException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.OK);
-		} catch (Exception e) {
+		} catch (PessimisticLockingFailureException pe){
+			return new ResponseEntity<>("Entity is being deleted!", HttpStatus.BAD_REQUEST);
+		}
+		catch (Exception e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.OK);
 		}
 	}
@@ -79,9 +83,12 @@ public class DiscountReservationsController {
 			System.out.println(dto);
 			int code= boatReservationService.createDiscountReservation(dto);
 			if(code == 1)  return new ResponseEntity<>("Discount reservation successfully created!", HttpStatus.OK);
-			else if(code == 2) return new ResponseEntity<>("Discount reservation period overlaps withh availability period!", HttpStatus.OK);
+			else if(code == 2) return new ResponseEntity<>("Discount reservation period is not availability period!", HttpStatus.OK);
 			else if(code == 3) return new ResponseEntity<>("Discount reservation could not be created because there is already a reservation that overlaps with selected period!", HttpStatus.OK);
 			else return new ResponseEntity<>("It is impossible to save discount reservation!", HttpStatus.OK);
+		}
+		catch (PessimisticLockingFailureException pe){
+			return new ResponseEntity<>("Client is reserving the entity!", HttpStatus.BAD_REQUEST);
 		}
 		catch (Exception e){
 			System.out.println("Ne okej status");
@@ -102,6 +109,9 @@ public class DiscountReservationsController {
 			else if(code == 3) return new ResponseEntity<>("Discount reservation could not be created because there is already a reservation that overlaps with selected period!", HttpStatus.OK);
 			else return new ResponseEntity<>("It is impossible to save discount reservation!", HttpStatus.OK);
 		}
+		catch (PessimisticLockingFailureException pe){
+			return new ResponseEntity<>("Client is reserving the entity!", HttpStatus.BAD_REQUEST);
+		}
 		catch (Exception e){
 			System.out.println("Ne okej status");
 			System.out.println(e);
@@ -119,6 +129,9 @@ public class DiscountReservationsController {
 			else if(code == 2) return new ResponseEntity<>("Discount reservation period overlaps with boat availability period!", HttpStatus.OK);
 			else if(code == 3) return new ResponseEntity<>("Discount reservation could not be created because there is already a reservation that overlaps with selected period!", HttpStatus.OK);
 			else return new ResponseEntity<>("It is impossible to save discount reservation!", HttpStatus.OK);
+		}
+		catch (PessimisticLockingFailureException pe){
+			return new ResponseEntity<>("Client is reserving the entity!", HttpStatus.BAD_REQUEST);
 		}
 		catch (Exception e){
 			System.out.println("Ne okej status");

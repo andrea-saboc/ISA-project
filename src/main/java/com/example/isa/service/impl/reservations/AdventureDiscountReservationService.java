@@ -12,8 +12,12 @@ import com.example.isa.service.AuthenticationService;
 import com.example.isa.service.DiscountReservationService;
 import com.example.isa.service.SubscriptionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.PessimisticLockingFailureException;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -50,9 +54,14 @@ public class AdventureDiscountReservationService implements DiscountReservationS
     }
 
     @Override
+    @Transactional(readOnly=false,propagation= Propagation.REQUIRED,isolation= Isolation.SERIALIZABLE)
     public int createDiscountReservation(NewDiscountReservationDto dto) {
         AdventureDiscountReservation adventureDiscountReservation = new AdventureDiscountReservation();
+        Adventure entity = adventureRepository.findLockedById(dto.boatId);
+        if (entity == null)
+            throw new PessimisticLockingFailureException("Some is already trying to reserve at the same time!");
         Adventure adventure = adventureRepository.findById(dto.boatId).get();
+
         adventureDiscountReservation.setAdventure(adventure);
         adventureDiscountReservation.setStatus(ReservationStatus.ACTIVE);
         adventureDiscountReservation.setPriceWithDiscount(dto.priceWithDiscount);

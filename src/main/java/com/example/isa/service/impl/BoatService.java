@@ -7,6 +7,7 @@ import com.example.isa.model.reservations.AbstractReservation;
 import com.example.isa.repository.*;
 import com.example.isa.service.impl.reservations.BoatReservationServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.PessimisticLockingFailureException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,9 @@ import com.example.isa.dto.BoatRegistrationDto;
 import com.example.isa.model.reservations.AdditionalService;
 import com.example.isa.model.reservations.BoatReservation;
 import com.example.isa.service.impl.reservations.CollectingBoatReservationsServiceImpl;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class BoatService {
@@ -105,6 +109,11 @@ public class BoatService {
 		boatToChange = boatsRepository.save(boatToChange);
 		return boatToChange;
 
+	}
+
+	@Transactional
+	public Boat findLockedById(Long id){
+		return boatsRepository.findLockedById(id);
 	}
 
 	public boolean isReserved(Long id)
@@ -310,7 +319,11 @@ public class BoatService {
 		return overlapedReservations;
 	}
 
+	@Transactional(readOnly=false,propagation= Propagation.REQUIRED,isolation= Isolation.SERIALIZABLE)
 	public void deleteBoat(Long boatId) {
+		Boat entity = boatsRepository.findLockedById(boatId);
+		if (entity == null)
+			throw new PessimisticLockingFailureException("Some is already trying to reserve!");
 		Boat boat = boatsRepository.findById(boatId).get();
 		boat.setDeleted(true);
 		boatsRepository.save(boat);
@@ -321,6 +334,16 @@ public class BoatService {
 		List<BoatAvailablePeriod> mansionAvailablePeriods = getBoatAvailbilities(id);
 		for (BoatAvailablePeriod ma : mansionAvailablePeriods ){
 			if(ma.getStartDate().before(endDate) && startDate.before(ma.getStartDate())){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public boolean inAvailabilityPeriods(Date startDate, Date endDate, Long id) {
+		List<BoatAvailablePeriod> mansionAvailablePeriods = getBoatAvailbilities(id);
+		for (BoatAvailablePeriod ma : mansionAvailablePeriods ){
+			if(!startDate.before(ma.getStartDate()) && !endDate.after(ma.getStartDate())){
 				return true;
 			}
 		}
