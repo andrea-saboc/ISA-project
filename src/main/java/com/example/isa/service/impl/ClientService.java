@@ -3,6 +3,8 @@ package com.example.isa.service.impl;
 
 import java.nio.file.AccessDeniedException;
 
+import com.example.isa.model.Administrator;
+import com.example.isa.repository.AdministratorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -35,6 +37,8 @@ public class ClientService {
 	private PasswordEncoder passwordEncoder;
     @Autowired
     private AuthenticationManager authenticationManager;
+	@Autowired
+	private AdministratorRepository administratorRepository;
 	
 	
 	public Iterable<User> findAll()  throws AccessDeniedException{
@@ -63,6 +67,14 @@ public class ClientService {
                         passwords.getOldPassword()));
         
 		client.setPassword(passwordEncoder.encode(passwords.getNewPassword()));
+		String userType=client.getClass().getSimpleName();
+		if(client.getClass().getSimpleName().equals("Administrator"))
+		{
+			Administrator admin= (Administrator) client;
+			admin.setLoggedIn(true);
+			administratorRepository.save(admin);
+
+		}
 		userRepository.save(client);
     }
     

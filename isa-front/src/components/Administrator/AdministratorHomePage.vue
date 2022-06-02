@@ -1,106 +1,87 @@
 <template>
-<div class="homeb-view" v-if="loggedUser != null &&  loggedUser.advertiserType=='fishing'">
+<div class="homeb-view" v-if="loggedUser != null &&  loggedUser.adminType=='admin'">
   <div class="sidebar-container side-bov">
     <div class="sidebar-logo">
       {{loggedUser.name}} {{loggedUser.surname}}
     </div>
-     <li>
-      <a v-on:click="DisplayDashboard()">
-        <i class="fa fa-tachometer" aria-hidden="true"></i>
-        Dashboard
-      </a>
-    </li>
 
     <ul class="sidebar-navigation">
-      <li class="header">Adventures</li>
-      <li>
-        <input type="search" class="form-control form-control-dark" placeholder="Search..."  aria-label="Search" v-model="search_adventure">
-      </li>
-      <li>
-        <a v-on:click="DisplayAdventureRegistration()">
-          <i class="fa fa-plus" aria-hidden="true"></i> Add new
+        <li>
+        <a v-if="loggedUser.email==='admin@gmail.com'" v-on:click="DisplayAdministratorRegistration()">
+          <i class="fa fa-plus" aria-hidden="true"></i> Add new administrator
         </a>
       </li>
-      <li v-for="adventure in adventures" :key="adventure.id" >
-        <div  v-if="AdventureSearch(adventure.name)">
-          <a v-on:click="DisplayAdventure(adventure.id)">
-            <i class="fa fa-ship" aria-hidden="true"></i> {{adventure.name}}
-          </a>
-        </div>
-      </li>
-      <li class="header">Reservations</li>
       <li>
-        <a href="#" v-on:click = "DisplayReservations()">
-          <i class="fa fa-calendar-check-o" aria-hidden="true"></i>  Reservations
+        <a  v-on:click="DisplayUsersRegistration()">
+          <i class="fa fa-plus" aria-hidden="true"></i> View users registration
         </a>
       </li>
-      
-      <li class="header">Profile</li>
+       <li class="header">View All request for account deleted</li>
+      <li>
+        <a href="#" v-on:click = "DisplayRequest()">
+          <i class="fa fa-calendar-check-o" aria-hidden="true"></i>  Request for delete account
+        </a>
+      </li>
+       <li class="header">Log Out</li>
+      <li>
+        <button type="button" class="btn btn-primary" v-on:click="logOut">Log out</button>
+      </li>
+       <li class="header">Profile</li>
       <li>
         <a href="#" v-on:click="DisplayProfile()">
           <i class="fa fa-cog" aria-hidden="true"></i> Profile
         </a>
       </li>
-      
-       <li class="header">Log Out</li>
-      <li>
-        <button type="button" class="btn btn-primary" v-on:click="logOut">Log out</button>
-
-      </li>
     </ul>
   
  </div>
  <div class="router-elem">
-    <div v-if="display == 'adventureRegistration'">
-      <AdventureRegistration></AdventureRegistration>
+    <div v-if="display == 'administratorRegistration'">
+      <AdminRegistration></AdminRegistration>
+      
     </div>
-      <div v-if="display=='dashboard'">
-      <FishingInstructorDashboard></FishingInstructorDashboard>
-    </div>
-     <div v-if="display == 'adventure'">
-      <AdventureView></AdventureView>
-    </div>
-    <div v-if="display=='reservations'">
-      <AdventureReservation></AdventureReservation>
-    </div>
-    <div v-if="display == 'profile'">
+      <div v-if="display == 'profile'">
       <Profile></Profile>
     </div>
-    <div v-if="display=='change'">
-      <ChangeAdventureInformation></ChangeAdventureInformation>
+    <div v-if="display == 'viewUsers'">
+      <ViewUserRegistration></ViewUserRegistration>
+    </div>
+    <div v-if="display == 'request'">
+      <ViewAllRequestForDeletedAccount></ViewAllRequestForDeletedAccount>
     </div>
   </div>
 </div>
 
 </template>
+
 <script>
 import Profile from "../Profile";
-import AdventureRegistration from "../FishingInstructor/AdventureRegistration";
-import AdventureView from "../FishingInstructor/AdventureView";
-import AdventureReservation from "../FishingInstructor/AdventureReservation";
-import FishingInstructorDashboard from "../FishingInstructor/FishingInstructorDashboard";
+import AdminRegistration from "../Administrator/AdminRegistration";
+import ViewUserRegistration from "../Administrator/ViewUserRegistration";
+import ViewAllRequestForDeletedAccount from "../Administrator/ViewAllRequestForDeletedAccount";
 import axios from "axios";
 import {devServer} from "../../../vue.config";
 
+
 export default{
-  name: "fishingInstructorHomePage",
-  components:{AdventureRegistration,AdventureView,Profile,AdventureReservation,FishingInstructorDashboard},
+  name: "administratorHomePage",
+    components:{AdminRegistration,Profile,ViewUserRegistration,ViewAllRequestForDeletedAccount},
+
+
+
     data: function(){
         return{
           display: 'dashboard',
             loggedUser:null,
             adventures:[],
             search_adventure:'',
-            user: null,
-            authorities:[],
-            rawObject:''
-
+            user: null
         }
     },
     mounted(){
     
-      if(window.location.href.includes('/adventure/')){
-      this.display = 'adventure'
+      if(window.location.href.includes('/administrator/')){
+      this.display = 'administrator'
     }
    let token = localStorage.getItem('token').substring(1, localStorage.getItem('token').length-1);
    console.log('toke je',token)
@@ -111,21 +92,7 @@ export default{
     })
     .then(response => {
       this.loggedUser =response.data
-      console.log("Ovaj user je ulogovan:", this.loggedUser.authorities[0].name)
-      this.authorities=response.data.authorities
-      
-        
-      if(this.loggedUser.advertiserType == 'fishing'){
-        axios.get(devServer.proxy+"/ownersAdventures", {
-          headers: {
-            'Authorization' :'Bearer ' + token,
-          }
-        })
-            .then(response1 => {
-              console.log("avanture vlasnika", response1.data)
-              this.adventures = response1.data;
-            })
-      }
+      console.log("Ovaj user je ulogovan:", this.loggedUser)
     })
         .catch(() => {
           console.log('Login user is unavailable')
@@ -134,29 +101,9 @@ export default{
     },
      methods: {
    
-    DisplayAdventureRegistration() {
+    DisplayAdministratorRegistration() {
 
-        this.display = 'adventureRegistration'
-    },
-     DisplayProfile(){
-      this.display = 'profile';
-    },
-     AdventureSearch(adventureName){
-      return adventureName.includes(this.search_adventure)
-    },
-     DisplayAdventure(id){
-      var path = window.location.href
-      if (path.includes('/adventure/')){
-        path = path.split('/adventure/')[0]
-      }
-
-      window.location.href =path+ "/adventure/"+id.toString();
-    },
-    DisplayReservations(){
-      this.display = 'reservations';
-    },  
-     DisplayDashboard(){
-     this.display= 'dashboard'
+        this.display = 'administratorRegistration'
     },
     logOut(){
       let router = this.$router;
@@ -164,7 +111,16 @@ export default{
       localStorage.clear();
       router.push("/login");
       return;
-      }
+      },
+         DisplayProfile(){
+      this.display = 'profile';
+    },
+     DisplayUsersRegistration(){
+      this.display = 'viewUsers';
+    },
+     DisplayRequest(){
+      this.display = 'request';
+    }
   }
 }
 </script>

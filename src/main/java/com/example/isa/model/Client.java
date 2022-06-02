@@ -33,9 +33,9 @@ public class Client extends User{
     }
 
     public Client(String name, String surname, String address, String city, String country, String phoneNumber,
-			String email, String password, int penaltyPoints,int loyaltyPoints) {
+			String email, String password, int penaltyPoints,int loyaltyPoints,Boolean deleted) {
     	
-        super(name,surname,address,city,country,phoneNumber,email, password);
+        super(name,surname,address,city,country,phoneNumber,email, password,deleted);
         this.penaltyPoints = penaltyPoints;
         this.loyaltyPoints = loyaltyPoints;
         this.penaltyPointsResetDate = new Date();
@@ -43,9 +43,9 @@ public class Client extends User{
     }
     
     public Client(String name, String surname, String address, String city, String country, String phoneNumber,
-			String email, String password) {
+			String email, String password,Boolean deleted) {
     	
-        super(name,surname,address,city,country,phoneNumber,email, password);
+        super(name,surname,address,city,country,phoneNumber,email, password,deleted);
         
     }
 

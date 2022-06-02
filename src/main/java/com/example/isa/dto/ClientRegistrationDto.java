@@ -122,7 +122,7 @@ public class ClientRegistrationDto {
 
 
 	public Client createClient(ClientRegistrationDto clientDto) {
-		return new Client(clientDto.name,clientDto.surname,clientDto.address,clientDto.city,clientDto.country,clientDto.phoneNumber,clientDto.email,clientDto.password);
+		return new Client(clientDto.name,clientDto.surname,clientDto.address,clientDto.city,clientDto.country,clientDto.phoneNumber,clientDto.email,clientDto.password,false);
 	}
 	
 }

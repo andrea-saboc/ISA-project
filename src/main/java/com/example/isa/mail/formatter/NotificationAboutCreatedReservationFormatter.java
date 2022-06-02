@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 public class NotificationAboutCreatedReservationFormatter {
+
     public String getText(Reservation reservation) {
 
         Format formatter = new SimpleDateFormat("dd.MM.yyyy, HH:mm");

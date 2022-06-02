@@ -36,6 +36,7 @@ public class ClientRegistrationService {
 		Client client = clientDto.createClient(clientDto);
 		client.setLoyaltyPoints(0);
 		client.setPenaltyPoints(0);
+		client.setDeleted(false);
 		client.setPassword(passwordEncoder.encode(clientDto.getPassword()));
 		String activationCode = RandomString.make(64);
 	    client.setActivationCode(activationCode);

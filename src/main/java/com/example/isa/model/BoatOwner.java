@@ -18,6 +18,8 @@ public class BoatOwner extends User{
     private String advertiserType;
     @Column(name = "advertiser_registration_approved")
     private boolean approved;
+    @Column(name = "advertiser_registration_notapproved")
+    private boolean notapproved;
 
 
 
@@ -34,14 +36,23 @@ public class BoatOwner extends User{
         this.approved = approved;
     }
 
-    public BoatOwner(String name, String surname, String address, String city, String country, String phoneNumber, String email, String password, String reason, String type, boolean approved) {
-        super(name, surname, address, city, country, phoneNumber, email, password);
+    public BoatOwner(String name, String surname, String address, String city, String country, String phoneNumber, String email, String password, String reason, String type, boolean approved,boolean notapproved,Boolean deleted) {
+        super(name, surname, address, city, country, phoneNumber, email, password,deleted);
         this.advertiserType = type;
         this.reason = reason;
         this.approved = approved;
+        this.notapproved=notapproved;
     }
 
-	public String getReason() {
+    public boolean isNotapproved() {
+        return notapproved;
+    }
+
+    public void setNotapproved(boolean notapproved) {
+        this.notapproved = notapproved;
+    }
+
+    public String getReason() {
 		return reason;
 	}
 

@@ -17,6 +17,8 @@ public class FishingInstructor extends User {
     private String advertiserType;
     @Column(name = "advertiser_registration_approved")
     private boolean approved;
+	@Column(name = "advertiser_registration_notapproved")
+	private boolean notapproved;
 	public FishingInstructor() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -34,21 +36,17 @@ public class FishingInstructor extends User {
 		this.advertiserType = advertiserType;
 		this.approved = approved;
 	}
-	public FishingInstructor(String name, String surname, String address, String city, String country,
-			String phoneNumber, String email, String password) {
-		super(name, surname, address, city, country, phoneNumber, email, password);
-		// TODO Auto-generated constructor stub
-	}
 	public FishingInstructor(String email, String password) {
 		super(email, password);
 		// TODO Auto-generated constructor stub
 	}
 	public FishingInstructor(String name, String surname, String address, String city, String country,
-			String phoneNumber, String email, String password, String reason, String advertiserType, boolean approved) {
-		super(name, surname, address, city, country, phoneNumber, email, password);
+			String phoneNumber, String email, String password, String reason, String advertiserType, boolean approved,boolean notapproved,Boolean deleted) {
+		super(name, surname, address, city, country, phoneNumber, email, password,deleted);
 		this.reason = reason;
 		this.advertiserType = advertiserType;
 		this.approved = approved;
+		this.notapproved=notapproved;
 	}
 	public String getReason() {
 		return reason;
@@ -67,6 +65,13 @@ public class FishingInstructor extends User {
 	}
 	public void setApproved(boolean approved) {
 		this.approved = approved;
+	}
+	public boolean isNotapproved() {
+		return notapproved;
+	}
+
+	public void setNotapproved(boolean notapproved) {
+		this.notapproved = notapproved;
 	}
 	
 
