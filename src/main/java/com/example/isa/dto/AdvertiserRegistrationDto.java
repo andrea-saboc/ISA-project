@@ -144,7 +144,7 @@ public class AdvertiserRegistrationDto {
                 "boat",
                 false,
                 false,
-                false
+                false,0
 
                 );
         return boatOwner;
@@ -164,7 +164,7 @@ public class AdvertiserRegistrationDto {
                 "mansion",
                 false,
                 false,
-                false
+                false,0
         );
         return mansionOwner;
     }
@@ -182,7 +182,7 @@ public class AdvertiserRegistrationDto {
                 "fishing",
                 false,
                 false,
-                false
+                false,0
         );
         return fishingInstructor;
     }

@@ -31,6 +31,7 @@ import FishingInstrucotrHomePage from "../components/FishingInstructor/fishingIn
 import AdventureRegistration from "../components/FishingInstructor/AdventureRegistration"
 import AdventureView from "../components/FishingInstructor/AdventureView"
 import ViewAllRequestForDeletedAccount from "../components/Administrator/ViewAllRequestForDeletedAccount"
+import LoyaltyProgram from "../components/Administrator/LoyaltyProgram"
 
 
 const routes = [
@@ -206,6 +207,11 @@ const routes = [
       
         name: 'viewAllRequestForDeletedAccount',
         component: ViewAllRequestForDeletedAccount
+    },{
+        path: '/loyaltyProgram',
+      
+        name: 'loyaltyProgram',
+        component: LoyaltyProgram
     }
 
 ]

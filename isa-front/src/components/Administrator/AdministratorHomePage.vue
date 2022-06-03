@@ -13,13 +13,24 @@
       </li>
       <li>
         <a  v-on:click="DisplayUsersRegistration()">
-          <i class="fa fa-plus" aria-hidden="true"></i> View users registration
+          <i class="fa fa-cog" aria-hidden="true"></i> View users registration
         </a>
       </li>
        <li class="header">View All request for account deleted</li>
       <li>
         <a href="#" v-on:click = "DisplayRequest()">
-          <i class="fa fa-calendar-check-o" aria-hidden="true"></i>  Request for delete account
+          <i class="fa fa-cog" aria-hidden="true"></i>  Request for delete account
+        </a>
+      </li>
+       <li class="header">Loyalty program</li>
+      <li>
+        <a href="#" v-on:click = "DisplayLoyalty()">
+          <i class="fa fa-cog" aria-hidden="true"></i>  Loyalty program
+        </a>
+      </li>
+      <li>
+        <a href="#" v-on:click="DisplayProfile()">
+          <i class="fa fa-cog" aria-hidden="true"></i> Profile
         </a>
       </li>
        <li class="header">Log Out</li>
@@ -27,11 +38,7 @@
         <button type="button" class="btn btn-primary" v-on:click="logOut">Log out</button>
       </li>
        <li class="header">Profile</li>
-      <li>
-        <a href="#" v-on:click="DisplayProfile()">
-          <i class="fa fa-cog" aria-hidden="true"></i> Profile
-        </a>
-      </li>
+      
     </ul>
   
  </div>
@@ -49,6 +56,9 @@
     <div v-if="display == 'request'">
       <ViewAllRequestForDeletedAccount></ViewAllRequestForDeletedAccount>
     </div>
+    <div v-if="display == 'loyalty'">
+      <LoyaltyProgram></LoyaltyProgram>
+    </div>
   </div>
 </div>
 
@@ -59,13 +69,14 @@ import Profile from "../Profile";
 import AdminRegistration from "../Administrator/AdminRegistration";
 import ViewUserRegistration from "../Administrator/ViewUserRegistration";
 import ViewAllRequestForDeletedAccount from "../Administrator/ViewAllRequestForDeletedAccount";
+import LoyaltyProgram from "../Administrator/LoyaltyProgram";
 import axios from "axios";
 import {devServer} from "../../../vue.config";
 
 
 export default{
   name: "administratorHomePage",
-    components:{AdminRegistration,Profile,ViewUserRegistration,ViewAllRequestForDeletedAccount},
+    components:{AdminRegistration,Profile,ViewUserRegistration,ViewAllRequestForDeletedAccount,LoyaltyProgram},
 
 
 
@@ -120,6 +131,9 @@ export default{
     },
      DisplayRequest(){
       this.display = 'request';
+    },
+    DisplayLoyalty(){
+      this.display = 'loyalty';
     }
   }
 }

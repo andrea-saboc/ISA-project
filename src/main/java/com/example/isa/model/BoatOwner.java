@@ -20,8 +20,16 @@ public class BoatOwner extends User{
     private boolean approved;
     @Column(name = "advertiser_registration_notapproved")
     private boolean notapproved;
+    @Column(name = "boatowner_loyalty_points")
+    private int loyaltyPoints;
 
+    public int getLoyaltyPoints() {
+        return loyaltyPoints;
+    }
 
+    public void setLoyaltyPoints(int loyaltyPoints) {
+        this.loyaltyPoints = loyaltyPoints;
+    }
 
     public BoatOwner(){}
 
@@ -36,12 +44,13 @@ public class BoatOwner extends User{
         this.approved = approved;
     }
 
-    public BoatOwner(String name, String surname, String address, String city, String country, String phoneNumber, String email, String password, String reason, String type, boolean approved,boolean notapproved,Boolean deleted) {
+    public BoatOwner(String name, String surname, String address, String city, String country, String phoneNumber, String email, String password, String reason, String type, boolean approved,boolean notapproved,Boolean deleted,int loyaltyPoints) {
         super(name, surname, address, city, country, phoneNumber, email, password,deleted);
         this.advertiserType = type;
         this.reason = reason;
         this.approved = approved;
         this.notapproved=notapproved;
+        this.loyaltyPoints=loyaltyPoints;
     }
 
     public boolean isNotapproved() {

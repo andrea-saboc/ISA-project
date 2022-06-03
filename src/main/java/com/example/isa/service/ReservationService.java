@@ -8,6 +8,7 @@ import com.example.isa.dto.ReservationDto;
 import com.example.isa.exception.EntityDeletedException;
 import com.example.isa.exception.ImpossibleDueToPenaltyPoints;
 import com.example.isa.exception.PeriodNoLongerAvailableException;
+import com.example.isa.model.RecordIncome;
 import com.example.isa.model.reservations.AdditionalService;
 import com.example.isa.model.reservations.Reservation;
 import com.sun.el.parser.ParseException;
@@ -24,6 +25,7 @@ public interface ReservationService {
 	public double accountAdditionalServices(Set<AdditionalService> additinalServices,ReservationDto res);	
 	
 	public Reservation cancelReservation(long resId);
+
 	
 	
 }

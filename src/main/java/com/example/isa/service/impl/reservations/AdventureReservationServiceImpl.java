@@ -42,6 +42,8 @@ public class AdventureReservationServiceImpl implements ReservationService {
     AuthenticationService authenticationService;
     @Autowired
     MailService<String> mailService;
+    @Autowired
+    LoyaltyProgramRepository loyaltyProgramRepository;
     @Override
     @Transactional(readOnly=false,propagation= Propagation.REQUIRED,isolation= Isolation.SERIALIZABLE)
     public AdventureReservation createReservationForClient(CustomReservationForClientDto dto) throws PeriodNoLongerAvailableException, ParseException {
@@ -53,9 +55,10 @@ public class AdventureReservationServiceImpl implements ReservationService {
         ReservationStartEndDateFormatter formatter = new ReservationStartEndDateFormatter(res);
         Date startDate = formatter.startDate;
         Date endDate = formatter.endDate;
-
+        LoyaltyProgram loyaltyProgram=loyaltyProgramRepository.findById(1L).get();
         FishingAvailablePeriod period = availablePeriodsRepo.getPeriodOfInterest(startDate, endDate,fishingInstructor1.getId());
         Adventure adventure = adventureRepository.findById(res.getEntityId()).orElse(new Adventure());
+
 
         if(period == null) {
             throw new PeriodNoLongerAvailableException();
@@ -75,10 +78,25 @@ public class AdventureReservationServiceImpl implements ReservationService {
                 availablePeriodsRepo.save(periodAfter);
             }
 
-
+            client.setLoyaltyPoints((int) (client.getLoyaltyPoints()+loyaltyProgram.client_reservation_score));
+fishingInstructor1.setLoyaltyPoints((int) (fishingInstructor1.getLoyaltyPoints()+loyaltyProgram.owner_reservation_score));
             availablePeriodsRepo.delete(period);
+            fishingInstructorRepository.save(fishingInstructor1);
+            clientRepository.save(client);
             newAdventureReservation.setAdditionalServices(addAdditionalServices(res.getAdditionalServices()));
             newAdventureReservation.setTotalPrice(dto.getPrice(adventure) + accountAdditionalServices(newAdventureReservation.getAdditionalServices(),res));
+            if(client.getLoyaltyPoints()<loyaltyProgram.getSilver_points_min())
+            {
+                newAdventureReservation.setTotalPrice((res.getPrice(newAdventureReservation.getAdventure()) + accountAdditionalServices(newAdventureReservation.getAdditionalServices(),res)));
+            }
+            if(client.getLoyaltyPoints()>=loyaltyProgram.silver_points_min && client.getLoyaltyPoints()<loyaltyProgram.gold_points_min)
+            {
+                newAdventureReservation.setTotalPrice(((res.getPrice(newAdventureReservation.getAdventure()) + accountAdditionalServices(newAdventureReservation.getAdditionalServices(),res))*(100-loyaltyProgram.client_discount_silver))/100);
+            }
+            if(client.getLoyaltyPoints()>= loyaltyProgram.gold_points_min)
+            {
+                newAdventureReservation.setTotalPrice(((res.getPrice(newAdventureReservation.getAdventure()) + accountAdditionalServices(newAdventureReservation.getAdditionalServices(),res))*(100-loyaltyProgram.client_discount_gold))/100);
+            }
             //mailService.notifyClientAboutCreatedReservation(newAdventureReservation);
             return adventureReservationRepository.save(newAdventureReservation);
         }
@@ -89,12 +107,15 @@ public class AdventureReservationServiceImpl implements ReservationService {
     @Transactional(readOnly=false,propagation=Propagation.REQUIRED,isolation= Isolation.SERIALIZABLE)
     public AdventureReservation createReservation(ReservationDto res) throws ParseException, PeriodNoLongerAvailableException, EntityDeletedException, ImpossibleDueToPenaltyPoints {
 
+
         ReservationStartEndDateFormatter formatter = new ReservationStartEndDateFormatter(res);
         Date startDate = formatter.startDate;
         Date endDate = formatter.endDate;
-        FishingAvailablePeriod period = availablePeriodsRepo.getPeriodOfInterest(startDate, endDate,res.getEntityId());
         Adventure adventure=adventureRepository.findByIdAndDeletedFalse(res.getEntityId());
+        FishingInstructor fishingInstructor=fishingInstructorRepository.findById(adventure.getFishingInstructor().getId()).get();
+        FishingAvailablePeriod period = availablePeriodsRepo.getPeriodOfInterest(startDate, endDate,fishingInstructor.getId());
 
+        LoyaltyProgram loyaltyProgram=loyaltyProgramRepository.findById(1L).get();
         Client client = clientRepository.findByEmail(authenticationService.getLoggedUser().getEmail());
 
         if(period == null) {
@@ -116,11 +137,25 @@ public class AdventureReservationServiceImpl implements ReservationService {
                 FishingAvailablePeriod periodAfter = new FishingAvailablePeriod(period.getStartDate(),startDate,period.getFishingInstructor());
                 availablePeriodsRepo.save(periodAfter);
             }
-
+            client.setLoyaltyPoints((int) (client.getLoyaltyPoints()+loyaltyProgram.client_reservation_score));
+            fishingInstructor.setLoyaltyPoints((int) (fishingInstructor.getLoyaltyPoints()+loyaltyProgram.owner_reservation_score));
             availablePeriodsRepo.delete(period);
+            fishingInstructorRepository.save(fishingInstructor);
+            clientRepository.save(client);
             newAdventureReservation.setAdditionalServices(addAdditionalServices(res.getAdditionalServices()));
             newAdventureReservation.setTotalPrice( res.getPrice(newAdventureReservation.getAdventure()) + accountAdditionalServices(newAdventureReservation.getAdditionalServices(),res));
-
+            if(client.getLoyaltyPoints()<loyaltyProgram.getSilver_points_min())
+            {
+                newAdventureReservation.setTotalPrice((res.getPrice(newAdventureReservation.getAdventure()) + accountAdditionalServices(newAdventureReservation.getAdditionalServices(),res)));
+            }
+            if(client.getLoyaltyPoints()>=loyaltyProgram.silver_points_min && client.getLoyaltyPoints()<loyaltyProgram.gold_points_min)
+            {
+                newAdventureReservation.setTotalPrice(((res.getPrice(newAdventureReservation.getAdventure()) + accountAdditionalServices(newAdventureReservation.getAdditionalServices(),res))*(100-loyaltyProgram.client_discount_silver))/100);
+            }
+            if(client.getLoyaltyPoints()>= loyaltyProgram.gold_points_min)
+            {
+                newAdventureReservation.setTotalPrice(((res.getPrice(newAdventureReservation.getAdventure()) + accountAdditionalServices(newAdventureReservation.getAdditionalServices(),res))*(100-loyaltyProgram.client_discount_gold))/100);
+            }
 
             return adventureReservationRepository.save(newAdventureReservation);
         }
@@ -181,5 +216,7 @@ public class AdventureReservationServiceImpl implements ReservationService {
         adventureReservationRepository.save(a);
         return null;
     }
+
+
 
 }

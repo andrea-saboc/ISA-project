@@ -2,8 +2,8 @@ INSERT INTO public.system_user(
     user_type, id, address, blocked, city, country, email, name, password, phone_number, surname,deleted,notdeleted)
 VALUES ('MansionOwner', 5, 'Trg 34', false, 'Paris', 'France', 'ana@gmail.com','Ana', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '78555', 'Grkovic',false,false);
 INSERT INTO public.mansion_owner(
-    type, advertiser_registration_approved, advertiser_registration_notapproved,advertiser_reason, id)
-VALUES ('mansion', false, false,'I am a mansion owner', 5);
+    type, advertiser_registration_approved, advertiser_registration_notapproved,advertiser_reason,mansionowner_loyalty_points, id)
+VALUES ('mansion', false, false,'I am a mansion owner', 0,5);
 INSERT INTO public.system_user(
     user_type, id, address, blocked, city, country, email, name, password, phone_number, surname,deleted,notdeleted)
 VALUES ('Administrator', 6, 'Tolstojeva 10', false, 'Novi Sad', 'Srbija', 'admin@gmail.com','Adminka', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra','069652256','mirkovic',false,false);
@@ -21,14 +21,14 @@ INSERT INTO public.system_user(
     user_type, id, address, blocked, city, country, email, name, password, phone_number, surname,deleted,notdeleted)
 VALUES ('FishingInstructor', 507, 'Vojvode Supljikca', false, 'Novi Sad', 'Srbija', 'alexmirkovic1719@gmail.com','Alex', '$2a$10$KBYOmrL4g3ce5.wfagQnveII0Ubylu0s/1pP/zl2pagffN7uDfAKS','069652256','Mirkovic',false,false);
 INSERT INTO public.fishing_instructor(
-    type, advertiser_registration_approved,advertiser_registration_notapproved, advertiser_reason, id)
-VALUES ('fishing', true,false, 'I want to advertise', 507);
+    type, advertiser_registration_approved,advertiser_registration_notapproved, advertiser_reason, fishing_loyalty_points,id)
+VALUES ('fishing', true,false, 'I want to advertise',0, 507);
 INSERT INTO public.system_user(
 user_type, id, address, blocked, city, country, email, name, password, phone_number, surname,deleted,notdeleted)
 VALUES ('BoatOwner', 90, 'St Marc 45', false, 'Genova', 'Italy', 'markijan@gmail.com', 'Mark', '$2a$10$KBYOmrL4g3ce5.wfagQnveII0Ubylu0s/1pP/zl2pagffN7uDfAKS', '09787', 'Markijani',false,false);
 INSERT INTO public.boat_owner(
-    type, advertiser_registration_approved,advertiser_registration_notapproved, advertiser_reason, id)
-VALUES ('boat', true, false,'I want to advertise', 90);
+    type, advertiser_registration_approved,advertiser_registration_notapproved, advertiser_reason,boatowner_loyalty_points,id)
+VALUES ('boat', true, false,'I want to advertise', 0,90);
 
 INSERT INTO public.system_user(
  user_type, id, address, blocked, city, country, email, name, password, phone_number, surname,deleted,notdeleted)
@@ -110,6 +110,9 @@ INSERT INTO public.address(
     id, address, city, country, latitude, longitude)
 VALUES (21, '361 Hiawatha Way', 'Melbourne Beach', 'Florida', 21.31, -157.9);
 
+
+INSERT INTO public.loyalty_program(id,client_reservation_score,owner_reservation_score,system_percentage,silver_points_min,client_discount_silver,gold_points_min,client_discount_gold)
+VALUES(1,20,30,20,120,5,250,10);
 
 
 INSERT INTO public.mansion(

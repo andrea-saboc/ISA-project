@@ -7,7 +7,13 @@ import java.util.List;
 import javax.mail.MessagingException;
 
 import com.example.isa.dto.*;
+import com.example.isa.model.LoyaltyProgram;
+import com.example.isa.model.RecordIncome;
 import com.example.isa.model.reservations.*;
+import com.example.isa.repository.BoatDiscountReservationRepository;
+import com.example.isa.repository.LoyaltyProgramRepository;
+import com.example.isa.repository.RecordIncomeRepository;
+import com.example.isa.service.impl.RecordIncomeService;
 import com.example.isa.service.impl.reservations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -65,6 +71,9 @@ public class ReservationController {
 	private MailService<String> mailService;
 	@Autowired
 	AuthenticationService authentication;
+    @Autowired
+    RecordIncomeService recordIncomeService;
+
 	
 	@PreAuthorize("hasRole('ROLE_CLIENT')")
     @RequestMapping(method = RequestMethod.GET,value = "/reservations/boats", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -138,6 +147,7 @@ public class ReservationController {
     	System.out.println("USli u kontroler");
         try {
         	BoatReservation newReservation = boatResService.createReservation(res);
+            recordIncomeService.saveBoatRecord(newReservation.getId());
         	try {
         		mailService.sendBoatReservationConfirmationMail(newReservation);
         	}catch (MessagingException e){
@@ -159,6 +169,7 @@ public class ReservationController {
     	
         try {
         	MansionReservation newReservation = mansionResService.createReservation(res);
+            recordIncomeService.saveMansionRecord(newReservation.getId());
         	try {
         		mailService.sendMansionReservationConfirmationMail(newReservation);
         	}catch (MessagingException e){
@@ -270,6 +281,10 @@ public class ReservationController {
         System.out.println(dto);
         try{
             BoatReservation boatReservation = boatResService.createReservationForClient(dto);
+            recordIncomeService.saveBoatRecord(boatReservation.getId());
+
+
+
             if (boatReservation!=null)
             return new ResponseEntity<>("Reservation for client is created successfully!", HttpStatus.OK);
             else return new ResponseEntity<>("Wrong params, try again!", HttpStatus.OK);
@@ -288,6 +303,7 @@ public class ReservationController {
 
         try{
             AdventureReservation adventureReservation=adventureReservationService.createReservationForClient(dto);
+            recordIncomeService.saveAdventureRecord(adventureReservation.getId());
 
             if (adventureReservation!=null)
                 return new ResponseEntity<>("Reservation for client is created successfully!", HttpStatus.OK);
@@ -304,6 +320,7 @@ public class ReservationController {
         System.out.println(dto);
         try{
            MansionReservation mansionReservation = mansionResService.createReservationForClient(dto);
+            recordIncomeService.saveMansionRecord(mansionReservation.getId());
             if (mansionReservation!=null)
                 return new ResponseEntity<>("Reservation for client is created successfully!", HttpStatus.OK);
             else return new ResponseEntity<>("Wrong params, try again!", HttpStatus.OK);

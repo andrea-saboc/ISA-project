@@ -44,7 +44,7 @@ public class ClientController {
 		}
 	}
 	
-	@PreAuthorize("hasAnyRole('ROLE_CLIENT','ROLE_BOAT_OWNER','ROLE_MANSION_OWNER','ROLE_FISHING_INSTRUCTOR')")
+	@PreAuthorize("hasAnyRole('ROLE_CLIENT','ROLE_BOAT_OWNER','ROLE_MANSION_OWNER','ROLE_FISHING_INSTRUCTOR','ROLE_ADMIN')")
 	@RequestMapping(method = RequestMethod.POST, value = "/updateUser",produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
 	@CrossOrigin(origins = "*")	
 	public ResponseEntity<User> updateUser(@RequestBody Client user) throws JsonProcessingException{	
