@@ -2,6 +2,7 @@ package com.example.isa.dto;
 
 import com.example.isa.model.Address;
 import com.example.isa.model.Boat;
+import com.example.isa.model.FishingEquipment;
 import com.example.isa.model.reservations.AdditionalService;
 
 import java.util.List;
@@ -33,6 +34,7 @@ public class BoatRegistrationDto {
     public int capacity;
     public Set<String> rules;
     public Set<AdditionalService> additionalServices;
+    public Set<FishingEquipment> fishingEquipments;
 
     public BoatRegistrationDto(){}
 
@@ -91,6 +93,22 @@ public class BoatRegistrationDto {
                 ", capacity=" + capacity +
                 ", rules=" + rules +
                 '}';
+    }
+
+    public Set<AdditionalService> getAdditionalServices() {
+        return additionalServices;
+    }
+
+    public void setAdditionalServices(Set<AdditionalService> additionalServices) {
+        this.additionalServices = additionalServices;
+    }
+
+    public Set<FishingEquipment> getFishingEquipments() {
+        return fishingEquipments;
+    }
+
+    public void setFishingEquipments(Set<FishingEquipment> fishingEquipments) {
+        this.fishingEquipments = fishingEquipments;
     }
 
     public String getName() {

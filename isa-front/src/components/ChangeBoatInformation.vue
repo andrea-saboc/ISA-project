@@ -88,6 +88,39 @@
           <label class="form-check-label" for="fishfinder">fishfinder</label>
         </div>
       </div>
+      <div>
+        <hr class="my-3">
+        <h5>Fishing equipment</h5>
+        <hr class="my-3">
+        <div class="double-field">
+          <div class="col-5">
+            <label for="new-fe-name" class="form-label">New fishing equipment</label>
+            <input type="text" class="form-control" id="new-fe-name" placeholder="Equipment name" >
+          </div>
+          <div class="col-3">
+            <br>
+            <button type="button" class="btn btn-secondary btn-sm" id="fe" v-on:click="addFishingEquipment()">Add equipment</button>
+          </div>
+        </div>
+        <div v-if="fishingEquipment.length>0">
+          <table class="table table-striped">
+            <thead>
+            <tr>
+              <th></th>
+              <th>Equipment</th>
+              <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="(as, index) in fishingEquipment" :key="(as, index)">
+              <th>{{ index +1}}</th>
+              <th>{{ as.equipment }}</th>
+              <th><button type="button" v-on:click="removeEquipment(as, index)" >x</button></th>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
       <hr class="my-3">
       <h5>Location</h5>
 
@@ -280,6 +313,8 @@ export default {
   name: "ChangeBoatInformation",
   data: function (){
     return{
+      fishingEquipment: new Array(),
+      fishingEquipmentDeleted: new Array(),
       token: null,
       name : '',
       type : '',
@@ -383,8 +418,9 @@ export default {
                 "pricePerDay": this.pricePerDay,
                 "priceForSevenDays": this.priceForSevenDays,
                 "additionalServices": this.additionalServiceNew,
-                "deleteAdditionalServices": this.additionalServicesDeleted
-
+                "deleteAdditionalServices": this.additionalServicesDeleted,
+                "fishingEquipments": this.fishingEquipment,
+                "deleteFishingEquipment": this.fishingEquipmentDeleted
               }, {
                 headers: {
                   'Authorization' : 'Bearer ' + this.token,
@@ -519,6 +555,7 @@ export default {
       this.exteriorImagesOldNum = this.selectedBoat.exteriorImages.length;
       this.selectedExteriorImages = new Array();
       this.selectedInteriorImages = new Array();
+      this.fishingEquipment = this.selectedBoat.fishingEquipments;
       this.setAdditionalServices();
       this.setImages();
 
@@ -575,6 +612,18 @@ export default {
       document.getElementById('new-additional-service-name').value='';
       document.getElementById('new-additional-service-hour').value='';
       document.getElementById('new-additional-service-day').value='';
+
+    },
+    addFishingEquipment(){
+      var equipment = document.getElementById('new-fe-name').value;
+      this.fishingEquipment.push({id:-1 , equipment: equipment});
+      document.getElementById('new-fe-name').value='';
+    },
+    removeEquipment(e, index){
+      this.fishingEquipment.splice(index, 1)
+      if(e.id!=-1){
+        this.fishingEquipmentDeleted.push(e.id)
+      }
 
     },
     removeRule(r, index){

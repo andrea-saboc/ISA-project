@@ -7,7 +7,9 @@ import java.util.List;
 
 import com.example.isa.mail.MailService;
 import com.example.isa.model.*;
+import com.example.isa.repository.BoatAvailablePeriodRepository;
 import com.example.isa.service.SubscriptionService;
+import com.example.isa.service.impl.AdvertisersService;
 import com.example.isa.service.impl.BoatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.PessimisticLockingFailureException;
@@ -48,6 +50,12 @@ public class BoatDiscountReservationService implements DiscountReservationServic
 	BoatService boatService;
 	@Autowired
 	CollectingBoatReservationsServiceImpl collectingBoatReservationsService;
+	@Autowired
+	AdvertisersService advertisersService;
+	@Autowired
+	BoatReservationServiceImpl boatReservationService;
+	@Autowired
+	BoatAvailablePeriodRepository boatAvailablePeriodRepository;
 	
 
 	
@@ -136,12 +144,28 @@ public class BoatDiscountReservationService implements DiscountReservationServic
 		boatDiscountReservation.setValidUntil(dto.validUntil);
 		boatDiscountReservation.setStartDate(dto.startDate);
 		boatDiscountReservation.setEndDate(getEndDate(dto));
+		if (dto.isOwnerPresent && !advertisersService.boatOwnerAvailable(boat.getOwner(), dto.startDate, getEndDate(dto))){
+			return 4;
+		}
+		boatDiscountReservation.setOwnerPresent(dto.isOwnerPresent);
 		if(!boatService.inAvailabilityPeriods(boatDiscountReservation.getStartDate(), boatDiscountReservation.getEndDate(), boat.getId())){
 			return 2;
 		}
 		if(collectingBoatReservationsService.overlapsWithActiveReservations(boatDiscountReservation.getStartDate(), boatDiscountReservation.getEndDate(), boat)){
 			return 3;
 		}
+		BoatAvailablePeriod period = boatAvailablePeriodRepository.getPeriodOfInterest(dto.startDate, getEndDate(dto), dto.boatId);
+		if(!period.getStartDate().equals(boatDiscountReservation.getStartDate())) {
+			BoatAvailablePeriod periodBefore = new BoatAvailablePeriod(period.getStartDate(),boatDiscountReservation.getStartDate(),period.getBoat());
+			boatAvailablePeriodRepository.save(periodBefore);
+		}
+		if(!period.getEndDate().equals(boatDiscountReservation.getEndDate())) {
+			BoatAvailablePeriod periodAfter = new BoatAvailablePeriod(boatDiscountReservation.getEndDate(),period.getEndDate(),period.getBoat());
+			boatAvailablePeriodRepository.save(periodAfter);
+		}
+		boatAvailablePeriodRepository.delete(period);
+
+		boatDiscountReservation.setAdditionalServices(boatReservationService.addAdditionalServices(dto.additionalServiceSet));
 		boatDiscountReservation.setType("BOAT");
 		boatDiscountReservation.setPriceWithoutDiscount(dto.getPrice(boat));
 		boatDiscountReservation.calculatePercentageOfDiscount();

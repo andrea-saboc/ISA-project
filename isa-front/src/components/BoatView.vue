@@ -153,12 +153,36 @@
             Fishfinder
           </div>
         </div>
-        <div v-if="!boatToShow.fishfinder && !boatToShow.VHFradio && !boatToShow.radar && !boatToShow.GPS">
+        <div v-if="!boatToShow.fishfinder && !boatToShow.vhfradio && !boatToShow.radar && !boatToShow.gps">
           <p style="font-size: 18px">
             There is no navigation equipment
           </p>
         </div>
         </div>
+      <div>
+        <p style="font-weight: bolder; font-size: 26px">
+          Fishing equipment
+        </p>
+        <div>
+          <div class="horizontal" v-if="fishingEquipments.length!=0">
+            <div class="navigation-icon">
+              <font-awesome-icon icon="fa-solid fa-fish" />
+            </div>
+            <div>
+              <div class="navigation-name">
+                <p v-for="e in fishingEquipments" :key="e.id">
+                  {{e.equipment}}
+                </p>
+              </div>
+            </div>
+          </div>
+          <div v-else>
+            <h5>There is no fishing equipment!</h5>
+          </div>
+
+
+        </div>
+      </div>
       </div>
       <hr>
       <div class="engine-information">
@@ -418,7 +442,7 @@
             </div>
           </div>
           <hr>
-          <div v-if="additionalServices!=null && additionalServices.length!=0">
+          <div>
             Addition services:
             <table>
               <tbody>
@@ -430,13 +454,23 @@
                   </label>
                 </div></td>
               </tr>
+              <tr>
+                <td>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value=""  v-model="isOwnerPresent">
+                    <label class="form-check-label">
+                      Boat owner will be at the reservation
+                    </label>
+                  </div>
+                </td>
+              </tr>
               </tbody>
             </table>
           </div>
           <div class="input-group mb-3">
             <span class="input-group-text" id="basic-addon2">Number of guests</span>
             <input type="number" class="form-control" min="1" max="{{boatToShow.capacity}}" v-model="clientResNumberOfGuests"  aria-label="Username" aria-describedby="basic-addon1">
-          </div>
+           </div>
           <br>
           <button type="button" class="btn btn-primary" style="width: 100%" v-on:click="makeReservationForClient()">Add reservation</button>
         </div>
@@ -452,7 +486,7 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times" aria-hidden="true"></i></button>
         </div>
         <div class="modal-body">
-          <v-date-picker mode="dateTime" is24hr v-model="startDateTimeQuick" style="width: 100%" :disabled-dates="availableDates" >
+          <v-date-picker mode="dateTime" is24hr v-model="startDateTimeQuick" style="width: 100%" :available-dates="availableDates" >
             <template v-slot="{ inputValue, inputEvents }">
               <input
                   class="px-2 py-1 border rounded focus:outline-none focus:border-blue-300"
@@ -494,15 +528,41 @@
               />
             </template>
           </v-date-picker>
+          <div>
+            Additional services:
+            <table>
+              <tbody>
+              <tr v-for="as in additionalServices" :key="as.id">
+                <td><div class="form-check">
+                  <input class="form-check-input" type="checkbox" value=""  v-bind:id="as.id+'ascrq'"  v-on:click="addAditionalServiceToQuickRes(as)">
+                  <label class="form-check-label" for="as.id+'ascrq'">
+                    {{as.name}}
+                  </label>
+                </div></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value=""  v-model="isOwnerPresentQuick">
+                    <label class="form-check-label">
+                      Boat owner will be at the reservation
+                    </label>
+                  </div>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-primary" v-on:click="addQuickReservation" data-bs-dismiss="modal">Add</button>
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         </div>
-      </div>
+
     </div>
   </div>
 </div>
+  </div>
 
 
 
@@ -515,6 +575,10 @@ export default {
   name: "BoatView",
   data: function (){
     return{
+      fishingEquipments: new Array(),
+      additionaSevicesForQuickReservation: new Array(),
+      isOwnerPresentQuick: false,
+      isOwnerPresent: false,
       availablePeriodsToShow: new Array(),
       selectedYear: new Date().getFullYear(),
       thisYear: new Date().getFullYear(),
@@ -613,6 +677,7 @@ export default {
       this.address = this.boatToShow.address
       console.log(response.data)
       this.boatOwner = this.boatToShow.boatOwner
+      this.fishingEquipments = this.boatToShow.fishingEquipments
      axios
           .post(devServer.proxy + "/getBoatAvailability", {
             "boatId": this.boatToShow.id
@@ -923,6 +988,20 @@ export default {
         }
       }
     },
+    addAditionalServiceToQuickRes(additionalService){
+      let checkbox = document.getElementById(additionalService.id + 'ascrq').checked
+      console.log("additional service is selected:", checkbox)
+      if(checkbox){
+        this.additionaSevicesForQuickReservation.push(additionalService)
+      } else{
+        for( var i = 0; i < this.additionaSevicesForQuickReservation.length; i++){
+
+          if ( this.additionaSevicesForQuickReservation[i] === additionalService) {
+            this.additionaSevicesForQuickReservation.splice(i, 1);
+          }
+        }
+      }
+    },
     makeReservationForClient(){
       axios.post(devServer.proxy+ "/makeBoatReservationClient", {
           email : this.clientResEmail,
@@ -931,7 +1010,8 @@ export default {
           days : this.clientResNumberOfDays,
           hours : this.clientResNumberOfHours,
           "boatId" : this.boatToShow.id,
-          numberOfGuests : this.clientResNumberOfGuests
+          numberOfGuests : this.clientResNumberOfGuests,
+          "isOwnerPresent": this.isOwnerPresent
       }, {
         headers: {
           'Authorization': this.$store.getters.tokenString,
@@ -946,6 +1026,7 @@ export default {
             this.clientResNumberOfDays=''
             this.clientResNumberOfHours=''
             this.clientResNumberOfGuests=''
+        this.isOwnerPresent = false;
       }
       )
       .catch( function (err){
@@ -957,7 +1038,7 @@ export default {
       var startDate = new Date(this.startDateTimeQuick);
       var valid = new Date(this.availableUntil);
       if(valid >= startDate){
-        alert("Quick reservation must be valid just BEFORE the reservation starts!");
+        alert("Quick reservation must be valid BEFORE the reservation starts!");
         return;
       }else{
         axios.post(devServer.proxy + "/createDiscountBoatReservation", {
@@ -967,7 +1048,9 @@ export default {
           "hours" : this.numberOfHoursQuick,
           "numberOfGuests" : this.numberOfGuestsQuick,
           "priceWithDiscount": this.priceQuick,
-          "validUntil" : this.availableUntil
+          "validUntil" : this.availableUntil,
+          "additionalServiceSet": this.additionaSevicesForQuickReservation,
+          "isOwnerPresent": this.isOwnerPresentQuick
         }, {
           headers: {
             'Authorization': this.$store.getters.tokenString,
@@ -975,6 +1058,14 @@ export default {
           }
         })
             .then(response => {
+              this.startDateTimeQuick = "";
+              this.numberOfHoursQuick = "";
+              this.numberOfDaysQuick = "";
+              this.numberOfGuestsQuick = "";
+              this.priceQuick = "";
+              this.availableUntil = "";
+              //this.additionaSevicesForQuickReservation = new Array();
+              this.isOwnerPresentQuick = false;
               console.log(response.data)
               alert(response.data)
             })

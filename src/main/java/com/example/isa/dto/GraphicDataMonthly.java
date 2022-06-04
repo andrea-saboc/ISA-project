@@ -32,6 +32,37 @@ public class GraphicDataMonthly {
     private Integer twentyNine= 0;
     private Integer thirty= 0;
     private Integer thirtyOne= 0;
+    private Integer onei = 0;
+    private Integer twoi= 0;
+    private Integer threei= 0;
+    private Integer fouri= 0;
+    private Integer fivei= 0;
+    private Integer sixi= 0;
+    private Integer seveni= 0;
+    private Integer eighti= 0;
+    private Integer ninei= 0;
+    private Integer teni= 0;
+    private Integer eleveni= 0;
+    private Integer twelvei= 0;
+    private Integer thirteeni= 0;
+    private Integer fourteeni= 0;
+    private Integer fifteeni= 0;
+    private Integer sixteeni= 0;
+    private Integer seventeeni= 0;
+    private Integer eighteeni= 0;
+    private Integer nineteeni= 0;
+    private Integer twentyi= 0;
+    private Integer twentyOnei= 0;
+    private Integer twentyTwoi= 0;
+    private Integer twentyThreei= 0;
+    private Integer twentyFouri= 0;
+    private Integer twentyFivei= 0;
+    private Integer twentySixi= 0;
+    private Integer twentySeveni= 0;
+    private Integer twentyEighti= 0;
+    private Integer twentyNinei= 0;
+    private Integer thirtyi= 0;
+    private Integer thirtyOnei= 0;
     private double incomings = 0;
 
     public double getIncomings() {
@@ -46,7 +77,253 @@ public class GraphicDataMonthly {
 
     }
 
+    public Integer getOnei() {
+        return onei;
+    }
 
+    public void setOnei(Integer onei) {
+        this.onei = onei;
+    }
+
+    public Integer getTwoi() {
+        return twoi;
+    }
+
+    public void setTwoi(Integer twoi) {
+        this.twoi = twoi;
+    }
+
+    public Integer getThreei() {
+        return threei;
+    }
+
+    public void setThreei(Integer threei) {
+        this.threei = threei;
+    }
+
+    public Integer getFouri() {
+        return fouri;
+    }
+
+    public void setFouri(Integer fouri) {
+        this.fouri = fouri;
+    }
+
+    public Integer getFivei() {
+        return fivei;
+    }
+
+    public void setFivei(Integer fivei) {
+        this.fivei = fivei;
+    }
+
+    public Integer getSixi() {
+        return sixi;
+    }
+
+    public void setSixi(Integer sixi) {
+        this.sixi = sixi;
+    }
+
+    public Integer getSeveni() {
+        return seveni;
+    }
+
+    public void setSeveni(Integer seveni) {
+        this.seveni = seveni;
+    }
+
+    public Integer getEighti() {
+        return eighti;
+    }
+
+    public void setEighti(Integer eighti) {
+        this.eighti = eighti;
+    }
+
+    public Integer getNinei() {
+        return ninei;
+    }
+
+    public void setNinei(Integer ninei) {
+        this.ninei = ninei;
+    }
+
+    public Integer getTeni() {
+        return teni;
+    }
+
+    public void setTeni(Integer teni) {
+        this.teni = teni;
+    }
+
+    public Integer getEleveni() {
+        return eleveni;
+    }
+
+    public void setEleveni(Integer eleveni) {
+        this.eleveni = eleveni;
+    }
+
+    public Integer getTwelvei() {
+        return twelvei;
+    }
+
+    public void setTwelvei(Integer twelvei) {
+        this.twelvei = twelvei;
+    }
+
+    public Integer getThirteeni() {
+        return thirteeni;
+    }
+
+    public void setThirteeni(Integer thirteeni) {
+        this.thirteeni = thirteeni;
+    }
+
+    public Integer getFourteeni() {
+        return fourteeni;
+    }
+
+    public void setFourteeni(Integer fourteeni) {
+        this.fourteeni = fourteeni;
+    }
+
+    public Integer getFifteeni() {
+        return fifteeni;
+    }
+
+    public void setFifteeni(Integer fifteeni) {
+        this.fifteeni = fifteeni;
+    }
+
+    public Integer getSixteeni() {
+        return sixteeni;
+    }
+
+    public void setSixteeni(Integer sixteeni) {
+        this.sixteeni = sixteeni;
+    }
+
+    public Integer getSeventeeni() {
+        return seventeeni;
+    }
+
+    public void setSeventeeni(Integer seventeeni) {
+        this.seventeeni = seventeeni;
+    }
+
+    public Integer getEighteeni() {
+        return eighteeni;
+    }
+
+    public void setEighteeni(Integer eighteeni) {
+        this.eighteeni = eighteeni;
+    }
+
+    public Integer getNineteeni() {
+        return nineteeni;
+    }
+
+    public void setNineteeni(Integer nineteeni) {
+        this.nineteeni = nineteeni;
+    }
+
+    public Integer getTwentyi() {
+        return twentyi;
+    }
+
+    public void setTwentyi(Integer twentyi) {
+        this.twentyi = twentyi;
+    }
+
+    public Integer getTwentyOnei() {
+        return twentyOnei;
+    }
+
+    public void setTwentyOnei(Integer twentyOnei) {
+        this.twentyOnei = twentyOnei;
+    }
+
+    public Integer getTwentyTwoi() {
+        return twentyTwoi;
+    }
+
+    public void setTwentyTwoi(Integer twentyTwoi) {
+        this.twentyTwoi = twentyTwoi;
+    }
+
+    public Integer getTwentyThreei() {
+        return twentyThreei;
+    }
+
+    public void setTwentyThreei(Integer twentyThreei) {
+        this.twentyThreei = twentyThreei;
+    }
+
+    public Integer getTwentyFouri() {
+        return twentyFouri;
+    }
+
+    public void setTwentyFouri(Integer twentyFouri) {
+        this.twentyFouri = twentyFouri;
+    }
+
+    public Integer getTwentyFivei() {
+        return twentyFivei;
+    }
+
+    public void setTwentyFivei(Integer twentyFivei) {
+        this.twentyFivei = twentyFivei;
+    }
+
+    public Integer getTwentySixi() {
+        return twentySixi;
+    }
+
+    public void setTwentySixi(Integer twentySixi) {
+        this.twentySixi = twentySixi;
+    }
+
+    public Integer getTwentySeveni() {
+        return twentySeveni;
+    }
+
+    public void setTwentySeveni(Integer twentySeveni) {
+        this.twentySeveni = twentySeveni;
+    }
+
+    public Integer getTwentyEighti() {
+        return twentyEighti;
+    }
+
+    public void setTwentyEighti(Integer twentyEighti) {
+        this.twentyEighti = twentyEighti;
+    }
+
+    public Integer getTwentyNinei() {
+        return twentyNinei;
+    }
+
+    public void setTwentyNinei(Integer twentyNinei) {
+        this.twentyNinei = twentyNinei;
+    }
+
+    public Integer getThirtyi() {
+        return thirtyi;
+    }
+
+    public void setThirtyi(Integer thirtyi) {
+        this.thirtyi = thirtyi;
+    }
+
+    public Integer getThirtyOnei() {
+        return thirtyOnei;
+    }
+
+    public void setThirtyOnei(Integer thirtyOnei) {
+        this.thirtyOnei = thirtyOnei;
+    }
 
     public Integer getOne() {
         return one;

@@ -6,7 +6,9 @@ import java.util.Date;
 import java.util.List;
 
 import com.example.isa.model.Client;
+import com.example.isa.model.User;
 import com.example.isa.model.reservations.AbstractReservation;
+import com.example.isa.service.impl.BoatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,6 +37,8 @@ public class CollectingBoatReservationsServiceImpl {
 	BoatOwnerRepository boatOwnerRepo;
 	@Autowired
 	BoatDiscountReservationRepository boatDiscountReservationRepo;
+	@Autowired
+	BoatService boatService;
 
 	public List<BoatReservation> GetReservationHistory() {
 		
@@ -68,7 +72,17 @@ public class CollectingBoatReservationsServiceImpl {
 		}
 		return boatReservations;
     }
-    
+
+	public List<AbstractReservation> getOwnersNotCanceledReservations(User owner){
+		List<AbstractReservation> allReservations = new ArrayList<>();
+		List<Boat> ownersBoat = boatService.getByOwner((BoatOwner) owner);
+		for (Boat boat : ownersBoat){
+			allReservations.addAll(boatReservationRepo.findAllByBoatAndStatusNot(boat, ReservationStatus.CANCELLED));
+			allReservations.addAll(boatDiscountReservationRepo.findAllByBoatAndStatusNot(boat, ReservationStatus.CANCELLED));
+		}
+		return allReservations;
+	}
+
 
 	public List<BoatReservation> getBoatReservationsByBoat(Long boatId) {
 		Boat boat = boatRepo.findById(boatId).get();

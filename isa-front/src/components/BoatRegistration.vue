@@ -76,6 +76,40 @@
           <label class="form-check-label" for="fishfinder">fishfinder</label>
         </div>
       </div>
+      <div>
+        <hr class="my-3">
+        <h5>Fishing equipment</h5>
+        <hr class="my-3">
+        <div class="double-field">
+          <div class="col-5">
+            <label for="new-fe-name" class="form-label">New fishing equipment</label>
+            <input type="text" class="form-control" id="new-fe-name" placeholder="Equipment name" >
+          </div>
+          <div class="col-3">
+            <br>
+            <button type="button" class="btn btn-secondary btn-sm" id="fe" v-on:click="addFishingEquipment()">Add equipment</button>
+          </div>
+        </div>
+        <div v-if="fishingEquipment.length>0">
+          <table class="table table-striped">
+            <thead>
+            <tr>
+              <th></th>
+              <th>Equipment</th>
+              <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="(as, index) in fishingEquipment" :key="(as, index)">
+              <th>{{ index +1}}</th>
+              <th>{{ as.equipment }}</th>
+              <th><button type="button" v-on:click="removeEquipment(index)" >x</button></th>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
       <hr class="my-3">
       <h5>Location</h5>
 
@@ -215,6 +249,7 @@ export default {
   name: "BoatRegistration",
   data(){
     return {
+      fishingEquipment: new Array(),
       name : '',
       type : '',
       length : '',
@@ -251,6 +286,15 @@ export default {
     }
     },
   methods:{
+    addFishingEquipment(){
+      var equipment = document.getElementById('new-fe-name').value;
+      this.fishingEquipment.push({equipment: equipment});
+      document.getElementById('new-fe-name').value='';
+    },
+    removeEquipment( index){
+      this.fishingEquipment.splice(index, 1)
+
+    },
     addRule(){
       var rule = document.getElementById('new-rule').value;
       this.rules.push(rule)
@@ -366,7 +410,8 @@ export default {
             "pricePerHour": this.pricePerHour,
             "pricePerDay": this.pricePerDay,
             "priceForSevenDays": this.priceForSevenDays,
-            "additionalServices": this.additionalServices
+            "additionalServices": this.additionalServices,
+            "fishingEquipments": this.fishingEquipment
 
           }, {
             headers: {

@@ -13,6 +13,18 @@ public class GraphicDataYearly {
     private Integer october;
     private Integer november;
     private Integer december;
+    private Integer januaryi;
+    private Integer februaryi;
+    private Integer marchi;
+    private Integer aprili;
+    private Integer mayi;
+    private Integer junei;
+    private Integer julyi;
+    private Integer augusti;
+    private Integer septemberi;
+    private Integer octoberi;
+    private Integer novemberi;
+    private Integer decemberi;
     private double incomings = 0;
 
     public double getIncomings() {
@@ -36,6 +48,18 @@ public class GraphicDataYearly {
         this.october = 0;
         this.november = 0;
         this.december = 0;
+        this.januaryi = 0;
+        this.februaryi=0;
+        this.marchi = 0;
+        this.aprili = 0;
+        this.mayi = 0;
+        this.junei = 0;
+        this.julyi = 0;
+        this.augusti = 0;
+        this.septemberi = 0;
+        this.octoberi = 0;
+        this.novemberi = 0;
+        this.decemberi = 0;
     }
 
     public Integer getJanuary() {
@@ -132,6 +156,102 @@ public class GraphicDataYearly {
 
     public void setDecember(Integer december) {
         this.december = december;
+    }
+
+    public Integer getJanuaryi() {
+        return januaryi;
+    }
+
+    public void setJanuaryi(Integer januaryi) {
+        this.januaryi = januaryi;
+    }
+
+    public Integer getFebruaryi() {
+        return februaryi;
+    }
+
+    public void setFebruaryi(Integer februaryi) {
+        this.februaryi = februaryi;
+    }
+
+    public Integer getMarchi() {
+        return marchi;
+    }
+
+    public void setMarchi(Integer marchi) {
+        this.marchi = marchi;
+    }
+
+    public Integer getAprili() {
+        return aprili;
+    }
+
+    public void setAprili(Integer aprili) {
+        this.aprili = aprili;
+    }
+
+    public Integer getMayi() {
+        return mayi;
+    }
+
+    public void setMayi(Integer mayi) {
+        this.mayi = mayi;
+    }
+
+    public Integer getJunei() {
+        return junei;
+    }
+
+    public void setJunei(Integer junei) {
+        this.junei = junei;
+    }
+
+    public Integer getJulyi() {
+        return julyi;
+    }
+
+    public void setJulyi(Integer julyi) {
+        this.julyi = julyi;
+    }
+
+    public Integer getAugusti() {
+        return augusti;
+    }
+
+    public void setAugusti(Integer augusti) {
+        this.augusti = augusti;
+    }
+
+    public Integer getSeptemberi() {
+        return septemberi;
+    }
+
+    public void setSeptemberi(Integer septemberi) {
+        this.septemberi = septemberi;
+    }
+
+    public Integer getOctoberi() {
+        return octoberi;
+    }
+
+    public void setOctoberi(Integer octoberi) {
+        this.octoberi = octoberi;
+    }
+
+    public Integer getNovemberi() {
+        return novemberi;
+    }
+
+    public void setNovemberi(Integer novemberi) {
+        this.novemberi = novemberi;
+    }
+
+    public Integer getDecemberi() {
+        return decemberi;
+    }
+
+    public void setDecemberi(Integer decemberi) {
+        this.decemberi = decemberi;
     }
 
     @Override

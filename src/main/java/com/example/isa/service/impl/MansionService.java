@@ -243,7 +243,7 @@ public class MansionService {
 	public boolean isInAvailabilityPeriods(Date startDate, Date endDate, Long id) {
 		List<MansionAvailablePeriod> mansionAvailablePeriods = getMansionAvailbilities(id);
 		for (MansionAvailablePeriod ma : mansionAvailablePeriods ){
-			if(!startDate.before(ma.getStartDate()) && !endDate.after(ma.getStartDate())){
+			if(!startDate.after(ma.getEndDate()) && !ma.getStartDate().after(endDate)){
 				return true;
 			}
 		}

@@ -30,10 +30,18 @@ public class BoatDiscountReservation extends DiscountReservation{
 	@JoinColumn(name = "owner_feedback_id")
 	private ClientFeedback boatOwnerFeedback;
 
+	private Boolean ownerPresent;
 
-	
+	public Boolean getOwnerPresent() {
+		return ownerPresent;
+	}
+
+	public void setOwnerPresent(Boolean ownerPresent) {
+		this.ownerPresent = ownerPresent;
+	}
+
 	public BoatDiscountReservation(Date startDate, Date endDate, int numberOfGuests,
-			double priceWithDiscount, Boat boat) {
+								   double priceWithDiscount, Boat boat) {
 		super("BOAT", startDate, endDate, numberOfGuests, priceWithDiscount);
 		this.boat = boat;
 	}

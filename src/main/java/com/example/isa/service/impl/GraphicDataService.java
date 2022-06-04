@@ -47,6 +47,16 @@ public class GraphicDataService {
         dto.monthly = examinateMonthlyDataBoatOwner();
         dto.weekly = examinateWeeklyDataBoatOwner();
         if (dto.weekly == null || dto.monthly == null || dto.yearly == null) {
+            System.out.println("something is null");
+            if(dto.weekly == null){
+                System.out.println("week");
+            }
+            if(dto.monthly == null){
+                System.out.println("month");
+            }
+            if(dto.yearly == null){
+                System.out.println("yearly");
+            }
             return null;
         }
         return dto;
@@ -86,6 +96,13 @@ public class GraphicDataService {
         Integer friday = 0;
         Integer saturday = 0;
         Integer sunday = 0;
+        Integer mondayi = 0;
+        Integer tuesdayi = 0;
+        Integer wednesdayi = 0;
+        Integer thursdayi = 0;
+        Integer fridayi = 0;
+        Integer saturdayi = 0;
+        Integer sundayi = 0;
         double incomings = 0;
         GraphicDataWeeklyOwnerDto weekly = new GraphicDataWeeklyOwnerDto();
         for (Boat b : allBoats) {
@@ -100,6 +117,13 @@ public class GraphicDataService {
             friday += dto.entityData.getFriday();
             saturday += dto.entityData.getSaturday();
             sunday += dto.entityData.getSunday();
+            mondayi += dto.entityData.getMondayi();
+            tuesdayi += dto.entityData.getTuesdayi();
+            wednesdayi += dto.entityData.getWednesdayi();
+            thursdayi += dto.entityData.getThurstadyi();
+            fridayi += dto.entityData.getFridayi();
+            saturdayi += dto.entityData.getSaturdayi();
+            sundayi += dto.entityData.getSundayi();
             incomings += dto.entityData.getIncomings();
             weekly.entityData.add(dto);
         }
@@ -110,6 +134,13 @@ public class GraphicDataService {
         weekly.allData.setFriday(friday);
         weekly.allData.setSaturday(saturday);
         weekly.allData.setSunday(sunday);
+        weekly.allData.setMondayi(mondayi);
+        weekly.allData.setTuesdayi(tuesdayi);
+        weekly.allData.setWednesdayi(wednesdayi);
+        weekly.allData.setThurstadyi(thursdayi);
+        weekly.allData.setFridayi(fridayi);
+        weekly.allData.setSaturdayi(saturdayi);
+        weekly.allData.setSundayi(sundayi);
         weekly.allData.setIncomings(incomings);
         return weekly;
     }
@@ -125,6 +156,13 @@ public class GraphicDataService {
         Integer friday = 0;
         Integer saturday = 0;
         Integer sunday = 0;
+        Integer mondayi = 0;
+        Integer tuesdayi = 0;
+        Integer wednesdayi = 0;
+        Integer thursdayi = 0;
+        Integer fridayi = 0;
+        Integer saturdayi = 0;
+        Integer sundayi = 0;
         double incomings = 0;
         GraphicDataWeeklyOwnerDto weekly = new GraphicDataWeeklyOwnerDto();
         for (Mansion b : allBoats) {
@@ -139,6 +177,13 @@ public class GraphicDataService {
             friday += dto.entityData.getFriday();
             saturday += dto.entityData.getSaturday();
             sunday += dto.entityData.getSunday();
+            mondayi += dto.entityData.getMondayi();
+            tuesdayi += dto.entityData.getTuesdayi();
+            wednesdayi += dto.entityData.getWednesdayi();
+            thursdayi += dto.entityData.getThurstadyi();
+            fridayi += dto.entityData.getFridayi();
+            saturdayi += dto.entityData.getSaturdayi();
+            sundayi += dto.entityData.getSundayi();
             incomings += dto.entityData.getIncomings();
             weekly.entityData.add(dto);
         }
@@ -149,6 +194,13 @@ public class GraphicDataService {
         weekly.allData.setFriday(friday);
         weekly.allData.setSaturday(saturday);
         weekly.allData.setSunday(sunday);
+        weekly.allData.setMondayi(mondayi);
+        weekly.allData.setTuesdayi(tuesdayi);
+        weekly.allData.setWednesdayi(wednesdayi);
+        weekly.allData.setThurstadyi(thursdayi);
+        weekly.allData.setFridayi(fridayi);
+        weekly.allData.setSaturdayi(saturdayi);
+        weekly.allData.setSundayi(sundayi);
         weekly.allData.setIncomings(incomings);
         return weekly;
     }
@@ -164,6 +216,13 @@ public class GraphicDataService {
         Integer friday = 0;
         Integer saturday = 0;
         Integer sunday = 0;
+        Integer mondayi = 0;
+        Integer tuesdayi = 0;
+        Integer wednesdayi = 0;
+        Integer thursdayi = 0;
+        Integer fridayi = 0;
+        Integer saturdayi = 0;
+        Integer sundayi = 0;
         double incomings = 0;
         GraphicDataWeeklyOwnerDto weekly = new GraphicDataWeeklyOwnerDto();
         for (Adventure b : allBoats) {
@@ -178,6 +237,13 @@ public class GraphicDataService {
             friday += dto.entityData.getFriday();
             saturday += dto.entityData.getSaturday();
             sunday += dto.entityData.getSunday();
+            mondayi += dto.entityData.getMondayi();
+            tuesdayi += dto.entityData.getTuesdayi();
+            wednesdayi += dto.entityData.getWednesdayi();
+            thursdayi += dto.entityData.getThurstadyi();
+            fridayi += dto.entityData.getFridayi();
+            saturdayi += dto.entityData.getSaturdayi();
+            sundayi += dto.entityData.getSundayi();
             incomings += dto.entityData.getIncomings();
             weekly.entityData.add(dto);
         }
@@ -188,6 +254,13 @@ public class GraphicDataService {
         weekly.allData.setFriday(friday);
         weekly.allData.setSaturday(saturday);
         weekly.allData.setSunday(sunday);
+        weekly.allData.setMondayi(mondayi);
+        weekly.allData.setTuesdayi(tuesdayi);
+        weekly.allData.setWednesdayi(wednesdayi);
+        weekly.allData.setThurstadyi(thursdayi);
+        weekly.allData.setFridayi(fridayi);
+        weekly.allData.setSaturdayi(saturdayi);
+        weekly.allData.setSundayi(sundayi);
         weekly.allData.setIncomings(incomings);
         return weekly;
     }
@@ -199,6 +272,7 @@ public class GraphicDataService {
         LocalDateTime startWeek = calculateMonday(now);
         LocalDateTime startWeekOr = startWeek;
         LocalDateTime endWeek = startWeek.plusDays(7);
+        now = startWeek;
         dto.entityData.setIncomings(dto.entityData.getIncomings() + calculateIncomingsForReservations(regulaReservations, startWeekOr, endWeek));
         while (startWeek.isBefore(endWeek)) {
             for (AbstractReservation br : regulaReservations) {
@@ -220,8 +294,26 @@ public class GraphicDataService {
                         dto.entityData.setSunday(dto.entityData.getSunday() + 1);
                     else return null;
                 }
+                if (startWeek.toLocalDate().equals(DateCoverter.convertToLocalDateTimeViaInstant(br.getStartDate()).toLocalDate())){
+                    if (now.getDayOfWeek() == DayOfWeek.MONDAY)
+                        dto.entityData.setMondayi((int) (dto.entityData.getMondayi() + br.getTotalPrice()));
+                    else if (now.getDayOfWeek() == DayOfWeek.TUESDAY)
+                        dto.entityData.setTuesdayi((int) (dto.entityData.getTuesdayi() + br.getTotalPrice()));
+                    else if (now.getDayOfWeek() == DayOfWeek.WEDNESDAY)
+                        dto.entityData.setWednesdayi((int) (dto.entityData.getWednesdayi() + br.getTotalPrice()));
+                    else if (now.getDayOfWeek() == DayOfWeek.THURSDAY)
+                        dto.entityData.setThurstadyi((int) (dto.entityData.getThurstadyi() + br.getTotalPrice()));
+                    else if (now.getDayOfWeek() == DayOfWeek.FRIDAY)
+                        dto.entityData.setFridayi((int) (dto.entityData.getFridayi() + br.getTotalPrice()));
+                    else if (now.getDayOfWeek() == DayOfWeek.SATURDAY)
+                        dto.entityData.setSaturdayi((int) (dto.entityData.getSaturdayi() + br.getTotalPrice()));
+                    else if (now.getDayOfWeek() == DayOfWeek.SUNDAY)
+                        dto.entityData.setSundayi((int) (dto.entityData.getSundayi() + br.getTotalPrice()));
+                    else return null;
+                }
             }
             startWeek = startWeek.plusDays(1);
+            now = startWeek;
         }
         return dto;
     }
@@ -294,11 +386,45 @@ public class GraphicDataService {
         Integer twentyNine = 0;
         Integer thirty = 0;
         Integer thirtyOne = 0;
+        Integer onei = 0;
+        Integer twoi = 0;
+        Integer threei = 0;
+        Integer fouri = 0;
+        Integer fivei = 0;
+        Integer sixi = 0;
+        Integer seveni = 0;
+        Integer eighti = 0;
+        Integer ninei = 0;
+        Integer teni = 0;
+        Integer eleveni = 0;
+        Integer twelvei = 0;
+        Integer thirteeni = 0;
+        Integer fourteeni = 0;
+        Integer fifteeni = 0;
+        Integer sixteeni = 0;
+        Integer seventeeni = 0;
+        Integer eighteeni = 0;
+        Integer nineteeni = 0;
+        Integer twentyi = 0;
+        Integer twentyOnei = 0;
+        Integer twentyTwoi = 0;
+        Integer twentyThreei = 0;
+        Integer twentyFouri = 0;
+        Integer twentyFivei = 0;
+        Integer twentySixi = 0;
+        Integer twentySeveni = 0;
+        Integer twentyEighti = 0;
+        Integer twentyNinei = 0;
+        Integer thirtyi = 0;
+        Integer thirtyOnei = 0;
         double incomings = 0;
         GraphicDataMonthlyOwnerDto monthly = new GraphicDataMonthlyOwnerDto();
         for (Boat b : allBoats) {
             GraphicDataMonthlyEntityDto dto = calculateMonthlyDataForBoat(b, findAllReservationsByBoat(b));
-            if (dto == null) return null;
+            if (dto == null) {
+                System.out.println("Return dto is null");
+                return null;
+            }
             one += dto.entityData.getOne();
             two += dto.entityData.getTwo();
             three += dto.entityData.getThree();
@@ -330,6 +456,37 @@ public class GraphicDataService {
             twentyNine += dto.entityData.getTwentyNine();
             thirty += dto.entityData.getThirty();
             thirtyOne += dto.entityData.getThirtyOne();
+            onei += dto.entityData.getOnei();
+            twoi += dto.entityData.getTwo();
+            threei += dto.entityData.getThreei();
+            fouri += dto.entityData.getFouri();
+            fivei += dto.entityData.getFivei();
+            sixi += dto.entityData.getSixi();
+            seveni += dto.entityData.getSeveni();
+            eighti += dto.entityData.getEighti();
+            ninei += dto.entityData.getNinei();
+            teni += dto.entityData.getTeni();
+            eleveni += dto.entityData.getEleveni();
+            twelvei += dto.entityData.getTwelvei();
+            thirteeni += dto.entityData.getThirteeni();
+            fourteeni += dto.entityData.getFourteeni();
+            fifteeni += dto.entityData.getFifteeni();
+            sixteeni += dto.entityData.getSixteeni();
+            seventeeni += dto.entityData.getSeventeeni();
+            eighteeni += dto.entityData.getEighteeni();
+            nineteeni += dto.entityData.getNineteeni();
+            twentyi += dto.entityData.getTwentyi();
+            twentyOnei += dto.entityData.getTwentyOnei();
+            twentyTwoi += dto.entityData.getTwentyTwoi();
+            twentyThreei += dto.entityData.getTwentyThreei();
+            twentyFouri += dto.entityData.getTwentyFouri();
+            twentyFivei += dto.entityData.getTwentyFivei();
+            twentySixi += dto.entityData.getTwentySixi();
+            twentySeveni += dto.entityData.getTwentySeveni();
+            twentyEighti += dto.entityData.getTwentyEighti();
+            twentyNinei += dto.entityData.getTwentyNinei();
+            thirtyi += dto.entityData.getThirtyi();
+            thirtyOnei += dto.entityData.getThirtyOnei();
             incomings += dto.entityData.getIncomings();
             monthly.entityData.add(dto);
         }
@@ -364,6 +521,37 @@ public class GraphicDataService {
         monthly.allData.setTwentyNine(twentyNine);
         monthly.allData.setThirty(thirty);
         monthly.allData.setThirtyOne(thirtyOne);
+        monthly.allData.setOnei(onei);
+        monthly.allData.setTwoi(twoi);
+        monthly.allData.setThreei(threei);
+        monthly.allData.setFouri(fouri);
+        monthly.allData.setFivei(fivei);
+        monthly.allData.setSixi(sixi);
+        monthly.allData.setSeveni(seveni);
+        monthly.allData.setEighti(eighti);
+        monthly.allData.setNinei(ninei);
+        monthly.allData.setTeni(teni);
+        monthly.allData.setEleveni(eleveni);
+        monthly.allData.setTwelvei(twelvei);
+        monthly.allData.setThirteeni(thirteeni);
+        monthly.allData.setFourteeni(fourteeni);
+        monthly.allData.setFifteeni(fifteeni);
+        monthly.allData.setSixteeni(sixteeni);
+        monthly.allData.setSeventeeni(seventeeni);
+        monthly.allData.setEighteeni(eighteeni);
+        monthly.allData.setNineteeni(nineteeni);
+        monthly.allData.setTwentyi(twentyi);
+        monthly.allData.setTwentyOnei(twentyOnei);
+        monthly.allData.setTwentyTwoi(twentyTwoi);
+        monthly.allData.setTwentyThreei(twentyThreei);
+        monthly.allData.setTwentyFouri(twentyFouri);
+        monthly.allData.setTwentyFivei(twentyFivei);
+        monthly.allData.setTwentySixi(twentySixi);
+        monthly.allData.setTwentySeveni(twentySeveni);
+        monthly.allData.setTwentyEighti(twentyEighti);
+        monthly.allData.setTwentyNinei(twentyNinei);
+        monthly.allData.setThirtyi(thirtyi);
+        monthly.allData.setThirtyOnei(thirtyOnei);
         monthly.allData.setIncomings(incomings);
         return monthly;
 
@@ -404,6 +592,37 @@ public class GraphicDataService {
         Integer twentyNine = 0;
         Integer thirty = 0;
         Integer thirtyOne = 0;
+        Integer onei = 0;
+        Integer twoi = 0;
+        Integer threei = 0;
+        Integer fouri = 0;
+        Integer fivei = 0;
+        Integer sixi = 0;
+        Integer seveni = 0;
+        Integer eighti = 0;
+        Integer ninei = 0;
+        Integer teni = 0;
+        Integer eleveni = 0;
+        Integer twelvei = 0;
+        Integer thirteeni = 0;
+        Integer fourteeni = 0;
+        Integer fifteeni = 0;
+        Integer sixteeni = 0;
+        Integer seventeeni = 0;
+        Integer eighteeni = 0;
+        Integer nineteeni = 0;
+        Integer twentyi = 0;
+        Integer twentyOnei = 0;
+        Integer twentyTwoi = 0;
+        Integer twentyThreei = 0;
+        Integer twentyFouri = 0;
+        Integer twentyFivei = 0;
+        Integer twentySixi = 0;
+        Integer twentySeveni = 0;
+        Integer twentyEighti = 0;
+        Integer twentyNinei = 0;
+        Integer thirtyi = 0;
+        Integer thirtyOnei = 0;
         double incomings = 0;
         GraphicDataMonthlyOwnerDto monthly = new GraphicDataMonthlyOwnerDto();
         for (Mansion b : allBoats) {
@@ -440,6 +659,37 @@ public class GraphicDataService {
             twentyNine += dto.entityData.getTwentyNine();
             thirty += dto.entityData.getThirty();
             thirtyOne += dto.entityData.getThirtyOne();
+            onei += dto.entityData.getOnei();
+            twoi += dto.entityData.getTwo();
+            threei += dto.entityData.getThreei();
+            fouri += dto.entityData.getFouri();
+            fivei += dto.entityData.getFivei();
+            sixi += dto.entityData.getSixi();
+            seveni += dto.entityData.getSeveni();
+            eighti += dto.entityData.getEighti();
+            ninei += dto.entityData.getNinei();
+            teni += dto.entityData.getTeni();
+            eleveni += dto.entityData.getEleveni();
+            twelvei += dto.entityData.getTwelvei();
+            thirteeni += dto.entityData.getThirteeni();
+            fourteeni += dto.entityData.getFourteeni();
+            fifteeni += dto.entityData.getFifteeni();
+            sixteeni += dto.entityData.getSixteeni();
+            seventeeni += dto.entityData.getSeventeeni();
+            eighteeni += dto.entityData.getEighteeni();
+            nineteeni += dto.entityData.getNineteeni();
+            twentyi += dto.entityData.getTwentyi();
+            twentyOnei += dto.entityData.getTwentyOnei();
+            twentyTwoi += dto.entityData.getTwentyTwoi();
+            twentyThreei += dto.entityData.getTwentyThreei();
+            twentyFouri += dto.entityData.getTwentyFouri();
+            twentyFivei += dto.entityData.getTwentyFivei();
+            twentySixi += dto.entityData.getTwentySixi();
+            twentySeveni += dto.entityData.getTwentySeveni();
+            twentyEighti += dto.entityData.getTwentyEighti();
+            twentyNinei += dto.entityData.getTwentyNinei();
+            thirtyi += dto.entityData.getThirtyi();
+            thirtyOnei += dto.entityData.getThirtyOnei();
             incomings += dto.entityData.getIncomings();
             monthly.entityData.add(dto);
         }
@@ -474,6 +724,37 @@ public class GraphicDataService {
         monthly.allData.setTwentyNine(twentyNine);
         monthly.allData.setThirty(thirty);
         monthly.allData.setThirtyOne(thirtyOne);
+        monthly.allData.setOnei(onei);
+        monthly.allData.setTwoi(twoi);
+        monthly.allData.setThreei(threei);
+        monthly.allData.setFouri(fouri);
+        monthly.allData.setFivei(fivei);
+        monthly.allData.setSixi(sixi);
+        monthly.allData.setSeveni(seveni);
+        monthly.allData.setEighti(eighti);
+        monthly.allData.setNinei(ninei);
+        monthly.allData.setTeni(teni);
+        monthly.allData.setEleveni(eleveni);
+        monthly.allData.setTwelvei(twelvei);
+        monthly.allData.setThirteeni(thirteeni);
+        monthly.allData.setFourteeni(fourteeni);
+        monthly.allData.setFifteeni(fifteeni);
+        monthly.allData.setSixteeni(sixteeni);
+        monthly.allData.setSeventeeni(seventeeni);
+        monthly.allData.setEighteeni(eighteeni);
+        monthly.allData.setNineteeni(nineteeni);
+        monthly.allData.setTwentyi(twentyi);
+        monthly.allData.setTwentyOnei(twentyOnei);
+        monthly.allData.setTwentyTwoi(twentyTwoi);
+        monthly.allData.setTwentyThreei(twentyThreei);
+        monthly.allData.setTwentyFouri(twentyFouri);
+        monthly.allData.setTwentyFivei(twentyFivei);
+        monthly.allData.setTwentySixi(twentySixi);
+        monthly.allData.setTwentySeveni(twentySeveni);
+        monthly.allData.setTwentyEighti(twentyEighti);
+        monthly.allData.setTwentyNinei(twentyNinei);
+        monthly.allData.setThirtyi(thirtyi);
+        monthly.allData.setThirtyOnei(thirtyOnei);
         monthly.allData.setIncomings(incomings);
         return monthly;
 
@@ -514,6 +795,37 @@ public class GraphicDataService {
         Integer twentyNine = 0;
         Integer thirty = 0;
         Integer thirtyOne = 0;
+        Integer onei = 0;
+        Integer twoi = 0;
+        Integer threei = 0;
+        Integer fouri = 0;
+        Integer fivei = 0;
+        Integer sixi = 0;
+        Integer seveni = 0;
+        Integer eighti = 0;
+        Integer ninei = 0;
+        Integer teni = 0;
+        Integer eleveni = 0;
+        Integer twelvei = 0;
+        Integer thirteeni = 0;
+        Integer fourteeni = 0;
+        Integer fifteeni = 0;
+        Integer sixteeni = 0;
+        Integer seventeeni = 0;
+        Integer eighteeni = 0;
+        Integer nineteeni = 0;
+        Integer twentyi = 0;
+        Integer twentyOnei = 0;
+        Integer twentyTwoi = 0;
+        Integer twentyThreei = 0;
+        Integer twentyFouri = 0;
+        Integer twentyFivei = 0;
+        Integer twentySixi = 0;
+        Integer twentySeveni = 0;
+        Integer twentyEighti = 0;
+        Integer twentyNinei = 0;
+        Integer thirtyi = 0;
+        Integer thirtyOnei = 0;
         double incomings = 0;
         GraphicDataMonthlyOwnerDto monthly = new GraphicDataMonthlyOwnerDto();
         for (Adventure b : allBoats) {
@@ -550,6 +862,37 @@ public class GraphicDataService {
             twentyNine += dto.entityData.getTwentyNine();
             thirty += dto.entityData.getThirty();
             thirtyOne += dto.entityData.getThirtyOne();
+            onei += dto.entityData.getOnei();
+            twoi += dto.entityData.getTwo();
+            threei += dto.entityData.getThreei();
+            fouri += dto.entityData.getFouri();
+            fivei += dto.entityData.getFivei();
+            sixi += dto.entityData.getSixi();
+            seveni += dto.entityData.getSeveni();
+            eighti += dto.entityData.getEighti();
+            ninei += dto.entityData.getNinei();
+            teni += dto.entityData.getTeni();
+            eleveni += dto.entityData.getEleveni();
+            twelvei += dto.entityData.getTwelvei();
+            thirteeni += dto.entityData.getThirteeni();
+            fourteeni += dto.entityData.getFourteeni();
+            fifteeni += dto.entityData.getFifteeni();
+            sixteeni += dto.entityData.getSixteeni();
+            seventeeni += dto.entityData.getSeventeeni();
+            eighteeni += dto.entityData.getEighteeni();
+            nineteeni += dto.entityData.getNineteeni();
+            twentyi += dto.entityData.getTwentyi();
+            twentyOnei += dto.entityData.getTwentyOnei();
+            twentyTwoi += dto.entityData.getTwentyTwoi();
+            twentyThreei += dto.entityData.getTwentyThreei();
+            twentyFouri += dto.entityData.getTwentyFouri();
+            twentyFivei += dto.entityData.getTwentyFivei();
+            twentySixi += dto.entityData.getTwentySixi();
+            twentySeveni += dto.entityData.getTwentySeveni();
+            twentyEighti += dto.entityData.getTwentyEighti();
+            twentyNinei += dto.entityData.getTwentyNinei();
+            thirtyi += dto.entityData.getThirtyi();
+            thirtyOnei += dto.entityData.getThirtyOnei();
             incomings += dto.entityData.getIncomings();
             monthly.entityData.add(dto);
         }
@@ -584,6 +927,37 @@ public class GraphicDataService {
         monthly.allData.setTwentyNine(twentyNine);
         monthly.allData.setThirty(thirty);
         monthly.allData.setThirtyOne(thirtyOne);
+        monthly.allData.setOnei(onei);
+        monthly.allData.setTwoi(twoi);
+        monthly.allData.setThreei(threei);
+        monthly.allData.setFouri(fouri);
+        monthly.allData.setFivei(fivei);
+        monthly.allData.setSixi(sixi);
+        monthly.allData.setSeveni(seveni);
+        monthly.allData.setEighti(eighti);
+        monthly.allData.setNinei(ninei);
+        monthly.allData.setTeni(teni);
+        monthly.allData.setEleveni(eleveni);
+        monthly.allData.setTwelvei(twelvei);
+        monthly.allData.setThirteeni(thirteeni);
+        monthly.allData.setFourteeni(fourteeni);
+        monthly.allData.setFifteeni(fifteeni);
+        monthly.allData.setSixteeni(sixteeni);
+        monthly.allData.setSeventeeni(seventeeni);
+        monthly.allData.setEighteeni(eighteeni);
+        monthly.allData.setNineteeni(nineteeni);
+        monthly.allData.setTwentyi(twentyi);
+        monthly.allData.setTwentyOnei(twentyOnei);
+        monthly.allData.setTwentyTwoi(twentyTwoi);
+        monthly.allData.setTwentyThreei(twentyThreei);
+        monthly.allData.setTwentyFouri(twentyFouri);
+        monthly.allData.setTwentyFivei(twentyFivei);
+        monthly.allData.setTwentySixi(twentySixi);
+        monthly.allData.setTwentySeveni(twentySeveni);
+        monthly.allData.setTwentyEighti(twentyEighti);
+        monthly.allData.setTwentyNinei(twentyNinei);
+        monthly.allData.setThirtyi(thirtyi);
+        monthly.allData.setThirtyOnei(thirtyOnei);
         monthly.allData.setIncomings(incomings);
         return monthly;
 
@@ -602,55 +976,133 @@ public class GraphicDataService {
                 start = start.toLocalDate().atTime(0, 0);
                 while (start.isBefore(end)) {
                     if (start.getMonthValue() == LocalDateTime.now().getMonthValue()) {
-                        if (start.getDayOfMonth() == 1) dto.entityData.setOne(dto.entityData.getOne() + 1);
-                        else if (start.getDayOfMonth() == 3) dto.entityData.setTwo(dto.entityData.getTwo() + 1);
-                        else if (start.getDayOfMonth() == 3) dto.entityData.setThree(dto.entityData.getThree() + 1);
-                        else if (start.getDayOfMonth() == 4) dto.entityData.setFour(dto.entityData.getFour() + 1);
-                        else if (start.getDayOfMonth() == 5) dto.entityData.setFive(dto.entityData.getFive() + 1);
-                        else if (start.getDayOfMonth() == 6) dto.entityData.setSix(dto.entityData.getSix() + 1);
-                        else if (start.getDayOfMonth() == 7) dto.entityData.setSeven(dto.entityData.getSeven() + 1);
-                        else if (start.getDayOfMonth() == 8) dto.entityData.setEight(dto.entityData.getEight() + 1);
-                        else if (start.getDayOfMonth() == 9) dto.entityData.setNine(dto.entityData.getNine() + 1);
-                        else if (start.getDayOfMonth() == 10) dto.entityData.setTen(dto.entityData.getTen() + 1);
-                        else if (start.getDayOfMonth() == 11) dto.entityData.setEleven(dto.entityData.getEleven() + 1);
-                        else if (start.getDayOfMonth() == 12) dto.entityData.setTwelve(dto.entityData.getTwelve() + 1);
-                        else if (start.getDayOfMonth() == 13)
+                        if (start.getDayOfMonth() == 1) {
+                            dto.entityData.setOne(dto.entityData.getOne() + 1);
+                            dto.entityData.setOnei((int) (dto.entityData.getOnei() + br.getTotalPrice()));
+                        }
+                        else if (start.getDayOfMonth() == 2) {
+                            dto.entityData.setTwo(dto.entityData.getTwo() + 1);
+                            dto.entityData.setTwoi((int) (dto.entityData.getTwoi() + br.getTotalPrice()));
+                        }
+                        else if (start.getDayOfMonth() == 3) {
+                            dto.entityData.setThree(dto.entityData.getThree() + 1);
+                            dto.entityData.setThreei((int) (dto.entityData.getThreei() + br.getTotalPrice()));
+                        }
+                        else if (start.getDayOfMonth() == 4) {
+                            dto.entityData.setFour(dto.entityData.getFour() + 1);
+                            dto.entityData.setFouri((int) (dto.entityData.getFouri() + br.getTotalPrice()));
+                        }
+                        else if (start.getDayOfMonth() == 5) {
+                            dto.entityData.setFive(dto.entityData.getFive() + 1);
+                            dto.entityData.setFivei((int) (dto.entityData.getFivei() + br.getTotalPrice()));
+                        }
+                        else if (start.getDayOfMonth() == 6) {
+                            dto.entityData.setSix(dto.entityData.getSix() + 1);
+                            dto.entityData.setSixi((int) (dto.entityData.getSixi() + br.getTotalPrice()));
+                        }
+                        else if (start.getDayOfMonth() == 7) {
+                            dto.entityData.setSeven(dto.entityData.getSeven() + 1);
+                            dto.entityData.setSeveni((int) (dto.entityData.getSeveni() + br.getTotalPrice()));
+                        }
+                        else if (start.getDayOfMonth() == 8) {
+                            dto.entityData.setEight(dto.entityData.getEight() + 1);
+                            dto.entityData.setEighti((int) (dto.entityData.getEighti() + br.getTotalPrice()));
+                        }
+                        else if (start.getDayOfMonth() == 9) {
+                            dto.entityData.setNine(dto.entityData.getNine() + 1);
+                            dto.entityData.setNinei((int) (dto.entityData.getNinei() + br.getTotalPrice()));
+                        }
+                        else if (start.getDayOfMonth() == 10) {
+                            dto.entityData.setTen(dto.entityData.getTen() + 1);
+                            dto.entityData.setTeni((int) (dto.entityData.getTeni() + br.getTotalPrice()));
+                        }
+                        else if (start.getDayOfMonth() == 11) {
+                            dto.entityData.setEleven(dto.entityData.getEleven() + 1);
+                            dto.entityData.setEleveni((int) (dto.entityData.getEleveni() + br.getTotalPrice()));
+                        }
+                        else if (start.getDayOfMonth() == 12) {
+                            dto.entityData.setTwelve(dto.entityData.getTwelve() + 1);
+                            dto.entityData.setTwelvei((int) (dto.entityData.getTwelvei() + br.getTotalPrice()));
+                        }
+                        else if (start.getDayOfMonth() == 13) {
                             dto.entityData.setThirteen(dto.entityData.getThirteen() + 1);
-                        else if (start.getDayOfMonth() == 14)
+                            dto.entityData.setThirteeni((int) (dto.entityData.getThirteeni() + br.getTotalPrice()));
+                        }
+                        else if (start.getDayOfMonth() == 14) {
                             dto.entityData.setFourteen(dto.entityData.getFourteen() + 1);
-                        else if (start.getDayOfMonth() == 15)
+                            dto.entityData.setFourteeni((int) (dto.entityData.getFourteeni() + br.getTotalPrice()));
+                        }
+                        else if (start.getDayOfMonth() == 15) {
                             dto.entityData.setFifteen(dto.entityData.getFifteen() + 1);
-                        else if (start.getDayOfMonth() == 16)
+                            dto.entityData.setFifteeni((int) (dto.entityData.getFifteeni() + br.getTotalPrice()));
+                        }
+                        else if (start.getDayOfMonth() == 16) {
                             dto.entityData.setSixteen(dto.entityData.getSixteen() + 1);
-                        else if (start.getDayOfMonth() == 17)
+                            dto.entityData.setSixteeni((int) (dto.entityData.getSixteeni() + br.getTotalPrice()));
+                        }
+                        else if (start.getDayOfMonth() == 17) {
                             dto.entityData.setSeventeen(dto.entityData.getSeventeen() + 1);
-                        else if (start.getDayOfMonth() == 18)
+                            dto.entityData.setSeventeeni((int) (dto.entityData.getSeventeeni() + br.getTotalPrice()));
+                        }
+                        else if (start.getDayOfMonth() == 18) {
                             dto.entityData.setEighteen(dto.entityData.getEighteen() + 1);
-                        else if (start.getDayOfMonth() == 19)
+                            dto.entityData.setEighteeni((int) (dto.entityData.getEighteeni() + br.getTotalPrice()));
+                        }
+                        else if (start.getDayOfMonth() == 19) {
                             dto.entityData.setNineteen(dto.entityData.getNineteen() + 1);
-                        else if (start.getDayOfMonth() == 20) dto.entityData.setTwenty(dto.entityData.getTwenty() + 1);
-                        else if (start.getDayOfMonth() == 21)
+                            dto.entityData.setNineteeni((int) (dto.entityData.getNineteeni() + br.getTotalPrice()));
+                        }
+                        else if (start.getDayOfMonth() == 20) {
+                            dto.entityData.setTwenty(dto.entityData.getTwenty() + 1);
+                            dto.entityData.setTwentyi((int) (dto.entityData.getTwentyi() + br.getTotalPrice()));
+                        }
+                        else if (start.getDayOfMonth() == 21) {
                             dto.entityData.setTwentyOne(dto.entityData.getTwentyOne() + 1);
-                        else if (start.getDayOfMonth() == 22)
+                            dto.entityData.setTwentyOnei((int) (dto.entityData.getTwentyOnei() + br.getTotalPrice()));
+                        }
+                        else if (start.getDayOfMonth() == 22) {
                             dto.entityData.setTwentyTwo(dto.entityData.getTwentyTwo() + 1);
-                        else if (start.getDayOfMonth() == 23)
+                            dto.entityData.setTwentyTwoi((int) (dto.entityData.getTwentyTwoi() + br.getTotalPrice()));
+                        }
+                        else if (start.getDayOfMonth() == 23) {
                             dto.entityData.setTwentyThree(dto.entityData.getTwentyThree() + 1);
-                        else if (start.getDayOfMonth() == 24)
+                            dto.entityData.setTwentyThreei((int) (dto.entityData.getTwentyThreei() + br.getTotalPrice()));
+                        }
+                        else if (start.getDayOfMonth() == 24) {
                             dto.entityData.setTwentyFour(dto.entityData.getTwentyFour() + 1);
-                        else if (start.getDayOfMonth() == 25)
+                            dto.entityData.setTwentyFouri((int) (dto.entityData.getTwentyFouri() + br.getTotalPrice()));
+                        }
+                        else if (start.getDayOfMonth() == 25) {
                             dto.entityData.setTwentyFive(dto.entityData.getTwentyFive() + 1);
-                        else if (start.getDayOfMonth() == 26)
+                            dto.entityData.setTwentyFivei((int) (dto.entityData.getTwentyFivei() + br.getTotalPrice()));
+                        }
+                        else if (start.getDayOfMonth() == 26) {
                             dto.entityData.setTwentySix(dto.entityData.getTwentySix() + 1);
-                        else if (start.getDayOfMonth() == 27)
+                            dto.entityData.setTwentySixi((int) (dto.entityData.getTwentySixi() + br.getTotalPrice()));
+                        }
+                        else if (start.getDayOfMonth() == 27) {
                             dto.entityData.setTwentySeven(dto.entityData.getTwentySeven() + 1);
-                        else if (start.getDayOfMonth() == 28)
+                            dto.entityData.setTwentySeveni((int) (dto.entityData.getTwentySeveni() + br.getTotalPrice()));
+                        }
+                        else if (start.getDayOfMonth() == 28) {
                             dto.entityData.setTwentyEight(dto.entityData.getTwentyEight() + 1);
-                        else if (start.getDayOfMonth() == 29)
+                            dto.entityData.setTwentyEighti((int) (dto.entityData.getTwentyEighti() + br.getTotalPrice()));
+                        }
+                        else if (start.getDayOfMonth() == 29) {
                             dto.entityData.setTwentyNine(dto.entityData.getTwentyNine() + 1);
-                        else if (start.getDayOfMonth() == 30) dto.entityData.setThirty(dto.entityData.getThirty() + 1);
-                        else if (start.getDayOfMonth() == 31)
+                            dto.entityData.setTwentyNinei((int) (dto.entityData.getTwentyNinei() + br.getTotalPrice()));
+                        }
+                        else if (start.getDayOfMonth() == 30) {
+                            dto.entityData.setThirty(dto.entityData.getThirty() + 1);
+                            dto.entityData.setThirtyi((int) (dto.entityData.getThirtyi() + br.getTotalPrice()));
+                        }
+                        else if (start.getDayOfMonth() == 31) {
                             dto.entityData.setThirtyOne(dto.entityData.getThirtyOne() + 1);
-                        else return null;
+                            dto.entityData.setThirtyOnei((int) (dto.entityData.getThirtyOnei() + br.getTotalPrice()));
+                        }
+                        else {
+                            return null;
+                        }
                     }
                     start = start.plusDays(1);
                 }
@@ -676,6 +1128,18 @@ public class GraphicDataService {
         int october = 0;
         int november = 0;
         int december = 0;
+        int januaryi = 0;
+        int februaryi = 0;
+        int marchi = 0;
+        int aprili = 0;
+        int mayi = 0;
+        int junei = 0;
+        int julyi = 0;
+        int augusti = 0;
+        int septemberi = 0;
+        int octoberi = 0;
+        int novemberi = 0;
+        int decemberi = 0;
         double incomings = 0;
         GraphicDataYearlyOwnerDto yearly = new GraphicDataYearlyOwnerDto();
         for (Boat b : allBoats) {
@@ -697,6 +1161,30 @@ public class GraphicDataService {
             november += dto.entityData.getNovember();
             december += dto.entityData.getDecember();
             incomings += dto.entityData.getIncomings();
+            january += dto.entityData.getJanuary();
+            february += dto.entityData.getFebruary();
+            march += dto.entityData.getMarch();
+            april += dto.entityData.getApril();
+            may += dto.entityData.getMay();
+            june += dto.entityData.getJune();
+            july += dto.entityData.getJuly();
+            august += dto.entityData.getAugust();
+            september += dto.entityData.getSeptember();
+            october += dto.entityData.getOctober();
+            november += dto.entityData.getNovember();
+            december += dto.entityData.getDecember();
+            januaryi += dto.entityData.getJanuaryi();
+            februaryi += dto.entityData.getFebruaryi();
+            marchi += dto.entityData.getMarchi();
+            aprili += dto.entityData.getAprili();
+            mayi += dto.entityData.getMayi();
+            junei += dto.entityData.getJunei();
+            julyi += dto.entityData.getJulyi();
+            augusti += dto.entityData.getAugusti();
+            septemberi += dto.entityData.getSeptemberi();
+            octoberi += dto.entityData.getOctoberi();
+            novemberi += dto.entityData.getNovemberi();
+            decemberi += dto.entityData.getDecemberi();
             yearly.entityData.add(dto);
         }
         yearly.allData.setJanuary(january);
@@ -712,8 +1200,19 @@ public class GraphicDataService {
         yearly.allData.setNovember(november);
         yearly.allData.setDecember(december);
         yearly.allData.setIncomings(incomings);
-
-
+        yearly.allData.setJanuaryi(januaryi);
+        yearly.allData.setFebruaryi(februaryi);
+        yearly.allData.setMarchi(marchi);
+        yearly.allData.setAprili(aprili);
+        yearly.allData.setMayi(mayi);
+        yearly.allData.setJunei(junei);
+        yearly.allData.setJulyi(julyi);
+        yearly.allData.setAugusti(augusti);
+        yearly.allData.setSeptemberi(septemberi);
+        yearly.allData.setOctoberi(octoberi);
+        yearly.allData.setNovemberi(novemberi);
+        yearly.allData.setDecemberi(decemberi);
+        yearly.allData.setIncomings(incomings);
         return yearly;
     }
 
@@ -733,6 +1232,18 @@ public class GraphicDataService {
         int october = 0;
         int november = 0;
         int december = 0;
+        int januaryi = 0;
+        int februaryi = 0;
+        int marchi = 0;
+        int aprili = 0;
+        int mayi = 0;
+        int junei = 0;
+        int julyi = 0;
+        int augusti = 0;
+        int septemberi = 0;
+        int octoberi = 0;
+        int novemberi = 0;
+        int decemberi = 0;
         double incomings = 0;
         GraphicDataYearlyOwnerDto yearly = new GraphicDataYearlyOwnerDto();
         for (Mansion b : allBoats) {
@@ -753,6 +1264,18 @@ public class GraphicDataService {
             october += dto.entityData.getOctober();
             november += dto.entityData.getNovember();
             december += dto.entityData.getDecember();
+            januaryi += dto.entityData.getJanuaryi();
+            februaryi += dto.entityData.getFebruaryi();
+            marchi += dto.entityData.getMarchi();
+            aprili += dto.entityData.getAprili();
+            mayi += dto.entityData.getMayi();
+            junei += dto.entityData.getJunei();
+            julyi += dto.entityData.getJulyi();
+            augusti += dto.entityData.getAugusti();
+            septemberi += dto.entityData.getSeptemberi();
+            octoberi += dto.entityData.getOctoberi();
+            novemberi += dto.entityData.getNovemberi();
+            decemberi += dto.entityData.getDecemberi();
             incomings += dto.entityData.getIncomings();
             yearly.entityData.add(dto);
         }
@@ -768,6 +1291,19 @@ public class GraphicDataService {
         yearly.allData.setOctober(october);
         yearly.allData.setNovember(november);
         yearly.allData.setDecember(december);
+
+        yearly.allData.setJanuaryi(januaryi);
+        yearly.allData.setFebruaryi(februaryi);
+        yearly.allData.setMarchi(marchi);
+        yearly.allData.setAprili(aprili);
+        yearly.allData.setMayi(mayi);
+        yearly.allData.setJunei(junei);
+        yearly.allData.setJulyi(julyi);
+        yearly.allData.setAugusti(augusti);
+        yearly.allData.setSeptemberi(septemberi);
+        yearly.allData.setOctoberi(octoberi);
+        yearly.allData.setNovemberi(novemberi);
+        yearly.allData.setDecemberi(decemberi);
         yearly.allData.setIncomings(incomings);
 
 
@@ -790,6 +1326,18 @@ public class GraphicDataService {
         int october = 0;
         int november = 0;
         int december = 0;
+        int januaryi = 0;
+        int februaryi = 0;
+        int marchi = 0;
+        int aprili = 0;
+        int mayi = 0;
+        int junei = 0;
+        int julyi = 0;
+        int augusti = 0;
+        int septemberi = 0;
+        int octoberi = 0;
+        int novemberi = 0;
+        int decemberi = 0;
         double incomings = 0;
         GraphicDataYearlyOwnerDto yearly = new GraphicDataYearlyOwnerDto();
         for (Adventure b : allBoats) {
@@ -811,6 +1359,30 @@ public class GraphicDataService {
             november += dto.entityData.getNovember();
             december += dto.entityData.getDecember();
             incomings += dto.entityData.getIncomings();
+            january += dto.entityData.getJanuary();
+            february += dto.entityData.getFebruary();
+            march += dto.entityData.getMarch();
+            april += dto.entityData.getApril();
+            may += dto.entityData.getMay();
+            june += dto.entityData.getJune();
+            july += dto.entityData.getJuly();
+            august += dto.entityData.getAugust();
+            september += dto.entityData.getSeptember();
+            october += dto.entityData.getOctober();
+            november += dto.entityData.getNovember();
+            december += dto.entityData.getDecember();
+            januaryi += dto.entityData.getJanuaryi();
+            februaryi += dto.entityData.getFebruaryi();
+            marchi += dto.entityData.getMarchi();
+            aprili += dto.entityData.getAprili();
+            mayi += dto.entityData.getMayi();
+            junei += dto.entityData.getJunei();
+            julyi += dto.entityData.getJulyi();
+            augusti += dto.entityData.getAugusti();
+            septemberi += dto.entityData.getSeptemberi();
+            octoberi += dto.entityData.getOctoberi();
+            novemberi += dto.entityData.getNovemberi();
+            decemberi += dto.entityData.getDecemberi();
             yearly.entityData.add(dto);
         }
         yearly.allData.setJanuary(january);
@@ -826,6 +1398,19 @@ public class GraphicDataService {
         yearly.allData.setNovember(november);
         yearly.allData.setDecember(december);
         yearly.allData.setIncomings(incomings);
+        yearly.allData.setJanuaryi(januaryi);
+        yearly.allData.setFebruaryi(februaryi);
+        yearly.allData.setMarchi(marchi);
+        yearly.allData.setAprili(aprili);
+        yearly.allData.setMayi(mayi);
+        yearly.allData.setJunei(junei);
+        yearly.allData.setJulyi(julyi);
+        yearly.allData.setAugusti(augusti);
+        yearly.allData.setSeptemberi(septemberi);
+        yearly.allData.setOctoberi(octoberi);
+        yearly.allData.setNovemberi(novemberi);
+        yearly.allData.setDecemberi(decemberi);
+        yearly.allData.setIncomings(incomings);
 
 
         return yearly;
@@ -837,30 +1422,54 @@ public class GraphicDataService {
         for (AbstractReservation br : regulaReservations) {
             if ((br.getStartDate().getYear() + 1900) == LocalDateTime.now().getYear() && br.getStatus() != ReservationStatus.CANCELLED && br.getUser() != null) {
                 dto.entityData.setIncomings(dto.entityData.getIncomings() + br.getTotalPrice());
-                if (br.getStartDate().getMonth() == Calendar.JANUARY)
+                if (br.getStartDate().getMonth() == Calendar.JANUARY) {
                     dto.entityData.setJanuary(dto.entityData.getJanuary() + 1);
-                else if (br.getStartDate().getMonth() == Calendar.FEBRUARY)
+                    dto.entityData.setJanuaryi((int) (dto.entityData.getJanuaryi() + br.getTotalPrice()));
+                }
+                else if (br.getStartDate().getMonth() == Calendar.FEBRUARY) {
                     dto.entityData.setFebruary(dto.entityData.getFebruary() + 1);
-                else if (br.getStartDate().getMonth() == Calendar.MARCH)
+                    dto.entityData.setFebruaryi((int) (dto.entityData.getFebruaryi() + br.getTotalPrice()));
+                }
+                else if (br.getStartDate().getMonth() == Calendar.MARCH) {
                     dto.entityData.setMarch(dto.entityData.getMarch() + 1);
-                else if (br.getStartDate().getMonth() == Calendar.APRIL)
-                    dto.entityData.setApril(dto.entityData.getApril() + 1);
-                else if (br.getStartDate().getMonth() == Calendar.MAY)
-                    dto.entityData.setMay(dto.entityData.getMay() + 1);
-                else if (br.getStartDate().getMonth() == Calendar.JUNE)
+                    dto.entityData.setMarchi((int) (dto.entityData.getMarchi() + br.getTotalPrice()));
+                }
+                else if (br.getStartDate().getMonth() == Calendar.APRIL) {
+                    dto.entityData.setAprili((int) (dto.entityData.getAprili() + br.getTotalPrice()));
+                    dto.entityData.setApril( dto.entityData.getApril() + 1);
+                }
+                else if (br.getStartDate().getMonth() == Calendar.MAY) {
+                    dto.entityData.setMayi((int) (dto.entityData.getMayi() + br.getTotalPrice()));
+                    dto.entityData.setMay((dto.entityData.getMayi() + 1));
+                }
+                else if (br.getStartDate().getMonth() == Calendar.JUNE) {
                     dto.entityData.setJune(dto.entityData.getJune() + 1);
-                else if (br.getStartDate().getMonth() == Calendar.JULY)
+                    dto.entityData.setJunei((int) (dto.entityData.getJunei() + br.getTotalPrice()));
+                }
+                else if (br.getStartDate().getMonth() == Calendar.JULY) {
                     dto.entityData.setJuly(dto.entityData.getJuly() + 1);
-                else if (br.getStartDate().getMonth() == Calendar.AUGUST)
+                    dto.entityData.setJulyi((int) (dto.entityData.getJulyi() + br.getTotalPrice()));
+                }
+                else if (br.getStartDate().getMonth() == Calendar.AUGUST) {
                     dto.entityData.setAugust(dto.entityData.getAugust() + 1);
-                else if (br.getStartDate().getMonth() == Calendar.SEPTEMBER)
+                    dto.entityData.setAugusti((int) (dto.entityData.getAugusti() + br.getTotalPrice()));
+                }
+                else if (br.getStartDate().getMonth() == Calendar.SEPTEMBER) {
                     dto.entityData.setSeptember(dto.entityData.getSeptember() + 1);
-                else if (br.getStartDate().getMonth() == Calendar.OCTOBER)
+                    dto.entityData.setSeptemberi((int) (dto.entityData.getSeptemberi() + br.getTotalPrice()));
+                }
+                else if (br.getStartDate().getMonth() == Calendar.OCTOBER) {
                     dto.entityData.setOctober(dto.entityData.getOctober() + 1);
-                else if (br.getStartDate().getMonth() == Calendar.NOVEMBER)
+                    dto.entityData.setOctoberi((int) (dto.entityData.getOctoberi() + br.getTotalPrice()));
+                }
+                else if (br.getStartDate().getMonth() == Calendar.NOVEMBER) {
                     dto.entityData.setNovember(dto.entityData.getNovember() + 1);
-                else if (br.getStartDate().getMonth() == Calendar.DECEMBER)
+                    dto.entityData.setNovemberi((int) (dto.entityData.getNovemberi() + br.getTotalPrice()));
+                }
+                else if (br.getStartDate().getMonth() == Calendar.DECEMBER) {
                     dto.entityData.setDecember(dto.entityData.getDecember() + 1);
+                    dto.entityData.setDecemberi((int) (dto.entityData.getDecemberi() + br.getTotalPrice()));
+                }
                 else return null;
             }
 
@@ -870,14 +1479,14 @@ public class GraphicDataService {
     }
 
     public List<AbstractReservation> findAllReservationsByBoat(Boat b) {
-        List<AbstractReservation> regulaReservations = new ArrayList<>(boatReservationRepository.findAllByBoat(b));
-        regulaReservations.addAll(boatDiscountReservationRepository.findAllByBoat(b));
+        List<AbstractReservation> regulaReservations = new ArrayList<>(boatReservationRepository.findAllByBoatAndStatusNot(b, ReservationStatus.CANCELLED));
+        regulaReservations.addAll(boatDiscountReservationRepository.findAllByBoatAndStatusNot(b, ReservationStatus.CANCELLED));
         return regulaReservations;
     }
 
     public List<AbstractReservation> findAllReservationsByMansion(Mansion m) {
-        List<AbstractReservation> regulaReservations = new ArrayList<>(mansionReservationRepository.findAllByMansion(m));
-        regulaReservations.addAll(mansionDiscountReservationRepository.findAllByMansion(m));
+        List<AbstractReservation> regulaReservations = new ArrayList<>(mansionReservationRepository.findAllByMansionAndStatusNot(m, ReservationStatus.CANCELLED));
+        regulaReservations.addAll(mansionDiscountReservationRepository.findAllByMansionAndStatusNot(m, ReservationStatus.CANCELLED));
         return regulaReservations;
     }
 

@@ -6,6 +6,7 @@ import com.example.isa.model.Mansion;
 import com.example.isa.model.reservations.AdditionalService;
 
 import java.util.Date;
+import java.util.List;
 
 public class NewDiscountReservationDto {
     public Long boatId;
@@ -15,6 +16,9 @@ public class NewDiscountReservationDto {
     public int hours;
     public int numberOfGuests;
     public double priceWithDiscount;
+    public Boolean isOwnerPresent;
+    public List<AdditionalService> additionalServiceSet;
+
 
     public NewDiscountReservationDto(){}
     

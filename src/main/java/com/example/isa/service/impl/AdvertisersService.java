@@ -1,15 +1,16 @@
 package com.example.isa.service.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import com.example.isa.model.*;
+import com.example.isa.model.reservations.AbstractReservation;
+import com.example.isa.service.impl.reservations.CollectingBoatReservationsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.isa.dto.AdvertisersDto;
-import com.example.isa.model.BoatOwner;
-import com.example.isa.model.FishingInstructor;
-import com.example.isa.model.MansionOwner;
 import com.example.isa.repository.BoatOwnerRepository;
 import com.example.isa.repository.FishingInstructorRepository;
 import com.example.isa.repository.MansionOwnerRepository;
@@ -18,6 +19,10 @@ import com.example.isa.repository.UserRepository;
 
 @Service
 public class AdvertisersService {
+	@Autowired
+	BoatService boatService;
+	@Autowired
+	CollectingBoatReservationsServiceImpl collectingBoatReservationsService;
 	@Autowired
     private UserRepository userRepository;
 	@Autowired
@@ -74,8 +79,17 @@ public class AdvertisersService {
     	return advertisers;
     	
     }
-    
-    
-    
 
+
+    public boolean boatOwnerAvailable(User owner, Date startDate, Date endDate) {
+		List<AbstractReservation> allBoatOwnerReservations = new ArrayList<>();
+		allBoatOwnerReservations.addAll(collectingBoatReservationsService.getOwnersNotCanceledReservations(owner));
+		for (AbstractReservation ab : allBoatOwnerReservations){
+			if(!(startDate.after(ab.getEndDate())) && !(ab.getEndDate().after(endDate))){
+				return false;
+			}
+		}
+		return true;
+
+    }
 }

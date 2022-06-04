@@ -5,16 +5,28 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import axios from "axios";
 import {devServer} from "../../../vue.config";
-import { Bar } from 'vue-chartjs'
-import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from 'chart.js'
+import { Bar, Line } from 'vue-chartjs'
+import {
+  Chart as ChartJS,
+  Title,
+  Tooltip,
+  Legend,
+  BarElement,
+  CategoryScale,
+  LinearScale,
 
-ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
+  PointElement,
+  LineElement
+} from 'chart.js'
+
+ChartJS.register(Title, Tooltip, Legend, BarElement, PointElement,LineElement, CategoryScale, LinearScale)
 
 
 export default {
   components: {
    FullCalendar, // make the <FullCalendar> tag available
-    Bar
+    Bar,
+    Line
   },
   data() {
     return {
@@ -73,7 +85,38 @@ export default {
             data: []
           }
         ]
-      },        token : null,
+      },
+      chartDataYearSelectedi: {
+        labels: [ 'January', 'February', 'March'],
+        datasets: [
+          {
+            label: 'Incomings for year selected',
+            backgroundColor: '#5350D5',
+            data: []
+          }
+        ]
+      },
+      chartDataMonthSelectedi: {
+        labels: [ 'January', 'February', 'March'],
+        datasets: [
+          {
+            label: 'Incomings for current month selected',
+            backgroundColor: '#D56850',
+            data: []
+          }
+        ]
+      },
+      chartDataWeekSelectedi: {
+        labels: [ 'January', 'February', 'March'],
+        datasets: [
+          {
+            label: 'Incomings for current week selected',
+            backgroundColor: '#48bf91',
+            data: []
+          }
+        ]
+      },
+      token : null,
         today : new Date(),
         datase: [],
         yearlyIncomings: 0,
@@ -109,6 +152,36 @@ export default {
             }
           ]
         },
+      chartDataYeari: {
+        labels: [ 'January', 'February', 'March'],
+        datasets: [
+          {
+            label: 'Incomings for year',
+            backgroundColor: '#5350D5',
+            data: []
+          }
+        ]
+      },
+      chartDataMonthi: {
+        labels: [ 'January', 'February', 'March'],
+        datasets: [
+          {
+            label: 'Incomings for current month',
+            backgroundColor: '#D56850',
+            data: []
+          }
+        ]
+      },
+      chartDataWeeki: {
+        labels: [ 'January', 'February', 'March'],
+        datasets: [
+          {
+            label: 'Incomings for current week',
+            backgroundColor: '#48bf91',
+            data: []
+          }
+        ]
+      },
 
     }
   },
@@ -118,10 +191,18 @@ export default {
     this.chartDataYear.labels = [ 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
     this.chartDataMonth.labels= [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31]
     this.chartDataWeek.labels = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" ]
+    this.chartDataYeari.labels = [ 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    this.chartDataMonthi.labels= [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31]
+    this.chartDataWeeki.labels = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" ]
+
     this.chartDataYearSelected.labels = [ 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
     this.chartDataMonthSelected.labels= [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31]
     this.chartDataWeekSelected.labels = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" ]
-   console.log('toke je',this.token)
+    this.chartDataYearSelectedi.labels = [ 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    this.chartDataMonthSelectedi.labels= [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31]
+    this.chartDataWeekSelectedi.labels = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" ]
+
+    console.log('toke je',this.token)
 
     axios.get(devServer.proxy + "/userData", {
       headers: {
@@ -169,6 +250,18 @@ export default {
           this.chartDataYear.datasets[0].data.push(allYearly.october);
           this.chartDataYear.datasets[0].data.push(allYearly.november);
           this.chartDataYear.datasets[0].data.push(allYearly.december);
+          this.chartDataYeari.datasets[0].data.push(allYearly.januaryi);
+          this.chartDataYeari.datasets[0].data.push(allYearly.februaryi);
+          this.chartDataYeari.datasets[0].data.push(allYearly.marchi);
+          this.chartDataYeari.datasets[0].data.push(allYearly.aprili);
+          this.chartDataYeari.datasets[0].data.push(allYearly.mayi);
+          this.chartDataYeari.datasets[0].data.push(allYearly.junei);
+          this.chartDataYeari.datasets[0].data.push(allYearly.julyi);
+          this.chartDataYeari.datasets[0].data.push(allYearly.augusti);
+          this.chartDataYeari.datasets[0].data.push(allYearly.septemberi);
+          this.chartDataYeari.datasets[0].data.push(allYearly.octoberi);
+          this.chartDataYeari.datasets[0].data.push(allYearly.novemberi);
+          this.chartDataYeari.datasets[0].data.push(allYearly.decemberi);
           this.yearlyIncomings = allYearly.incomings;
           var allMonthly = response.data.monthly.allData;
           console.log("month all", allMonthly)
@@ -203,6 +296,37 @@ export default {
           this.chartDataMonth.datasets[0].data.push(allMonthly.twentyNine);
           this.chartDataMonth.datasets[0].data.push(allMonthly.thirty);
           this.chartDataMonth.datasets[0].data.push(allMonthly.thirtyOne);
+          this.chartDataMonthi.datasets[0].data.push(allMonthly.onei);
+          this.chartDataMonthi.datasets[0].data.push(allMonthly.twoi);
+          this.chartDataMonthi.datasets[0].data.push(allMonthly.threei);
+          this.chartDataMonthi.datasets[0].data.push(allMonthly.fouri);
+          this.chartDataMonthi.datasets[0].data.push(allMonthly.fivei);
+          this.chartDataMonthi.datasets[0].data.push(allMonthly.sixi);
+          this.chartDataMonthi.datasets[0].data.push(allMonthly.seveni);
+          this.chartDataMonthi.datasets[0].data.push(allMonthly.eighti);
+          this.chartDataMonthi.datasets[0].data.push(allMonthly.ninei);
+          this.chartDataMonthi.datasets[0].data.push(allMonthly.teni);
+          this.chartDataMonthi.datasets[0].data.push(allMonthly.eleveni);
+          this.chartDataMonthi.datasets[0].data.push(allMonthly.twelvei);
+          this.chartDataMonthi.datasets[0].data.push(allMonthly.thirteeni);
+          this.chartDataMonthi.datasets[0].data.push(allMonthly.fourteeni);
+          this.chartDataMonthi.datasets[0].data.push(allMonthly.fifteeni);
+          this.chartDataMonthi.datasets[0].data.push(allMonthly.sixteeni);
+          this.chartDataMonthi.datasets[0].data.push(allMonthly.seventeeni);
+          this.chartDataMonthi.datasets[0].data.push(allMonthly.eighteeni);
+          this.chartDataMonthi.datasets[0].data.push(allMonthly.nineteeni);
+          this.chartDataMonthi.datasets[0].data.push(allMonthly.twentyi);
+          this.chartDataMonthi.datasets[0].data.push(allMonthly.twentyOnei);
+          this.chartDataMonthi.datasets[0].data.push(allMonthly.twentyTwoi);
+          this.chartDataMonthi.datasets[0].data.push(allMonthly.twentyThreei);
+          this.chartDataMonthi.datasets[0].data.push(allMonthly.twentyFouri);
+          this.chartDataMonthi.datasets[0].data.push(allMonthly.twentyFivei);
+          this.chartDataMonthi.datasets[0].data.push(allMonthly.twentySixi);
+          this.chartDataMonthi.datasets[0].data.push(allMonthly.twentySeveni);
+          this.chartDataMonthi.datasets[0].data.push(allMonthly.twentyEighti);
+          this.chartDataMonthi.datasets[0].data.push(allMonthly.twentyNinei);
+          this.chartDataMonthi.datasets[0].data.push(allMonthly.thirtyi);
+          this.chartDataMonthi.datasets[0].data.push(allMonthly.thirtyOnei);
           this.monthlyIncomings = allMonthly.incomings;
           var allWeekly = response.data.weekly.allData;
           console.log("week all", allWeekly);
@@ -213,6 +337,13 @@ export default {
           this.chartDataWeek.datasets[0].data.push((allWeekly.friday));
           this.chartDataWeek.datasets[0].data.push((allWeekly.saturday));
           this.chartDataWeek.datasets[0].data.push((allWeekly.sunday));
+          this.chartDataWeeki.datasets[0].data.push((allWeekly.mondayi));
+          this.chartDataWeeki.datasets[0].data.push((allWeekly.tuesdayi));
+          this.chartDataWeeki.datasets[0].data.push((allWeekly.wednesdayi));
+          this.chartDataWeeki.datasets[0].data.push((allWeekly.thursdayi));
+          this.chartDataWeeki.datasets[0].data.push((allWeekly.fridayi));
+          this.chartDataWeeki.datasets[0].data.push((allWeekly.saturdayi));
+          this.chartDataWeeki.datasets[0].data.push((allWeekly.sundayi));
           this.weeklyIncomings = allWeekly.incomings;
           axios.get(devServer.proxy+"/ownersAdventures", {
             headers: {
@@ -232,6 +363,8 @@ export default {
   methods:{
     setFields(){
       this.chartDataYearSelected.datasets[0].data = [];
+      this.chartDataYearSelectedi.datasets[0].data = [];
+
       this.chartDataYearSelected.datasets[0].data.push(this.yearlySelected.january);
       this.chartDataYearSelected.datasets[0].data.push(this.yearlySelected.february);
       this.chartDataYearSelected.datasets[0].data.push(this.yearlySelected.march);
@@ -244,8 +377,21 @@ export default {
       this.chartDataYearSelected.datasets[0].data.push(this.yearlySelected.october);
       this.chartDataYearSelected.datasets[0].data.push(this.yearlySelected.november);
       this.chartDataYearSelected.datasets[0].data.push(this.yearlySelected.december);
+      this.chartDataYearSelectedi.datasets[0].data.push(this.yearlySelected.januaryi);
+      this.chartDataYearSelectedi.datasets[0].data.push(this.yearlySelected.februaryi);
+      this.chartDataYearSelectedi.datasets[0].data.push(this.yearlySelected.marchi);
+      this.chartDataYearSelectedi.datasets[0].data.push(this.yearlySelected.aprili);
+      this.chartDataYearSelectedi.datasets[0].data.push(this.yearlySelected.mayi);
+      this.chartDataYearSelectedi.datasets[0].data.push(this.yearlySelected.junei);
+      this.chartDataYearSelectedi.datasets[0].data.push(this.yearlySelected.julyi);
+      this.chartDataYearSelectedi.datasets[0].data.push(this.yearlySelected.augusti);
+      this.chartDataYearSelectedi.datasets[0].data.push(this.yearlySelected.septemberi);
+      this.chartDataYearSelectedi.datasets[0].data.push(this.yearlySelected.octoberi);
+      this.chartDataYearSelectedi.datasets[0].data.push(this.yearlySelected.novemberi);
+      this.chartDataYearSelectedi.datasets[0].data.push(this.yearlySelected.decemberi);
       this.yearlyIncomingsSelected = this.yearlySelected.incomings;
       this.chartDataMonthSelected.datasets[0].data = [];
+      this.chartDataMonthSelectedi.datasets[0].data = [];
       this.chartDataMonthSelected.datasets[0].data.push(this.monthlySelected.one);
       this.chartDataMonthSelected.datasets[0].data.push(this.monthlySelected.two);
       this.chartDataMonthSelected.datasets[0].data.push(this.monthlySelected.three);
@@ -277,8 +423,41 @@ export default {
       this.chartDataMonthSelected.datasets[0].data.push(this.monthlySelected.twentyNine);
       this.chartDataMonthSelected.datasets[0].data.push(this.monthlySelected.thirty);
       this.chartDataMonthSelected.datasets[0].data.push(this.monthlySelected.thirtyOne);
+      this.chartDataMonthSelectedi.datasets[0].data.push(this.monthlySelected.onei);
+      this.chartDataMonthSelectedi.datasets[0].data.push(this.monthlySelected.twoi);
+      this.chartDataMonthSelectedi.datasets[0].data.push(this.monthlySelected.threei);
+      this.chartDataMonthSelectedi.datasets[0].data.push(this.monthlySelected.fouri);
+      this.chartDataMonthSelectedi.datasets[0].data.push(this.monthlySelected.fivei);
+      this.chartDataMonthSelectedi.datasets[0].data.push(this.monthlySelected.sixi);
+      this.chartDataMonthSelectedi.datasets[0].data.push(this.monthlySelected.seveni);
+      this.chartDataMonthSelectedi.datasets[0].data.push(this.monthlySelected.eighti);
+      this.chartDataMonthSelectedi.datasets[0].data.push(this.monthlySelected.ninei);
+      this.chartDataMonthSelectedi.datasets[0].data.push(this.monthlySelected.teni);
+      this.chartDataMonthSelectedi.datasets[0].data.push(this.monthlySelected.eleveni);
+      this.chartDataMonthSelectedi.datasets[0].data.push(this.monthlySelected.twelvei);
+      this.chartDataMonthSelectedi.datasets[0].data.push(this.monthlySelected.thirteeni);
+      this.chartDataMonthSelectedi.datasets[0].data.push(this.monthlySelected.fourteeni);
+      this.chartDataMonthSelectedi.datasets[0].data.push(this.monthlySelected.fifteeni);
+      this.chartDataMonthSelectedi.datasets[0].data.push(this.monthlySelected.sixteeni);
+      this.chartDataMonthSelectedi.datasets[0].data.push(this.monthlySelected.seventeeni);
+      this.chartDataMonthSelectedi.datasets[0].data.push(this.monthlySelected.eighteeni);
+      this.chartDataMonthSelectedi.datasets[0].data.push(this.monthlySelected.nineteeni);
+      this.chartDataMonthSelectedi.datasets[0].data.push(this.monthlySelected.twentyi);
+      this.chartDataMonthSelectedi.datasets[0].data.push(this.monthlySelected.twentyOnei);
+      this.chartDataMonthSelectedi.datasets[0].data.push(this.monthlySelected.twentyTwoi);
+      this.chartDataMonthSelectedi.datasets[0].data.push(this.monthlySelected.twentyThreei);
+      this.chartDataMonthSelectedi.datasets[0].data.push(this.monthlySelected.twentyFouri);
+      this.chartDataMonthSelectedi.datasets[0].data.push(this.monthlySelected.twentyFivei);
+      this.chartDataMonthSelectedi.datasets[0].data.push(this.monthlySelected.twentySixi);
+      this.chartDataMonthSelectedi.datasets[0].data.push(this.monthlySelected.twentySeveni);
+      this.chartDataMonthSelectedi.datasets[0].data.push(this.monthlySelected.twentyEighti);
+      this.chartDataMonthSelectedi.datasets[0].data.push(this.monthlySelected.twentyNinei);
+      this.chartDataMonthSelectedi.datasets[0].data.push(this.monthlySelected.thirtyi);
+      this.chartDataMonthSelectedi.datasets[0].data.push(this.monthlySelected.thirtyOnei);
       this.monthlyIncomingsSelected = this.monthlySelected.incomings;
       this.chartDataWeekSelected.datasets[0].data=[];
+      this.chartDataWeekSelectedi.datasets[0].data=[];
+
       this.chartDataWeekSelected.datasets[0].data.push((this.weeklySelected.monday));
       this.chartDataWeekSelected.datasets[0].data.push((this.weeklySelected.tuesday));
       this.chartDataWeekSelected.datasets[0].data.push((this.weeklySelected.wednesday));
@@ -286,6 +465,13 @@ export default {
       this.chartDataWeekSelected.datasets[0].data.push((this.weeklySelected.friday));
       this.chartDataWeekSelected.datasets[0].data.push((this.weeklySelected.saturday));
       this.chartDataWeekSelected.datasets[0].data.push((this.weeklySelected.sunday));
+      this.chartDataWeekSelectedi.datasets[0].data.push((this.weeklySelected.mondayi));
+      this.chartDataWeekSelectedi.datasets[0].data.push((this.weeklySelected.tuesdayi));
+      this.chartDataWeekSelectedi.datasets[0].data.push((this.weeklySelected.wednesdayi));
+      this.chartDataWeekSelectedi.datasets[0].data.push((this.weeklySelected.thursdayi));
+      this.chartDataWeekSelectedi.datasets[0].data.push((this.weeklySelected.fridayi));
+      this.chartDataWeekSelectedi.datasets[0].data.push((this.weeklySelected.saturdayi));
+      this.chartDataWeekSelectedi.datasets[0].data.push((this.weeklySelected.sundayi));
       this.weeklyIncomingsSelected = this.weeklySelected.incomings;
 
     },
@@ -321,21 +507,34 @@ export default {
   <h4>
     Dashboard
   </h4>
-  <div class="horizontal" style="border-radius: 20px; border-width: 1pt; border-color: #2c3e50; border-style: solid">
-    <div class="column" style="margin: 2%; width: 40%">
-      <h4 style="color: #0D184F">Yearly review {{today.getFullYear()}}</h4>
-      <h5 style="color: #0D184F">Incomings {{this.yearlyIncomings}}€</h5>
-      <Bar :chart-data="chartDataYear"/>
+  <div style="border-radius: 20px; border-width: 1pt; border-color: #2c3e50; border-style: solid">
+    <div class="horizontal" >
+      <div class="column" style="margin: 2%; width: 40%">
+        <h4 style="color: #0D184F">Yearly review {{today.getFullYear()}}</h4>
+        <h5 style="color: #0D184F">Incomings in this year {{this.yearlyIncomings}}€</h5>
+        <Bar :chart-data="chartDataYear" />
+      </div>
+      <div class="column" style="margin: 2%; width: 40%">
+        <h4 style="color: #0D184F">Monthly review {{today.getMonth()+1}}.{{today.getFullYear()}}.</h4>
+        <h5 style="color: #0D184F">Incomings in this month {{this.monthlyIncomings}}€</h5>
+        <Bar :chart-data="chartDataMonth" />
+      </div>
+      <div class="column" style="margin: 2%; width: 40%">
+        <h4 style="color: #0D184F">Weekly review</h4>
+        <h5 style="color: #0D184F">Incomings in this week {{this.weeklyIncomings}}€</h5>
+        <Bar :chart-data="chartDataWeek" />
+      </div>
     </div>
-    <div class="column" style="margin: 2%; width: 40%">
-      <h4 style="color: #0D184F">Monthly review {{today.getMonth()+1}}.{{today.getFullYear()}}.</h4>
-      <h5 style="color: #0D184F">Incomings {{this.monthlyIncomings}}€</h5>
-      <Bar :chart-data="chartDataMonth" />
-    </div>
-    <div class="column" style="margin: 2%; width: 40%">
-      <h4 style="color: #0D184F">Weekly review</h4>
-      <h5 style="color: #0D184F">Incomings in this week {{this.weeklyIncomings}}€</h5>
-      <Bar :chart-data="chartDataWeek" />
+    <div class="horizontal" >
+      <div class="column" style="margin: 2%; width: 40%">
+        <Line :chart-data="chartDataYeari" />
+      </div>
+      <div class="column" style="margin: 2%; width: 40%">
+        <Line :chart-data="chartDataMonthi" />
+      </div>
+      <div class="column" style="margin: 2%; width: 40%">
+        <Line :chart-data="chartDataWeeki" />
+      </div>
     </div>
   </div>
   <div v-if="allEntities!=null && allEntities.length>0" style="margin: 2%; font-weight: normal; font-size: 20px">
@@ -348,21 +547,35 @@ export default {
   <div v-else style="margin: 2%; font-weight: normal; font-size: 20px">
     There is no entities!
   </div>
-  <div class="horizontal" style="border-radius: 20px; border-width: 1pt; border-color: #2c3e50; border-style: solid">
-    <div class="column" style="margin: 2%; width: 40%">
-      <h4 style="color: #0D184F">Yearly review {{today.getFullYear()}}  for {{selectedEntity.name}}</h4>
-      <h5 style="color: #0D184F">Incomings {{this.yearlyIncomingsSelected}}€</h5>
-      <Bar :chart-data="chartDataYearSelected"/>
+  <div  style="border-radius: 20px; border-width: 1pt; border-color: #2c3e50; border-style: solid">
+    <div class="horizontal">
+      <div class="column" style="margin: 2%; width: 40%">
+        <h4 style="color: #0D184F">Yearly review {{today.getFullYear()}}  for {{selectedEntity.name}}</h4>
+        <h5 style="color: #0D184F">Incomings {{this.yearlyIncomingsSelected}}€</h5>
+        <Bar :chart-data="chartDataYearSelected"/>
+      </div>
+      <div class="column" style="margin: 2%; width: 40%">
+        <h4 style="color: #0D184F">Monthly review {{today.getMonth()+1}}.{{today.getFullYear()}}.  for {{selectedEntity.name}}</h4>
+        <h5 style="color: #0D184F">Incomings {{this.monthlyIncomingsSelected}}€</h5>
+        <Bar :chart-data="chartDataMonthSelected" />
+      </div>
+      <div class="column" style="margin: 2%; width: 40%">
+        <h4 style="color: #0D184F">Weekly review  for {{selectedEntity.name}}</h4>
+        <h5 style="color: #0D184F">Incomings {{this.weeklyIncomingsSelected}}€</h5>
+        <Bar :chart-data="chartDataWeekSelected" />
+      </div>
     </div>
-    <div class="column" style="margin: 2%; width: 40%">
-      <h4 style="color: #0D184F">Monthly review {{today.getMonth()+1}}.{{today.getFullYear()}}.  for {{selectedEntity.name}}</h4>
-      <h5 style="color: #0D184F">Incomings {{this.monthlyIncomingsSelected}}€</h5>
-      <Bar :chart-data="chartDataMonthSelected" />
-    </div>
-    <div class="column" style="margin: 2%; width: 40%">
-      <h4 style="color: #0D184F">Weekly review  for {{selectedEntity.name}}</h4>
-      <h5 style="color: #0D184F">Incomings {{this.weeklyIncomingsSelected}}€</h5>
-      <Bar :chart-data="chartDataWeekSelected" />
+    <div class="horizontal">
+      <div class="column" style="margin: 2%; width: 40%">
+        <Line :chart-data="chartDataYearSelectedi"/>
+      </div>
+      <div class="column" style="margin: 2%; width: 40%">
+        <Line :chart-data="chartDataMonthSelectedi" />
+      </div>
+      <div class="column" style="margin: 2%; width: 40%">
+        <Line :chart-data="chartDataWeekSelectedi" />
+      </div>
+
     </div>
   </div>
 

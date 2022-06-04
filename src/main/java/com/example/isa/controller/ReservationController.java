@@ -7,6 +7,7 @@ import java.util.List;
 import javax.mail.MessagingException;
 
 import com.example.isa.dto.*;
+import com.example.isa.exception.BoatOwnerNotAvailable;
 import com.example.isa.model.reservations.*;
 import com.example.isa.service.impl.reservations.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -150,6 +151,9 @@ public class ReservationController {
         }
         catch (PessimisticLockingFailureException pe){
             return new ResponseEntity<>("Client is reserving the entity!", HttpStatus.BAD_REQUEST);
+        }
+        catch (BoatOwnerNotAvailable be){
+            return  new ResponseEntity<>(be.getMessage(), HttpStatus.OK);
         }
         catch (Exception e) {
         	return  new ResponseEntity<>(e.getMessage(), HttpStatus.OK);
@@ -297,6 +301,7 @@ public class ReservationController {
             else if(code==5) return new ResponseEntity<>("Mansion is not available at selected time!", HttpStatus.OK);
             else if(code==6) return new ResponseEntity<>("Captain is not available at selected time!", HttpStatus.OK);
             else if(code==7) return new ResponseEntity<>("Client does not have an active reservation!", HttpStatus.OK);
+            else if(code==8) return new ResponseEntity<>("Boat owner is not available at that time!", HttpStatus.OK);
             else return new ResponseEntity<>("Wrong params, try again!", HttpStatus.OK);
         }
         catch (PessimisticLockingFailureException pe){

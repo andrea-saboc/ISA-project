@@ -5,9 +5,11 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 import com.example.isa.enums.EntityType;
+import com.example.isa.exception.BoatOwnerNotAvailable;
 import com.example.isa.mail.MailService;
 import com.example.isa.model.*;
 import com.example.isa.model.reservations.*;
+import com.example.isa.service.impl.AdvertisersService;
 import com.example.isa.service.impl.ClientService;
 import com.example.isa.service.impl.DateCoverter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,6 +61,8 @@ public class BoatReservationServiceImpl implements ReservationService{
 	CollectingBoatReservationsServiceImpl collectingBoatReservationsService;
 	@Autowired
 	CollectionMansionReservationsImpl collectionMansionReservations;
+	@Autowired
+	AdvertisersService advertisersService;
 	
 	
 	@Override
@@ -102,8 +106,10 @@ public class BoatReservationServiceImpl implements ReservationService{
 				BoatAvailablePeriod periodAfter = new BoatAvailablePeriod(endDate,period.getEndDate(),period.getBoat());
 				availablePeriodsRepo.save(periodAfter);
 			}
-			
-		
+			if(dto.isOwnerPresent && !advertisersService.boatOwnerAvailable(boat.getBoatOwner(), startDate, endDate)){
+				return 8;
+			}
+			newBoatReservation.setOwnerPresent(dto.isOwnerPresent);
 			availablePeriodsRepo.delete(period);
 	        newBoatReservation.setAdditionalServices(addAdditionalServices(res.getAdditionalServices()));
 	        newBoatReservation.setTotalPrice( dto.getPrice(boat) + accountAdditionalServices(newBoatReservation.getAdditionalServices(),res));
@@ -137,7 +143,7 @@ public class BoatReservationServiceImpl implements ReservationService{
 
 	@Override
 	@Transactional(readOnly=false,propagation=Propagation.REQUIRED,isolation= Isolation.SERIALIZABLE)
-	public BoatReservation createReservation(ReservationDto res) throws ParseException, PeriodNoLongerAvailableException, EntityDeletedException, ImpossibleDueToPenaltyPoints  {
+	public BoatReservation createReservation(ReservationDto res) throws ParseException, PeriodNoLongerAvailableException, EntityDeletedException, ImpossibleDueToPenaltyPoints, BoatOwnerNotAvailable {
 
 		ReservationStartEndDateFormatter formatter = new ReservationStartEndDateFormatter(res);
 		Date startDate = formatter.startDate;
@@ -169,7 +175,10 @@ public class BoatReservationServiceImpl implements ReservationService{
 	        	BoatAvailablePeriod periodAfter = new BoatAvailablePeriod(endDate,period.getEndDate(),period.getBoat());
 	        	availablePeriodsRepo.save(periodAfter);
 	        }
-	        
+			if(res.getOwnerPresent() && advertisersService.boatOwnerAvailable(boat.getBoatOwner(), startDate, endDate)){
+				throw new BoatOwnerNotAvailable();
+			}
+	        newBoatReservation.setOwnerPresent(res.getOwnerPresent());
 	        
 	        availablePeriodsRepo.delete(period);	        
 	        newBoatReservation.setAdditionalServices(addAdditionalServices(res.getAdditionalServices()));
@@ -183,6 +192,7 @@ public class BoatReservationServiceImpl implements ReservationService{
 		Set<AdditionalService> services = new HashSet<AdditionalService>();		
         for(AdditionalService id1 : additionalServices) {
         	AdditionalService service = additinalServicesRepo.findById(id1.getId()).orElse(null);
+			if(service!=null)
 			services.add(service);
         }
         return services;

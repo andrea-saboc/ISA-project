@@ -20,9 +20,23 @@ public class ReservationDto {
 	public Date startDateTime;
 	private int numberOfDays;
 	private int numberOfHours;
+	private Boolean isOwnerPresent;
 
+	public Date getStartDateTime() {
+		return startDateTime;
+	}
 
+	public void setStartDateTime(Date startDateTime) {
+		this.startDateTime = startDateTime;
+	}
 
+	public Boolean getOwnerPresent() {
+		return isOwnerPresent;
+	}
+
+	public void setOwnerPresent(Boolean ownerPresent) {
+		this.isOwnerPresent = isOwnerPresent;
+	}
 
 	public long getEntityId() {
 		return entityId;

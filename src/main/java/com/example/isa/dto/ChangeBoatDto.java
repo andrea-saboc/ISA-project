@@ -1,5 +1,6 @@
 package com.example.isa.dto;
 
+import com.example.isa.model.FishingEquipment;
 import com.example.isa.model.Rule;
 import com.example.isa.model.reservations.AdditionalService;
 import org.apache.tomcat.util.digester.Rules;
@@ -37,6 +38,8 @@ public class ChangeBoatDto extends AbstractChangeDto{
     public Set<Integer> rulesToDelete;
     public Set<AdditionalService> additionalServices;
     public Set<Long> deleteAdditionalServices;
+    public Set<FishingEquipment> fishingEquipments;
+    public Set<Integer> deleteFishingEquipment;
 
     @Override
     public String toString() {

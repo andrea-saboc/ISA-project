@@ -17,6 +17,8 @@ public class CustomReservationForClientDto {
     public  int hours;
     public Long boatId;
     public int numberOfGuests;
+    public boolean isOwnerPresent;
+
 
     public CustomReservationForClientDto(){}
 

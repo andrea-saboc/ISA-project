@@ -7,8 +7,10 @@ import java.util.List;
 
 import com.example.isa.mail.MailService;
 import com.example.isa.model.*;
+import com.example.isa.repository.MansionAvailablePeriodRepository;
 import com.example.isa.repository.MansionOwnerRepository;
 import com.example.isa.service.SubscriptionService;
+import com.example.isa.service.impl.AdditionalServiceService;
 import com.example.isa.service.impl.MansionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.PessimisticLockingFailureException;
@@ -48,6 +50,10 @@ public class MansionDiscountReservationService implements DiscountReservationSer
 	MansionService mansionService;
 	@Autowired
 	CollectionMansionReservationsImpl collectionMansionReservationsService;
+	@Autowired
+	AdditionalServiceService additionalServiceService;
+	@Autowired
+	MansionAvailablePeriodRepository mansionAvailablePeriodRepository;
 	
 
 	@Override
@@ -110,12 +116,23 @@ public class MansionDiscountReservationService implements DiscountReservationSer
 		mansionDiscountReservation.setValidUntil(dto.validUntil);
 		mansionDiscountReservation.setStartDate(dto.startDate);
 		mansionDiscountReservation.setEndDate(getEndDate(dto));
-		if(mansionService.isInAvailabilityPeriods(mansionDiscountReservation.getStartDate(), mansionDiscountReservation.getEndDate(), mansion.getId())){
+		if(!mansionService.isInAvailabilityPeriods(mansionDiscountReservation.getStartDate(), mansionDiscountReservation.getEndDate(), mansion.getId())){
 			return 2;
 		}
 		if(collectionMansionReservationsService.overlapsWithActiveReservations(mansionDiscountReservation.getStartDate(), mansionDiscountReservation.getEndDate(), mansion)){
 			return 3;
 		}
+		MansionAvailablePeriod period = mansionAvailablePeriodRepository.getPeriodOfInterest(dto.startDate, getEndDate(dto), dto.boatId);
+		if(!period.getStartDate().equals(mansionDiscountReservation.getStartDate())) {
+			MansionAvailablePeriod periodBefore = new MansionAvailablePeriod(period.getStartDate(),mansionDiscountReservation.getStartDate(),period.getMansion());
+			mansionAvailablePeriodRepository.save(periodBefore);
+		}
+		if(!period.getEndDate().equals(mansionDiscountReservation.getEndDate())) {
+			MansionAvailablePeriod periodAfter = new MansionAvailablePeriod(mansionDiscountReservation.getEndDate(),period.getEndDate(),period.getMansion());
+			mansionAvailablePeriodRepository.save(periodAfter);
+		}
+		mansionAvailablePeriodRepository.delete(period);
+		mansionDiscountReservation.setAdditionalServices(additionalServiceService.addAdditionalServices(dto.additionalServiceSet));
 		mansionDiscountReservation.setType("MANSION");
 		mansionDiscountReservation.setPriceWithoutDiscount(dto.getPrice(mansion));
 		mansionDiscountReservation.calculatePercentageOfDiscount();

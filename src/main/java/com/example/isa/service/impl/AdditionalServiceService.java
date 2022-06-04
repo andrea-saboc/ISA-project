@@ -14,7 +14,9 @@ import com.example.isa.repository.MansionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class AdditionalServiceService {
@@ -65,6 +67,16 @@ public class AdditionalServiceService {
             asToDlt.setBoat(null);
             additionalServiceRepository.save(asToDlt);
         }
+    }
+
+    public Set<AdditionalService> addAdditionalServices(List<AdditionalService> additionalServices) {
+        Set<AdditionalService> services = new HashSet<AdditionalService>();
+        for(AdditionalService id1 : additionalServices) {
+            AdditionalService service = additionalServiceRepository.findById(id1.getId()).orElse(null);
+            if(service!=null)
+                services.add(service);
+        }
+        return services;
     }
 
 

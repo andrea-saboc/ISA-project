@@ -55,10 +55,19 @@ public class Boat extends AbstractEntity{
 	@ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER, mappedBy = "boat")
 	public Set<Rule> rules = new HashSet<Rule>();
 
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+	private Set<FishingEquipment> fishingEquipments = new HashSet<>();
+
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private Set<AdditionalService> additionalServices = new HashSet<AdditionalService>();
 
+	public Set<FishingEquipment> getFishingEquipments() {
+		return fishingEquipments;
+	}
 
+	public void setFishingEquipments(Set<FishingEquipment> fishingEquipments) {
+		this.fishingEquipments = fishingEquipments;
+	}
 
 	public Boat(String ime_mi_je_brod, String neka_adresa, String promo_opis_moj, float v) {
 	}
@@ -310,12 +319,12 @@ public class Boat extends AbstractEntity{
 				", pricePerHour=" + pricePerHour +
 				", pricePerDay=" + pricePerDay +
 				", priceForSevenDays=" + priceForSevenDays +
+				", deleted=" + deleted +
 				", boatOwner=" + boatOwner +
 				", address=" + address +
-				", rules=" + rules +
+				", fishingEquipments=" + fishingEquipments +
 				'}';
 	}
-
 
 	public boolean isDeleted() {
 		return deleted;

@@ -346,7 +346,7 @@
                    </div>
                    <hr>
                    <div v-if="additionalServices!=null && additionalServices.length!=0">
-                     Addition services:
+                     Additional services:
                      <table>
                        <tbody>
                        <tr v-for="as in additionalServices" :key="as.id">
@@ -380,7 +380,7 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times" aria-hidden="true"></i></button>
           </div>
           <div class="modal-body">
-            <v-date-picker mode="dateTime" is24hr v-model="startDateTimeQuick" style="width: 100%" :disabled-dates="availableDates">
+            <v-date-picker mode="dateTime" is24hr v-model="startDateTimeQuick" style="width: 100%" :available-dates="availableDates">
               <template v-slot="{ inputValue, inputEvents }">
                 <input
                     class="px-2 py-1 border rounded focus:outline-none focus:border-blue-300"
@@ -417,6 +417,21 @@
                 />
               </template>
             </v-date-picker>
+            <div v-if="additionalServices!=null && additionalServices.length!=0">
+              Additional services:
+              <table>
+                <tbody>
+                <tr v-for="as in additionalServices" :key="as.id">
+                  <td><div class="form-check">
+                    <input class="form-check-input" type="checkbox" value=""  v-bind:id="as.id+'ascrq'"  v-on:click="addAditionalServiceToQuickRes(as)">
+                    <label class="form-check-label" for="as.id+'ascrq'">
+                      {{as.name}}
+                    </label>
+                  </div></td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-primary" v-on:click="addQuickReservation" data-bs-dismiss="modal">Add</button>
@@ -438,6 +453,7 @@ export default {
   name: "MansionView",
   data: function () {
     return {
+      additionaSevicesForQuickReservation: new Array(),
       availablePeriodsToShow: new Array(),
       selectedYear: new Date().getFullYear(),
       thisYear: new Date().getFullYear(),
@@ -612,6 +628,20 @@ export default {
 
   },
   methods:{
+    addAditionalServiceToQuickRes(additionalService){
+      let checkbox = document.getElementById(additionalService.id + 'ascrq').checked
+      console.log("additional service is selected:", checkbox)
+      if(checkbox){
+        this.additionaSevicesForQuickReservation.push(additionalService)
+      } else{
+        for( var i = 0; i < this.additionaSevicesForQuickReservation.length; i++){
+
+          if ( this.additionaSevicesForQuickReservation[i] === additionalService) {
+            this.additionaSevicesForQuickReservation.splice(i, 1);
+          }
+        }
+      }
+    },
     changeYear(){
       this.availablePeriodsToShow = new Array();
       for(var tmp of this.availablePeriods){
@@ -887,7 +917,8 @@ export default {
           "hours" : this.numberOfHoursQuick,
           "numberOfGuests" : this.numberOfGuestsQuick,
           "priceWithDiscount": this.priceQuick,
-          "validUntil" : this.availableUntil
+          "validUntil" : this.availableUntil,
+          "additionalServiceSet": this.additionaSevicesForQuickReservation
         }, {
           headers: {
             'Authorization': this.$store.getters.tokenString,
@@ -895,6 +926,12 @@ export default {
           }
         })
             .then(response => {
+              this.startDateTimeQuick = "";
+              this.numberOfHoursQuick = "";
+              this.numberOfDaysQuick = "";
+              this.numberOfGuestsQuick = "";
+              this.priceQuick = "";
+              this.availableUntil = "";
               console.log(response.data)
               alert(response.data)
             })

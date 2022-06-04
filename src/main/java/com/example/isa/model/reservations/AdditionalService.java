@@ -39,6 +39,12 @@ public class AdditionalService {
        inverseJoinColumns=@JoinColumn(name="reservation_id"))
     private Set<Reservation> reservations = new HashSet<Reservation>();
 
+    @ManyToMany
+    @JoinTable(name="discount_reservation_services",
+            joinColumns=@JoinColumn(name="service_id"),
+            inverseJoinColumns=@JoinColumn(name="discount_reservation_id"))
+    private Set<DiscountReservation> discountReservations = new HashSet<>();
+
     public AdditionalService(String name, double pricePerDay, double pricePerHour, Mansion mansion) {
         this.name = name;
         this.pricePerDay = pricePerDay;

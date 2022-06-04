@@ -42,6 +42,8 @@ public class BoatService {
 	private AddressRepository addressRepository;
 	@Autowired
 	private BoatReservationServiceImpl boatReservationService;
+	@Autowired
+	private FishingEquipmentService fishingEquipmentService;
 
 	public BoatService(BoatsRepository br, ImageRepository ir, BoatOwnerRepository bor, BoatAvailablePeriodRepository apr, AdditionalServiceRepository additionalServiceRepository){
 		this.boatsRepository = br;
@@ -99,12 +101,16 @@ public class BoatService {
 		boatToChange.setRules(makeRules(dto));
 		boatToChange.setExteriorImages(new HashSet<>(entityImageService.removeAndAddNewExterior(dto, boatToChange)));
 		boatToChange.setInteriorImages(new HashSet<>(entityImageService.removeAndAddNewInterior(dto, boatToChange)));
+		boatToChange.setFishingEquipments(new HashSet<>(fishingEquipmentService.removeAndAddNewFishingEquipments(dto, boatToChange)));
+
 		Address boatAddress = addressRepository.findById(boatToChange.getAddress().getId()).get();
 		boatAddress.setCountry(dto.country);
 		boatAddress.setCity(dto.city);
 		boatAddress.setAddress(dto.address);
 		boatAddress.setLatitude(dto.latitude);
 		boatAddress.setLongitude(dto.longitude);
+		System.out.println("Boat to change:"+boatToChange);
+
 		addressRepository.save(boatAddress);
 		boatToChange = boatsRepository.save(boatToChange);
 		return boatToChange;
@@ -173,6 +179,7 @@ public class BoatService {
 		System.out.println("Int images saving"+dto.getInteriorImages().size());
 		newBoat.setInteriorImages(new HashSet<>(entityImageService.createAndSaveImages("BoatOwners",boatOwner.getEmail(),dto.getName(),dto.getInteriorImages())));
 		System.out.println("Donee with saving");
+		newBoat.setFishingEquipments(new HashSet<>(dto.getFishingEquipments()));
 		newBoat.setRules(convertString2Rule(dto.rules, newBoat));
 		newBoat.setPricePerHour(dto.pricePerHour);
 		newBoat.setPricePerDay(dto.pricePerDay);
@@ -211,6 +218,11 @@ public class BoatService {
 		System.out.println("Trying to cast to User:"+ user);
 		BoatOwner boatOwner = boatOwnerRepository.findById(user.getId()).get();
 		List<Boat> ownersBoats = boatsRepository.findAllByBoatOwnerAndDeleted(boatOwner, false);
+		return ownersBoats;
+	}
+
+	public List<Boat> getByOwner(BoatOwner bo){
+		List<Boat> ownersBoats = boatsRepository.findAllByBoatOwnerAndDeleted(bo, false);
 		return ownersBoats;
 	}
 
@@ -343,7 +355,7 @@ public class BoatService {
 	public boolean inAvailabilityPeriods(Date startDate, Date endDate, Long id) {
 		List<BoatAvailablePeriod> mansionAvailablePeriods = getBoatAvailbilities(id);
 		for (BoatAvailablePeriod ma : mansionAvailablePeriods ){
-			if(!startDate.before(ma.getStartDate()) && !endDate.after(ma.getStartDate())){
+			if(!startDate.after(ma.getEndDate()) && !ma.getStartDate().after(endDate)){
 				return true;
 			}
 		}

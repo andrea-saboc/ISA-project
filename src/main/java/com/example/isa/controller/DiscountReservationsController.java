@@ -83,8 +83,9 @@ public class DiscountReservationsController {
 			System.out.println(dto);
 			int code= boatReservationService.createDiscountReservation(dto);
 			if(code == 1)  return new ResponseEntity<>("Discount reservation successfully created!", HttpStatus.OK);
-			else if(code == 2) return new ResponseEntity<>("Discount reservation period is not availability period!", HttpStatus.OK);
+			else if(code == 2) return new ResponseEntity<>("Discount reservation period is not in availability period!", HttpStatus.OK);
 			else if(code == 3) return new ResponseEntity<>("Discount reservation could not be created because there is already a reservation that overlaps with selected period!", HttpStatus.OK);
+			else if(code == 4) return new ResponseEntity<>("Discount reservation is not created because you seleceted to be present at the boat while reservation, altough you already have a reservation at that time!", HttpStatus.OK);
 			else return new ResponseEntity<>("It is impossible to save discount reservation!", HttpStatus.OK);
 		}
 		catch (PessimisticLockingFailureException pe){
@@ -105,7 +106,7 @@ public class DiscountReservationsController {
 			System.out.println(dto);
 			int code= mansionReservationService.createDiscountReservation(dto);
 			if(code == 1)  return new ResponseEntity<>("Discount reservation successfully created!", HttpStatus.OK);
-			else if(code == 2) return new ResponseEntity<>("Discount reservation period overlaps with availability period!", HttpStatus.OK);
+			else if(code == 2) return new ResponseEntity<>("Discount reservation is not in availability period!", HttpStatus.OK);
 			else if(code == 3) return new ResponseEntity<>("Discount reservation could not be created because there is already a reservation that overlaps with selected period!", HttpStatus.OK);
 			else return new ResponseEntity<>("It is impossible to save discount reservation!", HttpStatus.OK);
 		}

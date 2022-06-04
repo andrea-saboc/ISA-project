@@ -2,22 +2,10 @@ package com.example.isa.model.reservations;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-import javax.persistence.Version;
+import javax.persistence.*;
 
 import com.example.isa.model.ReservationReport;
 import com.example.isa.model.User;
@@ -63,9 +51,21 @@ public abstract class DiscountReservation extends AbstractReservation implements
 	
 	@OneToOne
 	private ReservationReport report;
-	
-	
 
+	@ManyToMany(cascade = CascadeType.PERSIST)
+	@JoinTable(name="discount_reservation_services",
+			joinColumns=@JoinColumn(name="discount_reservation_id"),
+			inverseJoinColumns=@JoinColumn(name="service_id "))
+	public Set<AdditionalService> additionalServices = new HashSet<AdditionalService>();
+
+
+	public Set<AdditionalService> getAdditionalServices() {
+		return additionalServices;
+	}
+
+	public void setAdditionalServices(Set<AdditionalService> additionalServices) {
+		this.additionalServices = additionalServices;
+	}
 
 	public ReservationReport getReport() {
 		return report;
