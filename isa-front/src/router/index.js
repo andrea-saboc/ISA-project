@@ -8,11 +8,15 @@ import BoatReservationOffers from '../components/BoatReservationOffers.vue'
 import MansionReservationOffers from '../components/MansionReservationOffers.vue'
 import Boats from '../components/Boats.vue'
 import Mansions from '../components/Mansions.vue'
+import AdministratorHomePage from "../components/Administrator/AdministratorHomePage"
+import AdminRegistration from "../components/Administrator/AdminRegistration"
+import ViewUserRegistration from "../components/Administrator/ViewUserRegistration"
 import Adventures from '../components/Adventures.vue'
 import Listing from '../components/Listing.vue'
 import ClientReservations from '../components/ClientReservations.vue'
 import ClientSubscriptions from '../components/ClientSubscriptions.vue'
 import ViewRegistration from '../components/ViewRegistration.vue'
+
 import ClientHomePage from '../components/ClientHomePage.vue'
 import ClientComplains from '../components/ClientComplains.vue'
 import AccountActivation from '../components/AccountActivation.vue'
@@ -26,6 +30,9 @@ import MansionOwnerHomePage from "../components/Mansion/MansionOwnerHomePage"
 import FishingInstrucotrHomePage from "../components/FishingInstructor/fishingInstructorHomePage"
 import AdventureRegistration from "../components/FishingInstructor/AdventureRegistration"
 import AdventureView from "../components/FishingInstructor/AdventureView"
+import ViewAllRequestForDeletedAccount from "../components/Administrator/ViewAllRequestForDeletedAccount"
+import LoyaltyProgram from "../components/Administrator/LoyaltyProgram"
+
 
 const routes = [
 {
@@ -175,6 +182,36 @@ const routes = [
         path: '/adventure/:id',
         name: 'AdventureView',
         component: AdventureView
+    },
+    {
+        path: '/administratorHomePage',
+      
+        name: 'administratorHomePage',
+        component: AdministratorHomePage
+    },
+    {
+        path: '/adminRegistration',
+      
+        name: 'adminRegistration',
+        component: AdminRegistration
+    },
+    {
+        path: '/viewUserRegistration',
+      
+        name: 'viewUserRegistration',
+        component: ViewUserRegistration
+    }
+    ,
+    {
+        path: '/viewAllRequestForDeletedAccount',
+      
+        name: 'viewAllRequestForDeletedAccount',
+        component: ViewAllRequestForDeletedAccount
+    },{
+        path: '/loyaltyProgram',
+      
+        name: 'loyaltyProgram',
+        component: LoyaltyProgram
     }
 
 ]

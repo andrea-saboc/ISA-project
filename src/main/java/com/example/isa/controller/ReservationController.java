@@ -7,8 +7,16 @@ import java.util.List;
 import javax.mail.MessagingException;
 
 import com.example.isa.dto.*;
+
 import com.example.isa.exception.BoatOwnerNotAvailable;
+
+import com.example.isa.model.LoyaltyProgram;
+import com.example.isa.model.RecordIncome;
 import com.example.isa.model.reservations.*;
+import com.example.isa.repository.BoatDiscountReservationRepository;
+import com.example.isa.repository.LoyaltyProgramRepository;
+import com.example.isa.repository.RecordIncomeRepository;
+import com.example.isa.service.impl.RecordIncomeService;
 import com.example.isa.service.impl.reservations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.PessimisticLockingFailureException;
@@ -67,6 +75,9 @@ public class ReservationController {
 	private MailService<String> mailService;
 	@Autowired
 	AuthenticationService authentication;
+    @Autowired
+    RecordIncomeService recordIncomeService;
+
 	
 	@PreAuthorize("hasRole('ROLE_CLIENT')")
     @RequestMapping(method = RequestMethod.GET,value = "/reservations/boats", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -140,6 +151,7 @@ public class ReservationController {
     	System.out.println("USli u kontroler");
         try {
         	BoatReservation newReservation = boatResService.createReservation(res);
+            recordIncomeService.saveBoatRecord(newReservation.getId());
         	try {
         		mailService.sendBoatReservationConfirmationMail(newReservation);
         	}catch (MessagingException e){
@@ -168,6 +180,7 @@ public class ReservationController {
     	
         try {
         	MansionReservation newReservation = mansionResService.createReservation(res);
+            recordIncomeService.saveMansionRecord(newReservation.getId());
         	try {
         		mailService.sendMansionReservationConfirmationMail(newReservation);
         	}catch (MessagingException e){

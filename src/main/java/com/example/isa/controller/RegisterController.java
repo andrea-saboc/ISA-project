@@ -2,6 +2,8 @@ package com.example.isa.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.example.isa.dto.AdministratorRegistrationDto;
+import com.example.isa.service.impl.AdministratorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -23,11 +25,13 @@ public class RegisterController {
 
     private final AdvertiserRegisterService advertiserRegisterService;
     private final ClientRegistrationService clientRegistrationService;
+    private final AdministratorService administratorService;
 
     @Autowired
-    public RegisterController(AdvertiserRegisterService advertiserRegisterService, ClientRegistrationService clientRegistrationService ) {
+    public RegisterController(AdvertiserRegisterService advertiserRegisterService, ClientRegistrationService clientRegistrationService, AdministratorService administratorService) {
         this.advertiserRegisterService = advertiserRegisterService;
         this.clientRegistrationService = clientRegistrationService;
+        this.administratorService = administratorService;
     }
 
     @RequestMapping(value = "/advertiser", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -59,6 +63,18 @@ public class RegisterController {
         		System.out.println(e);
         		return new ResponseEntity<>(e.getMessage(), HttpStatus.OK);
         }
+    }
+
+    @RequestMapping(value = "/administrator", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> registerAdmin(@RequestBody AdministratorRegistrationDto administratorRegistrationDto){
+
+        try {
+            this.administratorService.saveNewAdministrator(administratorRegistrationDto);
+            return new ResponseEntity<>("Successfull registration", HttpStatus.OK);
+        } catch (Exception e){
+            return  new ResponseEntity<>("Failed to register", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
     }
 	
 	

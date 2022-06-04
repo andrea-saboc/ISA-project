@@ -91,7 +91,7 @@
 <br>
 <br>
 <br>
-<button class = "btn btn-danger btn-lg" data-bs-toggle="modal" data-bs-target="#del">Request deleting account
+<button v-if="userType1 != 'ROLE_ADMIN'" class = "btn btn-danger btn-lg" data-bs-toggle="modal" data-bs-target="#del">Request deleting account
       </button>
       <div class="modal fade" id="del" tabindex="-1" role="dialog" aria-labelledby="del" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -135,7 +135,9 @@ export default{
          newPassword: '',
          newPasswordRepeated: '',
          penalties: '0',
-         deletionReason: ''
+         deletionReason: '',
+         userType1: null
+         
         }
    },
    mounted(){
@@ -153,14 +155,16 @@ export default{
             }
          })
          .then(response => {
-
+this.userType1=response.data.authorities[0].name
             this.user = response.data;
             this.name = response.data.name;
             this.surname = response.data.surname;
             this.address = response.data.address;
             this.city = response.data.city;
             this.country = response.data.country;
-            this.phoneNumber = response.data.phoneNumber;     
+            this.phoneNumber = response.data.phoneNumber; 
+      
+
       });
 
       },

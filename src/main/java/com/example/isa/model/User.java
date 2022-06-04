@@ -69,6 +69,10 @@ public class User implements UserDetails{
     
     @Column(name = "blocked")
     private boolean blocked;
+	@Column(name = "notdeleted")
+	private boolean notdeleted;
+
+
 
 	@Column(name = "deleted")
 	private boolean deleted =false;
@@ -95,8 +99,10 @@ public class User implements UserDetails{
 		this.blocked = true;
 	}
 
+
+
 	public User(String name, String surname, String address, String city, String country, String phoneNumber,
-			String email, String password) {
+				String email, String password, Boolean deleted) {
 		super();
 		this.name = name;
 		this.surname = surname;
@@ -106,9 +112,16 @@ public class User implements UserDetails{
 		this.phoneNumber = phoneNumber;
 		this.email = email;
 		this.password = password;
+		this.deleted=deleted;
+		this.notdeleted=false;
 	}
 
-
+	public boolean isNotdeleted() {
+		return notdeleted;
+	}
+	public void setNotdeleted(boolean notdeleted) {
+		this.notdeleted = notdeleted;
+	}
 
 	public boolean isDeleted() {
 		return deleted;
@@ -206,6 +219,7 @@ public class User implements UserDetails{
 	public void setPassword(String password) {
 		this.password = password;
 	}
+
 	
 	
 

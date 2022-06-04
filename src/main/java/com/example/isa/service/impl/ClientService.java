@@ -9,6 +9,8 @@ import java.util.List;
 import com.example.isa.model.reservations.AbstractReservation;
 import com.example.isa.service.ReservationService;
 import com.example.isa.service.impl.reservations.CollectingActiveReservationsService;
+import com.example.isa.model.Administrator;
+import com.example.isa.repository.AdministratorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -44,7 +46,8 @@ public class ClientService {
     private AuthenticationManager authenticationManager;
 	@Autowired
 	private CollectingActiveReservationsService collectingActiveReservationsService;
-	
+	private AdministratorRepository administratorRepository;
+
 	
 	public Iterable<User> findAll()  throws AccessDeniedException{
 		return userRepository.findAll();
@@ -72,6 +75,14 @@ public class ClientService {
                         passwords.getOldPassword()));
         
 		client.setPassword(passwordEncoder.encode(passwords.getNewPassword()));
+		String userType=client.getClass().getSimpleName();
+		if(client.getClass().getSimpleName().equals("Administrator"))
+		{
+			Administrator admin= (Administrator) client;
+			admin.setLoggedIn(true);
+			administratorRepository.save(admin);
+
+		}
 		userRepository.save(client);
     }
     

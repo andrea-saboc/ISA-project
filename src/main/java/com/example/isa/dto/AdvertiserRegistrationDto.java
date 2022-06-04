@@ -142,7 +142,10 @@ public class AdvertiserRegistrationDto {
                 password,
                 reason,
                 "boat",
-                false
+                false,
+                false,
+                false,0
+
                 );
         return boatOwner;
     }
@@ -159,7 +162,9 @@ public class AdvertiserRegistrationDto {
                 password,
                 reason,
                 "mansion",
-                false
+                false,
+                false,
+                false,0
         );
         return mansionOwner;
     }
@@ -175,7 +180,9 @@ public class AdvertiserRegistrationDto {
                 password,
                 reason,
                 "fishing",
-                false
+                false,
+                false,
+                false,0
         );
         return fishingInstructor;
     }

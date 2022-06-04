@@ -17,6 +17,10 @@ import org.springframework.stereotype.Service;
 import com.example.isa.model.reservations.BoatReservation;
 import com.example.isa.model.reservations.MansionReservation;
 
+import java.text.Format;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+
 @Service
 public class MailService<T> {
 	 private Environment env;
@@ -60,6 +64,48 @@ public class MailService<T> {
 		message.setTo("alexmirkovic1719@gmail.com"); //client.mail
 		message.setText(formater.getText( discountReservation, client));
 		message.setSubject(formater.getSubject(discountReservation));
+		mailSender.send(message);
+	}
+
+	@Async
+	public void sendNotificationAbaoutUnapprovedRegistration(User user,String report){
+		SimpleMailMessage message = new SimpleMailMessage();
+		message.setFrom("adventurelandisa@gmail.com");
+		message.setTo("alexmirkovic1719@gmail.com"); //client.mail
+		String content="";
+		Format formatter = new SimpleDateFormat("dd.MM.yyyy, HH:mm");
+		content+= "Hi "+user.getName()+",\n"+"\n";
+		content+="Vasa registracija je odbijena!\n";
+		content+="Razlog: "+report;
+		message.setText(content);
+		message.setSubject("ODBIJENA REGISTRACIJA");
+		mailSender.send(message);
+	}
+	@Async
+	public void sendNotificationAbaoutUndeletedAccount(User user,String report){
+		SimpleMailMessage message = new SimpleMailMessage();
+		message.setFrom("adventurelandisa@gmail.com");
+		message.setTo("alexmirkovic1719@gmail.com"); //client.mail
+		String content="";
+		Format formatter = new SimpleDateFormat("dd.MM.yyyy, HH:mm");
+		content+= "Hi "+user.getName()+",\n"+"\n";
+		content+="Vas zahtev za brisanje naloga  je odbijena!\n";
+		content+="Razlog: "+report;
+		message.setText(content);
+		message.setSubject("ODBIJENO BRISANJE PROFILA");
+		mailSender.send(message);
+	}
+	@Async
+	public void sendNotificationAbaoutDeletedAccount(User user){
+		SimpleMailMessage message = new SimpleMailMessage();
+		message.setFrom("adventurelandisa@gmail.com");
+		message.setTo("alexmirkovic1719@gmail.com"); //client.mail
+		String content="";
+		Format formatter = new SimpleDateFormat("dd.MM.yyyy, HH:mm");
+		content+= "Hi "+user.getName()+",\n"+"\n";
+		content+="Vas zahtev za brisanje naloga  je prihvacen!\n";
+		message.setText(content);
+		message.setSubject("PRIHVACENO BRISANJE PROFILA");
 		mailSender.send(message);
 	}
 

@@ -221,6 +221,7 @@ export default {
             .then(response1 => {
                 console.log("Podaci za kalendar: ",response1.data)
               this.calendarOptions.events=response1.data
+            
             })
     })
         .catch(() => {

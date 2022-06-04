@@ -15,6 +15,10 @@ public class MansionOwner extends User{
     private String advertiserType;
     @Column(name = "advertiser_registration_approved")
     private boolean approved;
+    @Column(name = "advertiser_registration_notapproved")
+    private boolean notapproved;
+    @Column(name = "mansionowner_loyalty_points")
+    private int loyaltyPoints;
 
     public  MansionOwner() {}
 
@@ -31,11 +35,13 @@ public class MansionOwner extends User{
         this.approved = approved;
     }
 
-    public MansionOwner(String name, String surname, String address, String city, String country, String phoneNumber, String email, String password, String reason, String advertiserType, boolean approved) {
-        super(name, surname, address, city, country, phoneNumber, email, password);
+    public MansionOwner(String name, String surname, String address, String city, String country, String phoneNumber, String email, String password, String reason, String advertiserType, boolean approved,boolean notapproved,Boolean deleted,int mansionowner_loyalty_points) {
+        super(name, surname, address, city, country, phoneNumber, email, password,deleted);
         this.reason = reason;
         this.advertiserType = advertiserType;
         this.approved = approved;
+        this.notapproved=notapproved;
+        this.loyaltyPoints=mansionowner_loyalty_points;
     }
 
 	public String getReason() {
@@ -50,7 +56,15 @@ public class MansionOwner extends User{
 		return advertiserType;
 	}
 
-	public void setAdvertiserType(String advertiserType) {
+    public int getLoyaltyPoints() {
+        return loyaltyPoints;
+    }
+
+    public void setLoyaltyPoints(int loyaltyPoints) {
+        this.loyaltyPoints = loyaltyPoints;
+    }
+
+    public void setAdvertiserType(String advertiserType) {
 		this.advertiserType = advertiserType;
 	}
 
@@ -61,5 +75,11 @@ public class MansionOwner extends User{
 	public void setApproved(boolean approved) {
 		this.approved = approved;
 	}
-    
+    public boolean isNotapproved() {
+        return notapproved;
+    }
+
+    public void setNotapproved(boolean notapproved) {
+        this.notapproved = notapproved;
+    }
 }

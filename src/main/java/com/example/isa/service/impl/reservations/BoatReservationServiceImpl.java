@@ -12,6 +12,8 @@ import com.example.isa.model.reservations.*;
 import com.example.isa.service.impl.AdvertisersService;
 import com.example.isa.service.impl.ClientService;
 import com.example.isa.service.impl.DateCoverter;
+import com.example.isa.repository.*;
+import com.example.isa.service.impl.RecordIncomeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.PessimisticLockingFailureException;
 import org.springframework.stereotype.Service;
@@ -30,6 +32,11 @@ import com.example.isa.repository.BoatOwnerRepository;
 import com.example.isa.repository.BoatRepository;
 import com.example.isa.repository.BoatReservationRepository;
 import com.example.isa.repository.ClientRepository;
+import com.example.isa.model.reservations.AdditionalService;
+import com.example.isa.model.reservations.BoatReservation;
+import com.example.isa.model.reservations.Reservation;
+import com.example.isa.model.reservations.ReservationStartEndDateFormatter;
+import com.example.isa.model.reservations.ReservationStatus;
 import com.example.isa.service.AuthenticationService;
 import com.example.isa.service.ReservationService;
 
@@ -63,7 +70,12 @@ public class BoatReservationServiceImpl implements ReservationService{
 	CollectionMansionReservationsImpl collectionMansionReservations;
 	@Autowired
 	AdvertisersService advertisersService;
-	
+	LoyaltyProgramRepository loyaltyProgramRepository;
+	@Autowired
+	RecordIncomeRepository recordIncomeRepository;
+	@Autowired
+	RecordIncomeService recordIncomeService;
+
 	
 	@Override
 	@Transactional(readOnly=false,propagation=Propagation.REQUIRED,isolation= Isolation.SERIALIZABLE)
@@ -73,12 +85,14 @@ public class BoatReservationServiceImpl implements ReservationService{
 		ReservationStartEndDateFormatter formatter = new ReservationStartEndDateFormatter(res);
 		Date startDate = formatter.startDate;
 		Date endDate = formatter.endDate;
+		LoyaltyProgram loyaltyProgram=loyaltyProgramRepository.findById(1L).get();
 
 		BoatAvailablePeriod period = availablePeriodsRepo.getPeriodOfInterest(startDate, endDate,res.getEntityId());
 		Boat entity = boatRepo.findLockedById(res.getEntityId());
 		if (entity == null)
 			throw new PessimisticLockingFailureException("Some is already trying to reserve at the same time!");
 		Boat boat = boatRepo.findById(res.getEntityId()).orElse(new Boat());
+		BoatOwner boatOwner=boatOwnerRepository.findById(boat.getBoatOwner().getId()).get();
 		
 		if(period == null) {
 			return 5;
@@ -118,6 +132,30 @@ public class BoatReservationServiceImpl implements ReservationService{
 			if(newRes == null){
 				return 3;
 			}
+
+			client.setLoyaltyPoints((int) (client.getLoyaltyPoints()+loyaltyProgram.client_reservation_score));
+			boatOwner.setLoyaltyPoints((int) (boatOwner.getLoyaltyPoints()+loyaltyProgram.owner_reservation_score));
+			boatOwnerRepository.save(boatOwner);
+			clientRepository.save(client);
+			availablePeriodsRepo.delete(period);
+
+	        newBoatReservation.setAdditionalServices(addAdditionalServices(res.getAdditionalServices()));
+	        newBoatReservation.setTotalPrice( dto.getPrice(boat) + accountAdditionalServices(newBoatReservation.getAdditionalServices(),res));
+			mailService.notifyClientAboutCreatedReservation(newBoatReservation);
+			if(client.getLoyaltyPoints()<loyaltyProgram.getSilver_points_min())
+			{
+				newBoatReservation.setTotalPrice((res.getPrice(newBoatReservation.getBoat()) + accountAdditionalServices(newBoatReservation.getAdditionalServices(),res)));
+			}
+			if(client.getLoyaltyPoints()>=loyaltyProgram.silver_points_min && client.getLoyaltyPoints()<loyaltyProgram.gold_points_min)
+			{
+				newBoatReservation.setTotalPrice(((res.getPrice(newBoatReservation.getBoat()) + accountAdditionalServices(newBoatReservation.getAdditionalServices(),res))*(100-loyaltyProgram.client_discount_silver))/100);
+			}
+			if(client.getLoyaltyPoints()>= loyaltyProgram.gold_points_min)
+			{
+				newBoatReservation.setTotalPrice(((res.getPrice(newBoatReservation.getBoat()) + accountAdditionalServices(newBoatReservation.getAdditionalServices(),res))*(100-loyaltyProgram.client_discount_gold))/100);
+			}
+			BoatReservation boatReservation = boatReservationRepo.save(newBoatReservation);
+			recordIncomeService.saveBoatRecord(boatReservation.getId());
 			return 1;
 		}
     }
@@ -148,13 +186,16 @@ public class BoatReservationServiceImpl implements ReservationService{
 		ReservationStartEndDateFormatter formatter = new ReservationStartEndDateFormatter(res);
 		Date startDate = formatter.startDate;
 		Date endDate = formatter.endDate;
-		    
-	    BoatAvailablePeriod period = availablePeriodsRepo.getPeriodOfInterest(startDate, endDate,res.getEntityId());
+		LoyaltyProgram loyaltyProgram=loyaltyProgramRepository.findById(1L).get();
+
+
+		BoatAvailablePeriod period = availablePeriodsRepo.getPeriodOfInterest(startDate, endDate,res.getEntityId());
 	    Boat boat = boatRepo.findByIdAndDeletedFalse(res.getEntityId());
 		Boat entity = boatRepo.findLockedById(res.getEntityId());
 		if (entity == null)
 			throw new PessimisticLockingFailureException("Some is already trying to reserve at the same time!");
 	    Client client = clientRepository.findByEmail(authenticationService.getLoggedUser().getEmail());
+		BoatOwner boatOwner=boatOwnerRepository.findById(boat.getBoatOwner().getId()).get();
 	    
 	    if(period == null) {
 	    	throw new PeriodNoLongerAvailableException();
@@ -181,8 +222,25 @@ public class BoatReservationServiceImpl implements ReservationService{
 	        newBoatReservation.setOwnerPresent(res.getOwnerPresent());
 	        
 	        availablePeriodsRepo.delete(period);	        
+
+			client.setLoyaltyPoints((int) (client.getLoyaltyPoints()+loyaltyProgram.client_reservation_score));
+			boatOwner.setLoyaltyPoints((int) (boatOwner.getLoyaltyPoints()+loyaltyProgram.owner_reservation_score));
+			boatOwnerRepository.save(boatOwner);
+			clientRepository.save(client);
+
 	        newBoatReservation.setAdditionalServices(addAdditionalServices(res.getAdditionalServices()));
-	        newBoatReservation.setTotalPrice(res.getPrice(newBoatReservation.getBoat()) + accountAdditionalServices(newBoatReservation.getAdditionalServices(),res));	            
+			if(client.getLoyaltyPoints()<loyaltyProgram.getSilver_points_min())
+			{
+				newBoatReservation.setTotalPrice((res.getPrice(newBoatReservation.getBoat()) + accountAdditionalServices(newBoatReservation.getAdditionalServices(),res)));
+			}
+			if(client.getLoyaltyPoints()>=loyaltyProgram.silver_points_min && client.getLoyaltyPoints()<loyaltyProgram.gold_points_min)
+			{
+				newBoatReservation.setTotalPrice(((res.getPrice(newBoatReservation.getBoat()) + accountAdditionalServices(newBoatReservation.getAdditionalServices(),res))*(100-loyaltyProgram.client_discount_silver))/100);
+			}
+			if(client.getLoyaltyPoints()>= loyaltyProgram.gold_points_min)
+			{
+				newBoatReservation.setTotalPrice(((res.getPrice(newBoatReservation.getBoat()) + accountAdditionalServices(newBoatReservation.getAdditionalServices(),res))*(100-loyaltyProgram.client_discount_gold))/100);
+			}
 		    return boatReservationRepo.save(newBoatReservation);
 	    }
 	}
