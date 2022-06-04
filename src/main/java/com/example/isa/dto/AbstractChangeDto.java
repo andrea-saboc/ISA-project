@@ -7,4 +7,7 @@ public abstract class AbstractChangeDto {
     public abstract Set<String> getInteriorImages();
     public abstract Set<Integer> getExteriorImagesToDelete();
     public abstract Set<Integer> getInteriorImagesToDelete();
+    public abstract Set<String> getImages();
+    public abstract Set<Integer> getImagesToDelete();
+
 }
