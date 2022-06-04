@@ -29,7 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class ControllerTests {
 
 	
-	private static final String WRONG_URL = "/mansiones";
+	private static final String WRONG_URL = "/mansionees";
 
 	private MediaType contentType = new MediaType(MediaType.APPLICATION_JSON.getType(),
 			MediaType.APPLICATION_JSON.getSubtype());
@@ -47,7 +47,7 @@ public class ControllerTests {
 	}
 	
 	@Test
-	public void testGetAllStudents() throws Exception {
+	public void testGetAll() throws Exception {
 		  mockMvc.perform(get(WRONG_URL))
           .andExpect(status().isNotFound());	
 	}
