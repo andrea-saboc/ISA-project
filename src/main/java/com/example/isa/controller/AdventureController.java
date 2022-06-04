@@ -5,11 +5,13 @@ import com.example.isa.model.Adventure;
 import com.example.isa.model.Boat;
 import com.example.isa.model.BoatAvailablePeriod;
 import com.example.isa.model.FishingAvailablePeriod;
+import com.example.isa.service.impl.AdditionalServiceService;
 import com.example.isa.service.impl.AdventureService;
 import com.example.isa.service.impl.BoatService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.PessimisticLockingFailureException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +26,8 @@ public class AdventureController {
 
     @Autowired
     private AdventureService service;
+    @Autowired
+    private AdditionalServiceService additionalServiceService;
 
     public AdventureController(AdventureService bs){
         this.service = bs;
@@ -91,6 +95,42 @@ public class AdventureController {
         System.out.println(jsonString);
         System.out.println("Finished");
         return new ResponseEntity<>(jsonString, HttpStatus.OK);
+    }
+
+
+    @PreAuthorize("hasRole('ROLE_FISHING_INSTRUCTOR')")
+    @RequestMapping(method = RequestMethod.POST, value = "/changeAdventure",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> changeAdventure(@RequestBody ChangeAdventureDto dto){
+        if(service.isReserved(dto.id)){
+            return new ResponseEntity<>("Adventure is reserved, not possible to change or delete!", HttpStatus.OK);
+        }
+        Adventure changedAdventure=service.changeAdventure(dto);
+        String responseMessege;
+        System.out.println("Trying to change adventure");
+        if (changedAdventure != null){
+            additionalServiceService.changeAdditionalServices(dto);
+            responseMessege = "Adventure successfully changed!";
+        } else{
+            responseMessege = "Error ocured while trying to change adventure!";
+        }
+        return new ResponseEntity<>(responseMessege, HttpStatus.OK);
+    }
+    @PreAuthorize("hasRole('ROLE_FISHING_INSTRUCTOR')")
+    @RequestMapping(method = RequestMethod.POST, value = "/deleteAdventure",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> deleteAdventure(@RequestBody LongIdDto adventureId){
+        if(service.isReserved(adventureId.adventureId)){
+            return new ResponseEntity<>("Adventure is reserved, not possible to change or delete!", HttpStatus.OK);
+        }
+        System.out.println("I'm trying to delete adventure id:"+ adventureId.adventureId);
+        try {
+            service.deleteAdventure(adventureId.adventureId);
+            return new ResponseEntity<String>("Successfully deleted adventure!", HttpStatus.OK);
+        }
+        catch (PessimisticLockingFailureException pe){
+            return new ResponseEntity<>("Client is reserving the entity!", HttpStatus.OK);
+        }catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 

@@ -4,13 +4,8 @@ package com.example.isa.service.impl.reservations;
 import com.example.isa.dto.ReservationCalendarDTO;
 import com.example.isa.dto.ReservationDto;
 import com.example.isa.model.*;
-import com.example.isa.model.reservations.AdventureReservation;
-import com.example.isa.model.reservations.BoatReservation;
-import com.example.isa.model.reservations.MansionReservation;
-import com.example.isa.repository.AdventureRepository;
-import com.example.isa.repository.AdventureReservationRepository;
-import com.example.isa.repository.FishingInstructorRepository;
-import com.example.isa.repository.UserRepository;
+import com.example.isa.model.reservations.*;
+import com.example.isa.repository.*;
 import com.example.isa.service.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -32,6 +27,8 @@ public class CollectingAdventureReservationsServiceImpl {
     AuthenticationService authenticationService;
     @Autowired
     AdventureRepository adventureRepository;
+    @Autowired
+    AdventureDiscountReservationRepository adventureDiscountReservationRepository;
 
 
 
@@ -65,6 +62,11 @@ public class CollectingAdventureReservationsServiceImpl {
         }
         return reservationCalendarDTO;
 
+    }
+    public List<AbstractReservation> getAllNotCancelledReservationsByAdventure(Adventure adventure){
+        List<AbstractReservation> allAdventureReservations = new ArrayList<>(adventureReservationRepository.findAllByAdventureAndStatusNot(adventure, ReservationStatus.CANCELLED));
+        allAdventureReservations.addAll(adventureDiscountReservationRepository.findAllByAdventureAndStatus(adventure,ReservationStatus.CANCELLED));
+        return allAdventureReservations;
     }
 
 }

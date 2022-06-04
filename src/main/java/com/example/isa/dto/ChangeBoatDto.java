@@ -75,6 +75,16 @@ public class ChangeBoatDto extends AbstractChangeDto{
         return InteriorImagesToDelete;
     }
 
+    @Override
+    public Set<String> getImages() {
+        return null;
+    }
+
+    @Override
+    public Set<Integer> getImagesToDelete() {
+        return null;
+    }
+
     public void setInteriorImagesToDelete(Set<Integer> interiorImagesToDelete) {
         InteriorImagesToDelete = interiorImagesToDelete;
     }

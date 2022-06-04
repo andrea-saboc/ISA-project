@@ -93,6 +93,11 @@ public class Boat extends AbstractEntity{
 		return EntityType.BOAT;
 	}
 
+	@Override
+	public Set<EntityImage> getImages() {
+		return null;
+	}
+
 	public Set<AdditionalService> getAdditionalServices() {
 		return additionalServices;
 	}

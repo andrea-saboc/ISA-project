@@ -11,6 +11,7 @@ import com.example.isa.model.reservations.*;
 import com.example.isa.repository.*;
 import com.example.isa.service.AuthenticationService;
 import com.example.isa.service.ReservationService;
+import com.example.isa.service.impl.DateCoverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -37,6 +39,8 @@ public class AdventureReservationServiceImpl implements ReservationService {
     FishingInstructorRepository fishingInstructorRepository;
     @Autowired
     ClientRepository clientRepository;
+    @Autowired
+    CollectingAdventureReservationsServiceImpl collectingAdventureReservationsService;
 
     @Autowired
     AuthenticationService authenticationService;
@@ -184,6 +188,18 @@ public class AdventureReservationServiceImpl implements ReservationService {
         a.setStatus(ReservationStatus.CANCELLED);
         adventureReservationRepository.save(a);
         return null;
+    }
+    public boolean isThereAReservationAfterToday(Adventure adventure) {
+        List<AbstractReservation> allReservations = collectingAdventureReservationsService.getAllNotCancelledReservationsByAdventure(adventure);
+        LocalDateTime today = LocalDateTime.now();
+        for (AbstractReservation ar : allReservations){
+            if ((DateCoverter.convertToLocalDateTimeViaInstant(ar.getStartDate()).isAfter((today))
+                    || (DateCoverter.convertToLocalDateTimeViaInstant(ar.getStartDate()).isBefore(today) && DateCoverter.convertToLocalDateTimeViaInstant(ar.getEndDate()).isAfter(today))
+            ) && (ar.getStatus()== ReservationStatus.RESERVED || ar.getStatus() == ReservationStatus.ACTIVE)){
+                return true;
+            }
+        }
+        return false;
     }
 
 }

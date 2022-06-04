@@ -1,5 +1,6 @@
 package com.example.isa.service.impl;
 
+import com.example.isa.dto.ChangeAdventureDto;
 import com.example.isa.dto.ChangeBoatDto;
 import com.example.isa.dto.ChangeMansionDto;
 import com.example.isa.model.Adventure;
@@ -63,6 +64,20 @@ public class AdditionalServiceService {
         for (Long id : dto.deleteAdditionalServices){
             AdditionalService asToDlt = additionalServiceRepository.findById(id).get();
             asToDlt.setBoat(null);
+            additionalServiceRepository.save(asToDlt);
+        }
+    }
+    public void changeAdditionalServices(ChangeAdventureDto dto) {
+        Adventure adventure = adventureRepository.findById(dto.id).get();
+        for(AdditionalService ad : dto.additionalServices){
+            if(ad.getId()==-1){
+                AdditionalService asNew = new AdditionalService(ad.getName(), ad.getPricePerDay(), ad.getPricePerDay(), adventure);
+                additionalServiceRepository.save(asNew);
+            }
+        }
+        for (Long id : dto.deleteAdditionalServices){
+            AdditionalService asToDlt = additionalServiceRepository.findById(id).get();
+            asToDlt.setAdventure(null);
             additionalServiceRepository.save(asToDlt);
         }
     }

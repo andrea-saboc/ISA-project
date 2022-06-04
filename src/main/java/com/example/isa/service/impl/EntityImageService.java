@@ -154,4 +154,12 @@ public class EntityImageService {
         }
         return entityImages;
     }
+    public ArrayList<EntityImage> removeAndAddNewImage(AbstractChangeDto dto, AbstractEntity adventureToChanged) {
+        ArrayList<EntityImage> entityImages = new ArrayList<>(adventureToChanged.getImages());
+        entityImages.addAll(createAndSaveImages("FishingInstructor", adventureToChanged.getOwner().getEmail(), adventureToChanged.getName(), dto.getImages()));
+        for(Integer id : dto.getImagesToDelete()){
+            entityImages.remove(entityImageRepository.findById(id).get());
+        }
+        return entityImages;
+    }
 }

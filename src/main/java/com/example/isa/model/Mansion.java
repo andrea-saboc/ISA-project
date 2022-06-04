@@ -64,6 +64,11 @@ public class Mansion extends AbstractEntity{
 		return EntityType.MANSION;
 	}
 
+	@Override
+	public Set<EntityImage> getImages() {
+		return null;
+	}
+
 	public void setId(Long id) {
 		this.id = id;
 	}
