@@ -29,9 +29,8 @@ jar {
 	archiveBaseName.set('isa')
 	archiveVersion.set('0.1.0')
 	manifest {
-		attributes(
-				'Main-Class': 'com.example.isa.IsaApplication'
-		)
+		attributes 'Main-Class': 'com.example.isa.IsaApplication'
+
 	}
 }
 
