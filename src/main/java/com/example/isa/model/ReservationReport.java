@@ -24,6 +24,9 @@ public class ReservationReport {
 	private boolean requestedToSanction;
 	private boolean approved;
 	private boolean clientShowedUp;
+	private boolean notApproved;
+
+
 	@OneToOne
 	private Reservation reservation;
 	@OneToOne
@@ -32,7 +35,7 @@ public class ReservationReport {
 	public ReservationReport () {}
 
 	public ReservationReport(String reportText, boolean requestedToSanction, boolean approved, boolean clientShowedUp,
-			Reservation reservation, DiscountReservation discountReservation) {
+			Reservation reservation, DiscountReservation discountReservation,boolean notApproved) {
 		super();
 		this.reportText = reportText;
 		this.requestedToSanction = requestedToSanction;
@@ -40,6 +43,14 @@ public class ReservationReport {
 		this.clientShowedUp = clientShowedUp;
 		this.reservation = reservation;
 		this.discountReservation = discountReservation;
+		this.notApproved=notApproved;
+	}
+	public boolean isNotApproved() {
+		return notApproved;
+	}
+
+	public void setNotApproved(boolean notApproved) {
+		this.notApproved = notApproved;
 	}
 
 	public Long getId() {

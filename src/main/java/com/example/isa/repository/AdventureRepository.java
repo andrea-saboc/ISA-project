@@ -21,6 +21,7 @@ public interface AdventureRepository extends JpaRepository<Adventure, Long> {
 
     List<Adventure> findAllByFishingInstructor(FishingInstructor fi);
 
+
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @QueryHints({@QueryHint(name = "javax.persistence.lock.timeout", value = "0")})
     Adventure findLockedById(Long id);

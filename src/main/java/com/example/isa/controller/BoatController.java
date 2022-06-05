@@ -172,7 +172,7 @@ public class BoatController {
 		}
 	}
 	
-	@PreAuthorize("hasRole('ROLE_BOAT_OWNER')")
+	@PreAuthorize("hasRole('ROLE_BOAT_OWNER','ROLE_ADMIN')")
 	@RequestMapping(method = RequestMethod.POST, value = "/deleteBoat",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> deleteBoat(@RequestBody LongIdDto boatId){
 		if(service.isReserved(boatId.boatId)){

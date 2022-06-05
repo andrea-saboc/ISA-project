@@ -16,7 +16,7 @@ import Listing from '../components/Listing.vue'
 import ClientReservations from '../components/ClientReservations.vue'
 import ClientSubscriptions from '../components/ClientSubscriptions.vue'
 import ViewRegistration from '../components/ViewRegistration.vue'
-
+import ViewReports from "../components/Administrator/ViewReports"
 import ClientHomePage from '../components/ClientHomePage.vue'
 import ClientComplains from '../components/ClientComplains.vue'
 import AccountActivation from '../components/AccountActivation.vue'
@@ -32,6 +32,8 @@ import AdventureRegistration from "../components/FishingInstructor/AdventureRegi
 import AdventureView from "../components/FishingInstructor/AdventureView"
 import ViewAllRequestForDeletedAccount from "../components/Administrator/ViewAllRequestForDeletedAccount"
 import LoyaltyProgram from "../components/Administrator/LoyaltyProgram"
+import ViewAllUsers from "../components/Administrator/ViewAllUsers"
+import Complain from "../components/Administrator/Complain"
 
 
 const routes = [
@@ -212,6 +214,22 @@ const routes = [
       
         name: 'loyaltyProgram',
         component: LoyaltyProgram
+    },{
+        path: '/viewReports',
+      
+        name: 'viewReports',
+        component: ViewReports
+    },{
+        path: '/viewAllUsers',
+      
+        name: 'viewAllUsers',
+        component: ViewAllUsers
+    }
+    ,{
+        path: '/complain',
+      
+        name: 'complain',
+        component: Complain
     }
 
 ]

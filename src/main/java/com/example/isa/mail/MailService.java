@@ -186,4 +186,82 @@ public class MailService<T> {
 	    	mailSender.send(message);
 			
 		}
+	@Async
+	public void sendNotificationAboutCommonClient(User user){
+		SimpleMailMessage message = new SimpleMailMessage();
+		message.setFrom("adventurelandisa@gmail.com");
+		message.setTo("alexmirkovic1719@gmail.com"); //client.mail
+		String content="";
+		Format formatter = new SimpleDateFormat("dd.MM.yyyy, HH:mm");
+		content+= "Hi "+user.getName()+",\n"+"\n";
+		content+="Na zalost vlasnik je zatrazio sankciju! Dobili ste jedan penal!!\n";
+		message.setText(content);
+		message.setSubject("Sankcija");
+		mailSender.send(message);
+	}
+	@Async
+	public void sendAdvertiserCompplain(User user, String reportText){
+		SimpleMailMessage message = new SimpleMailMessage();
+		message.setFrom("adventurelandisa@gmail.com");
+		message.setTo("alexmirkovic1719@gmail.com"); //client.mail
+		String content="";
+		Format formatter = new SimpleDateFormat("dd.MM.yyyy, HH:mm");
+		content+= "Hi "+user.getName()+",\n"+"\n";
+		content+="Odgovor administratora na klijentov complain:"+reportText+".\n";
+		message.setText(content);
+		message.setSubject("Odgovor na complain");
+		mailSender.send(message);
+	}
+	@Async
+	public void sendClientCompplain(User user, String reportText){
+		SimpleMailMessage message = new SimpleMailMessage();
+		message.setFrom("adventurelandisa@gmail.com");
+		message.setTo("alexmirkovic1719@gmail.com"); //client.mail
+		String content="";
+		Format formatter = new SimpleDateFormat("dd.MM.yyyy, HH:mm");
+		content+= "Hi "+user.getName()+",\n"+"\n";
+		content+="Odgovor administratora na vas complain:"+reportText+".\n";
+		message.setText(content);
+		message.setSubject("Odgovor na complain");
+		mailSender.send(message);
+	}
+	@Async
+	public void sendNotificationAboutCommonUser(User user,User user1){
+		SimpleMailMessage message = new SimpleMailMessage();
+		message.setFrom("adventurelandisa@gmail.com");
+		message.setTo("alexmirkovic1719@gmail.com"); //client.mail
+		String content="";
+		Format formatter = new SimpleDateFormat("dd.MM.yyyy, HH:mm");
+		content+= "Hi "+user.getName()+",\n"+"\n";
+		content+="Vas zahtev za sankciju klijenta "+user1.getName()+"je odobren!!\n";
+		message.setText(content);
+		message.setSubject("Sankcija klijenta");
+		mailSender.send(message);
+	}
+	@Async
+	public void sendNotificationAboutNotApproveCommonClient(User user){
+		SimpleMailMessage message = new SimpleMailMessage();
+		message.setFrom("adventurelandisa@gmail.com");
+		message.setTo("alexmirkovic1719@gmail.com"); //client.mail
+		String content="";
+		Format formatter = new SimpleDateFormat("dd.MM.yyyy, HH:mm");
+		content+= "Hi "+user.getName()+",\n"+"\n";
+		content+="Na zalost vlasnik je zatrazio sankciju, koja nije odobrena!! Potrudite se da se ovo više ne ponovi!\n";
+		message.setText(content);
+		message.setSubject("Sankcija");
+		mailSender.send(message);
+	}
+	@Async
+	public void sendNotificationAboutNotApproveCommonUser(User user,User user1){
+		SimpleMailMessage message = new SimpleMailMessage();
+		message.setFrom("adventurelandisa@gmail.com");
+		message.setTo("alexmirkovic1719@gmail.com"); //client.mail
+		String content="";
+		Format formatter = new SimpleDateFormat("dd.MM.yyyy, HH:mm");
+		content+= "Hi "+user.getName()+",\n"+"\n";
+		content+="Vas zahtev za sankciju klijenta "+user1.getName()+"njeje odobren!!\n";
+		message.setText(content);
+		message.setSubject("Sankcija klijenta");
+		mailSender.send(message);
+	}
 }

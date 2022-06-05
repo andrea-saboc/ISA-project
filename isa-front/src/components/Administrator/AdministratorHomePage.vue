@@ -29,6 +29,21 @@
         </a>
       </li>
       <li>
+        <a href="#" v-on:click = "DisplayReports()">
+          <i class="fa fa-cog" aria-hidden="true"></i>  View reports
+        </a>
+      </li>
+      <li>
+        <a href="#" v-on:click = "DisplayComplain()">
+          <i class="fa fa-cog" aria-hidden="true"></i>  View complains
+        </a>
+      </li>
+         <li>
+        <a href="#" v-on:click = "DisplayAllUsers()">
+          <i class="fa fa-cog" aria-hidden="true"></i>  View all users and entity
+        </a>
+      </li>
+      <li>
         <a href="#" v-on:click="DisplayProfile()">
           <i class="fa fa-cog" aria-hidden="true"></i> Profile
         </a>
@@ -45,7 +60,6 @@
  <div class="router-elem">
     <div v-if="display == 'administratorRegistration'">
       <AdminRegistration></AdminRegistration>
-      
     </div>
       <div v-if="display == 'profile'">
       <Profile></Profile>
@@ -53,11 +67,20 @@
     <div v-if="display == 'viewUsers'">
       <ViewUserRegistration></ViewUserRegistration>
     </div>
+     <div v-if="display == 'allUsers'">
+      <ViewAllUsers></ViewAllUsers>
+    </div>
     <div v-if="display == 'request'">
       <ViewAllRequestForDeletedAccount></ViewAllRequestForDeletedAccount>
     </div>
     <div v-if="display == 'loyalty'">
       <LoyaltyProgram></LoyaltyProgram>
+    </div>
+      <div v-if="display == 'reports'">
+      <ViewReports></ViewReports>
+    </div>
+      <div v-if="display == 'complain'">
+      <Complain></Complain>
     </div>
   </div>
 </div>
@@ -70,13 +93,16 @@ import AdminRegistration from "../Administrator/AdminRegistration";
 import ViewUserRegistration from "../Administrator/ViewUserRegistration";
 import ViewAllRequestForDeletedAccount from "../Administrator/ViewAllRequestForDeletedAccount";
 import LoyaltyProgram from "../Administrator/LoyaltyProgram";
+import ViewReports from "../Administrator/ViewReports";
+import ViewAllUsers from "../Administrator/ViewAllUsers";
+import Complain from "../Administrator/Complain";
 import axios from "axios";
 import {devServer} from "../../../vue.config";
 
 
 export default{
   name: "administratorHomePage",
-    components:{AdminRegistration,Profile,ViewUserRegistration,ViewAllRequestForDeletedAccount,LoyaltyProgram},
+    components:{AdminRegistration,Profile,ViewUserRegistration,ViewAllRequestForDeletedAccount,LoyaltyProgram,ViewReports,ViewAllUsers,Complain},
 
 
 
@@ -134,6 +160,18 @@ export default{
     },
     DisplayLoyalty(){
       this.display = 'loyalty';
+    },
+    DisplayReports()
+    {
+      this.display='reports'
+    },
+    DisplayAllUsers()
+    {
+      this.display='allUsers'
+    },
+    DisplayComplain()
+    {
+      this.display='complain'
     }
   }
 }

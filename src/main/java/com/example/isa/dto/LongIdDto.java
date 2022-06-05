@@ -4,4 +4,6 @@ public class LongIdDto {
     public Long boatId;
     public Long fishingId;
     public Long adventureId;
+    public Long userId;
+
 }

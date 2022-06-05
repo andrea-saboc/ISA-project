@@ -1,18 +1,15 @@
 package com.example.isa.controller;
 
 
-import com.example.isa.dto.AccountDeletionDTO;
-import com.example.isa.dto.ReportAcceptDeletedAccountDTO;
-import com.example.isa.dto.ReportAdminDto;
-import com.example.isa.dto.ReportDTO;
-import com.example.isa.model.Boat;
-import com.example.isa.model.ReservationReport;
-import com.example.isa.model.User;
+import com.example.isa.dto.*;
+import com.example.isa.model.*;
+import com.example.isa.repository.*;
 import com.example.isa.service.impl.AdministratorService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.tools.jconsole.JConsoleContext;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.PessimisticLockingFailureException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +23,16 @@ public class AdminController {
 
     @Autowired
     private AdministratorService administratorService;
+    @Autowired
+    private MansionOwnerRepository mansionOwnerRepository;
+    @Autowired
+    private FishingInstructorRepository fishingInstructorRepository;
+    @Autowired
+    private ClientRepository clientRepository;
+    @Autowired
+    private BoatOwnerRepository boatOwnerRepository;
+    @Autowired
+    private UserRepository userRepository;
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @RequestMapping(method = RequestMethod.GET, value = "/allUsersWithoutAdmin",produces = MediaType.APPLICATION_JSON_VALUE)
     @CrossOrigin(origins = "*")
@@ -89,6 +96,71 @@ public class AdminController {
         administratorService.unacceptAccountDeleted(dto);
 
         return ResponseEntity.ok("Successfully created!");
+    }
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @RequestMapping(method = RequestMethod.GET, value = "/getAllMansionOwners",produces = MediaType.APPLICATION_JSON_VALUE)
+    @CrossOrigin(origins = "*")
+    public ResponseEntity<String> getAllMansionOwners() throws JsonProcessingException{
+
+        List <MansionOwner> mansions = mansionOwnerRepository.findAll();
+        ObjectMapper mapper = new ObjectMapper();
+        String jsonString = mapper.writeValueAsString(mansions);
+        System.out.println(jsonString);
+        System.out.println("In contoler");
+
+        return new ResponseEntity<>(jsonString, HttpStatus.OK);
+    }
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @RequestMapping(method = RequestMethod.GET, value = "/getAllInstructor",produces = MediaType.APPLICATION_JSON_VALUE)
+    @CrossOrigin(origins = "*")
+    public ResponseEntity<String> getAllInstructor() throws JsonProcessingException{
+
+        List <FishingInstructor> mansions = fishingInstructorRepository.findAll();
+        ObjectMapper mapper = new ObjectMapper();
+        String jsonString = mapper.writeValueAsString(mansions);
+        System.out.println(jsonString);
+        System.out.println("In contoler");
+
+        return new ResponseEntity<>(jsonString, HttpStatus.OK);
+    }
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @RequestMapping(method = RequestMethod.GET, value = "/getAllClient",produces = MediaType.APPLICATION_JSON_VALUE)
+    @CrossOrigin(origins = "*")
+    public ResponseEntity<String> getAllClient() throws JsonProcessingException{
+
+        List <Client> mansions = clientRepository.findAll();
+        ObjectMapper mapper = new ObjectMapper();
+        String jsonString = mapper.writeValueAsString(mansions);
+        System.out.println(jsonString);
+        System.out.println("In contoler");
+
+        return new ResponseEntity<>(jsonString, HttpStatus.OK);
+    }
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @RequestMapping(method = RequestMethod.GET, value = "/getAllBoatOwners",produces = MediaType.APPLICATION_JSON_VALUE)
+    @CrossOrigin(origins = "*")
+    public ResponseEntity<String> getAllBoatOwners() throws JsonProcessingException{
+
+        List <BoatOwner> mansions = boatOwnerRepository.findAll();
+        ObjectMapper mapper = new ObjectMapper();
+        String jsonString = mapper.writeValueAsString(mansions);
+        System.out.println(jsonString);
+        System.out.println("In contoler");
+        return new ResponseEntity<>(jsonString, HttpStatus.OK);
+    }
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @RequestMapping(method = RequestMethod.POST, value = "/deleteUser",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> deleteAdventure(@RequestBody LongIdDto userId){
+
+        try {
+            administratorService.deletedUser(userId.userId);
+            return new ResponseEntity<String>("Successfully deleted user!", HttpStatus.OK);
+        }
+        catch (PessimisticLockingFailureException pe){
+            return new ResponseEntity<>("Client is reserving the entity!", HttpStatus.OK);
+        }catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }
 

@@ -61,6 +61,7 @@ public class Complaint {
 	public void setApproved(boolean approved) {
 		this.approved = approved;
 	}
+
 	
 	public Complaint(Client author, String complaintContent) {
 		super();

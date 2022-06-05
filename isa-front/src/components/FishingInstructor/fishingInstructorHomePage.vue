@@ -44,7 +44,7 @@
        <li class="header">Change Adventure</li>
       <li>
         <a href="#" v-on:click="DisplayChange()">
-          <i class="fa fa-cog" aria-hidden="true"></i> Profile
+          <i class="fa fa-cog" aria-hidden="true"></i> Change information
         </a>
       </li>
       

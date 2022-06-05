@@ -70,6 +70,7 @@ public class User implements UserDetails{
     @Column(name = "blocked")
     private boolean blocked;
 	@Column(name = "notdeleted")
+
 	private boolean notdeleted;
 
 

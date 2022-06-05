@@ -38,6 +38,13 @@ public class AdministratorService {
     private MailService mailService;
     @Autowired
     private DeletionRequestRepository deletionRequestRepository;
+    @Autowired
+    private MansionRepository mansionRepository;
+    @Autowired
+    private BoatRepository boatRepository;
+    @Autowired
+    private AdventureRepository adventureRepository;
+
 
     public User saveNewAdministrator(AdministratorRegistrationDto dat)throws BadUserTypeException
     {
@@ -150,6 +157,41 @@ public class AdministratorService {
         userRepository.save(u);
         //mailService.sendNotificationAbaoutUndeletedAccount(u, dto.getReportText());
 
+    }
+
+    public void deletedUser(Long id)
+    {
+        User user=userRepository.findById(id).get();
+
+        if(user.getClass().getSimpleName().equals("MansionOwner"))
+        {
+            List<Mansion> allMansion=mansionRepository.findAllByMansionOwner((MansionOwner) user);
+            for (Mansion m : allMansion)
+            {
+                m.setDeleted(true);
+                mansionRepository.save(m);
+            }
+        }
+        if(user.getClass().getSimpleName().equals("FishingInstructor"))
+        {
+            List<Adventure>adventures=adventureRepository.findAdventureByFishingInstructor((FishingInstructor) user);
+            for(Adventure a : adventures)
+            {
+                a.setDeleted(true);
+                adventureRepository.save(a);
+            }
+        }
+        if(user.getClass().getSimpleName().equals("BoatOwner"))
+        {
+            List<Boat>boats=boatRepository.findBoatByBoatOwner((BoatOwner) user);
+            for(Boat a : boats)
+            {
+                a.setDeleted(true);
+                boatRepository.save(a);
+            }
+        }
+        user.setDeleted(true);
+        userRepository.save(user);
     }
 
 }
