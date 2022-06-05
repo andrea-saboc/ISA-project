@@ -25,14 +25,7 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 
-jar {
-	manifest {
-		archiveBaseName.set('app')
-		archiveVersion.set('0.1.0')
-		attributes 'Main-Class': 'com.example.isa.IsaApplication'
 
-	}
-}
 
 repositories {
 	mavenCentral()
@@ -92,6 +85,13 @@ sonarqube {
 		property "sonar.sourceEncoding", "UTF-8"
 		property 'sonar.coverage.exclusions', "**/test/**,**/test"
         property 'sonar.coverage.exclusions', "**/main/**,**/main"
+	}
+}
+
+jar {
+	manifest {
+		attributes 'Main-Class': 'IsaApplication'
+
 	}
 }
 
