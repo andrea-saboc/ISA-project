@@ -337,7 +337,7 @@ export default {
         MakeReservation(res, boat) {
 
             axios
-                .get(devServer.proxy + '/makeDiscountBoatReservation', {
+                .get( '/makeDiscountBoatReservation', {
                     params: {
                         id: res.id
                     },
@@ -542,7 +542,7 @@ export default {
 
             console.log(boatReservation)
             axios
-                .post(devServer.proxy + '/reservations/createBoatReservation', boatReservation, {
+                .post('/reservations/createBoatReservation', boatReservation, {
                     headers: {
                         'Authorization': this.$store.getters.tokenString,
                         'Content-Type': 'application/json'
