@@ -8,6 +8,9 @@ import org.springframework.stereotype.Service;
 import com.example.isa.dto.ReportDTO;
 import com.example.isa.model.ReservationReport;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class ReservationReportService {
 	
@@ -36,7 +39,7 @@ public class ReservationReportService {
 	public ReservationReport createReservationReport(ReportDTO dto) {
 		ReservationReport reservationReport = null;
 		switch(dto.reservationType) {
-		case REGULAR_BOAT:
+		case BOAT:
 			reservationReport=createReportForRegularBoatReservation(dto);
 			break;
 		case DISCOUNT_BOAT:
@@ -54,17 +57,13 @@ public class ReservationReportService {
 			case DISCOUNT_ADVENTURE:
 				reservationReport=createReportForDiscountMansionReservation(dto);
 				break;
-
-
 		default:
 			break;
 		}
-		/*if(regularReservation!=null) {
-			reservationReport = createReportForRegularReservation(dto, regularReservation);
-		} else {
-			reservationReport = createReportForDiscountReservation(dto, discountReservation);
-		}*/
-		reservationReportRepository.save(reservationReport);
+		if (reservationReport!=null) {
+			reservationReport = reservationReportRepository.save(reservationReport);
+			System.out.println("Saving");
+		}
 		return reservationReport;
 	}
 
@@ -133,7 +132,8 @@ public class ReservationReportService {
 	}
 
 	private ReservationReport createReportForRegularBoatReservation(ReportDTO dto) {
-		BoatReservation boatReservation = boatRegularReservationRepository.findById(dto.id).get();
+		BoatReservation boatReservation = boatRegularReservationRepository.findById(dto.id).orElse(null);
+
 		ReservationReport reservationReport = new ReservationReport();
 		reservationReport.setClientShowedUp(dto.clientShowedUp);
 		reservationReport.setApproved(false);
@@ -141,8 +141,10 @@ public class ReservationReportService {
 		reservationReport.setReportText(dto.reportText);
 		reservationReport.setRequestedToSanction(dto.requestedToSanction);
 		if(!dto.clientShowedUp) {
+			System.out.println("Klijent not showed up");
 			penaltyManagementService.addPenaltyToClient(boatReservation.getUser());
 		}
+		if(boatReservation!=null)
 		boatReservation.setStatus(ReservationStatus.REPORT_CREATED);
 		boatRegularReservationRepository.save(boatReservation);
 		return reservationReport;
