@@ -24,7 +24,7 @@ jar {
 	archiveBaseName.set('isa')
 	archiveVersion.set('0.1.0')
 	manifest {
-		attributes mailClass : 'com.example.isa.IsaApplication'
+		attributes mainClass : 'com.example.isa.IsaApplication'
 
 	}
 }
@@ -47,6 +47,7 @@ dependencies {
 	implementation group: 'org.bouncycastle', name: 'bcprov-jdk15on', version: '1.64'
 	// token
 	implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.6.0'
+	implementation group: 'com.zaxxer', name: 'HikariCP', version: '3.4.5'
 	// jackson
 	implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.12.1'
 	// devtools
