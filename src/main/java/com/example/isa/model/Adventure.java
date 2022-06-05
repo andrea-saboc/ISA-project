@@ -66,6 +66,7 @@ public class Adventure extends AbstractEntity{
 	public Adventure() {
 		super();
 	}
+	@Override
 	public Set<EntityImage> getImages() {
 		return images;
 	}

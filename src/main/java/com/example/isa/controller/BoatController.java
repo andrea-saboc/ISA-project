@@ -115,7 +115,6 @@ public class BoatController {
 			responseMessege = "Error ocured while trying to change boat!";
 		}
 		return new ResponseEntity<>(responseMessege, HttpStatus.OK);
-
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/getBoatAvailability", produces = MediaType.APPLICATION_JSON_VALUE)

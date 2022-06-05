@@ -256,11 +256,11 @@ export default {
           .then(response => {
             alert(response.data)
             this.messege = response.data
+            let router = this.$router;
+             router.push("/fishingInstructorHomePage")
+             return;
+
           })
-           .catch(() => {
-           alert('greska')
-          return;
-        });
 
     }
   }

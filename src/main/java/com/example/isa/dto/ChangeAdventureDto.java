@@ -3,13 +3,15 @@ package com.example.isa.dto;
 import com.example.isa.model.Rule;
 import com.example.isa.model.reservations.AdditionalService;
 
-import java.util.List;
 import java.util.Set;
 
-public class ChangeMansionDto extends AbstractChangeDto {
+public class ChangeAdventureDto extends AbstractChangeDto {
     public Long id;
     public String name;
+    public String biography;
+    public String equipment;
     public String cancellationPolicy;
+    public double pricePerHour;
     public double pricePerDay;
     public double priceForSevenDays;
     public String address;
@@ -18,15 +20,44 @@ public class ChangeMansionDto extends AbstractChangeDto {
     public String longitude;
     public String latitude;
     public String promoDescription;
-    public Set<String> InteriorImages;
-    public Set<String> ExteriorImages;
-    public Set<Integer> InteriorImagesToDelete;
-    public Set<Integer> ExteriorImagesToDelete;
+    public Set<String> images;
+    public Set<Integer> imagesToDelete;
+    public int capacity;
     public Set<Rule> rules;
     public Set<Integer> rulesToDelete;
     public Set<AdditionalService> additionalServices;
     public Set<Long> deleteAdditionalServices;
-    public List<Integer> rooms;
+
+    public ChangeAdventureDto() {
+
+    }
+
+    @Override
+    public String toString() {
+        return "ChangeAdventureDto{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", biography='" + biography + '\'' +
+                ", equipment='" + equipment + '\'' +
+                ", cancellationPolicy='" + cancellationPolicy + '\'' +
+                ", pricePerHour=" + pricePerHour +
+                ", pricePerDay=" + pricePerDay +
+                ", priceForSevenDays=" + priceForSevenDays +
+                ", address='" + address + '\'' +
+                ", city='" + city + '\'' +
+                ", country='" + country + '\'' +
+                ", longitude='" + longitude + '\'' +
+                ", latitude='" + latitude + '\'' +
+                ", promoDescription='" + promoDescription + '\'' +
+                ", images=" + images +
+                ", imagesToDelete=" + imagesToDelete +
+                ", capacity=" + capacity +
+                ", rules=" + rules +
+                ", rulesToDelete=" + rulesToDelete +
+                ", additionalServices=" + additionalServices +
+                ", deleteAdditionalServices=" + deleteAdditionalServices +
+                '}';
+    }
 
     public Long getId() {
         return id;
@@ -44,12 +75,36 @@ public class ChangeMansionDto extends AbstractChangeDto {
         this.name = name;
     }
 
+    public String getBiography() {
+        return biography;
+    }
+
+    public void setBiography(String biography) {
+        this.biography = biography;
+    }
+
+    public String getEquipment() {
+        return equipment;
+    }
+
+    public void setEquipment(String equipment) {
+        this.equipment = equipment;
+    }
+
     public String getCancellationPolicy() {
         return cancellationPolicy;
     }
 
     public void setCancellationPolicy(String cancellationPolicy) {
         this.cancellationPolicy = cancellationPolicy;
+    }
+
+    public double getPricePerHour() {
+        return pricePerHour;
+    }
+
+    public void setPricePerHour(double pricePerHour) {
+        this.pricePerHour = pricePerHour;
     }
 
     public double getPricePerDay() {
@@ -117,47 +172,47 @@ public class ChangeMansionDto extends AbstractChangeDto {
     }
 
     @Override
-    public Set<String> getInteriorImages() {
-        return InteriorImages;
-    }
-
-    public void setInteriorImages(Set<String> interiorImages) {
-        InteriorImages = interiorImages;
+    public Set<String> getExteriorImages() {
+        return null;
     }
 
     @Override
-    public Set<String> getExteriorImages() {
-        return ExteriorImages;
+    public Set<String> getInteriorImages() {
+        return null;
     }
 
-    public void setExteriorImages(Set<String> exteriorImages) {
-        ExteriorImages = exteriorImages;
+    @Override
+    public Set<Integer> getExteriorImagesToDelete() {
+        return null;
     }
 
+    @Override
     public Set<Integer> getInteriorImagesToDelete() {
-        return InteriorImagesToDelete;
+        return null;
     }
-
     @Override
     public Set<String> getImages() {
-        return null;
+        return images;
     }
 
+    public void setImages(Set<String> images) {
+        this.images = images;
+    }
     @Override
     public Set<Integer> getImagesToDelete() {
-        return null;
+        return imagesToDelete;
     }
 
-    public void setInteriorImagesToDelete(Set<Integer> interiorImagesToDelete) {
-        InteriorImagesToDelete = interiorImagesToDelete;
+    public void setImagesToDelete(Set<Integer> imagesToDelete) {
+        this.imagesToDelete = imagesToDelete;
     }
 
-    public Set<Integer> getExteriorImagesToDelete() {
-        return ExteriorImagesToDelete;
+    public int getCapacity() {
+        return capacity;
     }
 
-    public void setExteriorImagesToDelete(Set<Integer> exteriorImagesToDelete) {
-        ExteriorImagesToDelete = exteriorImagesToDelete;
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
     }
 
     public Set<Rule> getRules() {

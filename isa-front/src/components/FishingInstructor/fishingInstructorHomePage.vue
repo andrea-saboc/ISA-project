@@ -41,6 +41,12 @@
           <i class="fa fa-cog" aria-hidden="true"></i> Profile
         </a>
       </li>
+       <li class="header">Change Adventure</li>
+      <li>
+        <a href="#" v-on:click="DisplayChange()">
+          <i class="fa fa-cog" aria-hidden="true"></i> Profile
+        </a>
+      </li>
       
        <li class="header">Log Out</li>
       <li>
@@ -79,12 +85,13 @@ import AdventureRegistration from "../FishingInstructor/AdventureRegistration";
 import AdventureView from "../FishingInstructor/AdventureView";
 import AdventureReservation from "../FishingInstructor/AdventureReservation";
 import FishingInstructorDashboard from "../FishingInstructor/FishingInstructorDashboard";
+import ChangeAdventureInformation from "../FishingInstructor/ChangeAdventureInformation";
 import axios from "axios";
 import {devServer} from "../../../vue.config";
 
 export default{
   name: "fishingInstructorHomePage",
-  components:{AdventureRegistration,AdventureView,Profile,AdventureReservation,FishingInstructorDashboard},
+  components:{AdventureRegistration,AdventureView,Profile,AdventureReservation,FishingInstructorDashboard,ChangeAdventureInformation},
     data: function(){
         return{
           display: 'dashboard',
@@ -157,6 +164,10 @@ export default{
     },  
      DisplayDashboard(){
      this.display= 'dashboard'
+    },
+    DisplayChange()
+    {
+      this.display= 'change'
     },
     logOut(){
       let router = this.$router;

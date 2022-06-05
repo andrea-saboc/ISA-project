@@ -11,4 +11,5 @@ public abstract class AbstractEntity {
     public abstract String getName();
     public abstract Long getId();
     public abstract EntityType getEntityType();
+    public abstract Set<EntityImage> getImages();
 }

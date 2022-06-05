@@ -72,4 +72,5 @@ public class Rule {
     public void removeMansion(Mansion mansion){
         this.mansions.remove(mansion);
     }
+    public void removeAdventure(Adventure adventure){this.adventure.remove(adventure);}
 }

@@ -1,18 +1,16 @@
 package com.example.isa.service.impl;
 
-import com.example.isa.dto.AddAvailablePeriodDto;
-import com.example.isa.dto.AddAvailablePeriodFishingInstructorDto;
-import com.example.isa.dto.AdventureRegistrationDto;
-import com.example.isa.dto.BoatRegistrationDto;
+import com.example.isa.dto.*;
 import com.example.isa.model.*;
 import com.example.isa.model.reservations.AdditionalService;
-import com.example.isa.repository.AdditionalServiceRepository;
-import com.example.isa.repository.AdventureRepository;
-import com.example.isa.repository.FishingAvailablePeriodRepository;
-import com.example.isa.repository.FishingInstructorRepository;
+import com.example.isa.repository.*;
+import com.example.isa.service.impl.reservations.AdventureReservationServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.PessimisticLockingFailureException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -32,12 +30,17 @@ public class AdventureService {
     private EntityImageService entityImageService;
     @Autowired
     private FishingAvailablePeriodRepository fishingAvailablePeriodRepository;
-
+    @Autowired
+    private AdventureReservationServiceImpl adventureReservationService;
+    @Autowired
+    private RuleRepository ruleRepository;
+    @Autowired
+    private AddressRepository addressRepository;
 
 
     @Autowired
-    public AdventureService(AdventureRepository ar,FishingInstructorRepository fishingInstructorRepository,AdditionalServiceRepository additionalServiceRepository,EntityImageService entityImageService,FishingAvailablePeriodRepository fishingAvailablePeriodRepository) {
-
+    public AdventureService(AdventureReservationServiceImpl adventureReservationService,AdventureRepository ar,FishingInstructorRepository fishingInstructorRepository,AdditionalServiceRepository additionalServiceRepository,EntityImageService entityImageService,FishingAvailablePeriodRepository fishingAvailablePeriodRepository) {
+        this.adventureReservationService=adventureReservationService;
         this.adventureRepository = ar;
         this.additionalServiceRepository=additionalServiceRepository;
         this.fishingInstructorRepository=fishingInstructorRepository;
@@ -142,5 +145,64 @@ public class AdventureService {
         List<FishingAvailablePeriod> fishingNewAvailability = fishingAvailablePeriodRepository.findByFishingInstructor(fishingInstructor);
         return fishingNewAvailability;
     }
+    public boolean isReserved(Long id)
+    {
+        return adventureReservationService.isThereAReservationAfterToday(adventureRepository.findById(id).get());
+    }
+    public Adventure changeAdventure(ChangeAdventureDto dto) {
+
+        Adventure adventure=adventureRepository.findById(dto.id).get();
+        if(adventure==null) return null;
+        adventure.setName(dto.name);
+        adventure.setPricePerDay(dto.pricePerDay);
+        adventure.setPriceForSevenDays(dto.priceForSevenDays);
+        adventure.setPricePerHour(dto.pricePerHour);
+        adventure.setBiography(dto.biography);
+        adventure.setEquipment(dto.equipment);
+        adventure.setCancellationPolicy(dto.cancellationPolicy);
+        adventure.setPromoDescription(dto.promoDescription);
+        adventure.setCapacity(dto.capacity);
+        adventure.setRules(makeRules(dto));
+        adventure.setImages(new HashSet<>(entityImageService.removeAndAddNewImage(dto, adventure)));
+        Address adventureAdress = addressRepository.findById(adventure.getAddress().getId()).get();
+        adventureAdress.setCountry(dto.country);
+        adventureAdress.setCity(dto.city);
+        adventureAdress.setAddress(dto.address);
+        adventureAdress.setLatitude(dto.latitude);
+        adventureAdress.setLongitude(dto.longitude);
+        addressRepository.save(adventureAdress);
+        adventure = adventureRepository.save(adventure);
+        return adventure;
+
+    }
+    @Transactional(readOnly=false,propagation= Propagation.REQUIRED,isolation= Isolation.SERIALIZABLE)
+    public void deleteAdventure(Long adventureId) {
+        Adventure entity = adventureRepository.findLockedById(adventureId);
+        if (entity == null)
+            throw new PessimisticLockingFailureException("Some is already trying to reserve!");
+        Adventure adventure = adventureRepository.findById(adventureId).get();
+        adventure.setDeleted(true);
+        adventureRepository.save(adventure);
+    }
+    private Set<Rule> makeRules(ChangeAdventureDto dto) {
+        System.out.println("Making rules***");
+        Adventure adventure = adventureRepository.findById(dto.id).get();
+        Set<Rule> newRules = new HashSet<>();
+        for (Rule r : dto.rules){
+            if(r.getRuleId()==-1){
+                Rule newRule = new Rule(r.getRule());
+                newRule.addAdventure(adventure);
+                newRules.add(newRule);
+            }
+
+        }
+        for(Integer rid : dto.rulesToDelete){
+            Rule rd= ruleRepository.findById(rid).get();
+            rd.removeAdventure(adventure);
+            ruleRepository.save(rd);
+        }
+        return newRules;
+    }
+
 
 }
