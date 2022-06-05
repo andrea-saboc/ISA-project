@@ -27,6 +27,8 @@ apply plugin: 'idea'
 
 jar {
 	manifest {
+		archiveBaseName.set('app')
+		archiveVersion.set('0.1.0')
 		attributes 'Main-Class': 'com.example.isa.IsaApplication'
 
 	}
