@@ -71,11 +71,16 @@ public class MansionService {
 	}
 
     public List<Mansion> getByOwnerId() {
-		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		System.out.println("Trying to cast to User:"+ user);
-		MansionOwner mansionOwner = mansionOwnerRepository.findById(user.getId()).get();
-		List<Mansion> ownersMansions = mansionRepo.findAllByMansionOwnerAndDeletedFalse(mansionOwner);
-		return ownersMansions;
+		try {
+			User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			System.out.println("Trying to cast to User:" + user);
+			MansionOwner mansionOwner = mansionOwnerRepository.findById(user.getId()).get();
+			List<Mansion> ownersMansions = mansionRepo.findAllByMansionOwnerAndDeletedFalse(mansionOwner);
+			return ownersMansions;
+		}
+		catch (Exception e){
+			return null;
+		}
     }
 
     public Mansion registerMansion(MansionRegistrationDto dto) {

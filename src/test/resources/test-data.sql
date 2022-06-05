@@ -53,12 +53,6 @@ INSERT INTO public.client(
     activation_code, client_loyalty_points,client_penalty_points, id)
 VALUES ('code', 0, 0, 402);
 
-user_type, id, address, blocked, city, country, email, name, password, phone_number, surname,deleted,notdeleted)
-VALUES ('CLIENT', 403, 'Trg 3', false, 'Lisabon', 'Portugal', 'client1@gmail.com','Dijana', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '78555', 'Jankovic',false,false);
-INSERT INTO public.client(
-    activation_code, client_loyalty_points,client_penalty_points, id)
-VALUES ('code', 0, 0, 403);
-
 
 INSERT INTO public.address(
     id, address, city, country, latitude, longitude)
@@ -159,7 +153,7 @@ INSERT INTO public.boat(
 VALUES (5, false,true, true, 0.0, 'You will recieve 70% of total price!', 10, 200, true, 34, 220, 'Catamaran', 6, 500, 100, 15, 'This is the best boat',false, 'Yacht', 10, 90);
 INSERT INTO public.boat(
     id,deleted, gps, vhfradio, avg_grade, cancellation_policy, capacity, engine_power, fishfinder, length, max_speed, name, number_of_engines, price_for_seven_days, price_per_day, price_per_hour, promo_description, radar, type, address_id, owner_id)
-VALUES (6, false,false, true, 0.0, 'You will recieve 85% of total price!', 15, 200, true, 34, 220, 'BENETEAU', 6, 700, 250, 70, 'This is the best boat',true, 'Sailboat', 9, 90);
+VALUES (6, false,false, true, 0.0, 'You will recieve 85% of total price!', 15, 200, true, 34, 220, 'BENEFTEAU', 6, 700, 250, 70, 'This is the best boat',true, 'Sailboat', 9, 90);
 INSERT INTO public.boat(
     id,deleted, gps, vhfradio, avg_grade, cancellation_policy, capacity, engine_power, fishfinder, length, max_speed, name, number_of_engines, price_for_seven_days, price_per_day, price_per_hour, promo_description, radar, type, address_id, owner_id)
 VALUES (7, false,true, true, 0.0, 'You will recieve 70% of total price!', 10, 200, true, 34, 220, 'Osmana', 6, 500, 100, 30, 'This is the best boat',false, 'Yacht', 20, 90);
@@ -242,16 +236,19 @@ VALUES (4,'2022-01-28 00:00:00', '2022-01-20 00:00:00', 5);
 
 INSERT INTO public.boat_available_period(
     available_period_id, end_date, start_date, boat_id)
-VALUES (5, '2022-03-10 00:00:00', '2022-02-02 00:00:00', 3);
+VALUES (5, '2022-05-28 00:00:00', '2022-05-20 00:00:00', 3);
+
 INSERT INTO public.boat_available_period(
     available_period_id, end_date, start_date, boat_id)
-VALUES (6, '2022-05-28 00:00:00', '2022-05-20 00:00:00', 3);
+VALUES (6, '2022-06-28 00:00:00', '2022-06-10 00:00:00', 3);
 INSERT INTO public.boat_available_period(
     available_period_id, end_date, start_date, boat_id)
-VALUES (7, '2023-02-20 00:00:00', '2023-01-20 00:00:00', 1);
+
+VALUES (7, '2022-02-20 00:00:00', '2022-01-20 00:00:00', 1);
 INSERT INTO public.boat_available_period(
     available_period_id, end_date, start_date, boat_id)
 VALUES (8,'2022-01-28 00:00:00', '2022-01-20 00:00:00', 2);
+
 INSERT INTO public.boat_available_period(
     available_period_id, end_date, start_date, boat_id)
 VALUES (9,'2023-12-28 00:00:00', '2023-11-20 00:00:00', 7);
@@ -299,24 +296,46 @@ INSERT INTO public.mansion_reservation(
 VALUES (6, 2, null, null);
 
 INSERT INTO public.reservation(
-    reservation_type, id, end_date, number_of_guests, start_date, total_price, type, system_user)
-VALUES ('ADVENTURE', 7, '2022-06-07 00:00:00', 4, '2022-05-28 00:08:00', 230, 'ADVENTURE', 401);
+    reservation_type, id, end_date, number_of_guests, start_date, total_price, type, system_user, status)
+VALUES ('ADVENTURE', 7, '2022-06-07 00:00:00', 4, '2022-05-28 00:08:00', 230, 'ADVENTURE', 400, 'RESERVED');
 INSERT INTO public.adventure_reservation(
     id, adventure_id, feedback_id, owner_feedback_id)
 VALUES (7, 1, null, null);
+
 INSERT INTO public.reservation(
-    reservation_type, id, end_date, number_of_guests, start_date, total_price, type, system_user)
-VALUES ('ADVENTURE', 8, '2022-06-09 00:00:00', 4, '2022-06-07 00:00:00', 230, 'ADVENTURE', 401);
+    reservation_type, id, end_date, number_of_guests, start_date, total_price, type, system_user, status)
+VALUES ('ADVENTURE', 8, '2022-06-09 00:00:00', 4, '2022-06-07 00:00:00', 230, 'ADVENTURE', 401, 'RESERVED');
 INSERT INTO public.adventure_reservation(
     id, adventure_id, feedback_id, owner_feedback_id)
 VALUES (8, 1, null, null);
 
 INSERT INTO public.reservation(
-    reservation_type, id, end_date, number_of_guests, start_date, total_price, type, system_user)
-VALUES ('ADVENTURE', 9, '2022-06-15 00:00:00', 4, '2022-06-10 00:00:00', 230, 'ADVENTURE', 400);
+    reservation_type, id, end_date, number_of_guests, start_date, total_price, type, system_user, status)
+VALUES ('ADVENTURE', 9, '2022-06-15 00:00:00', 4, '2022-06-10 00:00:00', 230, 'ADVENTURE', 400, 'RESERVED');
 INSERT INTO public.adventure_reservation(
     id, adventure_id, feedback_id, owner_feedback_id)
 VALUES (9, 2, null, null);
+
+INSERT INTO public.reservation(
+    reservation_type, id, end_date, number_of_guests, start_date, total_price, type, system_user, status)
+VALUES ('BOAT', 10, '2022-09-15 00:00:00', 4, '2022-06-04 00:00:00', 230, 'BOAT', 402, 'RESERVED');
+INSERT INTO public.boat_reservation(
+    id, boat_id, feedback_id, owner_feedback_id)
+VALUES (10, 8, null, null);
+
+INSERT INTO public.reservation(
+    reservation_type, id, end_date, number_of_guests, start_date, total_price, type, system_user, status)
+VALUES ('BOAT', 11, '2022-09-15 00:00:00', 4, '2022-06-04 00:00:00', 230, 'BOAT', 400, 'RESERVED');
+INSERT INTO public.boat_reservation(
+    id, boat_id, feedback_id, owner_feedback_id)
+VALUES (11, 7, null, null);
+
+INSERT INTO public.reservation(
+    reservation_type, id, end_date, number_of_guests, start_date, total_price, type, system_user, status)
+VALUES ('BOAT', 12, '2023-12-20 00:00:00', 4, '2023-11-01 00:00:00', 230, 'BOAT', 400, 'RESERVED');
+INSERT INTO public.boat_reservation(
+    id, boat_id, feedback_id, owner_feedback_id)
+VALUES (12, 6, null, null);
 
 
 

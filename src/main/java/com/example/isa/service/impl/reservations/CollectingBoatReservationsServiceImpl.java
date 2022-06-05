@@ -109,6 +109,7 @@ public class CollectingBoatReservationsServiceImpl {
     public Collection<? extends AbstractReservation> getAllNotCancelledReservationsByBoatAndClient(Client client, Long id) {
 		List<AbstractReservation> allReservations = new ArrayList<>(boatReservationRepo.findAllByUserAndStatusNotAndBoat(client, ReservationStatus.CANCELLED, boatRepo.findById(id).get()));
 		allReservations.addAll(boatDiscountReservationRepo.findAllByUserAndStatusNotAndBoat(client, ReservationStatus.CANCELLED, boatRepo.findById(id).get()));
+		System.out.println("Reservation by boat and client "+ allReservations.size());
 		return allReservations;
     }
 }

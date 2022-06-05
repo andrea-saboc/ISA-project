@@ -69,10 +69,13 @@ public class BoatController {
 		return new ResponseEntity<>(jsonString, HttpStatus.OK);
 	}
 
+	@PreAuthorize("hasRole('ROLE_BOAT_OWNER')")
 	@RequestMapping(method = RequestMethod.GET, value = "/ownersBoats",produces = MediaType.APPLICATION_JSON_VALUE)
-	@CrossOrigin(origins = "*")
 	public ResponseEntity<String> getOwnersBoats() throws JsonProcessingException{
 		List<Boat> boats = service.getByOwnerId();
+		if(boats == null)
+			return new ResponseEntity<>("There is no logged user", HttpStatus.METHOD_NOT_ALLOWED);
+		System.out.println("Number of boats "+boats.size());
 		ObjectMapper mapper = new ObjectMapper();
 		String jsonString = mapper.writeValueAsString(boats);
 		System.out.println(jsonString);
@@ -127,8 +130,8 @@ public class BoatController {
 		return new ResponseEntity<>(boatAvailabilities, HttpStatus.OK);
 	}
 
+	@PreAuthorize("hasRole('ROLE_BOAT_OWNER')")
 	@RequestMapping(method = RequestMethod.POST, value ="/addAvailablePeriodForBoat", produces = MediaType.APPLICATION_JSON_VALUE)
-	@CrossOrigin(origins = "*")
 	public ResponseEntity<String> addAvailablePeriodForBoat(@RequestBody AddAvailablePeriodDto dto) throws JsonProcessingException{
 		System.out.println("Adding available period for boat!");
 		if (dto.endTime == null || dto.startTime==null){

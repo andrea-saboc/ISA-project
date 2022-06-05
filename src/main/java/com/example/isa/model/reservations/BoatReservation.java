@@ -74,5 +74,4 @@ public class BoatReservation extends Reservation{
 		return this.boat.getName();
 	}
 
-
 }
