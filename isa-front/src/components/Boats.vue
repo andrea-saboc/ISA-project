@@ -263,6 +263,7 @@
 
 <script>
 import axios from 'axios'
+axios.defaults.baseURL = process.env.VUE_APP_URL;
 import moment from 'moment';
 import {
     devServer
@@ -410,7 +411,7 @@ export default {
 
         LoadBoats() {
             axios
-                .get(devServer.proxy + '/boats', {
+                .get('/boats', {
                     headers: {
                         'Authorization': this.$store.getters.tokenString
                     }
