@@ -54,7 +54,7 @@ dependencies {
 	implementation group: 'org.bouncycastle', name: 'bcprov-jdk15on', version: '1.64'
 
 	// token
-	implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.6.0'
+	annotationProcessor group: 'io.jsonwebtoken', name: 'jjwt', version: '0.6.0'
 
 	// jackson
 	implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.12.1'
