@@ -131,8 +131,11 @@ public class ClientService {
 
     public boolean clientAvailable(Client client, Date startDate, Date endDate) {
 		List<AbstractReservation> allClientReservations = new ArrayList<>(collectingActiveReservationsService.getAllReservationsByClient(client));
+		System.out.println("Reservation number "+allClientReservations.size());
+		System.out.println("Period of intereset"+", start:"+startDate+" ,period of interest end:"+endDate);
+		System.out.print("Ress: "+allClientReservations);
 		for (AbstractReservation ar : allClientReservations){
-			if(ar.getStartDate().before(endDate) && startDate.before(ar.getEndDate())){
+			if(!ar.getStartDate().after(endDate) && !startDate.after(ar.getEndDate())){
 				return false;
 			}
 		}

@@ -160,4 +160,14 @@ public abstract class DiscountReservation extends AbstractReservation implements
 	}
 
 	public abstract String getEntityName();
+
+	@Override
+	public String toString() {
+		return "DiscountReservation{" +
+				"id=" + id +
+				", user=" + user.getId() +
+				", startDate=" + startDate +
+				", endDate=" + endDate +
+				'}';
+	}
 }

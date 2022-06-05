@@ -87,4 +87,5 @@ public class AdventureDiscountReservation extends DiscountReservation{
     public double getTotalPrice() {
         return getPriceWithDiscount();
     }
+
 }

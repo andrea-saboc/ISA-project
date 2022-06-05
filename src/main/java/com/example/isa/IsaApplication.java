@@ -45,7 +45,6 @@ public class IsaApplication extends SpringBootServletInitializer implements Comm
 	BoatRepository boatRepo;
 	@Autowired
 	UserRepository userRepo;
-	
 	@Autowired
 	ClientRepository clientRepo;
 	@Autowired
