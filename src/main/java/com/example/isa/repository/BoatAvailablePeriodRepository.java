@@ -17,8 +17,6 @@ public interface BoatAvailablePeriodRepository extends JpaRepository<BoatAvailab
     @Query(value = "SELECT available_period_id,start_date,end_date,boat_id FROM public.boat_available_period u WHERE u.start_date <= :startDate AND u.end_date >= :endDate AND u.boat_id = :id",
     		nativeQuery = true)
     BoatAvailablePeriod getPeriodOfInterest(@Param("startDate") Date startDate,@Param("endDate") Date endDate,@Param("id") long id);
-
-    List<BoatAvailablePeriod> findAllByBoat(Boat boat);
     
     
     @Query(value = "SELECT available_period_id,start_date,end_date,boat_id FROM public.boat_available_period u WHERE u.end_date = :endDate AND u.boat_id = :id",

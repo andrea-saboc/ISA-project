@@ -98,5 +98,4 @@ public class BoatDiscountReservation extends DiscountReservation{
 	public double getTotalPrice() {
 		return getPriceWithDiscount();
 	}
-
 }

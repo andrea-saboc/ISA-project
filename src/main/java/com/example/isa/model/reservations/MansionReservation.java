@@ -78,6 +78,8 @@ public class MansionReservation extends Reservation{
 	public String getName(){
 		return this.mansion.getName();
 	}
+	
+	
 
 
 }

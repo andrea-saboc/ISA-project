@@ -214,18 +214,11 @@ public class BoatService {
 	}
 
 	public List<Boat> getByOwnerId() {
-		try {
-			User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-			System.out.println("Trying to cast to User:"+ user);
-			BoatOwner boatOwner = boatOwnerRepository.findById(user.getId()).get();
-			List<Boat> ownersBoats = boatsRepository.findAllByBoatOwnerAndDeleted(boatOwner, false);
-			return ownersBoats;
-		}
-		catch (Exception e){
-			System.out.println("Trying to cast failed!");
-			return null;
-		}
-
+		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		System.out.println("Trying to cast to User:"+ user);
+		BoatOwner boatOwner = boatOwnerRepository.findById(user.getId()).get();
+		List<Boat> ownersBoats = boatsRepository.findAllByBoatOwnerAndDeleted(boatOwner, false);
+		return ownersBoats;
 	}
 
 	public List<Boat> getByOwner(BoatOwner bo){
@@ -243,23 +236,18 @@ public class BoatService {
 		Boat boat = boatsRepository.findById(dto.boatId).get();
 		BoatAvailablePeriod availablePeriod = new BoatAvailablePeriod(dto.startTime, dto.endTime, boat);
 		if (isThereAReservation(availablePeriod, dto.boatId)){
-			System.out.println("There is a reservation, addBoatAvailability!");
 			return availablePeriodRepository.findByBoat(boat);
 		}
 		if(insideOtherPeriod(availablePeriod, availablePeriodRepository.findByBoat(boat))) {
-			System.out.println("It is inside other period!");
 			return availablePeriodRepository.findByBoat(boat);
 		}
-		System.out.println("Saving new availability for boat!");
 		availablePeriodRepository.save(availablePeriod);
 		List<BoatAvailablePeriod> boatNewAvailability = availablePeriodRepository.findByBoat(boat);
-		System.out.println("Size is"+boatNewAvailability.size());
 		return boatNewAvailability;
 	}
 
 	private boolean insideOtherPeriod(BoatAvailablePeriod availablePeriod, List<BoatAvailablePeriod> byBoat) {
 		Boolean overlaps = false;
-		System.out.println("Size iss:"+byBoat.size());
 		for (BoatAvailablePeriod ma : byBoat){
 			if((ma.getStartDate()).before(availablePeriod.getEndDate()) && (availablePeriod.getStartDate().before(ma.getEndDate()))){
 				if (ma.getStartDate().after(availablePeriod.getStartDate())){;

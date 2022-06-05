@@ -126,12 +126,10 @@ public class MansionController {
 		return new ResponseEntity<>(jsonString, HttpStatus.OK);
 	}
 
-	@PreAuthorize("hasRole('ROLE_MANSION_OWNER')")
 	@RequestMapping(method = RequestMethod.GET, value = "/ownersMansions",produces = MediaType.APPLICATION_JSON_VALUE)
+	@CrossOrigin(origins = "*")
 	public ResponseEntity<String> getOwnersMansions() throws JsonProcessingException{
 		List<Mansion> mansions = service.getByOwnerId();
-		if(mansions == null)
-			return new ResponseEntity<>("There is no logged user", HttpStatus.METHOD_NOT_ALLOWED);
 		ObjectMapper mapper = new ObjectMapper();
 		String jsonString = mapper.writeValueAsString(mansions);
 		System.out.println(jsonString);

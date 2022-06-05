@@ -1,7 +1,6 @@
 package com.example.isa.controller;
 
 import static org.hamcrest.Matchers.hasSize;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -75,16 +74,6 @@ public class MansionControllerTests {
 	    		    .characterEncoding("utf-8"))
 	    		    .andExpect(status().isOk())
 	    		    .andExpect(jsonPath("$", hasSize(1)));
-	    }
-
-	@Test
-	public void getOwnersMansions() throws Exception{
-		//dobavljamo brodove vlasnika
-		mockMvc.perform(get("/ownersMansions")
-						.contentType(MediaType.APPLICATION_JSON)
-						.with(user("ana@gmail.com").password("123").roles("MANSION_OWNER"))
-						.characterEncoding("utf-8"))
-				.andExpect(status().isMethodNotAllowed());
-	}
+	    }	    
 
 }

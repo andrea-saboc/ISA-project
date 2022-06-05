@@ -8,5 +8,4 @@ public abstract class AbstractReservation {
     public abstract Date getEndDate();
     public abstract ReservationStatus getStatus();
     public abstract Object getUser();
-    public abstract String toString();
 }
