@@ -68,8 +68,8 @@ workflows:
     jobs:
       - say-hello
       - build-and-test
-      - heroku/deploy-via-git
-        requires:
-          - build-and-test
-          - prepare-for-deploy
+      - heroku/deploy-via-git:
+          requires:
+            - build-and-test
+            - prepare-for-deploy
 
