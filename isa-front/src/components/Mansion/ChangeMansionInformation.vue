@@ -230,7 +230,7 @@
 
 <script>
 import axios from "axios";
-import {devServer} from "../../../vue.config";
+axios.defaults.baseURL = process.env.VUE_APP_URL;
 
 export default {
   name: "ChangeMansionInformation",
@@ -278,7 +278,7 @@ export default {
   },
   mounted() {
     this.token = localStorage.getItem('token').substring(1, localStorage.getItem('token').length-1);
-    axios.get(devServer.proxy+"/ownersMansions", {
+    axios.get("/ownersMansions", {
       headers: {
         'Authorization' : 'Bearer ' + this.token
       }
@@ -302,7 +302,7 @@ export default {
         }
       }
       axios
-          .post('http://localhost:8080/changeMansion',
+          .post('/changeMansion',
               {
                 "id": this.selectedMansion.id,
                 "name": this.name,
@@ -337,7 +337,7 @@ export default {
           });
     },
     setImg(img){
-      axios.get('http://localhost:8080/entityImage/'+img.path, {
+      axios.get('/entityImage/'+img.path, {
         headers: {
           'Authorization': 'Bearer ' + this.token,
         },
@@ -359,7 +359,7 @@ export default {
           })
     },
     setImgI(img){
-      axios.get('http://localhost:8080/entityImage/'+img.path, {
+      axios.get('/entityImage/'+img.path, {
         headers: {
           'Authorization': 'Bearer ' + this.token,
         },
@@ -392,7 +392,7 @@ export default {
       }
     },
     setAdditionalServices(){
-      axios.get(devServer.proxy + "/additionalServicesMansion", {
+      axios.get("/additionalServicesMansion", {
         params:
             {
               id: this.selectedMansion.id
@@ -484,7 +484,7 @@ export default {
       this.setFields();
       },
     deleteSelectedMansion(){
-      axios.post(devServer.proxy + "/deleteMansion",{
+      axios.post( "/deleteMansion",{
         "boatId" : this.selectedMansion.id
       }, {
         headers: {
@@ -493,7 +493,7 @@ export default {
       })
           .then(response => {
             alert("Mansion successfully deleted!", response.data)
-            axios.get(devServer.proxy + "/ownersMansions", {
+            axios.get("/ownersMansions", {
               headers: {
                 'Authorization': 'Bearer ' + this.token
               }

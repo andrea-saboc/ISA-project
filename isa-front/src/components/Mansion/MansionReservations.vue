@@ -269,8 +269,8 @@
 
 <script>
 import axios from "axios";
-import {devServer} from "../../../vue.config";
 import moment from "moment";
+axios.defaults.baseURL = process.env.VUE_APP_URL;
 
 export default {
   name: "MansionReservations",
@@ -296,7 +296,7 @@ export default {
     }
   },
   mounted() {
-    axios.get(devServer.proxy + "/userData", {
+    axios.get("/userData", {
       headers: {
         'Authorization' : this.$store.getters.tokenString
       }
@@ -305,7 +305,7 @@ export default {
               this.loggedUser =response.data
               console.log("Ovaj user je ulogovan Mansion Reservations:", this.loggedUser)
               if(this.loggedUser.advertiserType == 'mansion'){
-                axios.get(devServer.proxy+"/getMansionOwnerReservations", {
+                axios.get("/getMansionOwnerReservations", {
                   headers: {
                     'Authorization' : this.$store.getters.tokenString
                   }
@@ -440,7 +440,7 @@ export default {
     },
     createReport(){
      axios
-          .post(devServer.proxy + "/createReport", {
+          .post("/createReport", {
                 "reportText" : this.reportText,
                 "requestedToSanction" : this.requestSanctions,
                 "approved" : false,

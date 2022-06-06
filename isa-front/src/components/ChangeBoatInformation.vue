@@ -308,7 +308,7 @@
 
 <script>
 import axios from "axios";
-import {devServer} from "../../vue.config";
+axios.defaults.baseURL = process.env.VUE_APP_URL;
 export default {
   name: "ChangeBoatInformation",
   data: function (){
@@ -366,7 +366,7 @@ export default {
     this.token = localStorage.getItem('token').substring(1, localStorage.getItem('token').length-1);
     this.user = this.$store.state.userType
    // if (this.user!=null && this.user =='BoatOwner'){
-      axios.get(devServer.proxy+"/ownersBoats", {
+      axios.get("/ownersBoats", {
         headers: {
           'Authorization' : 'Bearer ' + this.token
         }
@@ -387,7 +387,7 @@ export default {
       alert("Changing boat", this.selectedBoat)
       console.log("selectovani brod", this.selectedBoat, this.selectedBoat.id)
       axios
-          .post('http://localhost:8080/changeBoat',
+          .post('/changeBoat',
               {
                 "id": this.selectedBoat.id,
                 "name": this.name,
@@ -434,7 +434,7 @@ export default {
           });
     },
     setImg(img){
-      axios.get('http://localhost:8080/entityImage/'+img.path, {
+      axios.get('/entityImage/'+img.path, {
         headers: {
           'Authorization': 'Bearer ' + this.token,
         },
@@ -456,7 +456,7 @@ export default {
           })
     },
     setImgI(img){
-      axios.get('http://localhost:8080/entityImage/'+img.path, {
+      axios.get('/entityImage/'+img.path, {
         headers: {
           'Authorization': 'Bearer ' + this.token,
         },
@@ -485,7 +485,7 @@ export default {
       console.log(this.selectedBoat.interiorImages.length)
       for(var iimg of this.selectedBoat.interiorImages){
         console.log('Image path je ', iimg.toString().replaceAll('\\','/'))
-        console.log(devServer.proxy + "/entityImage/"+"/" + iimg.path)
+        console.log("/entityImage/"+"/" + iimg.path)
         this.setImgI(iimg);
 
       }
@@ -494,7 +494,7 @@ export default {
 
     },
     setAdditionalServices() {
-      axios.get(devServer.proxy + "/additionalServices", {
+      axios.get("/additionalServices", {
         params:
             {
               id: this.selectedBoat.id
@@ -566,7 +566,7 @@ export default {
       this.setFields();
     },
     deleteSelectedBoat(){
-      axios.post(devServer.proxy + "/deleteBoat",{
+      axios.post("/deleteBoat",{
         "boatId" : this.selectedBoat.id
       }, {
         headers: {
@@ -575,7 +575,7 @@ export default {
       })
       .then(response => {
         alert(response.data)
-        axios.get(devServer.proxy + "/ownersBoats", {
+        axios.get("/ownersBoats", {
           headers: {
             'Authorization': this.$store.getters.tokenString
           }

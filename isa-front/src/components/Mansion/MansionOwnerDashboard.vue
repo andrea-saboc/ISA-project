@@ -79,7 +79,8 @@
 
 <script>
 import axios from "axios";
-import {devServer} from "../../../vue.config";
+axios.defaults.baseURL = process.env.VUE_APP_URL;
+
 import { Bar, Line } from 'vue-chartjs'
 import { Chart as ChartJS, Title, Tooltip, Legend, BarElement,LineElement,PointElement, CategoryScale, LinearScale } from 'chart.js'
 
@@ -243,7 +244,7 @@ export default {
     this.chartDataWeekSelectedi.labels = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" ]
 
     this.token = localStorage.getItem('token').substring(1, localStorage.getItem('token').length-1);
-    axios.get(devServer.proxy+'/graphicDataMansionOwner', {
+    axios.get('/graphicDataMansionOwner', {
       headers: {
         'Authorization': 'Bearer ' + this.token,
       }
@@ -360,7 +361,7 @@ export default {
           this.chartDataWeeki.datasets[0].data.push((allWeekly.saturdayi));
           this.chartDataWeeki.datasets[0].data.push((allWeekly.sundayi));
           this.weeklyIncomings = allWeekly.incomings;
-          axios.get(devServer.proxy+"/ownersMansions", {
+          axios.get("/ownersMansions", {
             headers: {
               'Authorization' :'Bearer ' + this.token,
             }

@@ -265,9 +265,6 @@
 import axios from 'axios'
 axios.defaults.baseURL = process.env.VUE_APP_URL;
 import moment from 'moment';
-import {
-    devServer
-} from "../../vue.config";
 export default {
     name: 'boats',
     data: function() {
@@ -300,7 +297,7 @@ export default {
     },
     methods: {
         picture(id) {
-            return devServer.proxy + '/images/boat' + id + '.jpg';
+            return '/images/boat' + id + '.jpg';
         },
 
         ShowOffers(value) {
@@ -311,7 +308,7 @@ export default {
             } else {
 
                 axios
-                    .get(devServer.proxy + '/boatDiscountReservations', {
+                    .get('/boatDiscountReservations', {
                         params: {
                             id: value
                         },
@@ -363,7 +360,7 @@ export default {
            if(this.user != 'Client') return true;
             else{
             axios
-                .post(devServer.proxy + '/subscriptions/checkBoatSubscription', mansion, {
+                .post( '/subscriptions/checkBoatSubscription', mansion, {
                     headers: {
                         'Authorization': this.$store.getters.tokenString,
                         'Content-Type': 'application/json'
@@ -380,7 +377,7 @@ export default {
         SubscribeClient(mansion) {
 
             axios
-                .post(devServer.proxy + '/subscriptions/checkBoatSubscription', mansion, {
+                .post('/subscriptions/checkBoatSubscription', mansion, {
                     headers: {
                         'Authorization': this.$store.getters.tokenString,
                         'Content-Type': 'application/json'
@@ -392,7 +389,7 @@ export default {
                    }else{
                      
                      axios
-                        .post(devServer.proxy + '/subscriptions/newBoatSubscription', mansion, {
+                        .post( '/subscriptions/newBoatSubscription', mansion, {
                            headers: {
                                  'Authorization': this.$store.getters.tokenString,
                                  'Content-Type': 'application/json'
@@ -458,7 +455,7 @@ export default {
             console.log(searchParams)
 
             axios
-                .post(devServer.proxy + '/boats/search', searchParams, {
+                .post( '/boats/search', searchParams, {
                     headers: {
                         'Authorization': this.$store.getters.tokenString,
                         'Content-Type': 'application/json'
@@ -478,7 +475,7 @@ export default {
             } else {
                 this.makingReservation = true;
                 axios
-                    .post(devServer.proxy + '/reservations/availableBoats', this.reservationForm, {
+                    .post('/reservations/availableBoats', this.reservationForm, {
                         headers: {
                             'Authorization': this.$store.getters.tokenString,
                             'Content-Type': 'application/json'

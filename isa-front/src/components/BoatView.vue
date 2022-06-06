@@ -570,7 +570,7 @@
 <script>
 import {ref} from "vue";
 import axios from 'axios'
-import {devServer} from "../../vue.config";
+axios.defaults.baseURL = process.env.VUE_APP_URL;
 export default {
   name: "BoatView",
   data: function (){
@@ -647,7 +647,7 @@ export default {
     var path = window.location.href;
     var boatId = path.split('/boat/')[1].replaceAll('%20', ' ');
     console.log("Bpat view --> boat id: ", boatId.toString())
-    axios.get(devServer.proxy + "/userData", {
+    axios.get("/userData", {
       headers: {
         'Authorization' : this.$store.getters.tokenString
       }
@@ -660,7 +660,7 @@ export default {
           this.loggedUser = null
     })
     axios
-    .get('http://localhost:8080/boat', {
+    .get('/boat', {
       params:
           {
             id : boatId
@@ -679,7 +679,7 @@ export default {
       this.boatOwner = this.boatToShow.boatOwner
       this.fishingEquipments = this.boatToShow.fishingEquipments
      axios
-          .post(devServer.proxy + "/getBoatAvailability", {
+          .post("/getBoatAvailability", {
             "boatId": this.boatToShow.id
           }, {
             headers: {
@@ -692,7 +692,7 @@ export default {
            this.changeYear();
            this.calculateAvailableDaysForCalendar();
          })//dostupnost broda
-      axios.get(devServer.proxy + "/additionalServices", {
+      axios.get( "/additionalServices", {
         params:
             {
               id: boatId
@@ -705,7 +705,7 @@ export default {
             this.additionalServices = resp.data
             console.log("Additional services: ", )
           })//additional services
-      axios.get(devServer.proxy + "/getReservedDatesForBoat", {
+      axios.get("/getReservedDatesForBoat", {
         params:
             {
               boatId: boatId
@@ -723,7 +723,7 @@ export default {
       if(this.loggedUser.id == this.boatToShow.boatOwner.id) {
         console.log("In trying to get subscribers!")
         axios
-            .get(devServer.proxy + "/getBoatsSubscribers", {
+            .get("/getBoatsSubscribers", {
               params:
                   {
                     boatId: boatId
@@ -760,7 +760,7 @@ export default {
     },
     setImages() {
       for (var eimg of this.boatToShow.exteriorImages) {
-        axios.get('http://localhost:8080/entityImage/'+eimg.path, {
+        axios.get('/entityImage/'+eimg.path, {
           headers: {
             'Authorization': 'Bearer ' + this.token,
           },
@@ -777,7 +777,7 @@ export default {
             })
       }
       for(var iimg of this.boatToShow.interiorImages){
-        axios.get('http://localhost:8080/entityImage/'+iimg.path, {
+        axios.get('/entityImage/'+iimg.path, {
           headers: {
             'Authorization': 'Bearer ' + this.token,
           },
@@ -831,7 +831,7 @@ export default {
     },
     calculateDiscountReservations(){
       axios
-      .get(devServer.proxy + "/getBoatDiscountReservations", {
+      .get( "/getBoatDiscountReservations", {
         headers: {
           'Authorization' : this.$store.getters.tokenString
         },
@@ -889,7 +889,7 @@ export default {
         } else
         {
       axios
-      .post(devServer.proxy + "/addAvailablePeriodForBoat", {
+      .post( "/addAvailablePeriodForBoat", {
         "boatId" : this.boatToShow.id,
         "startTime" : this.startDateTime,
         "endTime" : this.endDateTime
@@ -916,7 +916,7 @@ export default {
     SubscribeClient(){
       //alert(this.boatToShow.id)
             axios
-                .post(devServer.proxy + '/subscriptions/newBoatSubscription', this.boatToShow, {
+                .post('/subscriptions/newBoatSubscription', this.boatToShow, {
                     headers: {
                         'Authorization': this.$store.getters.tokenString,
                         'Content-Type': 'application/json'
@@ -930,7 +930,7 @@ export default {
     },
     CheckClientSubscription(boat){
             axios
-                .post(devServer.proxy + '/subscriptions/checkBoatSubscription', boat, {
+                .post('/subscriptions/checkBoatSubscription', boat, {
                     headers: {
                         'Authorization': this.$store.getters.tokenString,
                         'Content-Type': 'application/json'
@@ -943,32 +943,17 @@ export default {
 
     },
     getImg(image) {
-      return devServer.proxy+"/api/entityImage/images/" + image.img;
+      return "/api/entityImage/images/" + image.img;
     },
     ShowReservationOffer(){
       window.location.href = "/boatReservationOffers/" + this.boatToShow.id.toString();
     },
-    checkEmail(){
-        if (!this.validEmail(this.clientResEmail)){
-          this.clientResEmailForm = false
-        } else{
-          this.clientResEmailForm = true
-        }/*else {
-          this.clientResEmailForm = true
-          axios.post(devServer.proxy + '/emailExistsClient', {
-            email: this.clientResEmail
-          }, {
-            headers: {
-              'Authorization': this.$store.getters.tokenString,
-              'Content-Type': 'application/json'
-            }
-          }).then(response =>{
-            this.clientResEmailExists = response.data
-            if(!this.clientResEmailExists){
-              alert("User with that email is not registered yet!")
-            }
-          })
-        }*/
+    checkEmail() {
+      if (!this.validEmail(this.clientResEmail)) {
+        this.clientResEmailForm = false
+      } else {
+        this.clientResEmailForm = true
+      }
     },
     validEmail: function (email) {
       var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -1003,7 +988,7 @@ export default {
       }
     },
     makeReservationForClient(){
-      axios.post(devServer.proxy+ "/makeBoatReservationClient", {
+      axios.post("/makeBoatReservationClient", {
           email : this.clientResEmail,
           additionalServiceSet : this.clientResAdditionalServices,
           startDate : this.clientResStartDate,
@@ -1041,7 +1026,7 @@ export default {
         alert("Quick reservation must be valid BEFORE the reservation starts!");
         return;
       }else{
-        axios.post(devServer.proxy + "/createDiscountBoatReservation", {
+        axios.post("/createDiscountBoatReservation", {
           "boatId" : this.boatToShow.id,
           "startDate" : this.startDateTimeQuick,
           "days" : this.numberOfDaysQuick,
