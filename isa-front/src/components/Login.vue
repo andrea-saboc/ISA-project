@@ -127,12 +127,10 @@ export default{
                   }
                     })
                .then(response1 => {
-                this.loggedUser =response1.data
-                    console.log(token)
-                    console.log('TU SAM',response1.data);
+                     this.loggedUser =response1.data
+                    console.log("logged user", this.loggedUser)
                     this.approveRegistration=response1.data.approved;
-
-                if(this.loggedUser.loggedIn===false)
+                if(this.loggedUser===null)
                 {
                   console.log("I AM HERE")
                   this.show=true;
@@ -143,13 +141,14 @@ export default{
                   return;
                 }
                 store.dispatch('startSession', response.data);
-                console.log('User got the token:',this.$store.getters.tokenString)
                 this.dispatch(response.data.userType);
                 console.log('User type is:')
                 console.log(this.$store.state.userType)
               })
               })
-        }else alert('error in filling form');
+          .catch((err)=>
+          alert(err))
+        }else alert('Wrong username or password!');
 
       },
 
@@ -167,9 +166,9 @@ export default{
         return;
         }
       else if(type === 'MansionOwner'){
-        if(this.approveRegistration===false)
+        if(this.approveRegistration==false)
         {
-          alert("You cant registration")
+          alert("Your registration is not approved yet!")
         }
         else
         {

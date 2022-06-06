@@ -16,6 +16,10 @@
           <li v-if="user === 'BoatOwner'" class="nav-item">
             <a href="/boatOwnerHomePage" class="nav-link">Home page</a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/home" v-on:click="logOut">Log out</a>
+
+          </li>
         </ul>
       </div>
     </div>
@@ -48,6 +52,13 @@ export default{
       this.$router.push("/home");
       this.user = null 
       console.log(this.user)   
+    },
+    logOut(){
+      let router = this.$router;
+      localStorage.removeItem('token');
+      localStorage.clear();
+      router.push("/login");
+      return;
     }
   }
 }

@@ -12,14 +12,16 @@
     <div v-else>
       There is no boat yet!
     </div>
-  <div>
+  <div v-if="boats!=null && boats.length>0">
 
     <form>
       <h3 class="mb-3">Change boat informations</h3>
       <div class="col-11">
         <label for="boat-name" class="form-label">Boat name</label>
-        <input type="text" class="form-control" id="boat-name" v-model = "name" required>
+        <input type="text" class="form-control" id="boat-name" v-on="{keydown: checkName}" v-model = "name" required>
       </div>
+      <p v-if="!clientName" style="font-size: small; font-style: italic">Invalid name. Name shoud be without special characters.</p>
+
       <div class="double-field">
         <div class="col-5">
           <label for="boat-type" class="form-label">Boat type</label>
@@ -313,6 +315,7 @@ export default {
   name: "ChangeBoatInformation",
   data: function (){
     return{
+      clientNameValid: true,
       fishingEquipment: new Array(),
       fishingEquipmentDeleted: new Array(),
       token: null,
@@ -384,7 +387,19 @@ export default {
   },
   methods:{
     saveChanges(){
-      alert("Changing boat", this.selectedBoat)
+      if(this.name == '' || this.type=='' || this.length=='' || this.cancellationPolicy=='' ||
+          this.engineNum == '' || this.enginePower == '' || this.maxSpeed == '' ||
+          this.address == '' || this.city == '' || this.country=='' || this.longitude=="" || this.latitude ==""
+          || this.promoDescription=='' || this.capacity =='' || this.priceForSevenDays=='' || this.pricePerDay==""
+          || this.pricePerHour == ''){
+        alert("You must fill all fields!")
+        return
+      }
+      this.checkName()
+      if(!this.clientNameValid){
+        alert("Entity name should not contain any special caracters!")
+        return;
+      }
       console.log("selectovani brod", this.selectedBoat, this.selectedBoat.id)
       axios
           .post('/changeBoat',
@@ -602,12 +617,15 @@ export default {
         this.additionalServicesDeleted.push(as.id);
         console.log("To delete ", this.additionalServicesDeleted)
       }
-      alert("refresh??")
     },
     addAdditionalService(){
       var name = document.getElementById('new-additional-service-name').value;
       var hour = document.getElementById('new-additional-service-hour').value;
       var day = document.getElementById('new-additional-service-day').value;
+      if(name=='' || hour=='' || day==''){
+        alert("Fill out all information about additional service!")
+        return
+      }
       this.additionalServiceNew.push({id: -1, name: name, pricePerHour: hour, pricePerDay: day });
       document.getElementById('new-additional-service-name').value='';
       document.getElementById('new-additional-service-hour').value='';
@@ -709,7 +727,6 @@ export default {
           if (index<this.interiorImagesOldNum){
             this.interiorImagesOldNum--;
             console.log("image",image)
-            this.alert("image id:",image.id)
             this.deleteOldInterior.push(image.id); //kako da dodjem do id slike?
           } else{
             let indexToDelete = index-this.interiorImagesOldNum;
@@ -732,6 +749,17 @@ export default {
             this.imgExter.splice(indexToDelete,1)
           }
     },
+    checkName(){
+      if(!this.validName(this.name)){
+        this.clientNameValid = false;
+      } else{
+        this.clientNameValid = true;
+      }
+    },
+    validName: function (name){
+      var re = /^[A-Za-z0-9 ]*$/;
+      return re.test(name);
+    }
   }
 
 }

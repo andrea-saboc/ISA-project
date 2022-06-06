@@ -13,13 +13,14 @@
       There is no mansion yet!
     </div>
   </div>
-  <div>
+  <div v-if="mansions!=null && mansions.length>0">
     <form>
       <h3 class="mb-3">Change mansion</h3>
       <div class="col-11">
         <label for="mansion-name" class="form-label">Mansion name</label>
-        <input type="text" class="form-control" id="mansion-name" v-model = "name" required>
+        <input type="text" class="form-control" v-on="{keydown: checkName}" id="mansion-name" v-model = "name" required>
       </div>
+      <p v-if="!clientNameValid" style="font-size: small; font-style: italic">Invalid name. Name shoud be without special characters.</p>
       <div class="double-field" style="margin-top: 2%; margin-bottom: 2%">
         <div class="col-4">
           <label for="number_rooms" class="form-label">Number of rooms</label>
@@ -236,6 +237,7 @@ export default {
   name: "ChangeMansionInformation",
   data: function (){
     return{
+      clientNameValid: true,
       token: null,
       name : '',
       address : '',
@@ -257,7 +259,6 @@ export default {
       additionalServiceName : '',
       additionalServicePricePerHour : '',
       additionalServicePricePerDay : '',
-      pricePerHour: '',
       pricePerDay: '',
       priceForSevenDays: '',
       selectedMansion: null,
@@ -295,6 +296,18 @@ export default {
   },
   methods: {
     saveChanges(){
+      if(this.name == '' ||  this.cancellationPolicy=='' ||
+          this.address == '' || this.city == '' || this.country=='' || this.longitude=="" || this.latitude ==""
+          || this.promoDescription=='' || this.priceForSevenDays=='' || this.pricePerDay==""
+         ){
+        alert("You must fill all fields!")
+        return
+      }
+      this.checkName()
+      if(!this.clientNameValid){
+        alert("Entity name should not contain any special caracters!")
+        return;
+      }
       var roomArray = new Array();
       for ( const [key, value] of this.rooms){
         for (let i = 0; i<value; i++){
@@ -616,7 +629,6 @@ export default {
       console.log("To delete", as.id)
       this.additionalServiceNew.splice(index, 1);
       if(as.id!= -1) {
-        alert("in if")
         this.additionalServicesDeleted.push(as.id);
         console.log("To delete ", this.additionalServicesDeleted)
       }
@@ -635,6 +647,17 @@ export default {
       })
       document.getElementById('new-rule').value='';
     },
+    checkName(){
+      if(!this.validName(this.name)){
+        this.clientNameValid = false;
+      } else{
+        this.clientNameValid = true;
+      }
+    },
+    validName: function (name){
+      var re = /^[A-Za-z0-9 ]*$/;
+      return re.test(name);
+    }
 
   }
 }
