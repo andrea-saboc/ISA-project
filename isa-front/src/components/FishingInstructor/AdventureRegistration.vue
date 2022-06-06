@@ -91,11 +91,11 @@
         </div>
         <div class="col-2">
           <label for="new-additional-service-hour" class="form-label">Price per hour</label>
-          <input type="number" class="form-control" id="new-additional-service-hour">
+          <input type="number" class="form-control" min=0 id="new-additional-service-hour">
         </div>
         <div class="col-2">
-          <label for="new-additional-service-day" class="form-label">Price per day</label>
-          <input type="number" class="form-control" id="new-additional-service-day">
+          <label for="new-additional-service-day" min=0 class="form-label">Price per day</label>
+          <input type="number" class="form-control" min=0 id="new-additional-service-day">
         </div>
         <div class="col-3">
           <br>
@@ -107,16 +107,16 @@
       <hr class="my-4">
       <div class="double-field">
         <div class="col-3">
-          <label for="boat-price-per-hour" class="form-label">Price per hour</label>
-          <input type="number" class="form-control" id="boat-price-per-hour" v-model="pricePerHour">
+          <label for="boat-price-per-hour" min=0 class="form-label">Price per hour</label>
+          <input type="number" min=0  class="form-control" id="boat-price-per-hour" v-model="pricePerHour">
         </div>
         <div class="col-3">
-          <label for="boat-price-per-day" class="form-label">Price per day</label>
+          <label for="boat-price-per-day" min=0 class="form-label">Price per day</label>
           <input type="number" class="form-control" id="boat-price-per-day" v-model="pricePerDay">
         </div>
         <div class="col-3">
-          <label for="boat-price-per-seven" class="form-label">Price for seven days</label>
-          <input type="number" class="form-control" id="boat-price-per-seven" v-model="priceForSevenDays">
+          <label for="boat-price-per-seven" min=0 class="form-label">Price for seven days</label>
+          <input type="number" min=0 class="form-control" id="boat-price-per-seven" v-model="priceForSevenDays">
         </div>
       </div>
       
@@ -228,9 +228,17 @@ export default {
 
     },
     registerAdventure(){
-      alert("Registering an adventure")
-      alert(this.name)
-      alert(this.latitude)
+       if(this.name == '' || this.cancellationPolicy=='' || this.address == '' || this.city == '' || this.country=='' || this.longitude=="" || this.latitude ==""
+      || this.promoDescription=='' || this.capacity =='' || this.priceForSevenDays=='' || this.pricePerDay==""
+      || this.pricePerHour == '' || this.equipment=='' || this.biography==''){
+        alert("You must fill all fields!")
+        return
+      }
+      this.checkName()
+      if(!this.clientNameValid){
+        alert("Entity name should not contain any special caracters!")
+        return;
+      }
       
       axios.post('/registerAdventure',{
             "name": this.name,
@@ -264,6 +272,17 @@ export default {
 
           })
 
+    },
+    checkName(){
+      if(!this.validName(this.name)){
+        this.clientNameValid = false;
+      } else{
+        this.clientNameValid = true;
+      }
+    },
+    validName: function (name){
+      var re = /^[A-Za-z0-9 ]*$/;
+      return re.test(name);
     }
   }
 

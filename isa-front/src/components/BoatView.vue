@@ -795,6 +795,13 @@ export default {
       }
     },
     calculateAvailableDaysForCalendar(){
+      if(this.availablePeriods.length==0)
+    {
+       this.availableDates.push({
+          start: new Date(Date.now()),
+          end: new Date(Date.now())
+       });
+    }
       for(var tmp in this.availablePeriods) {
         var startDate = new Date(this.availablePeriods[tmp].startDate);
         var endDate = new Date(this.availablePeriods[tmp].endDate)

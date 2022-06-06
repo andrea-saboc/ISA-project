@@ -118,7 +118,6 @@ methods:
       alert("Successfully created!", response)
       this.loadReports()
       
-      
      })
       .catch(() =>
       {

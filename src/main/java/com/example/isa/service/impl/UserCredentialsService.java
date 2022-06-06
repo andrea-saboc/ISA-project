@@ -30,4 +30,12 @@ public class UserCredentialsService implements UserDetailsService{
 		}
 	}
 
+	public boolean emailExists(String email){
+		User user = repo.findByEmail(email);
+		if(user==null)
+			return true;
+		return false;
+
+	}
+
 }

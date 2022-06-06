@@ -11,6 +11,7 @@ import com.example.isa.repository.*;
 import com.example.isa.service.AuthenticationService;
 import com.example.isa.service.DiscountReservationService;
 import com.example.isa.service.SubscriptionService;
+import com.example.isa.service.impl.AdventureService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.PessimisticLockingFailureException;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
@@ -39,6 +40,12 @@ public class AdventureDiscountReservationService implements DiscountReservationS
     MailService<String> mailService;
     @Autowired
     SubscriptionService subscriptionService;
+    @Autowired
+    AdventureService adventureService;
+    @Autowired
+    CollectingAdventureReservationsServiceImpl collectingAdventureReservationsService;
+    @Autowired
+    FishingAvailablePeriodRepository fishingAvailablePeriodRepository;
 
 
     @Override
@@ -61,6 +68,7 @@ public class AdventureDiscountReservationService implements DiscountReservationS
         if (entity == null)
             throw new PessimisticLockingFailureException("Some is already trying to reserve at the same time!");
         Adventure adventure = adventureRepository.findById(dto.boatId).get();
+        FishingInstructor fishingInstructor=adventure.getFishingInstructor();
 
         adventureDiscountReservation.setAdventure(adventure);
         adventureDiscountReservation.setStatus(ReservationStatus.ACTIVE);
@@ -69,11 +77,33 @@ public class AdventureDiscountReservationService implements DiscountReservationS
         adventureDiscountReservation.setValidUntil(dto.validUntil);
         adventureDiscountReservation.setStartDate(dto.startDate);
         adventureDiscountReservation.setEndDate(getEndDate(dto));
+
+        if(!adventureService.inAvailabilityPeriods(adventureDiscountReservation.getStartDate(),adventureDiscountReservation.getEndDate(),fishingInstructor.getId()))
+
+        { return 2;}
+        if(collectingAdventureReservationsService.overlapsWithActiveReservations(adventureDiscountReservation.getStartDate(),adventureDiscountReservation.getEndDate(),adventure)) {
+            return 3;
+        }
+        Date endDate=getEndDate(dto);
+
+        FishingAvailablePeriod period = fishingAvailablePeriodRepository.getPeriodOfInterest(dto.startDate, endDate, fishingInstructor.getId());
+        if(!period.getStartDate().equals(adventureDiscountReservation.getStartDate())) {
+            FishingAvailablePeriod periodBefore = new FishingAvailablePeriod(period.getStartDate(),adventureDiscountReservation.getStartDate(),period.getFishingInstructor());
+            fishingAvailablePeriodRepository.save(periodBefore);
+        }
+        if(!period.getEndDate().equals(adventureDiscountReservation.getEndDate())) {
+            FishingAvailablePeriod periodAfter = new FishingAvailablePeriod(adventureDiscountReservation.getEndDate(),period.getEndDate(),period.getFishingInstructor());
+            fishingAvailablePeriodRepository.save(periodAfter);
+        }
+        fishingAvailablePeriodRepository.delete(period);
+
+
+
         adventureDiscountReservation.setType("ADVENTURE");
         adventureDiscountReservation.setPriceWithoutDiscount(dto.getPrice(adventure));
         adventureDiscountReservation.calculatePercentageOfDiscount();
         reservationRepo.save(adventureDiscountReservation);
-        notifyAllSubscribers(adventureDiscountReservation);
+       // notifyAllSubscribers(adventureDiscountReservation);
         return 1;
     }
 

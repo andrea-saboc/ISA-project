@@ -446,6 +446,7 @@ export default {
         alert("Boat is not possible to be registered!")
         console.log("Error while registering boat!", err)
       });
+      
 
     },
     checkName(){

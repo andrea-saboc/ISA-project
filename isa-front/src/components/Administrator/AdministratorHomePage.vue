@@ -112,19 +112,21 @@ export default{
             loggedUser:null,
             adventures:[],
             search_adventure:'',
-            user: null
+            user: null,
+            token: null
         }
     },
     mounted(){
-    
+        this.token = localStorage.getItem('token').substring(1, localStorage.getItem('token').length-1);
+
       if(window.location.href.includes('/administrator/')){
       this.display = 'administrator'
     }
-   let token = localStorage.getItem('token').substring(1, localStorage.getItem('token').length-1);
-   console.log('toke je',token)
+  
+  
     axios.get(devServer.proxy + "/userData", {
       headers: {
-        'Authorization' : 'Bearer ' + token,
+        'Authorization' : 'Bearer ' + this.token,
       }
     })
     .then(response => {

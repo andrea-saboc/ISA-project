@@ -12,6 +12,7 @@ import com.example.isa.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -141,6 +142,7 @@ public class AdministratorService {
        }
        return list;
     }
+    @Transactional
     public void acceptAccountDeleted(Long id)
     {
         User u=userRepository.findById(id).get();
@@ -149,6 +151,7 @@ public class AdministratorService {
         userRepository.save(u);
     //   mailService.sendNotificationAbaoutDeletedAccount(u);
     }
+    @Transactional
     public void unacceptAccountDeleted(ReportAcceptDeletedAccountDTO dto)
     {
         User u=userRepository.findById(dto.getId()).get();
