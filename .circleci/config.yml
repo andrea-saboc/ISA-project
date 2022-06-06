@@ -37,7 +37,18 @@ jobs:
           path: ~/ISA-project
       - run:
           name: Build
-          command: ./gradlew clean build -i --continue
+          command: ./gradlew test
+      - save_cache:
+          paths:
+           - ~/.gradle/wrapper
+          key: v1-gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+      - save_cache:
+          paths:
+           - ~/.gradle/caches
+          key: v1-gradle-cache-{{ checksum "build.gradle" }}
+      - store_test_results:
+    # Upload test results for display in Test Summary: https://circleci.com/docs/2.0/collect-test-data/
+          path: build/test-results/test
 
 
 
