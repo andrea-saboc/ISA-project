@@ -35,6 +35,9 @@ jobs:
       - run:
           name: Build
           command: ./gradlew clean build -i --continue
+      - run:
+          name: Analyze on SonarCloud
+          command: ./gradlew sonarqube
       - save_cache:
           paths:
            - ~/.gradle/wrapper
