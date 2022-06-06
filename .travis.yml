@@ -1,0 +1,20 @@
+language: java
+
+jdk:
+  - oraclejdk11
+
+sudo: required
+
+services:
+  - postgresql
+
+before_script:
+  - psql -c 'create database isa_test;' -U postgres
+  - psql -c 'create database isa;' -U postgres
+
+before_install:
+  - chmod +x gradlew
+
+script:
+  - ./gradlew clean build -i --continue
+
