@@ -86,7 +86,11 @@ public class AdventureDiscountReservationService implements DiscountReservationS
         }
         Date endDate=getEndDate(dto);
 
+
         FishingAvailablePeriod period = fishingAvailablePeriodRepository.getPeriodOfInterest(dto.startDate, endDate, fishingInstructor.getId());
+        if(period == null) {
+            return 5;
+        }
         if(!period.getStartDate().equals(adventureDiscountReservation.getStartDate())) {
             FishingAvailablePeriod periodBefore = new FishingAvailablePeriod(period.getStartDate(),adventureDiscountReservation.getStartDate(),period.getFishingInstructor());
             fishingAvailablePeriodRepository.save(periodBefore);

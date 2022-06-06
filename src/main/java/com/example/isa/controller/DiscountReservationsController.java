@@ -108,6 +108,8 @@ public class DiscountReservationsController {
 			if(code == 1)  return new ResponseEntity<>("Discount reservation successfully created!", HttpStatus.OK);
 			else if(code == 2) return new ResponseEntity<>("Discount reservation is not in availability period!", HttpStatus.OK);
 			else if(code == 3) return new ResponseEntity<>("Discount reservation could not be created because there is already a reservation that overlaps with selected period!", HttpStatus.OK);
+			else if(code==5) return new ResponseEntity<>("Mansion is not available at selected time!", HttpStatus.OK);
+
 			else return new ResponseEntity<>("It is impossible to save discount reservation!", HttpStatus.OK);
 		}
 		catch (PessimisticLockingFailureException pe){
@@ -129,6 +131,7 @@ public class DiscountReservationsController {
 			if(code == 1)  return new ResponseEntity<>("Discount reservation successfully created!", HttpStatus.OK);
 			else if(code == 2) return new ResponseEntity<>("Discount reservation period overlaps with boat availability period!", HttpStatus.OK);
 			else if(code == 3) return new ResponseEntity<>("Discount reservation could not be created because there is already a reservation that overlaps with selected period!", HttpStatus.OK);
+			else if(code==5) return new ResponseEntity<>("Adventure is not available at selected time!", HttpStatus.OK);
 			else return new ResponseEntity<>("It is impossible to save discount reservation!", HttpStatus.OK);
 		}
 		catch (PessimisticLockingFailureException pe){

@@ -123,6 +123,9 @@ public class MansionDiscountReservationService implements DiscountReservationSer
 			return 3;
 		}
 		MansionAvailablePeriod period = mansionAvailablePeriodRepository.getPeriodOfInterest(dto.startDate, getEndDate(dto), dto.boatId);
+		if(period == null) {
+			return 5;
+		}
 		if(!period.getStartDate().equals(mansionDiscountReservation.getStartDate())) {
 			MansionAvailablePeriod periodBefore = new MansionAvailablePeriod(period.getStartDate(),mansionDiscountReservation.getStartDate(),period.getMansion());
 			mansionAvailablePeriodRepository.save(periodBefore);

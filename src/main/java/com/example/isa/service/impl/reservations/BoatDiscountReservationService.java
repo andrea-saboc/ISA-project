@@ -154,7 +154,11 @@ public class BoatDiscountReservationService implements DiscountReservationServic
 		if(collectingBoatReservationsService.overlapsWithActiveReservations(boatDiscountReservation.getStartDate(), boatDiscountReservation.getEndDate(), boat)){
 			return 3;
 		}
+
 		BoatAvailablePeriod period = boatAvailablePeriodRepository.getPeriodOfInterest(dto.startDate, getEndDate(dto), dto.boatId);
+		if(period == null) {
+			return 5;
+		}
 		if(!period.getStartDate().equals(boatDiscountReservation.getStartDate())) {
 			BoatAvailablePeriod periodBefore = new BoatAvailablePeriod(period.getStartDate(),boatDiscountReservation.getStartDate(),period.getBoat());
 			boatAvailablePeriodRepository.save(periodBefore);

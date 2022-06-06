@@ -155,7 +155,7 @@
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times" aria-hidden="true"></i></button>
             </div>
             <div class="modal-body">
-              <v-date-picker mode="dateTime" is24hr v-model="startDateTime" style="width: 100%" :disabled-dates="disavailableDates" @dayclick="dayClicked">
+              <v-date-picker mode="dateTime" is24hr v-model="startDateTime" style="width: 100%" :disabled-dates="availableDates" @dayclick="dayClicked">
                 <template v-slot="{ inputValue, inputEvents }">
                   <input
                       class="px-2 py-1 border rounded focus:outline-none focus:border-blue-300"
@@ -166,7 +166,7 @@
                   />
                 </template>
               </v-date-picker>
-              <v-date-picker  mode="dateTime" is24hr v-model="endDateTime" style="width: 100%" :disabled-dates="disavailableDates">
+              <v-date-picker  mode="dateTime" is24hr v-model="endDateTime" style="width: 100%" :disabled-dates="availableDates">
                 <template v-slot="{ inputValue, inputEvents }">
                   <input
                       class="px-2 py-1 border rounded focus:outline-none focus:border-blue-300"
@@ -555,31 +555,6 @@ export default {
       }
       }
 
-       var d = new Date();
-       d.setDate(d.getDate() - 85600);
-       console.log("DATUM JE ",d);
-       this.disavailableDates.push({
-          start: d,
-          end: new Date(Date.now())
-       });
-       for(var tmp1 in this.availablePeriods) {
-        var startDate1 = new Date(this.availablePeriods[tmp1].startDate);
-        var endDate1 = new Date(this.availablePeriods[tmp1].endDate)
-        if(startDate1<Date.now() && endDate1>=Date.now())
-        { 
-          this.disavailableDates.push({
-          start: new Date(Date.now()),
-          end: new Date(endDate1.getFullYear(), endDate1.getMonth(), endDate1.getDate())
-        });
-        }
-        if(startDate1>=Date.now()){
-        this.disavailableDates.push({
-          start: new Date(startDate1.getFullYear(), startDate1.getMonth(), startDate1.getDate()),
-          end: new Date(endDate1.getFullYear(), endDate1.getMonth(), endDate1.getDate())
-        });
-      }
-      }
-
       for(var reservation in this.fishingReservations){
         var startDateRes = new Date(this.fishingReservations[reservation].startDate)
         var endDateRes = new Date(this.fishingReservations[reservation].endDate)
@@ -608,7 +583,7 @@ export default {
       axios
       .get("/getAdventureDiscountReservations", {
         headers: {
-          'Authorization' : this.$store.getters.tokenString
+          'Authorization' : 'Bearer ' + this.token,
         },
         params:{
           "adventureId": this.adventureToShow.id
@@ -682,11 +657,12 @@ export default {
         "endTime" : this.endDateTime
       }, {
         headers: {
-          'Authorization' : this.$store.getters.tokenString
+          'Authorization' : 'Bearer ' + this.token,
         }
       })
       .then(response => {
         this.availablePeriods = response.data
+        this.calculateAvailableDaysForCalendar()
         console.log("New available periods: ", this.availablePeriods )
         this.startDateTime="";
         this.endDateTime="";
@@ -723,14 +699,14 @@ export default {
         "validUntil" : this.availableUntil
       }, {
         headers: {
-          'Authorization': this.$store.getters.tokenString,
+          'Authorization': 'Bearer ' + this.token,
           'Content-Type': 'application/json'
         }
       })
 
       .then(response =>{
-            alert("Uspesno, ",response)
-            this.calculateAvailableDaysForCalendar
+            alert(response.data)
+            this.calculateAvailableDaysForCalendar()
             this.startDateTimeQuick="";
       this.numberOfDaysQuick="";
       this.numberOfHoursQuick="";
@@ -797,7 +773,7 @@ export default {
           numberOfGuests : this.clientResNumberOfGuests
       }, {
         headers: {
-          'Authorization': this.$store.getters.tokenString,
+          'Authorization': 'Bearer ' + this.token,
           'Content-Type': 'application/json'
         }
       })

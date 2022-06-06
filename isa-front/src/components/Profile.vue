@@ -150,13 +150,13 @@ export default{
 
       LoadUser(){
          axios
-         .get(+'/userData',{
+         .get('/userData',{
             headers: {
                'Authorization' : this.$store.getters.tokenString
             }
          })
          .then(response => {
-this.userType1=response.data.authorities[0].name
+            this.userType1=response.data.authorities[0].name
             this.user = response.data;
             this.name = response.data.name;
             this.surname = response.data.surname;
