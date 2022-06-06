@@ -4,8 +4,9 @@
       <h3 class="mb-3">Mansion registration</h3>
       <div class="col-11">
         <label for="mansion-name" class="form-label">Mansion name</label>
-        <input type="text" class="form-control" id="mansion-name" placeholder="E.g. San Victoria Motel" v-model = "name" required>
+        <input type="text" class="form-control" id="mansion-name" placeholder="E.g. San Victoria Motel" v-on="{keydown: checkName}" v-model = "name" required>
       </div>
+      <p v-if="!clientNameValid" style="font-size: small; font-style: italic">Invalid name. Name shoud be without special characters.</p>
       <div class="double-field">
         <div class="col-4">
           <label for="number_rooms" class="form-label">Number of rooms</label>
@@ -144,7 +145,7 @@
         </div>
       </div>
       <hr>
-      <button class="w-100 btn btn-primary btn-lg" type="submit" @click="registerMansion">Register a mansion</button>
+      <button class="w-100 btn btn-primary btn-lg" type="button" @click="registerMansion">Register a mansion</button>
     </form>
 
   </div>
@@ -152,11 +153,14 @@
 
 <script>
 import axios from "axios";
+axios.defaults.baseURL = process.env.VUE_APP_URL;
+
 
 export default {
   name: "MansionRegistration",
   data(){
     return {
+      clientNameValid: true,
       token: null,
       name: '',
       address : '',
@@ -205,6 +209,10 @@ export default {
     addAdditionalService(){
       var name = document.getElementById('new-additional-service-name').value;
       var day = document.getElementById('new-additional-service-day').value;
+      if(name=='' || day==''){
+        alert("Fill out all information about additional service!")
+        return
+      }
       this.additionalServices.push({name: name, pricePerDay: day });
       document.getElementById('new-additional-service-name').value='';
       document.getElementById('new-additional-service-day').value='';
@@ -282,7 +290,18 @@ export default {
       this.imgExter.splice(index, 1)
     },
     registerMansion(){
-      console.log("Registering a mansion "+this.name)
+      if(this.name == '' ||  this.cancellationPolicy=='' ||
+          this.address == '' || this.city == '' || this.country=='' || this.longitude=="" || this.latitude ==""
+          || this.promoDescription=='' || this.priceForSevenDays=='' || this.pricePerDay==""
+      ){
+        alert("You must fill all fields!")
+        return
+      }
+      this.checkName()
+      if(!this.clientNameValid){
+        alert("Entity name should not contain any special caracters!")
+        return;
+      }
       var roomArray = new Array();
       for ( const [key, value] of this.rooms){
         for (let i = 0; i<value; i++){
@@ -291,7 +310,7 @@ export default {
       }
       alert(roomArray.length)
       axios
-          .post('http://localhost:8080/registerMansion',
+          .post('/registerMansion',
               {
                 "name": this.name,
                 "cancellationPolicy" : this.cancellationPolicy,
@@ -323,6 +342,17 @@ export default {
         console.log("Registering mansion error", error)
       });
 
+    },
+    checkName(){
+      if(!this.validName(this.name)){
+        this.clientNameValid = false;
+      } else{
+        this.clientNameValid = true;
+      }
+    },
+    validName: function (name){
+      var re = /^[A-Za-z0-9 ]*$/;
+      return re.test(name);
     }
   }
 }

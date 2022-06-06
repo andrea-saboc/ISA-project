@@ -104,7 +104,8 @@
 </template>
 <script>
    import axios from 'axios'
-   import {devServer} from "../../vue.config";  
+   axios.defaults.baseURL = process.env.VUE_APP_URL;
+
    export default {
    data(){
        return{
@@ -128,7 +129,7 @@
    mounted(){
 
             axios
-                .get(devServer.proxy + '/complaints/boats', {
+                .get('/complaints/boats', {
                     headers: {
                         'Authorization': this.$store.getters.tokenString
                     }
@@ -139,7 +140,7 @@
                 });
 
             axios
-                .get(devServer.proxy + '/complaints/mansions', {
+                .get( '/complaints/mansions', {
                     headers: {
                         'Authorization': this.$store.getters.tokenString
                     }
@@ -153,7 +154,7 @@
    },
    methods:{  
        picture(id) {
-         return devServer.proxy +'/images/mansion'+id+'.jpg'; },
+         return '/images/mansion'+id+'.jpg'; },
        DisplayMansions(){  
            console.log('showing mansions')    
          this.display = 'mansions'
@@ -183,7 +184,7 @@
 
          console.log(complaint)
            axios
-            .post('http://localhost:8080/complaints/addMansionOwnerComplain',complaint,{
+            .post('/complaints/addMansionOwnerComplain',complaint,{
             headers: {
             'Authorization' : this.$store.getters.tokenString,
             'Content-Type': 'application/json'
@@ -204,7 +205,7 @@
           }
    
            axios
-            .post('http://localhost:8080/complaints/addMansionComplain',complaint,{
+            .post('/complaints/addMansionComplain',complaint,{
             headers: {
             'Authorization' : this.$store.getters.tokenString,
             'Content-Type': 'application/json'
@@ -232,7 +233,7 @@
           }
    
            axios
-            .post('http://localhost:8080/complaints/addBoatOwnerComplain',complaint,{
+            .post('/complaints/addBoatOwnerComplain',complaint,{
             headers: {
             'Authorization' : this.$store.getters.tokenString,
             'Content-Type': 'application/json'
@@ -253,7 +254,7 @@
           }
    
            axios
-            .post('http://localhost:8080/complaints/addBoatComplain',complaint,{
+            .post('/complaints/addBoatComplain',complaint,{
             headers: {
             'Authorization' : this.$store.getters.tokenString,
             'Content-Type': 'application/json'

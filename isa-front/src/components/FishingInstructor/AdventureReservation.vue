@@ -271,7 +271,8 @@
 <script>
 
 import axios from 'axios'
-import {devServer} from "../../../vue.config";
+axios.defaults.baseURL = process.env.VUE_APP_URL;
+
 import moment from "moment";
 
 export default {
@@ -299,7 +300,7 @@ export default {
     }
   },
   mounted() {
-    axios.get(devServer.proxy + "/userData", {
+    axios.get("/userData", {
       headers: {
         'Authorization' : this.$store.getters.tokenString
       }
@@ -308,7 +309,7 @@ export default {
           this.loggedUser =response.data
           console.log("Ovaj user je ulogovan:", this.loggedUser)
           if(this.loggedUser.advertiserType == 'fishing'){
-            axios.get(devServer.proxy+"/getFishingInstructorReservations", {
+            axios.get("/getFishingInstructorReservations", {
               headers: {
                 'Authorization' : this.$store.getters.tokenString
               }
@@ -343,7 +344,7 @@ export default {
       this.selectedReservation = reservation
       console.log("Another reservation is selected", this.selectedReservation)
       if(reservation.user != null){
-        axios.get(devServer.proxy + "/subscriptions/adventureByFishingInstructor", {
+        axios.get("/subscriptions/adventureByFishingInstructor", {
           headers:{
             'Authorization' : this.$store.getters.tokenString
           },
@@ -444,7 +445,7 @@ export default {
     },
     createReport(){
       axios
-      .post(devServer.proxy + "/createReport", {
+      .post("/createReport", {
         "reportText" : this.reportText,
         "requestedToSanction" : this.requestSanctions,
         "approved" : false,

@@ -119,7 +119,8 @@
 
 <script>
 import axios from 'axios'
-import {devServer} from "../../vue.config";
+axios.defaults.baseURL = process.env.VUE_APP_URL;
+
 export default{
     data(){
         return{
@@ -149,7 +150,7 @@ export default{
 
       LoadUser(){
          axios
-         .get(devServer.proxy +'/userData',{
+         .get(+'/userData',{
             headers: {
                'Authorization' : this.$store.getters.tokenString
             }
@@ -195,7 +196,7 @@ this.userType1=response.data.authorities[0].name
       UpdateUser(){
          console.log(this.user)
          axios
-         .post(devServer.proxy + '/updateUser',this.user,{
+         .post('/updateUser',this.user,{
          headers: {
          'Authorization' : this.$store.getters.tokenString,
          'Content-Type': 'application/json'
@@ -216,7 +217,7 @@ this.userType1=response.data.authorities[0].name
             }  
             console.log(passwords)
             axios
-            .post(devServer.proxy + '/changePassword',passwords,{
+            .post('/changePassword',passwords,{
             headers: {
             'Authorization' : this.$store.getters.tokenString,
             'Content-Type': 'application/json'
@@ -236,7 +237,7 @@ this.userType1=response.data.authorities[0].name
       },
       SubmitDeletionRequest(){
          axios
-         .post(devServer.proxy + '/createDeletionRequest',this.deletionReason,{
+         .post('/createDeletionRequest',this.deletionReason,{
          headers: {
          'Authorization' : this.$store.getters.tokenString,
          'Content-Type': 'application/json'

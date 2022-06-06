@@ -29,7 +29,6 @@
 
 <script>
 import axios from 'axios'
-import {devServer} from "../../vue.config";
 import moment from 'moment';
 //import Popper from 'popper.js'
 export default{
@@ -53,7 +52,7 @@ export default{
             var mansionId = path.split('/mansionReservationOffers/')[1].replaceAll('%20', ' ');
 
             axios
-            .get(devServer.proxy + '/mansion', {
+            .get('/mansion', {
             params:
                 {
                     id : mansionId
@@ -73,7 +72,7 @@ export default{
             var mansionId = path.split('/mansionReservationOffers/')[1].replaceAll('%20', ' ');
 
             axios
-            .get(devServer.proxy + '/mansionDiscountReservations', {
+            .get( '/mansionDiscountReservations', {
             params:
                 {
                     id : mansionId
@@ -93,7 +92,7 @@ export default{
         MakeReservation(res){
 
             axios
-            .get(devServer.proxy + '/makeDiscountMansionReservation', {
+            .get('/makeDiscountMansionReservation', {
             params:
                 {
                     id : res.id

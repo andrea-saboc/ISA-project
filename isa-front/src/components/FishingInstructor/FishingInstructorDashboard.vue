@@ -4,7 +4,8 @@ import FullCalendar from '@fullcalendar/vue3'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import axios from "axios";
-import {devServer} from "../../../vue.config";
+axios.defaults.baseURL = process.env.VUE_APP_URL;
+
 import { Bar, Line } from 'vue-chartjs'
 import {
   Chart as ChartJS,
@@ -204,7 +205,7 @@ export default {
 
     console.log('toke je',this.token)
 
-    axios.get(devServer.proxy + "/userData", {
+    axios.get("/userData", {
       headers: {
         'Authorization' : 'Bearer ' + this.token,
       }
@@ -213,7 +214,7 @@ export default {
       this.loggedUser =response.data
       console.log("Ovaj user je ulogovan:", this.loggedUser)
     
-        axios.get(devServer.proxy+"/allReservationAdventures", {
+        axios.get("/allReservationAdventures", {
           headers: {
             'Authorization' :'Bearer ' + this.token,
           }
@@ -229,7 +230,7 @@ export default {
           return;
         });
 
-    axios.get(devServer.proxy+'/graphicDataFishingInstructor', {
+    axios.get('/graphicDataFishingInstructor', {
       headers: {
         'Authorization': 'Bearer ' + this.token,
       }
@@ -346,7 +347,7 @@ export default {
           this.chartDataWeeki.datasets[0].data.push((allWeekly.saturdayi));
           this.chartDataWeeki.datasets[0].data.push((allWeekly.sundayi));
           this.weeklyIncomings = allWeekly.incomings;
-          axios.get(devServer.proxy+"/ownersAdventures", {
+          axios.get("/ownersAdventures", {
             headers: {
               'Authorization' :'Bearer ' + this.token,
             }

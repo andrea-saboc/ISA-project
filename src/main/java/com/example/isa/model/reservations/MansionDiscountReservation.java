@@ -104,5 +104,4 @@ public class MansionDiscountReservation extends DiscountReservation{
 	public double getTotalPrice() {
 		return getPriceWithDiscount();
 	}
-
 }

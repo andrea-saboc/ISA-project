@@ -87,7 +87,8 @@ import AdventureReservation from "../FishingInstructor/AdventureReservation";
 import FishingInstructorDashboard from "../FishingInstructor/FishingInstructorDashboard";
 import ChangeAdventureInformation from "../FishingInstructor/ChangeAdventureInformation";
 import axios from "axios";
-import {devServer} from "../../../vue.config";
+axios.defaults.baseURL = process.env.VUE_APP_URL;
+
 
 export default{
   name: "fishingInstructorHomePage",
@@ -111,7 +112,7 @@ export default{
     }
    let token = localStorage.getItem('token').substring(1, localStorage.getItem('token').length-1);
    console.log('toke je',token)
-    axios.get(devServer.proxy + "/userData", {
+    axios.get("/userData", {
       headers: {
         'Authorization' : 'Bearer ' + token,
       }
@@ -123,7 +124,7 @@ export default{
       
         
       if(this.loggedUser.advertiserType == 'fishing'){
-        axios.get(devServer.proxy+"/ownersAdventures", {
+        axios.get("/ownersAdventures", {
           headers: {
             'Authorization' :'Bearer ' + token,
           }

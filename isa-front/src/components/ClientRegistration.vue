@@ -5,16 +5,17 @@
 <br>
    <h1>{{picked}} Registration</h1>
   <br>
-  <div class="radio">
-  <input type="radio" id="clientreg" value="Client" name="selecttype" v-model="picked">
-  <label for="clientreg">Client</label>
-  <input type="radio" id="ownerreg" value="Owner" name="selecttype" v-model="picked">
-  <label for="ownerreg">Advertiser</label>
-  </div>
+  <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+    <input type="radio" class="btn-check"  id="btnradio1" autocomplete="off" value="Client" name="selecttype" v-model="picked" checked>
+    <label class="btn btn-outline-success" for="btnradio1">Client</label>
+
+    <input type="radio" class="btn-check"  id="btnradio2" autocomplete="off" value="Owner" name="selecttype" v-model="picked">
+    <label class="btn btn-outline-success" for="btnradio2">Advertiser</label>
+    </div>
   <br>
   <br>
     <div class="selection" v-if="picked=='Owner'">
-      <select v-model="otype">
+      <select v-model="otype" class="form-select" style="height: 2%;" >
         <option value="none" disabled selected hidden>Select what you want to advertise</option>
         <option value="boat" >Boats</option>
         <option value="mansion">Mansions</option>
@@ -60,7 +61,7 @@
 
 <script>
 import axios from 'axios'
-import {devServer} from "../../vue.config";
+axios.defaults.baseURL = process.env.VUE_APP_URL;
 
 export default{
     data(){
@@ -89,7 +90,7 @@ export default{
 
       if(this.fieldsFilled && this.passwordValid && this.picked=='Client'){
         axios
-            .post(devServer.proxy + '/register/client',
+            .post('/register/client',
             {
               "name": this.name,
               "surname": this.surname,
@@ -107,7 +108,7 @@ export default{
         this.ClearAllFields();
       } else if (this.fieldsFilled && this.passwordValid && this.picked=='Owner'){
         axios
-      .post(devServer.proxy +'/register/advertiser',
+      .post('/register/advertiser',
             {
               "name": this.name,
               "surname": this.surname,

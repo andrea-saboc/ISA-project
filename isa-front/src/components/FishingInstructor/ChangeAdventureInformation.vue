@@ -197,7 +197,8 @@
 </template>
 <script>
 import axios from "axios";
-import {devServer} from "../../../vue.config";
+axios.defaults.baseURL = process.env.VUE_APP_URL;
+
 export default {
   name: "ChangeAdventureInformation",
   data: function (){
@@ -240,7 +241,7 @@ export default {
   mounted(){
     this.token = localStorage.getItem('token').substring(1, localStorage.getItem('token').length-1);
     this.user = this.$store.state.userType
-      axios.get(devServer.proxy+"/ownersAdventures", {
+      axios.get("/ownersAdventures", {
         headers: {
           'Authorization' : 'Bearer ' + this.token
         }
@@ -261,7 +262,7 @@ export default {
         console.log("OVDEEEEEEEEEEEE SAAAAAAM",this.img);
       alert("Changing Adventure", this.selectedAdventure)
       axios
-          .post('http://localhost:8080/changeAdventure',
+          .post('/changeAdventure',
               {
                 "id": this.selectedAdventure.id,
                 "name": this.name,
@@ -298,7 +299,7 @@ export default {
           });
     },
     setImg(img){
-      axios.get('http://localhost:8080/entityImage/'+img.path, {
+      axios.get('/entityImage/'+img.path, {
         headers: {
           'Authorization': 'Bearer ' + this.token,
         },
@@ -327,7 +328,7 @@ export default {
 
     },
     setAdditionalServices() {
-      axios.get(devServer.proxy + "/additionalServicesAdventure", {
+      axios.get( "/additionalServicesAdventure", {
         params:
             {
               id: this.selectedAdventure.id
@@ -386,7 +387,7 @@ export default {
       this.setFields();
     },
     deleteSelectedAdventure(){
-      axios.post(devServer.proxy + "/deleteAdventure",{
+      axios.post("/deleteAdventure",{
         "adventureId" : this.selectedAdventure.id
       }, {
         headers: {
@@ -395,7 +396,7 @@ export default {
       })
       .then(response => {
         alert(response.data)
-        axios.get(devServer.proxy + "/ownersAdventures", {
+        axios.get( "/ownersAdventures", {
           headers: {
             'Authorization': this.$store.getters.tokenString
           }

@@ -51,11 +51,13 @@ public class ReservationServiceTests {
 	
 	@Test
 	public void CheckAdditionalServicesPrice() {
-						
-		double price = service.accountAdditionalServices(constants.BOAT_ADDITIONAL_SERVICES,constants.RESERVATION_PARAMS);		
+		//da li funcija za racunanje radi kako treba
+		double price = service.accountAdditionalServices(constants.BOAT_ADDITIONAL_SERVICES, constants.RESERVATION_PARAMS);
 		assertTrue(price == EXPECTED_PRICE);
 	}
-	
+
+
+
 	@Test
 	public void CancellationNotAllowed() {
 						

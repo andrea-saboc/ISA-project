@@ -145,6 +145,8 @@
 
 <script>
 import axios from 'axios'
+axios.defaults.baseURL = process.env.VUE_APP_URL;
+
 
 
 export default {
@@ -230,7 +232,7 @@ export default {
       alert(this.name)
       alert(this.latitude)
       
-      axios.post('http://localhost:8080/registerAdventure',{
+      axios.post('/registerAdventure',{
             "name": this.name,
             "address": this.address,
             "city": this.city,

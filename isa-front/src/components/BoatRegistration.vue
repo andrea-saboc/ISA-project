@@ -5,9 +5,9 @@
       <h3 class="mb-3">Boat registration</h3>
       <div class="col-11">
         <label for="boat-name" class="form-label">Boat name</label>
-        <input type="text" class="form-control" id="boat-name" placeholder="E.g. Titanic" v-model = "name" required>
+        <input type="text" class="form-control" id="boat-name" placeholder="E.g. Titanic" v-on="{keydown: checkName}" v-model = "name" required>
       </div>
-
+      <p v-if="!clientNameValid" style="font-size: small; font-style: italic">Invalid name. Name shoud be without special characters.</p>
       <div class="double-field">
         <div class="col-5">
           <label for="boat-type" class="form-label">Boat type</label>
@@ -245,10 +245,13 @@
 
 <script>
 import axios from 'axios'
+axios.defaults.baseURL = process.env.VUE_APP_URL;
+
 export default {
   name: "BoatRegistration",
   data(){
     return {
+      clientNameValid: true,
       fishingEquipment: new Array(),
       name : '',
       type : '',
@@ -304,6 +307,10 @@ export default {
       var name = document.getElementById('new-additional-service-name').value;
       var hour = document.getElementById('new-additional-service-hour').value;
       var day = document.getElementById('new-additional-service-day').value;
+      if(name=='' || hour=='' || day==''){
+        alert("Fill out all information about additional service!")
+        return
+      }
       this.additionalServices.push({name: name, pricePerHour: hour, pricePerDay: day });
       document.getElementById('new-additional-service-name').value='';
       document.getElementById('new-additional-service-hour').value='';
@@ -383,8 +390,21 @@ export default {
       this.imgExter.splice(index, 1)
     },
     registerBoat(){
+      if(this.name == '' || this.type=='' || this.length=='' || this.cancellationPolicy=='' ||
+      this.engineNum == '' || this.enginePower == '' || this.maxSpeed == '' ||
+      this.address == '' || this.city == '' || this.country=='' || this.longitude=="" || this.latitude ==""
+      || this.promoDescription=='' || this.capacity =='' || this.priceForSevenDays=='' || this.pricePerDay==""
+      || this.pricePerHour == ''){
+        alert("You must fill all fields!")
+        return
+      }
+      this.checkName()
+      if(!this.clientNameValid){
+        alert("Entity name should not contain any special caracters!")
+        return;
+      }
       axios
-      .post('http://localhost:8080/registerBoat',
+      .post('/registerBoat',
           {
             "name": this.name,
             "type": this.type,
@@ -421,8 +441,23 @@ export default {
           .then(response => {
             alert(response.data)
             this.messege = response.data
-          });
+          })
+      .catch((err) =>{
+        alert("Boat is not possible to be registered!")
+        console.log("Error while registering boat!", err)
+      });
 
+    },
+    checkName(){
+      if(!this.validName(this.name)){
+        this.clientNameValid = false;
+      } else{
+        this.clientNameValid = true;
+      }
+    },
+    validName: function (name){
+      var re = /^[A-Za-z0-9 ]*$/;
+      return re.test(name);
     }
   }
 

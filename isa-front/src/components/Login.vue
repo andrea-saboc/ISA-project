@@ -56,7 +56,8 @@
 </template>
 <script>
 import axios from 'axios'
-import {devServer} from "../../vue.config";
+axios.defaults.baseURL = process.env.VUE_APP_URL;
+
 //import {onBeforeMount} from "vue";
 export default{
     data(){
@@ -82,7 +83,7 @@ export default{
        LoadUser(){
          let token = localStorage.getItem('token').substring(1, localStorage.getItem('token').length-1);
          axios
-         .get(devServer.proxy +'/userData',{
+         .get('/userData',{
             headers: {
                'Authorization' : 'Bearer ' + token,
             }
@@ -107,7 +108,7 @@ export default{
         this.CheckIfEmpty()
         if(!this.fieldEmpty){
           axios
-              .post(devServer.proxy +'/login',
+              .post('/login',
               {
                 "email": this.email,
                 "password": this.password
@@ -120,18 +121,16 @@ export default{
 
                     localStorage.setItem('token', JSON.stringify(response.data.accessToken));
                     let token = localStorage.getItem('token').substring(1, localStorage.getItem('token').length-1);
-                     axios.get(devServer.proxy + "/userData", {
+                     axios.get("/userData", {
                     headers: {
                     'Authorization' : 'Bearer ' + token,
                   }
                     })
                .then(response1 => {
-                this.loggedUser =response1.data
-                    console.log(token)
-                    console.log('TU SAM',response1.data);
+                     this.loggedUser =response1.data
+                    console.log("logged user", this.loggedUser)
                     this.approveRegistration=response1.data.approved;
-
-                if(this.loggedUser.loggedIn===false)
+                if(this.loggedUser===null)
                 {
                   console.log("I AM HERE")
                   this.show=true;
@@ -142,13 +141,14 @@ export default{
                   return;
                 }
                 store.dispatch('startSession', response.data);
-                console.log('User got the token:',this.$store.getters.tokenString)
                 this.dispatch(response.data.userType);
                 console.log('User type is:')
                 console.log(this.$store.state.userType)
               })
               })
-        }else alert('error in filling form');
+          .catch((err)=>
+          alert(err))
+        }else alert('Wrong username or password!');
 
       },
 
@@ -166,9 +166,9 @@ export default{
         return;
         }
       else if(type === 'MansionOwner'){
-        if(this.approveRegistration===false)
+        if(this.approveRegistration==false)
         {
-          alert("You cant registration")
+          alert("Your registration is not approved yet!")
         }
         else
         {
@@ -228,7 +228,7 @@ export default{
             }  
             console.log(passwords)
             axios
-            .post(devServer.proxy + '/changePassword',passwords,{
+            .post( '/changePassword',passwords,{
             headers: {
             'Authorization' : 'Bearer ' + token,
             'Content-Type': 'application/json'

@@ -82,7 +82,8 @@
 
 <script>
 import axios from "axios";
-import {devServer} from "../../vue.config";
+axios.defaults.baseURL = process.env.VUE_APP_URL;
+
 import { Bar, Bubble, Line } from 'vue-chartjs'
 import { Chart as ChartJS, Title, Tooltip, Legend, LineElement, BarElement, PointElement, CategoryScale, LinearScale } from 'chart.js'
 
@@ -247,7 +248,7 @@ export default {
     this.chartDataMonthSelectedi.labels= [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31]
     this.chartDataWeekSelectedi.labels = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" ]
     this.token = localStorage.getItem('token').substring(1, localStorage.getItem('token').length-1);
-    axios.get(devServer.proxy+'/graphicDataBoatOwner', {
+    axios.get('/graphicDataBoatOwner', {
       headers: {
         'Authorization': 'Bearer ' + this.token,
       }
@@ -364,7 +365,7 @@ export default {
       this.chartDataWeeki.datasets[0].data.push((allWeekly.saturdayi));
       this.chartDataWeeki.datasets[0].data.push((allWeekly.sundayi));
       this.weeklyIncomings = allWeekly.incomings;
-      axios.get(devServer.proxy+"/ownersBoats", {
+      axios.get("/ownersBoats", {
         headers: {
           'Authorization' :'Bearer ' + this.token,
         }

@@ -96,6 +96,7 @@ public class BoatAvailablePeriod{
 		return "AvailablePeriod{" +
 				", startDate=" + startDate +
 				", endDate=" + endDate +
+				", boat=" + boat +
 				'}';
 	}
 

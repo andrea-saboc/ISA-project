@@ -18,6 +18,8 @@
 <script>
 
 import axios from 'axios'
+axios.defaults.baseURL = process.env.VUE_APP_URL;
+
 export default {
   data: function(){
       return{
@@ -26,7 +28,7 @@ export default {
   },
     mounted() {
     axios
-        .get('http://localhost:8080/getAllAdvertisers')
+        .get('/getAllAdvertisers')
         .then(response => {
           this.registrationsUsers = response.data;
         })

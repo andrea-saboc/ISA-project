@@ -446,7 +446,8 @@
 
 <script>
 import axios from "axios";
-import {devServer} from "../../../vue.config";
+axios.defaults.baseURL = process.env.VUE_APP_URL;
+
 import {ref} from "vue";
 
 export default {
@@ -517,7 +518,7 @@ export default {
 
     var path = window.location.href;
     var mansionid = path.split('/mansion/')[1].replaceAll('%20', ' ');
-    axios.get(devServer.proxy + "/userData", {
+    axios.get("/userData", {
       headers: {
         'Authorization' : 'Bearer ' + this.token
       }
@@ -526,7 +527,7 @@ export default {
               console.log("Logged user in mansion view: ", response.data)
               this.loggedUser = response.data
           axios
-              .get('http://localhost:8080/mansion', {
+              .get('/mansion', {
                 params:
                     {
                       id: mansionid
@@ -547,7 +548,7 @@ export default {
                 this.mansionOwner = this.mansionToShow.mansionOwner
                 if(this.loggedUser.id == this.mansionToShow.mansionOwner.id) {
                   axios
-                      .get(devServer.proxy + "/getMansionsSubscribers", {
+                      .get( "/getMansionsSubscribers", {
                         params:
                             {
                               mansionId: this.mansionToShow.id
@@ -563,7 +564,8 @@ export default {
                       .catch(() => {
                         alert("Error occured while trying to find mansion subscribers!")
                       }) //subscribero
-                  axios.get(devServer.proxy + "/getReservedDatesForMansion",{
+                  axios.get(
+                      "/getReservedDatesForMansion",{
                     params:
                         {
                           "boatId": this.mansionToShow.id
@@ -579,7 +581,7 @@ export default {
                 } //ako je ulogovan owner
                 ///Unutar ifa drugi axios poziv
                 axios
-                    .post(devServer.proxy + "/getMansionAvailability", {
+                    .post("/getMansionAvailability", {
                           "boatId" : this.mansionToShow.id
                         }, {
                           headers: {
@@ -597,7 +599,7 @@ export default {
                       alert("Error while trying to get available periods!")
                       console.log(err);
                     }) //dostupnpost vikendice
-                axios.get(devServer.proxy + "/additionalServicesMansion", {
+                axios.get("/additionalServicesMansion", {
                   params:
                       {
                         id: this.mansionToShow.id
@@ -668,8 +670,8 @@ export default {
       console.log(this.mansionToShow.exteriorImages)
       for (var eimg of this.mansionToShow.exteriorImages) {
         console.log('Image path je ', eimg.toString().replaceAll('\\','/'))
-        console.log(devServer.proxy + "/entityImage/"+"/" + eimg.path)
-        axios.get('http://localhost:8080/entityImage/'+eimg.path, {
+        console.log("/entityImage/"+"/" + eimg.path)
+        axios.get('/entityImage/'+eimg.path, {
           headers: {
             'Authorization': 'Bearer ' + this.token,
           },
@@ -688,8 +690,8 @@ export default {
       }
       for(var iimg of this.mansionToShow.interiorImages){
         console.log('Image path je ', iimg.toString().replaceAll('\\','/'))
-        console.log(devServer.proxy + "/entityImage/"+"/" + iimg.path)
-        axios.get('http://localhost:8080/entityImage/'+iimg.path, {
+        console.log("/entityImage/"+"/" + iimg.path)
+        axios.get('/entityImage/'+iimg.path, {
           headers: {
             'Authorization': 'Bearer ' + this.token,
           },
@@ -714,7 +716,7 @@ export default {
     CheckClientSubscription(){
       alert(this.user)
       axios
-          .post(devServer.proxy + '/subscriptions/checkMansionSubscription', this.mansionToShow, {
+          .post('/subscriptions/checkMansionSubscription', this.mansionToShow, {
             headers: {
               'Authorization': this.$store.getters.tokenString,
               'Content-Type': 'application/json'
@@ -727,7 +729,7 @@ export default {
     },
     SubscribeClient(){
       axios
-          .post(devServer.proxy + '/subscriptions/newMansionSubscription', this.mansionToShow, {
+          .post('/subscriptions/newMansionSubscription', this.mansionToShow, {
             headers: {
               'Authorization': this.$store.getters.tokenString,
               'Content-Type': 'application/json'
@@ -774,7 +776,7 @@ export default {
     },
     calculateDiscountReservations(){
       axios
-          .get(devServer.proxy + "/getMansionDiscountReservations", {
+          .get("/getMansionDiscountReservations", {
             headers: {
               'Authorization' : this.$store.getters.tokenString
             },
@@ -832,7 +834,7 @@ export default {
         } else
         {
           axios
-              .post(devServer.proxy + "/addAvailablePeriodForMansion", {
+              .post( "/addAvailablePeriodForMansion", {
                 "boatId": this.mansionToShow.id,
                 "startTime": this.startDateTime,
                 "endTime": this.endDateTime
@@ -873,7 +875,7 @@ export default {
       }
     },
     makeReservationForClient(){
-      axios.post(devServer.proxy+ "/makeMansionReservationClient", {
+      axios.post("/makeMansionReservationClient", {
         email : this.clientResEmail,
         additionalServiceSet : this.clientResAdditionalServices,
         startDate : this.clientResStartDate,
@@ -910,7 +912,7 @@ export default {
       }
       else{
         console.log("pokusavam da kreiram")
-        axios.post(devServer.proxy + "/createDiscountMansionReservation", {
+        axios.post( "/createDiscountMansionReservation", {
           "boatId" : this.mansionToShow.id,
           "startDate" : this.startDateTimeQuick,
           "days" : this.numberOfDaysQuick,
@@ -948,22 +950,7 @@ export default {
         this.clientResEmailForm = false
       } else{
         this.clientResEmailForm = true
-      }/*else {
-          this.clientResEmailForm = true
-          axios.post(devServer.proxy + '/emailExistsClient', {
-            email: this.clientResEmail
-          }, {
-            headers: {
-              'Authorization': this.$store.getters.tokenString,
-              'Content-Type': 'application/json'
-            }
-          }).then(response =>{
-            this.clientResEmailExists = response.data
-            if(!this.clientResEmailExists){
-              alert("User with that email is not registered yet!")
-            }
-          })
-        }*/
+      }
     },
     validEmail: function (email) {
       var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;

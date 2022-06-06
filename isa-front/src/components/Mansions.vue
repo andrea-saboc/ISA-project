@@ -271,10 +271,9 @@
 
 <script>
 import axios from 'axios'
+axios.defaults.baseURL = process.env.VUE_APP_URL;
+
 import moment from 'moment';
-import {
-    devServer
-} from "../../vue.config";
 export default {
     name: 'mansions',
     data() {
@@ -311,7 +310,7 @@ export default {
     },
     methods: {
         picture(id) {
-         return devServer.proxy +'/images/mansion'+id+'.jpg'; },
+         return '/images/mansion'+id+'.jpg'; },
 
 
         ShowOffers(value) {
@@ -321,7 +320,7 @@ export default {
             } else {
 
                 axios
-                    .get(devServer.proxy + '/mansionDiscountReservations', {
+                    .get('/mansionDiscountReservations', {
                         params: {
                             id: value
                         },
@@ -347,7 +346,7 @@ export default {
         MakeReservation(res, mansion) {
 
             axios
-                .get(devServer.proxy + '/makeDiscountMansionReservation', {
+                .get('/makeDiscountMansionReservation', {
                     params: {
                         id: res.id
                     },
@@ -372,7 +371,7 @@ export default {
         SubscribeClient(mansion) {
 
             axios
-                .post(devServer.proxy + '/subscriptions/checkMansionSubscription', mansion, {
+                .post('/subscriptions/checkMansionSubscription', mansion, {
                     headers: {
                         'Authorization': this.$store.getters.tokenString,
                         'Content-Type': 'application/json'
@@ -384,7 +383,7 @@ export default {
                    }else{
                      
                      axios
-                        .post(devServer.proxy + '/subscriptions/newMansionSubscription', mansion, {
+                        .post('/subscriptions/newMansionSubscription', mansion, {
                            headers: {
                                  'Authorization': this.$store.getters.tokenString,
                                  'Content-Type': 'application/json'
@@ -406,7 +405,7 @@ export default {
         LoadMansions() {
 
             axios
-                .get(devServer.proxy + '/mansions', {
+                .get('/mansions', {
                     headers: {
                         'Authorization': this.$store.getters.tokenString
                     }
@@ -454,7 +453,7 @@ export default {
             console.log(searchParams)
 
             axios
-                .post(devServer.proxy + '/mansions/search', searchParams, {
+                .post( '/mansions/search', searchParams, {
                     headers: {
                         'Authorization': this.$store.getters.tokenString,
                         'Content-Type': 'application/json'
@@ -487,7 +486,7 @@ export default {
            else{
             this.makingReservation = true;
             axios
-                .post(devServer.proxy + '/reservations/availableMansions', this.reservationForm, {
+                .post('/reservations/availableMansions', this.reservationForm, {
                     headers: {
                         'Authorization': this.$store.getters.tokenString,
                         'Content-Type': 'application/json'
@@ -554,7 +553,7 @@ export default {
 
             console.log(mansionReservation)
             axios
-                .post(devServer.proxy +'/reservations/createMansionReservation', mansionReservation, {
+                .post('/reservations/createMansionReservation', mansionReservation, {
                     headers: {
                         'Authorization': this.$store.getters.tokenString,
                         'Content-Type': 'application/json'

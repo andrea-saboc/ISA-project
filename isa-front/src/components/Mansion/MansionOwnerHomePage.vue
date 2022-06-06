@@ -83,7 +83,7 @@ import MansionReservations from "./MansionReservations";
 import MansionOwnerDashboard from "./MansionOwnerDashboard";
 import ChangeMansionInformation from "./ChangeMansionInformation";
 import axios from "axios";
-import {devServer} from "../../../vue.config";
+axios.defaults.baseURL = process.env.VUE_APP_URL;
 
 export default {
 name: "MansionOwnerHomePage",
@@ -104,7 +104,7 @@ data: function(){
     if(window.location.href.includes('/mansion/')){
       this.display = 'mansion'
     }
-    axios.get(devServer.proxy + "/userData", {
+    axios.get("/userData", {
       headers: {
         'Authorization' : this.$store.getters.tokenString
       }
@@ -114,7 +114,7 @@ data: function(){
           console.log("Ovaj user je ulogovan:", this.loggedUser)
           if(this.loggedUser.advertiserType == 'mansion'){
             console.log("Trying to find mansions!")
-            axios.get(devServer.proxy+"/ownersMansions", {
+            axios.get("/ownersMansions", {
               headers: {
                 'Authorization' : this.$store.getters.tokenString
               }
