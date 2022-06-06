@@ -149,7 +149,7 @@ public class ReservationControllerTest {
                 .andExpect(status().isOk()).andExpect(jsonPath("$").value("Client is not available at selected time!"));
     }
 
-    @Test
+  /*  @Test
     public void makeBoatReservationForClientSuccess() throws Exception{
         CustomReservationForClientDto dto = new CustomReservationForClientDto();
         dto.email = "littlevamp999@gmail.com";
@@ -171,5 +171,5 @@ public class ReservationControllerTest {
                         .with(user("markijan@gmail.com").password("123").roles("BOAT_OWNER"))
                         .characterEncoding("utf-8"))
                 .andExpect(status().isOk()).andExpect(jsonPath("$").value("Reservation for client is created successfully!"));
-    }
+    }*/
 }
