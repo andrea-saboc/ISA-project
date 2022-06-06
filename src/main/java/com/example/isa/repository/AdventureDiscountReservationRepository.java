@@ -3,10 +3,7 @@ package com.example.isa.repository;
 import com.example.isa.model.Adventure;
 import com.example.isa.model.Boat;
 import com.example.isa.model.User;
-import com.example.isa.model.reservations.AdventureDiscountReservation;
-import com.example.isa.model.reservations.BoatDiscountReservation;
-import com.example.isa.model.reservations.DiscountReservation;
-import com.example.isa.model.reservations.ReservationStatus;
+import com.example.isa.model.reservations.*;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Date;
@@ -18,6 +15,7 @@ public interface AdventureDiscountReservationRepository  extends JpaRepository<A
     List<AdventureDiscountReservation> findAllByAdventure(Adventure b);
     List<DiscountReservation> findAllByAdventureAndStatus(Adventure b, ReservationStatus status);
     List<AdventureDiscountReservation> findAllByUserAndStatusNot(User user, ReservationStatus status);
+    List<AdventureDiscountReservation> findAllByUserAndStatusNotAndAdventure(User user, ReservationStatus status,Adventure adventure);
 
     List<AdventureDiscountReservation> findAllByUserAndStatus(User u, ReservationStatus status);
 
