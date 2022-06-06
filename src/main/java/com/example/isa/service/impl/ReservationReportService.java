@@ -235,7 +235,7 @@ public class ReservationReportService {
 		if(reservationReport.getReservation()!=null) {
 			penaltyManagementService.addPenaltyToClient(reservationReport.getReservation().getUser());
 
-			//mailService.sendNotificationAboutCommonClient(reservationReport.getReservation().getUser());
+			mailService.sendNotificationAboutCommonClient(reservationReport.getReservation().getUser());
 			reservationReport.setApproved(true);
 			reservationReport.setNotApproved(false);
 
@@ -244,7 +244,7 @@ public class ReservationReportService {
 				BoatReservation boatReservation = boatRegularReservationRepository.findById(id).get();
 				Boat boat = boatRepository.findById(boatReservation.getBoat().getId()).get();
 				BoatOwner boatOwner = boatOwnerRepository.findById(boat.getBoatOwner().getId()).get();
-				//mailService.sendNotificationAboutCommonUser(boatOwner,reservationReport.getReservation().getUser());
+				mailService.sendNotificationAboutCommonUser(boatOwner,reservationReport.getReservation().getUser());
 			}
 
 			if (reservationReport.getReservation().getType().equals("MANSION") ) {
@@ -252,7 +252,7 @@ public class ReservationReportService {
 				MansionReservation mansionReservation = mansionRegularReservationRepository.findById(id).get();
 				Mansion mansion = mansionRepository.findById(mansionReservation.getMansion().getId()).get();
 				MansionOwner mansionOwner = mansionOwnerRepository.findById(mansion.getMansionOwner().getId()).get();
-				//mailService.sendNotificationAboutCommonUser(mansionOwner,reservationReport.getReservation().getUser());
+				mailService.sendNotificationAboutCommonUser(mansionOwner,reservationReport.getReservation().getUser());
 			}
 
 
@@ -261,7 +261,7 @@ public class ReservationReportService {
 				AdventureReservation adventureReservation = adventureReservationRepository.findById(id).get();
 				Adventure adventure = adventureRepository.findById(adventureReservation.getAdventure().getId()).get();
 				FishingInstructor fishingInstructor = fishingInstructorRepository.findById(adventure.getFishingInstructor().getId()).get();
-				//mailService.sendNotificationAboutCommonUser(fishingInstructor,reservationReport.getReservation().getUser());
+				mailService.sendNotificationAboutCommonUser(fishingInstructor,reservationReport.getReservation().getUser());
 			}
 			reservationReportRepository.save(reservationReport);
 		}
@@ -269,33 +269,33 @@ public class ReservationReportService {
 		{
 			penaltyManagementService.addPenaltyToClient(reservationReport.getDiscountReservation().getUser());
 			DiscountReservation discountReservation=reservationReport.getDiscountReservation();
-			//mailService.sendNotificationAboutCommonClient(reservationReport.getDiscountReservation().getUser());
+			mailService.sendNotificationAboutCommonClient(reservationReport.getDiscountReservation().getUser());
 			reservationReport.setApproved(true);
 			reservationReport.setNotApproved(false);
 
-			if (reservationReport.getDiscountReservation().getType().equals("BOAT DISCOUNT") ) {
+			if (reservationReport.getDiscountReservation().getType().equals("BOAT_DISCOUNT") ) {
 				Long id = reservationReport.getDiscountReservation().getId();
 				BoatDiscountReservation boatReservation = boatDiscountReservationRepository.findById(id).get();
 				Boat boat = boatRepository.findById(boatReservation.getBoat().getId()).get();
 				BoatOwner boatOwner = boatOwnerRepository.findById(boat.getBoatOwner().getId()).get();
-				//mailService.sendNotificationAboutCommonUser(boatOwner,reservationReport.getDiscountReservation().getUser());
+				mailService.sendNotificationAboutCommonUser(boatOwner,reservationReport.getDiscountReservation().getUser());
 			}
 
 
-			if (reservationReport.getDiscountReservation().getType().equals("MANSION DISCOUNT") ) {
+			if (reservationReport.getDiscountReservation().getType().equals("MANSION_DISCOUNT") ) {
 				Long id = reservationReport.getDiscountReservation().getId();
 				MansionDiscountReservation mansionReservation = mansionDiscountReservationRepository.findById(id).get();
 				Mansion mansion = mansionRepository.findById(mansionReservation.getMansion().getId()).get();
 				MansionOwner mansionOwner = mansionOwnerRepository.findById(mansion.getMansionOwner().getId()).get();
-				//mailService.sendNotificationAboutCommonUser(mansionOwner,reservationReport.getDiscountReservation().getUser());
+				mailService.sendNotificationAboutCommonUser(mansionOwner,reservationReport.getDiscountReservation().getUser());
 			}
 
-			if (reservationReport.getDiscountReservation().getType().equals("ADVENTURE DISCOUNT")) {
+			if (reservationReport.getDiscountReservation().getType().equals("ADVENTURE_DISCOUNT")) {
 				Long id = reservationReport.getDiscountReservation().getId();
 				AdventureDiscountReservation adventureReservation = adventureDiscountReservationRepository.findById(id).get();
 				Adventure adventure = adventureRepository.findById(adventureReservation.getAdventure().getId()).get();
 				FishingInstructor fishingInstructor = fishingInstructorRepository.findById(adventure.getFishingInstructor().getId()).get();
-				//mailService.sendNotificationAboutCommonUser(fishingInstructor,reservationReport.getDiscountReservation().getUser());
+				mailService.sendNotificationAboutCommonUser(fishingInstructor,reservationReport.getDiscountReservation().getUser());
 			}
 			reservationReportRepository.save(reservationReport);
 
@@ -307,7 +307,7 @@ public class ReservationReportService {
 		ReservationReport reservationReport = reservationReportRepository.findById(dto.idReservation).get();
 		if (reservationReport.getReservation() != null) {
 
-			//mailService.sendNotificationAboutNotApproveCommonClient(reservationReport.getReservation().getUser());
+			mailService.sendNotificationAboutNotApproveCommonClient(reservationReport.getReservation().getUser());
 			reservationReport.setApproved(false);
 			reservationReport.setNotApproved(true);
 
@@ -316,7 +316,7 @@ public class ReservationReportService {
 				BoatReservation boatReservation = boatRegularReservationRepository.findById(id).get();
 				Boat boat = boatRepository.findById(boatReservation.getBoat().getId()).get();
 				BoatOwner boatOwner = boatOwnerRepository.findById(boat.getBoatOwner().getId()).get();
-				//mailService.sendNotificationAboutNotApproveCommonUser(boatOwner,reservationReport.getReservation().getUser());
+				mailService.sendNotificationAboutNotApproveCommonUser(boatOwner,reservationReport.getReservation().getUser());
 			}
 
 			if (reservationReport.getReservation().getType().equals("MANSION")) {
@@ -324,7 +324,7 @@ public class ReservationReportService {
 				MansionReservation mansionReservation = mansionRegularReservationRepository.findById(id).get();
 				Mansion mansion = mansionRepository.findById(mansionReservation.getMansion().getId()).get();
 				MansionOwner mansionOwner = mansionOwnerRepository.findById(mansion.getMansionOwner().getId()).get();
-				//mailService.sendNotificationAboutNotApproveCommonUser(mansionOwner,reservationReport.getReservation().getUser());
+				mailService.sendNotificationAboutNotApproveCommonUser(mansionOwner,reservationReport.getReservation().getUser());
 			}
 
 
@@ -333,37 +333,37 @@ public class ReservationReportService {
 				AdventureReservation adventureReservation = adventureReservationRepository.findById(id).get();
 				Adventure adventure = adventureRepository.findById(adventureReservation.getAdventure().getId()).get();
 				FishingInstructor fishingInstructor = fishingInstructorRepository.findById(adventure.getFishingInstructor().getId()).get();
-				//mailService.sendNotificationAboutNotApproveCommonUser(fishingInstructor,reservationReport.getReservation().getUser());
+				mailService.sendNotificationAboutNotApproveCommonUser(fishingInstructor,reservationReport.getReservation().getUser());
 			}
 			reservationReportRepository.save(reservationReport);
 		} else {
-			//mailService.sendNotificationAboutCommonClient(reservationReport.getDiscountReservation().getUser());
+			mailService.sendNotificationAboutCommonClient(reservationReport.getDiscountReservation().getUser());
 			reservationReport.setApproved(false);
 			reservationReport.setNotApproved(true);
 
-			if (reservationReport.getDiscountReservation().getType().equals("BOAT DISCOUNT")) {
+			if (reservationReport.getDiscountReservation().getType().equals("BOAT_DISCOUNT")) {
 				Long id = reservationReport.getDiscountReservation().getId();
 				BoatDiscountReservation boatReservation = boatDiscountReservationRepository.findById(id).get();
 				Boat boat = boatRepository.findById(boatReservation.getBoat().getId()).get();
 				BoatOwner boatOwner = boatOwnerRepository.findById(boat.getBoatOwner().getId()).get();
-				//mailService.sendNotificationAboutNotApproveCommonUser(boatOwner,reservationReport.getDiscountReservation().getUser());
+				mailService.sendNotificationAboutNotApproveCommonUser(boatOwner,reservationReport.getDiscountReservation().getUser());
 			}
 
 
-			if (reservationReport.getDiscountReservation().getType().equals("MANSION DISCOUNT")) {
+			if (reservationReport.getDiscountReservation().getType().equals("MANSION_DISCOUNT")) {
 				Long id = reservationReport.getDiscountReservation().getId();
 				MansionDiscountReservation mansionReservation = mansionDiscountReservationRepository.findById(id).get();
 				Mansion mansion = mansionRepository.findById(mansionReservation.getMansion().getId()).get();
 				MansionOwner mansionOwner = mansionOwnerRepository.findById(mansion.getMansionOwner().getId()).get();
-				//mailService.sendNotificationAboutNotApproveCommonUser(mansionOwner,reservationReport.getDiscountReservation().getUser());
+				mailService.sendNotificationAboutNotApproveCommonUser(mansionOwner,reservationReport.getDiscountReservation().getUser());
 			}
 
-			if (reservationReport.getDiscountReservation().getType().equals("ADVENTURE DISCOUNT")) {
+			if (reservationReport.getDiscountReservation().getType().equals("ADVENTURE_DISCOUNT")) {
 				Long id = reservationReport.getDiscountReservation().getId();
 				AdventureDiscountReservation adventureReservation = adventureDiscountReservationRepository.findById(id).get();
 				Adventure adventure = adventureRepository.findById(adventureReservation.getAdventure().getId()).get();
 				FishingInstructor fishingInstructor = fishingInstructorRepository.findById(adventure.getFishingInstructor().getId()).get();
-				//mailService.sendNotificationAboutNotApproveCommonUser(fishingInstructor,reservationReport.getDiscountReservation().getUser());
+				mailService.sendNotificationAboutNotApproveCommonUser(fishingInstructor,reservationReport.getDiscountReservation().getUser());
 			}
 			reservationReportRepository.save(reservationReport);
 

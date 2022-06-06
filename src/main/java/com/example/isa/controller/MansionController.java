@@ -95,7 +95,7 @@ public class MansionController {
         }
     }
 
-	@PreAuthorize("hasRoles('ROLE_MANSION_OWNER','ROLE_ADMIN')")
+	@PreAuthorize("hasAnyRole('ROLE_MANSION_OWNER','ROLE_ADMIN')")
 	@RequestMapping(method = RequestMethod.POST,value = "/deleteMansion",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> deleteMansion(@RequestBody LongIdDto id){
 		if(service.isReserved(id.boatId)){

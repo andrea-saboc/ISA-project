@@ -81,6 +81,21 @@ public class MailService<T> {
 		message.setSubject("ODBIJENA REGISTRACIJA");
 		mailSender.send(message);
 	}
+
+	@Async
+	public void sendNotificationAbaoutApprovedRegistration(User user,String report){
+		SimpleMailMessage message = new SimpleMailMessage();
+		message.setFrom("adventurelandisa@gmail.com");
+		message.setTo("alexmirkovic1719@gmail.com"); //client.mail
+		String content="";
+		Format formatter = new SimpleDateFormat("dd.MM.yyyy, HH:mm");
+		content+= "Hi "+user.getName()+",\n"+"\n";
+		content+="Vasa registracija je prihvacena!\n";
+		message.setText(content);
+		message.setSubject("REGISTRACIJA");
+		mailSender.send(message);
+	}
+
 	@Async
 	public void sendNotificationAbaoutUndeletedAccount(User user,String report){
 		SimpleMailMessage message = new SimpleMailMessage();

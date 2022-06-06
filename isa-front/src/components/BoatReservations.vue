@@ -57,7 +57,7 @@
         </thead>
         <tbody>
         <tr v-for="(reservation, index) in filteredReservations" :key="reservation.id" style="align-content: center"
-            v-on:click="selectReservation(reservation, 'REGULAR_BOAT')" data-toggle="modal" data-target="#exampleModal">
+            v-on:click="selectReservation(reservation, 'BOAT')" data-toggle="modal" data-target="#exampleModal">
           <th scope="row" style="align-content: center" >{{index+1}}</th>
           <td>{{reservation.boat.name}}</td>
           <td v-bind:id="reservation.id+'resid'" style="align-content: center">{{formatDate(reservation.startDate)}}</td>
@@ -288,7 +288,7 @@ export default {
       past: false,
       filteredReservations: new Array(),
       selectedReservation: null,
-      selectedReservationType: 'REGULAR_BOAT',
+      selectedReservationType: 'BOAT',
       selectedUserSubscribed: new Array(),
       discountReservations : new Array(),
       filteredDiscountReservations : new Array(),

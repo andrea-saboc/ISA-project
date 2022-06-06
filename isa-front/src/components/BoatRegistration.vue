@@ -235,7 +235,7 @@
         </div>
       </div>
 <hr>
-      <button class="w-100 btn btn-primary btn-lg" type="submit" @click="registerBoat">Register a boat</button>
+      <button class="w-100 btn btn-primary btn-lg" type="button" @click="registerBoat">Register a boat</button>
     </form>
 
   </div>
