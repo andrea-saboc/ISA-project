@@ -12,6 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Service
@@ -47,7 +48,12 @@ public class CollectingAdventureReservationsServiceImpl {
         }
         return adventureReservation;
     }
-
+    public Collection<? extends AbstractReservation> getAllNotCancelledReservationsByAdventureAndClient(Client client, Long id) {
+        List<AbstractReservation> allReservations = new ArrayList<>(adventureReservationRepository.findAllByUserAndStatusNotAndAdventure(client, ReservationStatus.CANCELLED, adventureRepository.findById(id).get()));
+        allReservations.addAll(adventureDiscountReservationRepository.findAllByUserAndStatusNotAndAdventure(client, ReservationStatus.CANCELLED, adventureRepository.findById(id).get()));
+        System.out.println("Reservation by dventure and client "+ allReservations.size());
+        return allReservations;
+    }
     public List<ReservationCalendarDTO> getAllAdventureForCalendar()
     {
         List<AdventureReservation> adventureReservation=getOwnerReservation();

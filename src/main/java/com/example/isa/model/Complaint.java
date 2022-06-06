@@ -1,17 +1,10 @@
 package com.example.isa.model;
 
+
+
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.SequenceGenerator;
+import javax.persistence.*;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -30,6 +23,10 @@ public class Complaint {
 	private String complaintContent;
 	private Date date;
 	private boolean approved;
+
+	@Version
+	@Column(name = "version", nullable =true)
+	private Long version;
 	
 	public Long getId() {
 		return id;
@@ -73,6 +70,13 @@ public class Complaint {
 	
 	public Complaint() {
 		super();
+	}
+	public void setVersion(Long version) {
+		this.version = version;
+	}
+
+	public Long getVersion() {
+		return version;
 	}
 	
 	

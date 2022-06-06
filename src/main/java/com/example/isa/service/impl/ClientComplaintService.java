@@ -29,7 +29,11 @@ import com.example.isa.repository.MansionRepository;
 import com.example.isa.repository.MansionReservationRepository;
 import com.example.isa.service.AuthenticationService;
 
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
 @Service
+@Transactional(readOnly = true)
 public class ClientComplaintService {
 	
 	@Autowired
@@ -60,6 +64,7 @@ public class ClientComplaintService {
 		return complaintRepository.save(new AdvertiserComplaint((Client) authentication.getLoggedUser(), dto.getContent(),mansionRepository.findById(dto.getEntityId()).getMansionOwner()));
 	}
 
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public void sendComplain(AdminComplaintDto dto) {
 		Complaint complaint=complaintRepository.findById(dto.idComlaint).get();
 		Client client=complaint.getAuthor();

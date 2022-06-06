@@ -2,6 +2,7 @@ package com.example.isa.service.impl.reservations;
 
 import com.example.isa.dto.CustomReservationForClientDto;
 import com.example.isa.dto.ReservationDto;
+import com.example.isa.enums.EntityType;
 import com.example.isa.exception.EntityDeletedException;
 import com.example.isa.exception.ImpossibleDueToPenaltyPoints;
 import com.example.isa.exception.PeriodNoLongerAvailableException;
@@ -12,11 +13,13 @@ import com.example.isa.repository.*;
 import com.example.isa.service.AuthenticationService;
 import com.example.isa.service.ReservationService;
 
+import com.example.isa.service.impl.ClientService;
 import com.example.isa.service.impl.RecordIncomeService;
 
 import com.example.isa.service.impl.DateCoverter;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.PessimisticLockingFailureException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -48,7 +51,8 @@ public class AdventureReservationServiceImpl implements ReservationService {
     RecordIncomeService recordIncomeService;
 @Autowired
     CollectingAdventureReservationsServiceImpl collectingAdventureReservationsService;
-
+    @Autowired
+    ClientService clientService;
     @Autowired
     AuthenticationService authenticationService;
     @Autowired
@@ -60,23 +64,36 @@ public class AdventureReservationServiceImpl implements ReservationService {
     public int createReservationForClient(CustomReservationForClientDto dto) throws PeriodNoLongerAvailableException, ParseException {
 
         ReservationDto res = new ReservationDto(dto);
-        System.out.println(res.toString());
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         FishingInstructor fishingInstructor1 = fishingInstructorRepository.findById(user.getId()).get();
         ReservationStartEndDateFormatter formatter = new ReservationStartEndDateFormatter(res);
         Date startDate = formatter.startDate;
         Date endDate = formatter.endDate;
         LoyaltyProgram loyaltyProgram=loyaltyProgramRepository.findById(1L).get();
-        FishingAvailablePeriod period = availablePeriodsRepo.getPeriodOfInterest(startDate, endDate,fishingInstructor1.getId());
+
+        Adventure entity = adventureRepository.findLockedById(res.getEntityId());
+        if (entity == null)
+            throw new PessimisticLockingFailureException("Some is already trying to reserve at the same time!");
+
         Adventure adventure = adventureRepository.findById(res.getEntityId()).orElse(new Adventure());
+        FishingAvailablePeriod period = availablePeriodsRepo.getPeriodOfInterest(startDate, endDate,fishingInstructor1.getId());
 
 
         if(period == null) {
-            throw new PeriodNoLongerAvailableException();
+            return 5;
         }
         else {
 
             Client client = clientRepository.findByEmail(dto.email);
+            if (client == null){
+                return 2;
+            }
+            if(!clientHasAnActiveReservationAtEntity(client, adventure)){
+                return 7;
+            }
+            if(!clientService.clientAvailable(client, startDate, endDate)){
+                return 4;
+            }
             AdventureReservation newAdventureReservation= new AdventureReservation(client, startDate,endDate, res.getNumberOfGuests(), dto.toResSearchDto(),
                     adventure);
 
@@ -118,6 +135,23 @@ fishingInstructor1.setLoyaltyPoints((int) (fishingInstructor1.getLoyaltyPoints()
         }
     }
 
+    private boolean clientHasAnActiveReservationAtEntity(Client client, AbstractEntity entity) {
+        List<AbstractReservation> allClientsReservations = new ArrayList<>();
+        if (entity.getEntityType() == EntityType.BOAT){
+        } else if(entity.getEntityType() == EntityType.AVENTURE){
+            allClientsReservations.addAll(collectingAdventureReservationsService.getAllNotCancelledReservationsByAdventureAndClient(client, entity.getId()));
+
+        } else if (entity.getEntityType() == EntityType.MANSION){
+        }
+        LocalDateTime now = LocalDateTime.now();
+        for (AbstractReservation ar : allClientsReservations){
+            if(DateCoverter.convertToLocalDateTimeViaInstant(ar.getStartDate()).isBefore(now)
+                    && DateCoverter.convertToLocalDateTimeViaInstant(ar.getEndDate()).isAfter(now)){
+                return true;
+            }
+        }
+        return false;
+    }
 
     @Override
     @Transactional(readOnly=false,propagation=Propagation.REQUIRED,isolation= Isolation.SERIALIZABLE)
