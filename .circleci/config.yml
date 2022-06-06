@@ -35,6 +35,9 @@ jobs:
     steps:
       - checkout:
           path: ~/ISA-project
+      - run:
+          name: Build
+          command: gradle -B -DskipTests clean package
 
 
 
