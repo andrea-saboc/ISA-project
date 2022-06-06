@@ -6,7 +6,7 @@ orbs:
   heroku: circleci/heroku@1.2.6
 
 jobs:
-  build-and-test:
+  build:
     docker:
       - image: circleci/openjdk:11-jdk
       - image: circleci/postgres:9.4-alpine-ram
