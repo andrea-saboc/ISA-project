@@ -299,6 +299,22 @@ public class ReservationController {
         }
     }
 
+    @PreAuthorize("hasRole('ROLE_BOAT_OWNER')")
+    @RequestMapping(method = RequestMethod.GET, value = "/allReservationBoat")
+    @CrossOrigin(origins = "*")
+    public ResponseEntity<String> allReservationBoat(){
+        try {
+            //List<AdventureReservation> adventureReservations = collectingAdventureReservationsService.getOwnerReservation();
+            List<ReservationCalendarDTO> reservationCalendarDTO= collectingBoatResService.getAllBoatForCalendar();
+            ObjectMapper mapper = new ObjectMapper();
+            String jsonString = mapper.writeValueAsString(reservationCalendarDTO);
+            System.out.println(jsonString);
+            return new ResponseEntity<>(jsonString, HttpStatus.OK);
+        } catch (Exception e){
+            return new ResponseEntity<>("Bad request", HttpStatus.BAD_REQUEST);
+        }
+    }
+
 
     @PreAuthorize("hasRole('ROLE_BOAT_OWNER')")
     @RequestMapping(method = RequestMethod.POST, value = "/makeBoatReservationClient")

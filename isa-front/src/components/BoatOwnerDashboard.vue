@@ -76,11 +76,20 @@
 
     </div>
   </div>
+   <h4>
+    Calendar
+  </h4>
+ 
+  <FullCalendar :options="calendarOptions" />
 
 </div>
 </template>
 
 <script>
+import '@fullcalendar/core/vdom' // solves problem with Vite
+import FullCalendar from '@fullcalendar/vue3'
+import dayGridPlugin from '@fullcalendar/daygrid'
+import interactionPlugin from '@fullcalendar/interaction'
 import axios from "axios";
 axios.defaults.baseURL = process.env.VUE_APP_URL;
 
@@ -92,10 +101,27 @@ ChartJS.register(Title, Tooltip, Legend, BarElement,PointElement,LineElement, Ca
 export default {
 
   name: "BoatOwnerDashboard",
-  components: {Bar, Bubble, Line},
+  components: {Bar, Bubble, Line,FullCalendar},
 
   data: function (){
       return {
+           calendarOptions: {
+        plugins: [dayGridPlugin, interactionPlugin],
+        initialView: 'dayGridMonth',
+        weekends: true,
+        editable: true,
+        selectable: true,
+        headerToolbar: {
+          left: 'prev,next today',
+          center: 'title',
+          right: 'dayGridMonth,dayGridWeek,dayGridDay'
+        },
+
+        events: [],
+        eventClick: (arg) => {
+          alert(arg.event.extendedProps.description)
+        },
+      },
         selectedEntity: '',
         allEntities: [],
         allData: '',
@@ -255,6 +281,16 @@ export default {
     })
     .then(response => {
       console.log(response.data);
+      axios.get("/allReservationBoat", {
+          headers: {
+            'Authorization' :'Bearer ' + this.token,
+          }
+        })
+            .then(response1 => {
+                console.log("Podaci za kalendar: ",response1.data)
+              this.calendarOptions.events=response1.data
+            
+            })
       this.allData = response.data;
       var allYearly = response.data.yearly.allData;
       console.log(allYearly);
