@@ -84,7 +84,8 @@ import BoatReservations from "./BoatReservations";
 import BoatOwnerDashboard from "./BoatOwnerDashboard";
 import ChangeBoatInformation from "./ChangeBoatInformation";
 import axios from "axios";
-import {devServer} from "../../vue.config";
+axios.defaults.baseURL = process.env.VUE_APP_URL;
+
 export default {
   name: "BoatOwnerHomePage",
   components: {BoatRegistration, Profile, BoatView, BoatReservations, BoatOwnerDashboard, ChangeBoatInformation},
@@ -109,7 +110,7 @@ export default {
     console.log('Window access token: ',window.sessionStorage.getItem('accessToken'))
     console.log('Token string',this.$store.getters.tokenString)
 
-    axios.get(devServer.proxy + "/userData", {
+    axios.get( "/userData", {
       headers: {
         'Authorization' : this.$store.getters.tokenString
       }
@@ -118,7 +119,7 @@ export default {
       this.loggedUser =response.data
       console.log("Ovaj user je ulogovan:", this.loggedUser)
       if(this.loggedUser.advertiserType == 'boat'){
-        axios.get(devServer.proxy+"/ownersBoats", {
+        axios.get("/ownersBoats", {
           headers: {
             'Authorization' : this.$store.getters.tokenString
           }

@@ -362,7 +362,7 @@
 <script>
 import {ref} from "vue";
 import axios from 'axios'
-import {devServer} from "../../../vue.config";
+axios.defaults.baseURL = process.env.VUE_APP_URL;
 
 export default {
   name: "AdventureView",
@@ -431,7 +431,7 @@ export default {
       var path = window.location.href;
       var adventureId = path.split('/adventure/')[1].replaceAll('%20', ' ');
    
-    axios.get("http://localhost:8080/userData", {
+    axios.get("/userData", {
       headers: {
         'Authorization' :  'Bearer ' + this.token,
       }
@@ -443,7 +443,7 @@ export default {
           this.loggedUser = null
     })
     axios
-         .get('http://localhost:8080/adventure', {
+         .get('/adventure', {
       params:
           {
             id : adventureId
@@ -459,7 +459,7 @@ export default {
       console.log(response.data)
       this.fishingInstructor = this.adventureToShow.fishingInstructor
       axios
-          .post(devServer.proxy + "/getFishingAvailability", {
+          .post("/getFishingAvailability", {
             "fishingId": this.adventureToShow.fishingInstructor.id
           }, {
             headers: {
@@ -469,7 +469,7 @@ export default {
           .then(response => {
             this.availablePeriods = response.data
             console.log("Available periods for fishing: ", this.availablePeriods)
-            axios.get(devServer.proxy + "/additionalServicesAdventure", {
+            axios.get("/additionalServicesAdventure", {
               params:
                   {
                     id: adventureId
@@ -480,7 +480,7 @@ export default {
             })
             .then(resp => {
               this.additionalServices = resp.data
-              axios.get(devServer.proxy + "/getAllReservedAdventureDatesForFishing", {
+              axios.get("/getAllReservedAdventureDatesForFishing", {
                 headers: {
                   'Authorization': 'Bearer ' + this.token,
                 
@@ -507,8 +507,8 @@ export default {
     setImg: function(image)
     {
       console.log('Image path je ',image.path.toString().replaceAll('\\','/'))
-      console.log('http://localhost:8080/entityImage/'+image.path)
-      axios.get('http://localhost:8080/entityImage/'+image.path, {
+      console.log('/entityImage/'+image.path)
+      axios.get('/entityImage/'+image.path, {
       headers: {
         'Authorization' : 'Bearer ' + this.token,
       },
@@ -598,7 +598,7 @@ export default {
     },
     calculateDiscountReservations(){
       axios
-      .get(devServer.proxy + "/getAdventureDiscountReservations", {
+      .get("/getAdventureDiscountReservations", {
         headers: {
           'Authorization' : this.$store.getters.tokenString
         },
@@ -668,7 +668,7 @@ export default {
       }
       else{
       axios
-      .post(devServer.proxy + "/addAvailablePeriodForFishing", {
+      .post("/addAvailablePeriodForFishing", {
         "fishingId" : this.adventureToShow.fishingInstructor.id,
         "startTime" : this.startDateTime,
         "endTime" : this.endDateTime
@@ -700,7 +700,7 @@ export default {
         return;
       }
       else{
-      axios.post(devServer.proxy + "/createDiscountAdventureReservation", {
+      axios.post( "/createDiscountAdventureReservation", {
                                      
         "boatId" : this.adventureToShow.id,
         "startDate" : this.startDateTimeQuick,
@@ -773,7 +773,7 @@ export default {
       console.log("additional service is :", this.clientResAdditionalServices)
     }, 
     makeReservationForClient(){
-      axios.post(devServer.proxy+ "/makeAdventureReservationClient", {
+      axios.post("/makeAdventureReservationClient", {
           email : this.clientResEmail,
           additionalServiceSet : this.clientResAdditionalServices,
           startDate : this.clientResStartDate,

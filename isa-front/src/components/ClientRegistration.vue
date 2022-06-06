@@ -60,7 +60,7 @@
 
 <script>
 import axios from 'axios'
-import {devServer} from "../../vue.config";
+axios.defaults.baseURL = process.env.VUE_APP_URL;
 
 export default{
     data(){
@@ -89,7 +89,7 @@ export default{
 
       if(this.fieldsFilled && this.passwordValid && this.picked=='Client'){
         axios
-            .post(devServer.proxy + '/register/client',
+            .post('/register/client',
             {
               "name": this.name,
               "surname": this.surname,
@@ -107,7 +107,7 @@ export default{
         this.ClearAllFields();
       } else if (this.fieldsFilled && this.passwordValid && this.picked=='Owner'){
         axios
-      .post(devServer.proxy +'/register/advertiser',
+      .post('/register/advertiser',
             {
               "name": this.name,
               "surname": this.surname,

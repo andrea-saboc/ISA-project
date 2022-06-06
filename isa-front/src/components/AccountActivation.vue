@@ -73,9 +73,8 @@
 </template>
 <script>
 import axios from 'axios'
-import {
-    devServer
-} from "../../vue.config";
+axios.defaults.baseURL = process.env.VUE_APP_URL;
+
 export default {
 name: "AccountActivation",
   data() {
@@ -89,7 +88,7 @@ name: "AccountActivation",
             var code = url.split('/')[4]   
 
               axios
-                .post(devServer.proxy + '/checkActivationCode', code, {
+                .post('/checkActivationCode', code, {
                     headers: {
                         'Authorization': this.$store.getters.tokenString,
                         'Content-Type': 'application/json'

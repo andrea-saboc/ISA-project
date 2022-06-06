@@ -159,8 +159,9 @@
 
 <script>
 import axios from 'axios';
+axios.defaults.baseURL = process.env.VUE_APP_URL;
+
 import moment from 'moment';
-import {devServer} from "../../vue.config";
 export default {
     name: 'clientReservations',
     data: function() {
@@ -196,7 +197,7 @@ export default {
 
         LoadReservations() {
             axios
-                .get(devServer.proxy+'/reservations', {
+                .get('/reservations', {
                     headers: {
                         'Authorization': this.$store.getters.tokenString
                     }
@@ -208,7 +209,7 @@ export default {
         },
         LoadMansionReservationHistory() {
             axios
-                .get(devServer.proxy+'/reservations/mansions', {
+                .get('/reservations/mansions', {
                     headers: {
                         'Authorization': this.$store.getters.tokenString
                     }
@@ -220,7 +221,7 @@ export default {
         },
         LoadBoatReservationHistory() {
             axios
-                .get(devServer.proxy+'/reservations/boats', {
+                .get('/reservations/boats', {
                     headers: {
                         'Authorization': this.$store.getters.tokenString
                     }
@@ -317,7 +318,7 @@ export default {
 
             console.log(feedback)
             axios
-                .post(devServer.proxy + url, feedback, {
+                .post(url, feedback, {
                     headers: {
                         'Authorization': this.$store.getters.tokenString,
                         'Content-Type': 'application/json'
@@ -349,7 +350,7 @@ export default {
 
             console.log(feedback)
             axios
-                .post(devServer.proxy + url, feedback, {
+                .post( url, feedback, {
                     headers: {
                         'Authorization': this.$store.getters.tokenString,
                         'Content-Type': 'application/json'
@@ -382,7 +383,7 @@ export default {
             }
 
             axios
-                .post(devServer.proxy + url, res.reservationId, {
+                .post( url, res.reservationId, {
                     headers: {
                         'Authorization': this.$store.getters.tokenString,
                         'Content-Type': 'application/json'

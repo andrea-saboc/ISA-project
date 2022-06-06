@@ -56,7 +56,8 @@
 </template>
 <script>
 import axios from 'axios'
-import {devServer} from "../../vue.config";
+axios.defaults.baseURL = process.env.VUE_APP_URL;
+
 //import {onBeforeMount} from "vue";
 export default{
     data(){
@@ -82,7 +83,7 @@ export default{
        LoadUser(){
          let token = localStorage.getItem('token').substring(1, localStorage.getItem('token').length-1);
          axios
-         .get(devServer.proxy +'/userData',{
+         .get('/userData',{
             headers: {
                'Authorization' : 'Bearer ' + token,
             }
@@ -107,7 +108,7 @@ export default{
         this.CheckIfEmpty()
         if(!this.fieldEmpty){
           axios
-              .post(devServer.proxy +'/login',
+              .post('/login',
               {
                 "email": this.email,
                 "password": this.password
@@ -120,7 +121,7 @@ export default{
 
                     localStorage.setItem('token', JSON.stringify(response.data.accessToken));
                     let token = localStorage.getItem('token').substring(1, localStorage.getItem('token').length-1);
-                     axios.get(devServer.proxy + "/userData", {
+                     axios.get("/userData", {
                     headers: {
                     'Authorization' : 'Bearer ' + token,
                   }
@@ -228,7 +229,7 @@ export default{
             }  
             console.log(passwords)
             axios
-            .post(devServer.proxy + '/changePassword',passwords,{
+            .post( '/changePassword',passwords,{
             headers: {
             'Authorization' : 'Bearer ' + token,
             'Content-Type': 'application/json'

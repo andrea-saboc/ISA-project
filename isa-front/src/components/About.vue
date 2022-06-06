@@ -7,6 +7,8 @@
 </template>
 <script>
 import axios from 'axios'
+axios.defaults.baseURL = process.env.VUE_APP_URL;
+
 export default {
   name: "About",
   data() {
@@ -20,7 +22,7 @@ export default {
 
     alert(this.user)
     axios
-        .get('http://localhost:8080/proba',{
+        .get('/proba',{
       headers: {
         'Authorization' : this.$store.getters.tokenString
       }

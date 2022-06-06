@@ -48,7 +48,8 @@
 </template>
 <script>
 import axios from 'axios'
-import {devServer} from "../../vue.config";
+axios.defaults.baseURL = process.env.VUE_APP_URL;
+
 //import Popper from 'popper.js'
 export default{
     name: 'boats',
@@ -73,7 +74,7 @@ export default{
 
         LoadMansions(){
             axios
-            .get(devServer.proxy + '/subscriptions/mansions', {
+            .get('/subscriptions/mansions', {
                 headers: {
                     'Authorization': this.$store.getters.tokenString
                 }
@@ -85,7 +86,7 @@ export default{
         },
         LoadBoats(){
             axios
-                .get(devServer.proxy + '/subscriptions/boats', {
+                .get('/subscriptions/boats', {
                     headers: {
                         'Authorization': this.$store.getters.tokenString
                     }
@@ -98,7 +99,7 @@ export default{
 
        CancelBoatSubsciption(s){
           axios
-         .post(devServer.proxy + '/subscriptions/cancelBoatSub',s,{
+         .post( '/subscriptions/cancelBoatSub',s,{
          headers: {
          'Authorization' : this.$store.getters.tokenString,
          'Content-Type': 'application/json'
@@ -112,7 +113,7 @@ export default{
        },
        CancelMansionSubsciption(s){
          axios
-         .post(devServer.proxy + '/subscriptions/cancelMansionSub',s,{
+         .post('/subscriptions/cancelMansionSub',s,{
          headers: {
          'Authorization' : this.$store.getters.tokenString,
          'Content-Type': 'application/json'
