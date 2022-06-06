@@ -1,4 +1,4 @@
-package com.example.isa.controller;
+/*package com.example.isa.controller;
 
 import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
@@ -48,6 +48,6 @@ public class LoyaltyProgramControllerTest {
                         .with(user("admin@gmail.com").password("123").roles("ADMIN"))
                         .characterEncoding("utf-8"))
                 .andExpect(status().isOk());
-    }*/
+    }
 
-}
+}*/
