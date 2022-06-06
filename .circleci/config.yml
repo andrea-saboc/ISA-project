@@ -37,7 +37,7 @@ jobs:
           path: ~/ISA-project
       - run:
           name: Build
-          command: ./gradlew test
+          command: ./gradlew clean build -i --continue
       - save_cache:
           paths:
            - ~/.gradle/wrapper
