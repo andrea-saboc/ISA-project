@@ -16,7 +16,7 @@ jobs:
       - checkout
       - run:
           name: "Say hello"
-          command: "echo Hello, World!"
+          command: "echo Hello, Worl!"
 
   build-and-test:
     working_directory: ~/ISA-project
