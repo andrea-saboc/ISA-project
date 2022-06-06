@@ -23,13 +23,13 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
-@RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@AutoConfigureMockMvc
+//@RunWith(SpringRunner.class)
+//@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+//@AutoConfigureMockMvc
 public class ControllerTests {
 
 	
-	private static final String WRONG_URL = "/mansionees";
+/*	private static final String WRONG_URL = "/mansionees";
 
 	private MediaType contentType = new MediaType(MediaType.APPLICATION_JSON.getType(),
 			MediaType.APPLICATION_JSON.getSubtype());
@@ -64,6 +64,6 @@ public class ControllerTests {
         mockMvc.perform(get("/mansions"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(contentType)).andExpect(jsonPath("$", hasSize(8)));
-    }
+    }*/
 
 }
