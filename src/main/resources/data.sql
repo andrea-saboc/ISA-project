@@ -53,6 +53,7 @@ INSERT INTO public.client(
     activation_code, client_loyalty_points,client_penalty_points, id)
 VALUES ('code', 0, 0, 402);
 
+INSERT INTO public.system_user(
 user_type, id, address, blocked, city, country, email, name, password, phone_number, surname,deleted,notdeleted)
 VALUES ('CLIENT', 403, 'Trg 3', false, 'Lisabon', 'Portugal', 'client1@gmail.com','Dijana', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '78555', 'Jankovic',false,false);
 INSERT INTO public.client(
