@@ -125,10 +125,6 @@ methods:
       
       
      })
-      .catch(() =>
-      {
-        alert("Server error")
-      })
      
     }, 
     approveReport(report)
@@ -153,10 +149,7 @@ methods:
       
       
      })
-      .catch(() =>
-      {
-        alert("Server error")
-      })
+
      }
     
      
