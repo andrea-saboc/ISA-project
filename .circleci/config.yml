@@ -70,6 +70,8 @@ workflows:
       - build-and-test
       - prepare-for-deploy
       - heroku/deploy-via-git:
+          name: deploy-back
+          app-name: adventrelandisa
           requires:
             - build-and-test
             - prepare-for-deploy
