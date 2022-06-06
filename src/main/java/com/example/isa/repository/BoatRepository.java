@@ -22,4 +22,6 @@ public interface BoatRepository extends JpaRepository<Boat, Long>{
 	@Lock(LockModeType.PESSIMISTIC_WRITE)
 	@QueryHints({@QueryHint(name = "javax.persistence.lock.timeout", value = "0")})
 	Boat findLockedById(Long id);
+
+    List<Boat> findAllByBoatOwnerAndDeletedFalse(BoatOwner fishingInstructor);
 }

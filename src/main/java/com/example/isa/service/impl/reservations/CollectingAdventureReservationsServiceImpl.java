@@ -70,6 +70,8 @@ public class CollectingAdventureReservationsServiceImpl {
         return reservationCalendarDTO;
 
     }
+
+
     public boolean overlapsWithActiveReservations(Date startDate, Date endDate, Adventure boat) {
         List<AbstractReservation> allReservations = getAllNotCancelledReservationsByAdventure(boat);
         for (AbstractReservation ar : allReservations){

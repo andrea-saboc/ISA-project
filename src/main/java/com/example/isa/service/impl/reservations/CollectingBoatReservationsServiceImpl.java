@@ -5,18 +5,13 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
-import com.example.isa.model.Client;
-import com.example.isa.model.User;
-import com.example.isa.model.reservations.AbstractReservation;
+import com.example.isa.dto.ReservationCalendarDTO;
+import com.example.isa.model.*;
+import com.example.isa.model.reservations.*;
 import com.example.isa.service.impl.BoatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.isa.model.Boat;
-import com.example.isa.model.BoatOwner;
-import com.example.isa.model.reservations.BoatDiscountReservation;
-import com.example.isa.model.reservations.BoatReservation;
-import com.example.isa.model.reservations.ReservationStatus;
 import com.example.isa.repository.BoatDiscountReservationRepository;
 import com.example.isa.repository.BoatOwnerRepository;
 import com.example.isa.repository.BoatRepository;
@@ -111,4 +106,29 @@ public class CollectingBoatReservationsServiceImpl {
 		allReservations.addAll(boatDiscountReservationRepo.findAllByUserAndStatusNotAndBoat(client, ReservationStatus.CANCELLED, boatRepo.findById(id).get()));
 		return allReservations;
     }
+	public List<BoatReservation> getOwnerReservation() {
+		BoatOwner fishingInstructor = boatOwnerRepo.findById(authenticationService.getLoggedUser().getId()).get();
+		List<Boat> adventures = boatRepo.findAllByBoatOwnerAndDeletedFalse(fishingInstructor);
+
+		List<BoatReservation> adventureReservation= new ArrayList<>();
+		for ( Boat adventure: adventures) {
+			adventureReservation.addAll(boatReservationRepo.findAllByBoat(adventure));
+		}
+		return adventureReservation;
+	}
+	public List<ReservationCalendarDTO> getAllBoatForCalendar()
+	{
+		List<BoatReservation> adventureReservation=getOwnerReservation();
+		List<ReservationCalendarDTO> reservationCalendarDTO=  new ArrayList<>();
+
+		for(BoatReservation a : adventureReservation)
+		{
+			String title="Avantura:"+a.getBoat().getName();
+			String description="Pocetak: "+a.getStartDate()+"\n kraj je "+a.getEndDate()+"\n korisnik koji je rezervisao: "+a.getUser().getName()+ " "+a.getUser().getSurname();
+			ReservationCalendarDTO r= new ReservationCalendarDTO(a.getStartDate(),a.getEndDate(),title,description);
+			reservationCalendarDTO.add(r);
+		}
+		return reservationCalendarDTO;
+
+	}
 }
