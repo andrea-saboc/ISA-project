@@ -71,7 +71,7 @@ workflows:
       - prepare-for-deploy
       - heroku/deploy-via-git:
           name: deploy-back
-          api-key: 9690485c-dac5-46a3-8499-a4d33786b381
+          api-key: $HEROKU_API_KEY
           app-name: adventurelandisa
           requires:
             - build-and-test
