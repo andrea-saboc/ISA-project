@@ -70,6 +70,7 @@ public class BoatReservationServiceImpl implements ReservationService{
 	CollectionMansionReservationsImpl collectionMansionReservations;
 	@Autowired
 	AdvertisersService advertisersService;
+	@Autowired
 	LoyaltyProgramRepository loyaltyProgramRepository;
 	@Autowired
 	RecordIncomeRepository recordIncomeRepository;
@@ -85,15 +86,14 @@ public class BoatReservationServiceImpl implements ReservationService{
 		ReservationStartEndDateFormatter formatter = new ReservationStartEndDateFormatter(res);
 		Date startDate = formatter.startDate;
 		Date endDate = formatter.endDate;
-		LoyaltyProgram loyaltyProgram=loyaltyProgramRepository.findById(1L).get();
 
-		BoatAvailablePeriod period = availablePeriodsRepo.getPeriodOfInterest(startDate, endDate,res.getEntityId());
 		Boat entity = boatRepo.findLockedById(res.getEntityId());
 		if (entity == null)
 			throw new PessimisticLockingFailureException("Some is already trying to reserve at the same time!");
 		Boat boat = boatRepo.findById(res.getEntityId()).orElse(new Boat());
+		BoatAvailablePeriod period = availablePeriodsRepo.getPeriodOfInterest(startDate, endDate,boat.getId());
 		BoatOwner boatOwner=boatOwnerRepository.findById(boat.getBoatOwner().getId()).get();
-		
+
 		if(period == null) {
 			return 5;
 		}
@@ -103,11 +103,11 @@ public class BoatReservationServiceImpl implements ReservationService{
 			if (client == null){
 				return 2;
 			}
-			if(!clientService.clientAvailable(client, startDate, endDate)){
-				return 4;
-			}
 			if(!clientHasAnActiveReservationAtEntity(client, boat)){
 				return 7;
+			}
+			if(!clientService.clientAvailable(client, startDate, endDate)){
+				return 4;
 			}
 			BoatReservation newBoatReservation = new BoatReservation(client, startDate,endDate, res.getNumberOfGuests(), dto.toResSearchDto(),
 					boat);
@@ -133,32 +133,39 @@ public class BoatReservationServiceImpl implements ReservationService{
 				return 3;
 			}
 
-			client.setLoyaltyPoints((int) (client.getLoyaltyPoints()+loyaltyProgram.client_reservation_score));
-			boatOwner.setLoyaltyPoints((int) (boatOwner.getLoyaltyPoints()+loyaltyProgram.owner_reservation_score));
-			boatOwnerRepository.save(boatOwner);
-			clientRepository.save(client);
+			newBoatReservation = setLoyalty(client, boatOwner, newBoatReservation, res);
+
 			availablePeriodsRepo.delete(period);
 
 	        newBoatReservation.setAdditionalServices(addAdditionalServices(res.getAdditionalServices()));
 	        newBoatReservation.setTotalPrice( dto.getPrice(boat) + accountAdditionalServices(newBoatReservation.getAdditionalServices(),res));
 			mailService.notifyClientAboutCreatedReservation(newBoatReservation);
-			if(client.getLoyaltyPoints()<loyaltyProgram.getSilver_points_min())
-			{
-				newBoatReservation.setTotalPrice((res.getPrice(newBoatReservation.getBoat()) + accountAdditionalServices(newBoatReservation.getAdditionalServices(),res)));
-			}
-			if(client.getLoyaltyPoints()>=loyaltyProgram.silver_points_min && client.getLoyaltyPoints()<loyaltyProgram.gold_points_min)
-			{
-				newBoatReservation.setTotalPrice(((res.getPrice(newBoatReservation.getBoat()) + accountAdditionalServices(newBoatReservation.getAdditionalServices(),res))*(100-loyaltyProgram.client_discount_silver))/100);
-			}
-			if(client.getLoyaltyPoints()>= loyaltyProgram.gold_points_min)
-			{
-				newBoatReservation.setTotalPrice(((res.getPrice(newBoatReservation.getBoat()) + accountAdditionalServices(newBoatReservation.getAdditionalServices(),res))*(100-loyaltyProgram.client_discount_gold))/100);
-			}
+
 			BoatReservation boatReservation = boatReservationRepo.save(newBoatReservation);
 			recordIncomeService.saveBoatRecord(boatReservation.getId());
 			return 1;
 		}
     }
+
+	private BoatReservation setLoyalty(Client client, BoatOwner boatOwner, BoatReservation newBoatReservation, ReservationDto res) {
+		LoyaltyProgram loyaltyProgram = loyaltyProgramRepository.findById(1L).orElse(null);
+		if (loyaltyProgram != null) {
+			client.setLoyaltyPoints((int) (client.getLoyaltyPoints() + loyaltyProgram.client_reservation_score));
+			boatOwner.setLoyaltyPoints((int) (boatOwner.getLoyaltyPoints() + loyaltyProgram.owner_reservation_score));
+			boatOwnerRepository.save(boatOwner);
+			clientRepository.save(client);
+			if (client.getLoyaltyPoints() < loyaltyProgram.getSilver_points_min()) {
+				newBoatReservation.setTotalPrice((res.getPrice(newBoatReservation.getBoat()) + accountAdditionalServices(newBoatReservation.getAdditionalServices(), res)));
+			}
+			if (client.getLoyaltyPoints() >= loyaltyProgram.silver_points_min && client.getLoyaltyPoints() < loyaltyProgram.gold_points_min) {
+				newBoatReservation.setTotalPrice(((res.getPrice(newBoatReservation.getBoat()) + accountAdditionalServices(newBoatReservation.getAdditionalServices(), res)) * (100 - loyaltyProgram.client_discount_silver)) / 100);
+			}
+			if (client.getLoyaltyPoints() >= loyaltyProgram.gold_points_min) {
+				newBoatReservation.setTotalPrice(((res.getPrice(newBoatReservation.getBoat()) + accountAdditionalServices(newBoatReservation.getAdditionalServices(), res)) * (100 - loyaltyProgram.client_discount_gold)) / 100);
+			}
+		}
+		return newBoatReservation;
+	}
 
 	private boolean clientHasAnActiveReservationAtEntity(Client client, AbstractEntity entity) {
 		List<AbstractReservation> allClientsReservations = new ArrayList<>();

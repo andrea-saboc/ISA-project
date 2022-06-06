@@ -311,7 +311,7 @@ public class ReservationController {
             else if(code==2) return new ResponseEntity<>("Client with selected email adress does not exist in the system!", HttpStatus.OK);
             else if(code==3) return new ResponseEntity<>("It is impossible to save the reservation", HttpStatus.OK);
             else if(code==4) return new ResponseEntity<>("Client is not available at selected time!", HttpStatus.OK);
-            else if(code==5) return new ResponseEntity<>("Mansion is not available at selected time!", HttpStatus.OK);
+            else if(code==5) return new ResponseEntity<>("Boat is not available at selected time!", HttpStatus.OK);
             else if(code==6) return new ResponseEntity<>("Captain is not available at selected time!", HttpStatus.OK);
             else if(code==7) return new ResponseEntity<>("Client does not have an active reservation!", HttpStatus.OK);
             else if(code==8) return new ResponseEntity<>("Boat owner is not available at that time!", HttpStatus.OK);

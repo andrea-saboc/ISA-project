@@ -196,7 +196,16 @@ public abstract class Reservation extends AbstractReservation {
 	public abstract String getName();
 
 
-
+	@Override
+	public String toString() {
+		return "Reservation{" +
+				"type='" + type + '\'' +
+				", id=" + id +
+				", user=" + user.getId() +
+				", startDate=" + startDate +
+				", endDate=" + endDate +
+				'}';
+	}
 
 	
 	

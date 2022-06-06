@@ -158,6 +158,15 @@ public abstract class DiscountReservation extends AbstractReservation implements
 		return 100.00 - getPriceWithDiscount()/getPriceWithDiscount();
 
 	}
+	@Override
+	public String toString() {
+		return "DiscountReservation{" +
+				"id=" + id +
+				", user=" + user.getId() +
+				", startDate=" + startDate +
+				", endDate=" + endDate +
+				'}';
+	}
 
 	public abstract String getEntityName();
 }

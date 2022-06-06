@@ -214,11 +214,17 @@ public class BoatService {
 	}
 
 	public List<Boat> getByOwnerId() {
-		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		System.out.println("Trying to cast to User:"+ user);
-		BoatOwner boatOwner = boatOwnerRepository.findById(user.getId()).get();
-		List<Boat> ownersBoats = boatsRepository.findAllByBoatOwnerAndDeleted(boatOwner, false);
-		return ownersBoats;
+		try {
+			User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			System.out.println("Trying to cast to User:"+ user);
+			BoatOwner boatOwner = boatOwnerRepository.findById(user.getId()).get();
+			List<Boat> ownersBoats = boatsRepository.findAllByBoatOwnerAndDeleted(boatOwner, false);
+			return ownersBoats;
+		}
+		catch (Exception e){
+			System.out.println("Trying to cast failed!");
+			return null;
+		}
 	}
 
 	public List<Boat> getByOwner(BoatOwner bo){
@@ -239,6 +245,7 @@ public class BoatService {
 			return availablePeriodRepository.findByBoat(boat);
 		}
 		if(insideOtherPeriod(availablePeriod, availablePeriodRepository.findByBoat(boat))) {
+			System.out.println("There is a reservation, addBoatAvailability!");
 			return availablePeriodRepository.findByBoat(boat);
 		}
 		availablePeriodRepository.save(availablePeriod);
@@ -248,6 +255,8 @@ public class BoatService {
 
 	private boolean insideOtherPeriod(BoatAvailablePeriod availablePeriod, List<BoatAvailablePeriod> byBoat) {
 		Boolean overlaps = false;
+		System.out.println("Size iss:"+byBoat.size());
+
 		for (BoatAvailablePeriod ma : byBoat){
 			if((ma.getStartDate()).before(availablePeriod.getEndDate()) && (availablePeriod.getStartDate().before(ma.getEndDate()))){
 				if (ma.getStartDate().after(availablePeriod.getStartDate())){;

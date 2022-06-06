@@ -17,4 +17,10 @@ public class DateCoverter {
                 .atZone(ZoneId.systemDefault())
                 .toLocalDateTime();
     }
+
+    public static Date convertToDate(LocalDateTime localDateTime){
+        Instant instant = localDateTime.atZone(ZoneId.systemDefault()).toInstant();
+        Date date = Date.from(instant);
+        return date;
+    }
 }

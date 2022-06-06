@@ -25,5 +25,6 @@ public interface BoatAvailablePeriodRepository extends JpaRepository<BoatAvailab
     
     @Query(value = "SELECT available_period_id,start_date,end_date,boat_id FROM public.boat_available_period u WHERE u.start_date = :startDate AND u.boat_id = :id",
     		nativeQuery = true)   
-    BoatAvailablePeriod checkIfPeriodHasStartDate(@Param("startDate") Date startDate,@Param("id") long id); 
+    BoatAvailablePeriod checkIfPeriodHasStartDate(@Param("startDate") Date startDate,@Param("id") long id);
+    List<BoatAvailablePeriod> findAllByBoat(Boat boat);
 }
