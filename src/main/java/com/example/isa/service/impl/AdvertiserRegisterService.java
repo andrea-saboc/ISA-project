@@ -50,6 +50,7 @@ public class AdvertiserRegisterService {
                 authorities.add(auth);
                 MansionOwner mansionOwner = (MansionOwner) user;
                 mansionOwner.setAuthorities(authorities);
+
                 mansionOwnerRepository.save(mansionOwner);
                 break;
             case "boat":

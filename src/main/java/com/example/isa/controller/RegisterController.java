@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.example.isa.dto.AdministratorRegistrationDto;
 import com.example.isa.service.impl.AdministratorService;
+import com.example.isa.service.impl.UserCredentialsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -26,17 +27,22 @@ public class RegisterController {
     private final AdvertiserRegisterService advertiserRegisterService;
     private final ClientRegistrationService clientRegistrationService;
     private final AdministratorService administratorService;
+    private final UserCredentialsService userCredentialsService;
 
     @Autowired
-    public RegisterController(AdvertiserRegisterService advertiserRegisterService, ClientRegistrationService clientRegistrationService, AdministratorService administratorService) {
+    public RegisterController(AdvertiserRegisterService advertiserRegisterService, ClientRegistrationService clientRegistrationService, AdministratorService administratorService, UserCredentialsService userCredentialsService) {
         this.advertiserRegisterService = advertiserRegisterService;
         this.clientRegistrationService = clientRegistrationService;
         this.administratorService = administratorService;
+        this.userCredentialsService = userCredentialsService;
     }
 
     @RequestMapping(value = "/advertiser", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> register(@RequestBody AdvertiserRegistrationDto advertiserData){
         System.out.println("Advertiser adding :"+advertiserData.toString());
+        if(!userCredentialsService.emailExists(advertiserData.getEmail()))
+            return new ResponseEntity<>("User with that email exists",HttpStatus.OK);
+
         try {
             this.advertiserRegisterService.saveNewAdvertiser(advertiserData);
             System.out.println(advertiserData.toString());

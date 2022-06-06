@@ -19,10 +19,20 @@ public class LoyaltyProgram{
     public double client_discount_silver;
     public double gold_points_min;
     public double client_discount_gold;
+    @Version
+    @Column(name = "version", nullable = false)
+    private Long version;
 
 
     public LoyaltyProgram() {
         super();
+    }
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
     }
 
     public Long getId() {

@@ -13,10 +13,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class AdventureService {
@@ -174,6 +171,15 @@ public class AdventureService {
         adventure = adventureRepository.save(adventure);
         return adventure;
 
+    }
+    public boolean inAvailabilityPeriods(Date startDate, Date endDate, Long id) {
+        List<FishingAvailablePeriod> mansionAvailablePeriods = getFishingAvailablePeriod(id);
+        for (FishingAvailablePeriod ma : mansionAvailablePeriods ){
+            if(!startDate.after(ma.getEndDate()) && !ma.getStartDate().after(endDate)){
+                return true;
+            }
+        }
+        return false;
     }
     @Transactional(readOnly=false,propagation= Propagation.REQUIRED,isolation= Isolation.SERIALIZABLE)
     public void deleteAdventure(Long adventureId) {

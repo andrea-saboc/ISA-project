@@ -4,6 +4,8 @@ import com.example.isa.model.LoyaltyProgram;
 import com.example.isa.repository.LoyaltyProgramRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -12,6 +14,9 @@ public class LoyaltyProgramService {
     @Autowired
     LoyaltyProgramRepository loyaltyProgramRepository;
 
+
+
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public LoyaltyProgram update(LoyaltyProgram loyaltyProgram) {
         LoyaltyProgram loyaltyProgram1=loyaltyProgramRepository.findById(loyaltyProgram.getId()).get();
         loyaltyProgram1.setClient_reservation_score(loyaltyProgram.getClient_reservation_score());

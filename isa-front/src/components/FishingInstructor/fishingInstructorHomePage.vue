@@ -101,7 +101,8 @@ export default{
             search_adventure:'',
             user: null,
             authorities:[],
-            rawObject:''
+            rawObject:'',
+            token: null
 
         }
     },
@@ -110,11 +111,10 @@ export default{
       if(window.location.href.includes('/adventure/')){
       this.display = 'adventure'
     }
-   let token = localStorage.getItem('token').substring(1, localStorage.getItem('token').length-1);
-   console.log('toke je',token)
+   this.token = localStorage.getItem('token').substring(1, localStorage.getItem('token').length-1);
     axios.get("/userData", {
       headers: {
-        'Authorization' : 'Bearer ' + token,
+        'Authorization' : 'Bearer ' + this.token,
       }
     })
     .then(response => {
@@ -126,7 +126,7 @@ export default{
       if(this.loggedUser.advertiserType == 'fishing'){
         axios.get("/ownersAdventures", {
           headers: {
-            'Authorization' :'Bearer ' + token,
+            'Authorization' :'Bearer ' + this.token,
           }
         })
             .then(response1 => {

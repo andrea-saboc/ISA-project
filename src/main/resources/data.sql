@@ -120,8 +120,8 @@ INSERT INTO public.address(
 VALUES (21, '361 Hiawatha Way', 'Melbourne Beach', 'Florida', 21.31, -157.9);
 
 
-INSERT INTO public.loyalty_program(id,client_reservation_score,owner_reservation_score,system_percentage,silver_points_min,client_discount_silver,gold_points_min,client_discount_gold)
-VALUES(1,20,30,20,120,5,250,10);
+INSERT INTO public.loyalty_program(id,client_reservation_score,owner_reservation_score,system_percentage,silver_points_min,client_discount_silver,gold_points_min,client_discount_gold,version)
+VALUES(1,20,30,20,120,5,250,10,1);
 
 
 INSERT INTO public.mansion(

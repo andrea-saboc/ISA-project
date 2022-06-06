@@ -55,7 +55,7 @@
 import axios from 'axios'
 import {devServer} from "../../../vue.config";
 export default {
-  name: "viewUserRegistration",
+  name: "viewReports",
   data: function (){
     return{
         loggedUser: null,

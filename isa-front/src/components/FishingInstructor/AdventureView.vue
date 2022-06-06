@@ -303,7 +303,7 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times" aria-hidden="true"></i></button>
         </div>
         <div class="modal-body">
-          <v-date-picker mode="dateTime" is24hr v-model="startDateTimeQuick" style="width: 100%" :disabled-dates='disavailableDates'>
+          <v-date-picker mode="dateTime" is24hr v-model="startDateTimeQuick" style="width: 100%" :available-dates='availableDates'>
             <template v-slot="{ inputValue, inputEvents }">
               <input
                   class="px-2 py-1 border rounded focus:outline-none focus:border-blue-300"
@@ -317,22 +317,22 @@
           <div class="horizontal">
             <div class="input-group mb-3" style="margin-right: 5%">
               <span class="input-group-text" id="basic-addon6">Days</span>
-              <input type="number" class="form-control" placeholder="Days" aria-label="Username" v-model="numberOfDaysQuick" aria-describedby="basic-addon1">
+              <input type="number" class="form-control" min=0 placeholder="Days" aria-label="Username" v-model="numberOfDaysQuick" aria-describedby="basic-addon1">
             </div>
 
             <div class="input-group mb-3">
               <span class="input-group-text" id="basic-addon7">Hours</span>
-              <input type="number" class="form-control" placeholder="Hours" aria-label="Username" v-model="numberOfHoursQuick" aria-describedby="basic-addon1">
+              <input type="number" class="form-control" min=0 placeholder="Hours" aria-label="Username" v-model="numberOfHoursQuick" aria-describedby="basic-addon1">
             </div>
 
           </div>
           <div class="input-group mb-3">
             <span class="input-group-text" id="basic-addon111">Number of guests</span>
-            <input type="number" class="form-control" placeholder="Number of guests" aria-label="Username" v-model="numberOfGuestsQuick" aria-describedby="basic-addon1">
+            <input type="number" class="form-control" min=0 placeholder="Number of guests" aria-label="Username" v-model="numberOfGuestsQuick" aria-describedby="basic-addon1">
           </div>
           <div class="input-group mb-3">
             <span class="input-group-text" id="basic-addon11">Final price</span>
-            <input type="number" class="form-control" placeholder="Price" aria-label="Username" v-model="priceQuick" aria-describedby="basic-addon1">
+            <input type="number" class="form-control" min=0 placeholder="Price" aria-label="Username" v-model="priceQuick" aria-describedby="basic-addon1">
           </div>
           <v-date-picker mode="dateTime" is24hr v-model="availableUntil" style="width: 100%">
             <template v-slot="{ inputValue, inputEvents }">
@@ -529,6 +529,14 @@ export default {
   },
 
   calculateAvailableDaysForCalendar(){
+    console.log("DUZINA JE", this.availablePeriods.length)
+    if(this.availablePeriods.length==0)
+    {
+       this.availableDates.push({
+          start: new Date(Date.now()),
+          end: new Date(Date.now())
+       });
+    }
       for(var tmp in this.availablePeriods) {
         var startDate = new Date(this.availablePeriods[tmp].startDate);
         var endDate = new Date(this.availablePeriods[tmp].endDate)
@@ -694,11 +702,15 @@ export default {
         alert("Enter all fields")
         return;
       }
-      if(this.availableUntil>this.startDateTimeQuick)
+      var d = new Date();
+       d.setDate(d.getDate());
+  
+      if(this.availableUntil>=this.startDateTimeQuick || this.availableUntil<d)
       {
-        alert("Valide until must be before starte date");
+        alert("Valide until must be before starte date and date now");
         return;
       }
+      
       else{
       axios.post( "/createDiscountAdventureReservation", {
                                      
@@ -717,18 +729,20 @@ export default {
       })
 
       .then(response =>{
-            alert("Uspesno, ",response.data)
-      })
-      .catch( function (err){
-        alert(err)
-      })
-      this.calculateAvailableDaysForCalendar()
-      this.startDateTimeQuick="";
+            alert("Uspesno, ",response)
+            this.calculateAvailableDaysForCalendar
+            this.startDateTimeQuick="";
       this.numberOfDaysQuick="";
       this.numberOfHoursQuick="";
       this.numberOfGuestsQuick="";
       this.priceQuick="";
       this.availableUntil="";
+      })
+      .catch( function (err){
+        alert(err)
+      })
+      
+      
     }
     },checkEmail(){
         if (!this.validEmail(this.clientResEmail)){

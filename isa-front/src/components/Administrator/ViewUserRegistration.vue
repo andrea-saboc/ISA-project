@@ -73,22 +73,25 @@ export default {
         loggedUser: null,
         allUsers: [],
         selectedUser: null,
-        reportText: ''
+        reportText: '',
+        token:null
       
 
     }
   },
   mounted() {
+        this.token = localStorage.getItem('token').substring(1, localStorage.getItem('token').length-1);
+
     axios.get(devServer.proxy + "/userData", {
       headers: {
-        'Authorization' : this.$store.getters.tokenString
+        'Authorization' : 'Bearer ' + this.token,
       }
     })
         .then(response => {
           this.loggedUser =response.data
             axios.get(devServer.proxy + "/allUsersWithoutAdmin", {
       headers: {
-        'Authorization' : this.$store.getters.tokenString
+        'Authorization' : 'Bearer ' + this.token,
               }
          })
          .then(response1 =>{
@@ -103,14 +106,14 @@ methods:
     {
          axios.get(devServer.proxy + "/userData", {
       headers: {
-        'Authorization' : this.$store.getters.tokenString
+        'Authorization' : 'Bearer ' + this.token,
       }
     })
         .then(response => {
           this.loggedUser =response.data
             axios.get(devServer.proxy + "/allUsersWithoutAdmin", {
       headers: {
-        'Authorization' : this.$store.getters.tokenString
+        'Authorization' : 'Bearer ' + this.token,
               }
          })
          .then(response1 =>{
@@ -130,7 +133,7 @@ methods:
     
       }, {
         headers: {
-          'Authorization': this.$store.getters.tokenString
+          'Authorization': 'Bearer ' + this.token,
         }
       }
       )
@@ -158,7 +161,7 @@ methods:
     
       }, {
         headers: {
-          'Authorization': this.$store.getters.tokenString
+          'Authorization': 'Bearer ' + this.token,
         }
       }
       )

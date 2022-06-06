@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -69,10 +70,20 @@ public class CollectingAdventureReservationsServiceImpl {
         return reservationCalendarDTO;
 
     }
+    public boolean overlapsWithActiveReservations(Date startDate, Date endDate, Adventure boat) {
+        List<AbstractReservation> allReservations = getAllNotCancelledReservationsByAdventure(boat);
+        for (AbstractReservation ar : allReservations){
+            if (ar.getStartDate().before(endDate) && startDate.before(ar.getEndDate())){
+                return true;
+            }
+        }
+        return false;
+    }
     public List<AbstractReservation> getAllNotCancelledReservationsByAdventure(Adventure adventure){
         List<AbstractReservation> allAdventureReservations = new ArrayList<>(adventureReservationRepository.findAllByAdventureAndStatusNot(adventure, ReservationStatus.CANCELLED));
         allAdventureReservations.addAll(adventureDiscountReservationRepository.findAllByAdventureAndStatus(adventure,ReservationStatus.CANCELLED));
         return allAdventureReservations;
     }
+
 
 }
