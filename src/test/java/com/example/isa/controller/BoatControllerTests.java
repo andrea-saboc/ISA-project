@@ -115,7 +115,7 @@ public class BoatControllerTests {
 						.with(user("markijan@gmail.com").password("123").roles("BOAT_OWNER"))
 						.characterEncoding("utf-8"))
 				.andExpect(status().isOk())
-				.andExpect(jsonPath("$", hasSize(4)));
+				.andExpect(jsonPath("$", hasSize(5)));
 
 	}
 

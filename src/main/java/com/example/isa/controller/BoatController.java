@@ -117,8 +117,8 @@ public class BoatController {
 		return new ResponseEntity<>(responseMessege, HttpStatus.OK);
 	}
 
+	@PreAuthorize("hasRole('ROLE_BOAT_OWNER')")
 	@RequestMapping(method = RequestMethod.POST, value = "/getBoatAvailability", produces = MediaType.APPLICATION_JSON_VALUE)
-	@CrossOrigin(origins = "*")
 	public ResponseEntity<List<BoatAvailablePeriod>> getAvailablePeriod(@RequestBody LongIdDto dto) throws JsonProcessingException{
 		System.out.println("In getting availability for boats");
 		List<BoatAvailablePeriod> boatAvailabilities = service.getBoatAvailbilities(dto.boatId);
@@ -175,7 +175,7 @@ public class BoatController {
 		}
 	}
 	
-	@PreAuthorize("hasRoles('ROLE_BOAT_OWNER','ROLE_ADMIN')")
+	@PreAuthorize("hasAnyRole('ROLE_BOAT_OWNER','ROLE_ADMIN')")
 	@RequestMapping(method = RequestMethod.POST, value = "/deleteBoat",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> deleteBoat(@RequestBody LongIdDto boatId){
 		if(service.isReserved(boatId.boatId)){
