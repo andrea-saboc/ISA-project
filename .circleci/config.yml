@@ -31,7 +31,7 @@ jobs:
             password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
           environment:
             POSTGRES_USER: root
-            POSTGRES_DB: isa
+            POSTGRES_DB: isa_test
     steps:
       - checkout:
           path: ~/ISA-project
