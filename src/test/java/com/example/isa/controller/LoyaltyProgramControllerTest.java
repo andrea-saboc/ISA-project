@@ -31,7 +31,7 @@ public class LoyaltyProgramControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
-
+de
     @Autowired
     private WebApplicationContext webApplicationContext;
 

@@ -82,7 +82,7 @@ public class AdministratorService {
             m.setApproved(dta.isApproved());
             m.setNotapproved(true);
             mansionOwner.save(m);
-          //  mailService.sendNotificationAbaoutUnapprovedRegistration(u, dta.getReportText());
+            mailService.sendNotificationAbaoutUnapprovedRegistration(u, dta.getReportText());
         }
         if(u.getClass().getSimpleName().equals("FishingInstructor"))
         {
@@ -90,7 +90,7 @@ public class AdministratorService {
             m.setApproved(dta.isApproved());
             m.setNotapproved(true);
             fishingInstructorRepository.save(m);
-          //  mailService.sendNotificationAbaoutUnapprovedRegistration(u, dta.getReportText());
+             mailService.sendNotificationAbaoutUnapprovedRegistration(u, dta.getReportText());
         }
         if(u.getClass().getSimpleName().equals("BoatOwner"))
         {
@@ -98,7 +98,7 @@ public class AdministratorService {
             m.setApproved(dta.isApproved());
             m.setNotapproved(true);
             boatOwnerRepository.save(m);
-          //  mailService.sendNotificationAbaoutUnapprovedRegistration(u, dta.getReportText());
+           mailService.sendNotificationAbaoutUnapprovedRegistration(u, dta.getReportText());
         }
     }
     public void approveRegistration(ReportAdminDto dta)
@@ -110,7 +110,7 @@ public class AdministratorService {
             m.setApproved(dta.isApproved());
             m.setNotapproved(false);
             mansionOwner.save(m);
-            //  mailService.sendNotificationAbaoutUnapprovedRegistration(u, dta.getReportText());
+            mailService.sendNotificationAbaoutUnapprovedRegistration(u, dta.getReportText());
         }
         if(u.getClass().getSimpleName().equals("FishingInstructor"))
         {
@@ -118,7 +118,7 @@ public class AdministratorService {
             m.setApproved(dta.isApproved());
             m.setNotapproved(false);
             fishingInstructorRepository.save(m);
-            //  mailService.sendNotificationAbaoutUnapprovedRegistration(u, dta.getReportText());
+             mailService.sendNotificationAbaoutUnapprovedRegistration(u, dta.getReportText());
         }
         if(u.getClass().getSimpleName().equals("BoatOwner"))
         {
@@ -126,7 +126,7 @@ public class AdministratorService {
             m.setApproved(dta.isApproved());
             m.setNotapproved(false);
             boatOwnerRepository.save(m);
-            //  mailService.sendNotificationAbaoutUnapprovedRegistration(u, dta.getReportText());
+             mailService.sendNotificationAbaoutUnapprovedRegistration(u, dta.getReportText());
         }
     }
 
@@ -149,7 +149,7 @@ public class AdministratorService {
         u.setDeleted(true);
         u.setNotdeleted(false);
         userRepository.save(u);
-    //   mailService.sendNotificationAbaoutDeletedAccount(u);
+      mailService.sendNotificationAbaoutDeletedAccount(u);
     }
     @Transactional
     public void unacceptAccountDeleted(ReportAcceptDeletedAccountDTO dto)
@@ -158,7 +158,7 @@ public class AdministratorService {
         u.setDeleted(false);
         u.setNotdeleted(true);
         userRepository.save(u);
-        //mailService.sendNotificationAbaoutUndeletedAccount(u, dto.getReportText());
+        mailService.sendNotificationAbaoutUndeletedAccount(u, dto.getReportText());
 
     }
 
